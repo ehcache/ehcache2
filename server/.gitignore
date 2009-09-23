@@ -3,3 +3,6 @@
 /*.ipr
 /*.iws
 /generated
+/.classpath
+/.project
+/.settings
