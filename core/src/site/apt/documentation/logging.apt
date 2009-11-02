@@ -1,0 +1,23 @@
+{Logging}
+
+* {Java Util Logging}
+
+    As of 1.7.1, Ehcache uses the the slf4j logging facade. Plug in your own logging framework.
+
+
+* Recommended Logging Levels
+
+    Ehcache seeks to trade off informing production support developers or important messages and cluttering the log.
+
+    {ERROR} ERROR messages should not occur in normal production and indicate that action should be taken.
+
+    {WARN} WARN messages generally indicate a configuration change should be made or an unusual event
+    has occurred.
+
+    {DEBUG} DEBUG and TRACE messages are for development use. All DEBUG level statements
+    are surrounded with a guard so that no performance cost is incurred unless the logging
+    level is set.
+
+    Setting the logging level to DEBUG should provide more information on the source of any problems.
+    Many logging systems enable a logging level change to be made without restarting the application.
+
