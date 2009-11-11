@@ -577,5 +577,11 @@
         </site>
     </distributionManagement>
 
+    <scm>
+        <connection>scm:git:git@github.com:ehcache/ehcache2.git</connection>
+        <developerConnection>scm:git:https://github.com/ehcache/ehcache2.git</developerConnection>
+        <tag/>
+    </scm>
+
 </project>
 
