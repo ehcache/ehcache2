@@ -1,4 +1,4 @@
-Release Notes For ehcache 1.7.1
+Release Notes For Ehcache 1.7.1
 
 Introduction
 ============
@@ -36,10 +36,7 @@ Java Requirements
 Dependencies
 ============
 
-    * ehcache-core
-    * terracotta-core
-    * slf4j api and concrete logging implementation
-
+    SLF4J API and one concrete logging implementation. The API jar and the JDK14 logging jar are included in the distribution.
 
 Maven POM snippet
 =================
@@ -54,35 +51,17 @@ Maven POM snippet
         <version>1.7.1</version>
      </dependency>
 
-     The Maven snippet for ehcache terracotta is:
-
-     <dependency>
-        <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache-terracotta</artifactId>
-        <version>1.7.1</version>
-     </dependency>
-
 Installation
 ============
-
-Place the ehcache-core.jar, the ehcache-terracotta.jar, slf4j-api.jar and slf4j-jdk14.jar, or the concrete SLF4J logging implementation library of your choice into your classpath.
+Place the ehcache-core.jar, slf4j-api.jar and slf4j-jdk14.jar, or the concrete SLF4J logging implementation library of your choice into your classpath.
 
 Create an ehcache.xml configuration from the one supplied in the distribution and place it in the root of your classpath.
 
-
 Documentation
 =============
-See http://ehcache.org/documentation for full documentation.
+See  http://ehcache.org/documentation for full documentation.
 
 The JavaDoc is in the distribution and also online at http://ehcache.org/javadoc.
-
-Licenses
-========
-This kit contains both Terracotta code in the ehcache-terracotta module and jar, which is governed by the Terracotta Public License,
-and ehcache code in the ehcache-core module and jar, which is governed by the Apache License, version 2.0.
-Both licenses are compatible with one another, and end users who wish to redistribute this kit should be aware that the
-attribution requirement set forth in the Terracotta Public License would apply to such redistribution.
-
 
 Known Issues
 ============
