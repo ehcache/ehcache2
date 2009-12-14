@@ -1,0 +1,5 @@
+/ehcache-debugger.i*
+/target
+/.classpath
+/.project
+/.settings
