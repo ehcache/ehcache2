@@ -1,6 +1,7 @@
 /ehcache-core.i*
+/nb-configuration.xml
+/.classpath
 /ehcache.i*
+/.project
 /target
 /.ant-targets*
-/.classpath
-/.project
