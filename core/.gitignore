@@ -5,3 +5,4 @@
 /.project
 /target
 /.ant-targets*
+/bin
