@@ -507,22 +507,37 @@ public class LruMemoryStore implements Store {
     
     /**
      * {@inheritDoc}
+     */    
+    public void waitUntilClusterCoherent() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * {@inheritDoc}
      */
-    public boolean isCacheCoherent() {
+    public void setNodeCoherence(boolean coherent) {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isNodeCoherent() {
         return false;
     }
     
     /**
      * {@inheritDoc}
      */
-    public void setCoherent(boolean coherent) {
-        throw new UnsupportedOperationException();
+    public boolean isClusterCoherent() {
+        return false;
     }
-
+    
     /**
      * {@inheritDoc}
-     */    
-    public void waitUntilCoherent() {
-        throw new UnsupportedOperationException();
+     */
+    public boolean isCacheCoherent() {
+        return false;
     }
 }
+

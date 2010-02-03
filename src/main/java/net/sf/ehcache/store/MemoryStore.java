@@ -678,14 +678,29 @@ public class MemoryStore implements Store, CacheConfigurationListener {
     /**
      * {@inheritDoc}
      */
-    public void setCoherent(boolean coherent) {
+    public boolean isNodeCoherent() {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isClusterCoherent() {
+        return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */    
+    public void waitUntilClusterCoherent() {
         throw new UnsupportedOperationException();
     }
 
     /**
      * {@inheritDoc}
-     */    
-    public void waitUntilCoherent() {
+     */
+    public void setNodeCoherence(boolean coherent) {
         throw new UnsupportedOperationException();
     }
 }
+
