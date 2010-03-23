@@ -1,356 +1,440 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.sf.ehcache</groupId>
-    <artifactId>ehcache-parent</artifactId>
-    <packaging>pom</packaging>
-    <version>2.1</version>
-    <name>Ehcache Parent</name>
-    <description><![CDATA[Ehcache is a widely used, pure Java, in-process, distributed cache]]>
-    </description>
-    <url>http://ehcache.sf.net</url>
-    <inceptionYear>2003</inceptionYear>
-    <organization>
-        <name>Terracotta, Inc.</name>
-        <url>www.terracotta.org</url>
-    </organization>
+    <!-- mvn -Ptest verify to run tests -->
+    <!-- mvn -Ptest jetty:run-war to run jetty interactively -->
+    <!-- mvn -Dmaven.test.skip=true clean install to install -->
+    <!-- Activate the test profile in your IDE otherwise the concrete logging implementation will not be found. -->
 
-    <!--Not using aggregate building -->
-<!--
-    <modules>
-        <module>core</module>
-        <module>debugger</module>
-        <module>jcache</module>
-        <module>server</module>
-        <module>standalone-server</module>
-        <module>console</module>
-    <module>jmsreplication</module>
-    <module>jgroupsreplication</module>
-    <module>openjpa</module>
-    <module>terracotta</module>
-    <module>googleappengine</module>
-  </modules>
--->
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>net.sf.jsr107cache</groupId>
-                <artifactId>jsr107cache</artifactId>
-                <version>1.0</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.0.4</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>dom4j</groupId>
-                <artifactId>dom4j</artifactId>
-                <version>1.6.1</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>3.3.2.GA</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.transaction</groupId>
-                        <artifactId>jta</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.security</groupId>
-                        <artifactId>jacc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>net.sf.ehcache</groupId>
-                        <artifactId>ehcache</artifactId>
-                    </exclusion>
-                </exclusions>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-ehcache</artifactId>
-                <version>3.3.2.GA</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.sf.hibernate</groupId>
-                <artifactId>hibernate</artifactId>
-                <version>2.1.8</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.transaction</groupId>
-                        <artifactId>jta</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.security</groupId>
-                        <artifactId>jacc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>net.sf.ehcache</groupId>
-                        <artifactId>ehcache</artifactId>
-                    </exclusion>
-                </exclusions>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.4</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>jgroups</groupId>
-                <artifactId>jgroups-all</artifactId>
-                <version>2.4.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>bsh</groupId>
-                        <artifactId>bsh</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                </exclusions>
-                <scope>provided</scope>
-            </dependency>
-            <!--<dependency>-->
-            <!--<groupId>javax.management</groupId>-->
-            <!--<artifactId>jmx</artifactId>-->
-            <!--<version>1.3</version>-->
-            <!--<scope>system</scope>-->
-            <!--</dependency>-->
+    <!-- Note to IntelliJ users. Run mvn compile before interactively running tests. -->
 
-            <!-- Test scope -->
-            <dependency>
-                <groupId>httpunit</groupId>
-                <artifactId>httpunit</artifactId>
-                <version>1.6</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.0.1</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>checkstyle</groupId>
-                <artifactId>checkstyle-optional</artifactId>
-                <version>4.4</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.0.1</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>httpunit</groupId>
-                <artifactId>httpunit</artifactId>
-                <version>1.6.1</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring</artifactId>
-                <version>2.0.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>2.0.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aspects</artifactId>
-                <version>2.0.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-mock</artifactId>
-                <version>2.0.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.acegisecurity</groupId>
-                <artifactId>acegi-security</artifactId>
-                <version>1.0.3</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <parent>
+        <groupId>net.sf.ehcache</groupId>
+        <artifactId>ehcache-parent</artifactId>
+        <version>2.1</version>
+    </parent>
+    <name>Ehcache Server</name>
+    <artifactId>ehcache-server</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <description>The ehcache W3C and RESTful web services server.</description>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>src/assemble/LICENSE.txt</url>
+        </license>
+    </licenses>
+    <url>http://ehcache.org/documentation/cache_server.html</url>
+    <dependencies>
+        <!-- IntelliJ Issue. Hibernate has a transitive dep on asm, but a later
+        version is required for javax.ws.rs. The only thing that
+         seem to work is to move asm-3.1 up the classpath. -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <scope>compile</scope>
+            <version>1.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>[1.7.1,]</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.wss</groupId>
+            <artifactId>xws-security</artifactId>
+            <version>3.0</version>
+            <scope>compile</scope>
+            <exclusions>
+                <!--This must be gotten manually. People can include it if they need it.-->
+                <exclusion>
+                    <groupId>javax.xml.crypto</groupId>
+                    <artifactId>xmldsig</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>httpunit</groupId>
+            <artifactId>httpunit</artifactId>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>com.sun.net.httpserver</groupId>
+            <artifactId>http</artifactId>
+            <version>20070405</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.5.8</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.3</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.0.3</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.3</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.0-beta-7</version>
-                    <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <preparationGoals>clean install</preparationGoals>
-                        <tagBase>https://ehcache.svn.sourceforge.net/svnroot/ehcache/tags</tagBase>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-idea-plugin</artifactId>
-                    <version>2.1</version>
-                    <configuration>
-                        <downloadSources>true</downloadSources>
-                        <downloadJavadocs>false</downloadJavadocs>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>clean</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <!-- Clover. This seems to quite broken
-             <plugin>
-             <groupId>org.apache.maven.plugins</groupId>
-             <artifactId>maven-clover-plugin</artifactId>
-             <version>2.3</version>
-             <executions>
-             <execution>
-             <phase>compile</phase>
-             <goals>
-             <goal>check</goal>
-             </goals>
-             </execution>
-             </executions>
-             <configuration>
-             <cloverDatabase>${basedir}/target/log/mycoverage.db</cloverDatabase>
-             <cloverOutputDirectory>${basedir}/clover_html</cloverOutputDirectory>
-             <targetPercentage>85.9%</targetPercentage>
-             <licenseFile>/Users/gluck/work/ehcache/tools/clover.license</licenseFile>
-             </configuration>
-             </plugin>   -->
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>${basedir}/checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>${basedir}/checkstyle/suppressions.xml
+                    </suppressionsLocation>
+                    <headerLocation>${basedir}/checkstyle/ClassHeader.txt</headerLocation>
+                    <enableRSS>false</enableRSS>
+                    <linkXRef>true</linkXRef>
+                    <enableRulesSummary>false</enableRulesSummary>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <enableRulesSummary>true</enableRulesSummary>
+                </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>${basedir}/checkstyle/checkstyle.xml
+                    </configLocation>
+                    <suppressionsLocation>${basedir}/checkstyle/suppressions.xml
+                    </suppressionsLocation>
+                    <headerLocation>${basedir}/checkstyle/ClassHeader.txt
+                    </headerLocation>
+                    <enableRSS>false</enableRSS>
+                    <linkXRef>true</linkXRef>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                    <enableRulesSummary>true</enableRulesSummary>
+                </configuration>
+            </plugin>
+
+
+            <!--Conflicts with Dave Whitla's plugin with the same goal.
+            Use mvn org.glassfish:maven-glassfish-plugin:run instead
+            change to port 9090
+            -->
+            <plugin>
+                <groupId>org.glassfish</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+                <version>1.0-alpha-4</version>
+            </plugin>
+
+            <plugin>
+                <!-- Something in maven 2.1, deploy 2.4 or something else in the chain is causing an OOME
+                on deploy. Use the following script to deploy export MAVEN_OPTS=-Xmx1024m; mvn -Dmaven.test.skip=true  deploy -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+
+            <!--mvn jar:jar to create this jar plugin -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>2.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true
+                            </addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true
+                            </addDefaultSpecificationEntries>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                    <excludes>
+                        <exclude>**/ehcache.xml</exclude>
+                    </excludes>
+                    <classifier>jaronly</classifier>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.glassfish</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+                <version>1.0-alpha-4</version>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*UnitTest.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*$*</exclude>
+                    </excludes>
+                    <enableAssertions>false</enableAssertions>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>target/classes
+                        </additionalClasspathElement>
+                    </additionalClasspathElements>
+                    <systemProperties>
+                        <property>
+                            <name>net.sf.ehcache.skipUpdateCheck</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>java.awt.headless</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*Test.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*$*</exclude>
+                                <exclude>**/Abstract*Test.java</exclude>
+                                <exclude>**/*UnitTest.java</exclude>
+                            </excludes>
+                            <enableAssertions>false</enableAssertions>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>target/classes
+                                </additionalClasspathElement>
+                            </additionalClasspathElements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+            <!--<artifactId>maven-plugin-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<goalPrefix>glassfish</goalPrefix>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>jaxws-maven-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<sei>net.sf.ehcache.server.soap.EhcacheWebServiceEndpoint</sei>-->
+            <!--<genWsdl>true</genWsdl>-->
+            <!--<destDir></destDir>-->
+            <!--<keep>true</keep>-->
+            <!--<verbose>true</verbose>-->
+            <!--</configuration>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<phase>verify</phase>-->
+            <!--<goals>-->
+            <!--<goal>wsgen</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<sei>net.sf.ehcache.server.soap.EhcacheWebServiceEndpoint</sei>-->
+            <!--<genWsdl>true</genWsdl>-->
+            <!--<keep>true</keep>-->
+            <!--<verbose>true</verbose>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <filters>
+                        <filter>src/assemble/filter.properties</filter>
+                    </filters>
+                    <descriptors>
+                        <descriptor>src/assemble/distribution.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<id>assemble</id>-->
+                <!--<phase>process-classes</phase>-->
+                <!--<goals>-->
+                <!--<goal>assembly</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
+            </plugin>
+
         </plugins>
     </build>
 
     <profiles>
         <profile>
-          <!-- Profile to sign artifacts with a PGP key (using GPG). -->
-          <id>sign-artifacts</id>
-          <activation>
-            <property>
-              <name>performRelease</name>
-              <value>true</value>
-            </property>
-          </activation>
-          <build>
-            <plugins>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                  <execution>
-                    <id>sign-artifacts</id>
-                    <phase>verify</phase>
-                    <goals>
-                      <goal>sign</goal>
-                    </goals>
-                    <configuration>
-                      <keyname>Terracotta Release Engineer</keyname>
-                    </configuration>
-                  </execution>
-                </executions>
-              </plugin>
-            </plugins>
-          </build>
-        </profile>
-
-        <profile>
-            <!-- No-test profile:  equivalent to -Dmaven.test.skip=true -->
-            <id>nt</id>
+            <id>test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <!--With slf4j, users choose a concrete logging implementation at deploy time, which they provide-->
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                    <version>1.5.8</version>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>0.3.1</version>
                         <configuration>
-                            <skip>true</skip>
+                            <wait>false</wait>
+                            <container>
+                                <containerId>jetty6x</containerId>
+                                <type>embedded</type>
+                                <systemProperties>
+                                    <com.sun.management.jmxremote/>
+                                    <com.sun.management.jmxremote.port>8999
+                                    </com.sun.management.jmxremote.port>
+                                    <com.sun.management.jmxremote.ssl>false
+                                    </com.sun.management.jmxremote.ssl>
+                                    <com.sun.management.jmxremote.authenticate>false
+                                    </com.sun.management.jmxremote.authenticate>
+                                    <java.rmi.server.hostname>localhost
+                                    </java.rmi.server.hostname>
+                                    <com.sun.management.jmxremote>true
+                                    </com.sun.management.jmxremote>
+                                    <Ron>noR</Ron>
+                                </systemProperties>
+                            </container>
+                            <configuration>
+                                <properties>
+                                    <cargo.servlet.port>9090</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>start-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-server</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>maven-jetty-plugin</artifactId>
+                        <version>6.1.11</version>
+                        <configuration>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>9090</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>com.sun.management.jmxremote</name>
+                                    <value>true</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>com.sun.management.jmxremote.port</name>
+                                    <value>8999</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>com.sun.management.jmxremote.ssl</name>
+                                    <value>true</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>com.sun.management.jmxremote.authenticate</name>
+                                    <value>false</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>java.rmi.server.hostname</name>
+                                    <value>localhost</value>
+                                </systemProperty>
+                            </systemProperties>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -358,149 +442,87 @@
         </profile>
     </profiles>
 
-    <developers>
-        <developer>
-            <id>gregluck</id>
-            <name>Greg Luck</name>
-            <roles>
-                <role>Maintainer</role>
-                <role>Developer</role>
-            </roles>
-            <timezone>+10</timezone>
-            <properties>
-                <skype>gregrluck</skype>
-                <yahoo>gregrluck</yahoo>
-            </properties>
-        </developer>
-        <developer>
-            <id>ssuravarapu</id>
-            <name>Surya Suravarapu</name>
-            <url/>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-        <developer>
-            <id>oneovthafew</id>
-            <name>Gavin King</name>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>+10</timezone>
-        </developer>
-        <developer>
-            <name>Mauro Talevi</name>
-            <email/>
-            <url/>
-            <organization/>
-            <organizationUrl/>
-            <roles>
-                <role>Maven Guru</role>
-            </roles>
-            <timezone/>
-        </developer>
-    </developers>
-
-    <contributors>
-        <contributor>
-            <name>Adam Murdoch</name>
-            <email/>
-            <url/>
-            <organization/>
-            <organizationUrl/>
-            <roles>
-                <role>Former Developer</role>
-            </roles>
-            <timezone>+10</timezone>
-        </contributor>
-        <contributor>
-            <name>Ben Houston</name>
-            <email/>
-            <url/>
-            <organization/>
-            <organizationUrl/>
-            <roles/>
-            <timezone/>
-            <properties/>
-        </contributor>
-        <contributor>
-            <name>Claus Ibsen</name>
-            <email/>
-            <url/>
-            <organization/>
-            <organizationUrl/>
-            <roles/>
-            <timezone/>
-            <properties>
-                <contribution>Patches</contribution>
-            </properties>
-        </contributor>
-        <contributor>
-            <name>Jody Brownell</name>
-            <email/>
-            <url/>
-            <organization/>
-            <organizationUrl/>
-            <roles/>
-            <timezone/>
-            <properties>
-                <contribution>Patches</contribution>
-            </properties>
-        </contributor>
-    </contributors>
-
-    <!-- Repos other than central not allowed to be defined for code released on central-->
-    <!--<repositories>-->
-    <!--<repository>-->
-    <!--<id>codehaus-repository</id>-->
-    <!--<name>Codehaus Repository</name>-->
-    <!--<url>http://repository.codehaus.org</url>-->
-    <!--</repository>-->
-    <!--</repositories>-->
-
-    <!--Snapshot repos not allowed in releases hosted at central repo-->
-    <!--<pluginRepositories>-->
-    <!--<pluginRepository>-->
-    <!--<id>codehaus-plugin-snapshot-repository</id>-->
-    <!--<name>Codehaus Plugin Snapshot Repository</name>-->
-    <!--<url>http://snapshots.repository.codehaus.org</url>-->
-    <!--<snapshots>-->
-    <!--<enabled>true</enabled>-->
-    <!--</snapshots>-->
-    <!--</pluginRepository>-->
-    <!--</pluginRepositories>-->
-
-    <!--Snapshot repos not allowed in releases hosted at central repo-->
-    <!--<pluginRepositories>-->
-    <!--<pluginRepository>-->
-    <!--<id>apache.snapshots</id>-->
-    <!--<name>Apache Snapshot Repository</name>-->
-    <!--<url>http://people.apache.org/repo/m2-snapshot-repository</url>-->
-    <!--<releases>-->
-    <!--<enabled>false</enabled>-->
-    <!--</releases>-->
-    <!--</pluginRepository>-->
-    <!--</pluginRepositories>-->
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://ehcache.sourceforge.net/LICENSE.txt</url>
-            <distribution>repo</distribution>
-            <comments>The license is the standard wording from the Apache license.
-                Terracotta, Inc. is the copyright owner.
-            </comments>
-        </license>
-    </licenses>
-
-    <issueManagement>
-        <system>Terracotta's JIRA</system>
-        <url>https://jira.terracotta.org/browse/EHC</url>
-    </issueManagement>
-
+    <properties>
+    </properties>
+    <repositories>
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/1</url>
+            <layout>legacy</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>glassfish-repository</id>
+            <name>Java.net Repository for Glassfish</name>
+            <url>http://download.java.net/maven/glassfish</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>java.net2</id>
+            <name>Java.net Maven2 Repository</name>
+            <url>http://download.java.net/maven/2</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+        <!--Turn off snapshots. We always build against a released Cache version-->
+        <!--<repository>-->
+            <!--<id>sourceforge-snapshots</id>-->
+            <!--<url>http://oss.sonatype.org/content/repositories/sourceforge-snapshots</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>sonatype-nexus-snapshots</id>-->
+            <!--<name>sonatype-nexus-snapshots</name>-->
+            <!--<url>http://oss.sonatype.org/content/repositories/snapshots</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>daily</updatePolicy>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven2.java.net</id>
+            <name>Java.net Repository for Maven 2</name>
+            <url>http://download.java.net/maven/2</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <distributionManagement>
+        <!--
+            The server id here defined must also appear in ~/.m2/settings.xml with username
+            Note: site URL repeated here to ensure correct deployment path -->
         <repository>
             <id>sourceforge-releases</id>
             <name>Sourceforge Release Repository</name>
@@ -511,42 +533,9 @@
             <name>Sourceforge Snapshot Repository</name>
             <url>http://oss.sonatype.org/content/repositories/sourceforge-snapshots</url>
         </snapshotRepository>
-
-
-        <!--
-              The server id here defined must also appear in ~/.m2/settings.xml
-              with username Note: site URL repeated here to ensure correct
-              deployment path
-          -->
-        <site>
-            <id>ehcache.org</id>
-            <name>EHCache Site</name>
-            <url>dav:https://echache-stage.terracotta.lan/export1/ehcache.org</url>
-        </site>
     </distributionManagement>
 
-    <mailingLists>
-        <mailingList>
-            <name>Ehcache Mailing List</name>
-            <subscribe>http://lists.terracotta.org/mailman/listinfo/ehcache-list</subscribe>
-            <unsubscribe>http://lists.terracotta.org/mailman/listinfo/ehcache-list</unsubscribe>
-            <post>ehcache-list@lists.terracotta.org</post>
-            <archive>http://lists.terracotta.org/pipermail/ehcache-list/</archive>
-        </mailingList>
-        <mailingList>
-            <name>Old SourceForge Mailing List - closed due to spam attacks</name>
-            <subscribe>http://lists.sourceforge.net/lists/listinfo/ehcache-list</subscribe>
-            <unsubscribe>http://lists.sourceforge.net/lists/listinfo/ehcache-list</unsubscribe>
-            <post>ehcache-list@lists.sourceforge.net</post>
-            <archive>http://sourceforge.net/mailarchive/forum.php?forum=ehcache-list</archive>
-        </mailingList>
-    </mailingLists>
-
-    <scm>
-        <connection>scm:git:git@github.com:ehcache/ehcache2.git</connection>
-        <developerConnection>scm:git:https://github.com/ehcache/ehcache2.git</developerConnection>
-        <tag/>
-        <url>https://github.com/ehcache/ehcache2</url>
-    </scm>
-
+    <!--<modules>-->
+    <!--<module>ehcache-server-packaging</module>-->
+    <!--</modules>-->
 </project>
