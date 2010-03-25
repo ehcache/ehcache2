@@ -1,8 +1,7 @@
-/target
-/*.iml
 /*.ipr
-/*.iws
-/generated
 /.classpath
+/*.i*
+/generated
 /.project
+/target
 /.settings
