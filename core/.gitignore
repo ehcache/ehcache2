@@ -6,3 +6,4 @@
 /target
 /.ant-targets*
 /bin
+/btm*.tlog
