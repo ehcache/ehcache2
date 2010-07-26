@@ -69,6 +69,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -171,7 +173,21 @@ public class Cache implements Ehcache, StoreListener {
                     " Ehcache will work as a local cache.");
         }
     }
-
+    
+    private static Constructor<? extends Store> NATIVE_CONSTRUCTOR;
+    static {
+        Class<? extends Store> nativeClass;
+        try {
+            nativeClass = (Class<? extends Store>) Class.forName("net.sf.ehcache.store.nativecache.NativeCacheStore");
+            NATIVE_CONSTRUCTOR = nativeClass.getConstructor(Cache.class);
+            LOG.info("Native Cache Extensions Enabled");
+        } catch (ClassNotFoundException e) {
+            //ignore - no native extensions installed
+        } catch (Exception e) {
+            LOG.warn("Exception while detecting native cache extensions", e);
+        }
+    }
+    
     private volatile boolean disabled = Boolean.getBoolean(NET_SF_EHCACHE_DISABLED);
 
     private final boolean useClassicLru = Boolean.getBoolean(NET_SF_EHCACHE_USE_CLASSIC_LRU);
@@ -959,7 +975,14 @@ public class Cache implements Ehcache, StoreListener {
                 boolean coherent = unlockedReads ? false : this.configuration.getTerracottaConfiguration().isCoherent();
                 store.setNodeCoherent(coherent);
             } else {
-                if (useClassicLru && configuration.getMemoryStoreEvictionPolicy().equals(MemoryStoreEvictionPolicy.LRU)) {
+                if (NATIVE_CONSTRUCTOR != null && configuration.getNativeConfiguration() != null) {
+                    System.err.println("Using Native Memory Store For " + this.getName());
+                    try {
+                        store = NATIVE_CONSTRUCTOR.newInstance(this);
+                    } catch (Exception e) {
+                        throw new CacheException("Couldn't construct native store", e);
+                    }
+                } else if (useClassicLru && configuration.getMemoryStoreEvictionPolicy().equals(MemoryStoreEvictionPolicy.LRU)) {
                     Store disk = createDiskStore();
                     store = new LegacyStoreWrapper(new LruMemoryStore(this, disk), disk, registeredEventListeners, configuration);
                 } else {

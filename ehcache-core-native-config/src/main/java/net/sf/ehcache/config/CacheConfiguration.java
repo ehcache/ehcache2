@@ -311,6 +311,7 @@ public class CacheConfiguration implements Cloneable {
     private TransactionalMode transactionalMode = DEFAULT_TRANSACTIONAL_MODE;
     private volatile boolean statistics = DEFAULT_STATISTICS;
     private volatile CopyStrategyConfiguration copyStrategyConfiguration = DEFAULT_COPY_STRATEGY_CONFIGURATION;
+    private volatile NativeConfiguration nativeConfiguration = null;
     private volatile Boolean copyOnRead;
     private volatile Boolean copyOnWrite;
     private Object defaultTransactionManager;
@@ -907,6 +908,22 @@ public class CacheConfiguration implements Cloneable {
         return this.copyStrategyConfiguration;
     }
 
+    /**
+     * Sets the NativeConfiguration for this cache
+     * @param nativeConfiguration the native configuration
+     */
+    public void addNative(NativeConfiguration nativeConfiguration) {
+        this.nativeConfiguration = nativeConfiguration;
+    }
+    
+    /**
+     * Returns the NativeConfiguration for this cache
+     * @return the native configuration
+     */
+    public NativeConfiguration getNativeConfiguration() {
+        return nativeConfiguration;
+    }
+    
     /**
      * Getter to the default TM to use
      * @return the default one if set, or null

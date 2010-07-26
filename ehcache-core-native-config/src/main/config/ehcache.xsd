@@ -78,6 +78,7 @@
                 <xs:element minOccurs="0" maxOccurs="1" ref="terracotta"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="cacheWriter"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="copyStrategy"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="native"/>
             </xs:sequence>
             <xs:attribute name="diskExpiryThreadIntervalSeconds" type="xs:integer" use="optional"/>
             <xs:attribute name="diskSpoolBufferSizeMB" type="xs:integer" use="optional"/>
@@ -109,6 +110,7 @@
                 <xs:element minOccurs="0" maxOccurs="1" ref="terracotta"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="cacheWriter"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="copyStrategy"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="native"/>
             </xs:sequence>
             <xs:attribute name="diskExpiryThreadIntervalSeconds" type="xs:integer" use="optional"/>
             <xs:attribute name="diskSpoolBufferSizeMB" type="xs:integer" use="optional"/>
@@ -250,6 +252,15 @@
     <xs:element name="copyStrategy">
         <xs:complexType>
             <xs:attribute name="class" use="required" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="native">
+        <xs:complexType>
+            <xs:attribute name="concurrency" use="optional" type="xs:positiveInteger"/>
+            <xs:attribute name="initialTableSize" use="optional" type="xs:positiveInteger"/>
+            <xs:attribute name="initialDataSize" use="optional" type="xs:positiveInteger"/>
+            <xs:attribute name="maximalDataSize" use="required" type="xs:positiveInteger"/>
         </xs:complexType>
     </xs:element>
 
