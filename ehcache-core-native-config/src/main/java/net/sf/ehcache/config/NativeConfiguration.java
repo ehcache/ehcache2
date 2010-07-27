@@ -23,6 +23,17 @@ public class NativeConfiguration {
     private volatile long initialDataSize = -1;
     private volatile long maximalDataSize = -1;
 
+    public NativeConfiguration() {
+        
+    }
+    
+    public NativeConfiguration(long initialTableSize, long initialDataSize, long maximalDataSize, int concurrency) {
+        this.concurrency = concurrency;
+        this.initialTableSize = initialTableSize;
+        this.initialDataSize = initialDataSize;
+        this.maximalDataSize = maximalDataSize;
+    }
+    
     public int getConcurrency() {
         return concurrency;
     }

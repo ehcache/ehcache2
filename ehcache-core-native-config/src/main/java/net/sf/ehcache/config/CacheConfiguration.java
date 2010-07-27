@@ -924,6 +924,13 @@ public class CacheConfiguration implements Cloneable {
         return nativeConfiguration;
     }
     
+    public CacheConfiguration makeNative(long initialTableSize, long initialDataSize, long maximalDataSize, int concurrency) {
+        if (getNativeConfiguration() == null) {
+            addNative(new NativeConfiguration(initialTableSize, initialDataSize, maximalDataSize, concurrency));
+        }
+        return this;
+    }
+    
     /**
      * Getter to the default TM to use
      * @return the default one if set, or null
