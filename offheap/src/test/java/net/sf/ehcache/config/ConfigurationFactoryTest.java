@@ -606,25 +606,18 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         Configuration configuration = ConfigurationFactory.parseConfiguration(file);
 
         CacheConfiguration cacheConfiguration = configuration.getCacheConfigurations().get("defaultStorageStrategy");
-        assertEquals(2, cacheConfiguration.getStoreFactoryConfigurations().size());
 
-        CacheConfiguration.StoreFactoryConfiguration storeFactoryConfiguration = cacheConfiguration.getStoreFactoryConfigurations().get(0);
-        assertEquals("my.pkg.OffHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
-        assertEquals("8Gb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
-        assertEquals("true", storeFactoryConfiguration.getAnyProperties().getProperty("fast"));
-
-        storeFactoryConfiguration = cacheConfiguration.getStoreFactoryConfigurations().get(1);
-        assertEquals("my.pkg.OnHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
-        assertEquals("8Mb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
-        assertEquals("false", storeFactoryConfiguration.getAnyProperties().getProperty("lame"));
+        StoreConfiguration storeConfiguration = cacheConfiguration.getStoreFactoryConfiguration();
+        assertEquals("my.pkg.OffHeapStore", storeConfiguration.getFullyQualifiedClassPath());
+        assertEquals("8Gb", storeConfiguration.getAnyProperties().getProperty("maximalSize"));
+        assertEquals("true", storeConfiguration.getAnyProperties().getProperty("fast"));
 
         CacheConfiguration otherCacheConfiguration = configuration.getCacheConfigurations().get("otherDefaultStorageStrategy");
-        assertEquals(1, otherCacheConfiguration.getStoreFactoryConfigurations().size());
 
-        storeFactoryConfiguration = otherCacheConfiguration.getStoreFactoryConfigurations().get(0);
-        assertEquals("my.other.pkg.OffHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
-        assertEquals("1Gb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
-        assertEquals("false", storeFactoryConfiguration.getAnyProperties().getProperty("slow"));
+        storeConfiguration = otherCacheConfiguration.getStoreFactoryConfiguration();
+        assertEquals("my.other.pkg.OffHeapStore", storeConfiguration.getFullyQualifiedClassPath());
+        assertEquals("1Gb", storeConfiguration.getAnyProperties().getProperty("maximalSize"));
+        assertEquals("false", storeConfiguration.getAnyProperties().getProperty("slow"));
     }
 
 

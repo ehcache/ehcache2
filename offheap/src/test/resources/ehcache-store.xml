@@ -13,10 +13,6 @@
             <maximalSize>8Gb</maximalSize>
             <fast>true</fast>
 		</store>
-		<store class="my.pkg.OnHeapStore">
-            <maximalSize>8Mb</maximalSize>
-            <lame>false</lame>
-		</store>
 	</cache>
 	
 	<cache name="otherDefaultStorageStrategy" maxElementsInMemory="10"
