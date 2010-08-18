@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -301,6 +302,12 @@ public class CacheConfiguration implements Cloneable {
      */
     protected volatile List<CacheDecoratorFactoryConfiguration> cacheDecoratorConfigurations =
             new ArrayList<CacheDecoratorFactoryConfiguration>();
+
+    /**
+     * The store factories added by BeanUtils.
+     */
+    protected volatile List<StoreFactoryConfiguration> storeFactoryConfigurations =
+            new ArrayList<StoreFactoryConfiguration>();
 
     /**
      * The listeners for this configuration.
@@ -1114,6 +1121,28 @@ public class CacheConfiguration implements Cloneable {
         return this;
     }
 
+    public static final class StoreFactoryConfiguration extends FactoryConfiguration<StoreFactoryConfiguration> {
+        private final Properties properties = new Properties();
+
+        public void addAnyProperty(String name, String value) {
+            properties.setProperty(name, value);
+        }
+
+        public Properties getAnyProperties() {
+            return properties;
+        }
+    }
+
+    public final void addStore(StoreFactoryConfiguration factory) {
+        checkDynamicChange();
+        storeFactoryConfigurations.add(factory);
+    }
+
+    public final CacheConfiguration store(StoreFactoryConfiguration factory) {
+        addStore(factory);
+        return this;
+    }
+    
     /**
      * Configuration for the CacheLoaderFactoryConfiguration.
      */
@@ -1456,6 +1485,16 @@ public class CacheConfiguration implements Cloneable {
      */
     public List getCacheLoaderConfigurations() {
         return cacheLoaderConfigurations;
+    }
+
+
+    /**
+     * Accessor
+     *
+     * @return the configuration
+     */
+    public List<StoreFactoryConfiguration> getStoreFactoryConfigurations() {
+        return storeFactoryConfigurations;
     }
 
     /**

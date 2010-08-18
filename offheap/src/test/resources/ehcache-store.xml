@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd">
+
+	<defaultCache maxElementsInMemory="10" eternal="false"
+		timeToIdleSeconds="5" timeToLiveSeconds="10" overflowToDisk="true" />
+
+	<cache name="defaultStorageStrategy" maxElementsInMemory="10"
+		eternal="false" timeToIdleSeconds="5" timeToLiveSeconds="10"
+		overflowToDisk="true" copyOnRead="true">
+		<store class="my.pkg.OffHeapStore">
+            <maximalSize>8Gb</maximalSize>
+            <fast>true</fast>
+		</store>
+		<store class="my.pkg.OnHeapStore">
+            <maximalSize>8Mb</maximalSize>
+            <lame>false</lame>
+		</store>
+	</cache>
+	
+	<cache name="otherDefaultStorageStrategy" maxElementsInMemory="10"
+		eternal="false" timeToIdleSeconds="5" timeToLiveSeconds="10"
+		overflowToDisk="true" copyOnRead="true">
+		<store class="my.other.pkg.OffHeapStore">
+            <maximalSize>1Gb</maximalSize>
+            <slow>false</slow>
+		</store>
+	</cache>
+
+</ehcache>

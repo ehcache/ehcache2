@@ -600,6 +600,33 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         assertEquals(1, sampleCacheNoOptionalAttributes.getCacheConfiguration().getDiskAccessStripes());
     }
 
+    @Test
+    public void testStoreConfigElements() throws Exception {
+        File file = new File(TEST_CONFIG_DIR + "ehcache-store.xml");
+        Configuration configuration = ConfigurationFactory.parseConfiguration(file);
+
+        CacheConfiguration cacheConfiguration = configuration.getCacheConfigurations().get("defaultStorageStrategy");
+        assertEquals(2, cacheConfiguration.getStoreFactoryConfigurations().size());
+
+        CacheConfiguration.StoreFactoryConfiguration storeFactoryConfiguration = cacheConfiguration.getStoreFactoryConfigurations().get(0);
+        assertEquals("my.pkg.OffHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
+        assertEquals("8Gb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
+        assertEquals("true", storeFactoryConfiguration.getAnyProperties().getProperty("fast"));
+
+        storeFactoryConfiguration = cacheConfiguration.getStoreFactoryConfigurations().get(1);
+        assertEquals("my.pkg.OnHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
+        assertEquals("8Mb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
+        assertEquals("false", storeFactoryConfiguration.getAnyProperties().getProperty("lame"));
+
+        CacheConfiguration otherCacheConfiguration = configuration.getCacheConfigurations().get("otherDefaultStorageStrategy");
+        assertEquals(1, otherCacheConfiguration.getStoreFactoryConfigurations().size());
+
+        storeFactoryConfiguration = otherCacheConfiguration.getStoreFactoryConfigurations().get(0);
+        assertEquals("my.other.pkg.OffHeapStore", storeFactoryConfiguration.getFullyQualifiedClassPath());
+        assertEquals("1Gb", storeFactoryConfiguration.getAnyProperties().getProperty("maximalSize"));
+        assertEquals("false", storeFactoryConfiguration.getAnyProperties().getProperty("slow"));
+    }
+
 
     /**
      * Tests that the loader successfully loads from ehcache-nodisk.xml

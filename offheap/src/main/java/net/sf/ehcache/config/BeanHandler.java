@@ -144,7 +144,18 @@ final class BeanHandler extends DefaultHandler {
     @Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
-        
+
+        if (element.parent != null) {
+            try {
+                Method method = element.parent.bean.getClass().getMethod("addAnyProperty", String.class, String.class);
+                String value = new String(ch, start, length).trim();
+                method.invoke(element.parent.bean, element.elementName, value);
+            } catch (Exception e) {
+                // could not set xsd:any property on parent element
+            }
+        }
+
+
         if (extractingSubtree()) {
             appendToSubtree(ch, start, length);
         }
@@ -171,6 +182,14 @@ final class BeanHandler extends DefaultHandler {
             }
         } catch (final Exception e) {
             throw new SAXException(getLocation() + ": Could not create nested element <" + name + ">.");
+        }
+
+        try {
+            parent.bean.getClass().getMethod("addAnyProperty", String.class, String.class);
+            // found addAnyProperty -> supports nested elements as xsd:any properties
+            return null;
+        } catch (NoSuchMethodException e) {
+            // did not find addAnyProperty -> no support for nested elements as xsd:any properties
         }
 
         throw new SAXException(getLocation()
