@@ -14,23 +14,18 @@
  *  limitations under the License.
  */
 
-package net.sf.ehcache.config;
+package net.sf.ehcache.management;
 
-import net.sf.ehcache.CacheException;
+import javax.management.MBeanServer;
+
+import net.sf.ehcache.distribution.CacheManagerPeerProvider;
 
 /**
- * An exception to report invalid configuration settings.
- *  
- * @author gbevin
- * @author Greg Luck
+ * A CacheManagerPeerProvider that supports MBean registration
  */
-public class InvalidConfigurationException extends CacheException {
-
+public interface ManagedCacheManagerPeerProvider extends CacheManagerPeerProvider {
     /**
-     * Constructs a new exception with a detailed message that explains the cause.
-     * @param message the exception message
+     * Register the peer provider with the MBeanServer 
      */
-    public InvalidConfigurationException(String message) {
-        super(message);
-    }
+    public void register(MBeanServer mBeanServer);
 }

@@ -79,6 +79,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -287,6 +288,7 @@ public class Cache implements Ehcache, StoreListener {
 
 
         this.configuration = cacheConfiguration.clone();
+        configuration.validateCompleteConfiguration();
 
         guid = createGuid();
 
@@ -1637,7 +1639,7 @@ public class Cache implements Ehcache, StoreListener {
      */
     public final List getKeys() throws IllegalStateException, CacheException {
         checkStatus();
-        return Arrays.asList(compoundStore.getKeyArray());
+        return compoundStore.getKeys();
     }
 
     /**
@@ -1662,19 +1664,18 @@ public class Cache implements Ehcache, StoreListener {
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     public final List getKeysWithExpiryCheck() throws IllegalStateException, CacheException {
-        List allKeyList = getKeys();
-        //removeInternal keys of expired elements
-        ArrayList<Object> nonExpiredKeys = new ArrayList<Object>(allKeyList.size());
-        int allKeyListSize = allKeyList.size();
-        for (int i = 0; i < allKeyListSize; i++) {
-            Object key = allKeyList.get(i);
-            Element element = getQuiet(key);
-            if (element != null) {
-                nonExpiredKeys.add(key);
-            }
-        }
-        nonExpiredKeys.trimToSize();
-        return nonExpiredKeys;
+    	 List allKeyList = getKeys();
+         //removeInternal keys of expired elements
+         ArrayList<Object> nonExpiredKeys = new ArrayList<Object>(allKeyList.size());
+         for (Iterator iter = allKeyList.iterator(); iter.hasNext(); ) {
+             Object key = iter.next();
+             Element element = getQuiet(key);
+             if (element != null) {
+                 nonExpiredKeys.add(key);
+             }
+         }
+         nonExpiredKeys.trimToSize();
+         return nonExpiredKeys;
     }
 
 

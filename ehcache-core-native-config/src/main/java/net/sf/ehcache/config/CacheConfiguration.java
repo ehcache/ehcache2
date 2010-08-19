@@ -33,7 +33,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * <h4>Construction Patterns</h4>
  * The recommended way of creating a <code>Cache</code> in Ehcache 2.0 and above is to create a <code>CacheConfiguration</code> object
  * and pass it to the <code>Cache</code> constructor. See {@link net.sf.ehcache.Cache#Cache(CacheConfiguration)}.
- * <p>
+ * <p/>
  * This class supports setter injection and also the fluent builder pattern.
  * e.g.
  * <code>Cache cache = new Cache(new CacheConfiguration("test2", 1000).eternal(true).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.FIFO));</code>
@@ -95,12 +95,12 @@ public class CacheConfiguration implements Cloneable {
      * Default number of diskAccessStripes.
      */
     public static final int DEFAULT_DISK_ACCESS_STRIPES = 1;
-    
+
     /**
      * Logging is off by default.
      */
     public static final boolean DEFAULT_LOGGING = false;
-    
+
     /**
      * The default memory store eviction policy is LRU.
      */
@@ -111,22 +111,22 @@ public class CacheConfiguration implements Cloneable {
      * The default cacheWriterConfiguration
      */
     public static final CacheWriterConfiguration DEFAULT_CACHE_WRITER_CONFIGURATION = new CacheWriterConfiguration();
-    
+
     /**
      * Default value for copyOnRead
      */
     public static final boolean DEFAULT_COPY_ON_READ = false;
-    
+
     /**
      * Default value for copyOnRead
      */
     public static final boolean DEFAULT_COPY_ON_WRITE = false;
-    
+
     /**
      * Default value for ttl
      */
     public static final long DEFAULT_TTL = 0;
-    
+
     /**
      * Default value for tti
      */
@@ -156,9 +156,9 @@ public class CacheConfiguration implements Cloneable {
      * Default copyStrategyConfiguration
      */
     public static final CopyStrategyConfiguration DEFAULT_COPY_STRATEGY_CONFIGURATION = new CopyStrategyConfiguration();
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(CacheConfiguration.class.getName());
-    
+
     /**
      * the name of the cache.
      */
@@ -166,14 +166,14 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * the maximum objects to be held in the {@link net.sf.ehcache.store.MemoryStore}.
-     * <p>
+     * <p/>
      * <code>0</code> translates to no-limit.
      */
     protected volatile int maxElementsInMemory;
 
     /**
      * the maximum objects to be held in the {@link net.sf.ehcache.store.DiskStore}.
-     * <p>
+     * <p/>
      * <code>0</code> translates to no-limit.
      */
     protected volatile int maxElementsOnDisk = DEFAULT_MAX_ELEMENTS_ON_DISK;
@@ -243,7 +243,7 @@ public class CacheConfiguration implements Cloneable {
      * The number of concurrent disk access stripes.
      */
     protected volatile int diskAccessStripes = DEFAULT_DISK_ACCESS_STRIPES;
-    
+
     /**
      * The interval in seconds between runs of the disk expiry thread.
      * <p/>
@@ -295,12 +295,12 @@ public class CacheConfiguration implements Cloneable {
      * The cache loader factories added by BeanUtils.
      */
     protected volatile List<CacheLoaderFactoryConfiguration> cacheLoaderConfigurations = new ArrayList<CacheLoaderFactoryConfiguration>();
-    
+
     /**
      * The cache decorator factories added by BeanUtils.
      */
-    protected volatile List<CacheDecoratorFactoryConfiguration> cacheDecoratorConfigurations = 
-        new ArrayList<CacheDecoratorFactoryConfiguration>();
+    protected volatile List<CacheDecoratorFactoryConfiguration> cacheDecoratorConfigurations =
+            new ArrayList<CacheDecoratorFactoryConfiguration>();
 
     /**
      * The listeners for this configuration.
@@ -315,19 +315,29 @@ public class CacheConfiguration implements Cloneable {
     private volatile Boolean copyOnRead;
     private volatile Boolean copyOnWrite;
     private Object defaultTransactionManager;
+    private boolean conflictingValuesWarningLogged = false;
 
     /**
-     * Default constructor that can only be used by classes in this package.
+     * Default constructor.
+     * <p/>
+     * Note that an empty Cache is not valid and must have extra configuration added which can be done
+     * through the fluent methods in this class. Call <code>validateConfiguration()</code> to check your configuration.
+     *
+     * @see #validateCompleteConfiguration
      */
     public CacheConfiguration() {
-        // default constructor is only accessible in this package
+        //empty constructor
     }
 
     /**
      * Create a new cache configuration.
+     * <p/>
+     * Extra configuration can added after construction via the fluent methods in this class.
+     * Call <code>validateConfiguration()</code> to check your configuration.
      *
      * @param name                the name of the cache. Note that "default" is a reserved name for the defaultCache.
      * @param maxElementsInMemory the maximum number of elements in memory, before they are evicted (0 == no limit)
+     * @see #validateCompleteConfiguration()
      */
     public CacheConfiguration(String name, int maxElementsInMemory) {
         this.name = name;
@@ -369,7 +379,7 @@ public class CacheConfiguration implements Cloneable {
         }
 
         cloneCacheLoaderConfigurations(config);
-        
+
         cloneCacheDecoratorConfigurations(config);
 
         config.listeners = new CopyOnWriteArraySet<CacheConfigurationListener>();
@@ -406,7 +416,7 @@ public class CacheConfiguration implements Cloneable {
             config.cacheLoaderConfigurations = copy;
         }
     }
-    
+
     private void cloneCacheDecoratorConfigurations(CacheConfiguration config) {
         if (cacheDecoratorConfigurations.size() > 0) {
             List<CacheDecoratorFactoryConfiguration> copy = new ArrayList<CacheDecoratorFactoryConfiguration>();
@@ -419,6 +429,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the name of the cache.
+     *
      * @param name the cache name. This must be unique. The / character is illegal. The # character does not work with RMI replication.
      */
     public final void setName(String name) {
@@ -431,6 +442,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder to set the name of the cache.
+     *
      * @param name the cache name. This must be unique. The / character is illegal. The # character does not work with RMI replication.
      * @return this configuration instance
      * @see #setName(String)
@@ -445,6 +457,7 @@ public class CacheConfiguration implements Cloneable {
      * <p/>
      * This property can be modified dynamically while the cache is operating.
      * Only used when cache is clustered with Terracotta
+     *
      * @param enable If true, enables logging otherwise disables logging
      */
     public final void setLogging(boolean enable) {
@@ -459,6 +472,7 @@ public class CacheConfiguration implements Cloneable {
      * <p/>
      * This property can be modified dynamically while the cache is operating.
      * Only used when cache is clustered with Terracotta
+     *
      * @param enable If true, enables logging otherwise disables logging
      * @return this configuration instance
      * @see #setLogging(boolean)
@@ -472,6 +486,7 @@ public class CacheConfiguration implements Cloneable {
      * Sets the maximum objects to be held in memory (0 = no limit).
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param maxElementsInMemory The maximum number of elements in memory, before they are evicted (0 == no limit)
      */
     public final void setMaxElementsInMemory(int maxElementsInMemory) {
@@ -486,6 +501,7 @@ public class CacheConfiguration implements Cloneable {
      * Builder that sets the maximum objects to be held in memory (0 = no limit).
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param maxElementsInMemory The maximum number of elements in memory, before they are evicted (0 == no limit)
      * @return this configuration instance
      */
@@ -505,6 +521,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder that sets the eviction policy. An invalid argument will set it to null.
+     *
      * @param memoryStoreEvictionPolicy a String representation of the policy. One of "LRU", "LFU" or "FIFO".
      * @return this configuration instance
      * @see #setMemoryStoreEvictionPolicy(String)
@@ -540,6 +557,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Sets whether the MemoryStore should be cleared when
      * {@link net.sf.ehcache.Ehcache#flush flush()} is called on the cache - true by default.
+     *
      * @param clearOnFlush true to clear on flush
      */
     public final void setClearOnFlush(boolean clearOnFlush) {
@@ -550,6 +568,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Builder which sets whether the MemoryStore should be cleared when
      * {@link net.sf.ehcache.Ehcache#flush flush()} is called on the cache - true by default.
+     *
      * @param clearOnFlush true to clear on flush
      * @return this configuration instance
      * @see #setClearOnFlush(boolean)
@@ -561,10 +580,12 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets whether elements are eternal. If eternal, timeouts are ignored and the element is never expired. False by default.
-     * @param  eternal true for eternal
+     *
+     * @param eternal true for eternal
      */
     public final void setEternal(boolean eternal) {
         checkDynamicChange();
+        checkConflictingEternalValues(eternal, getTimeToLiveSeconds(), getTimeToIdleSeconds());
         this.eternal = eternal;
         if (eternal) {
             setTimeToIdleSeconds(0);
@@ -572,9 +593,20 @@ public class CacheConfiguration implements Cloneable {
         }
     }
 
+    private void checkConflictingEternalValues(boolean newEternalValue, long newTTLValue, long newTTIValue) {
+        if (!conflictingValuesWarningLogged && newEternalValue && (newTTLValue != 0 || newTTIValue != 0)) {
+            conflictingValuesWarningLogged = true;
+            LOG
+                    .warn("Cache '"
+                            + getName()
+                            + "' is set to eternal but also has TTI/TTL set. To avoid this warning, clean up the config removing conflicting values of eternal, TTI and TTL.");
+        }
+    }
+
     /**
      * Builder which sets whether elements are eternal. If eternal, timeouts are ignored and the element is never expired. False by default.
-     * @param  eternal true for eternal
+     *
+     * @param eternal true for eternal
      * @return this configuration instance
      * @see #setEternal(boolean)
      */
@@ -588,10 +620,12 @@ public class CacheConfiguration implements Cloneable {
      * {@link net.sf.ehcache.Element}
      * <p/>
      * This property can be modified dynamically while the cache is operating.
-     * @param timeToIdleSeconds   the default amount of time to live for an element from its last accessed or modified date
+     *
+     * @param timeToIdleSeconds the default amount of time to live for an element from its last accessed or modified date
      */
     public final void setTimeToIdleSeconds(long timeToIdleSeconds) {
         checkDynamicChange();
+        checkConflictingEternalValues(eternal, getTimeToLiveSeconds(), timeToIdleSeconds);
         long oldTti = this.timeToIdleSeconds;
         long newTti = timeToIdleSeconds;
         this.timeToIdleSeconds = timeToIdleSeconds;
@@ -603,7 +637,8 @@ public class CacheConfiguration implements Cloneable {
      * This default can be overridden in {@link net.sf.ehcache.Element}
      * <p/>
      * This property can be modified dynamically while the cache is operating.
-     * @param timeToIdleSeconds   the default amount of time to live for an element from its last accessed or modified date
+     *
+     * @param timeToIdleSeconds the default amount of time to live for an element from its last accessed or modified date
      * @return this configuration instance
      * @see #setTimeToIdleSeconds(long)
      */
@@ -617,10 +652,12 @@ public class CacheConfiguration implements Cloneable {
      * This default can be overridden in {@link net.sf.ehcache.Element}
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param timeToLiveSeconds the default amount of time to live for an element from its creation date
      */
     public final void setTimeToLiveSeconds(long timeToLiveSeconds) {
         checkDynamicChange();
+        checkConflictingEternalValues(eternal, timeToLiveSeconds, getTimeToIdleSeconds());
         long oldTtl = this.timeToLiveSeconds;
         long newTtl = timeToLiveSeconds;
         this.timeToLiveSeconds = timeToLiveSeconds;
@@ -632,6 +669,7 @@ public class CacheConfiguration implements Cloneable {
      * This default can be overridden in {@link net.sf.ehcache.Element}
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param timeToLiveSeconds the default amount of time to live for an element from its creation date
      * @return this configuration instance
      * @see #setTimeToLiveSeconds(long)
@@ -643,6 +681,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets whether elements can overflow to disk when the in-memory cache has reached the set limit.
+     *
      * @param overflowToDisk whether to use the disk store
      */
     public final void setOverflowToDisk(boolean overflowToDisk) {
@@ -653,6 +692,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets whether elements can overflow to disk when the in-memory cache has reached the set limit.
+     *
      * @param overflowToDisk whether to use the disk store
      * @return this configuration instance
      * @see #setOverflowToDisk(boolean)
@@ -664,7 +704,8 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets whether the disk store persists between CacheManager instances. Note that this operates independently of {@link #overflowToDisk}.
-     * @param diskPersistent  whether to persist the cache to disk between JVM restarts
+     *
+     * @param diskPersistent whether to persist the cache to disk between JVM restarts
      */
     public final void setDiskPersistent(boolean diskPersistent) {
         checkDynamicChange();
@@ -674,7 +715,8 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets whether the disk store persists between CacheManager instances. Note that this operates independently of {@link #overflowToDisk}.
-     * @param diskPersistent  whether to persist the cache to disk between JVM restarts.
+     *
+     * @param diskPersistent whether to persist the cache to disk between JVM restarts.
      * @return this configuration instance
      * @see #setDiskPersistent(boolean)
      */
@@ -685,6 +727,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the path that will be used for the disk store.
+     *
      * @param diskStorePath this parameter is ignored. CacheManager sets it using setter injection.
      */
     public final void setDiskStorePath(String diskStorePath) {
@@ -698,6 +741,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the path that will be used for the disk store.
+     *
      * @param diskStorePath this parameter is ignored. CacheManager sets it using setter injection.
      * @return this configuration instance
      * @see #setDiskStorePath(String)
@@ -710,6 +754,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Sets the disk spool size, which is used to buffer writes to the DiskStore.
      * If not set it defaults to {@link #DEFAULT_SPOOL_BUFFER_SIZE}
+     *
      * @param diskSpoolBufferSizeMB a positive number
      */
     public void setDiskSpoolBufferSizeMB(int diskSpoolBufferSizeMB) {
@@ -724,6 +769,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Builder which sets the disk spool size, which is used to buffer writes to the DiskStore.
      * If not set it defaults to {@link #DEFAULT_SPOOL_BUFFER_SIZE}
+     *
      * @param diskSpoolBufferSizeMB a positive number
      * @return this configuration instance
      * @see #setDiskSpoolBufferSizeMB(int)
@@ -747,10 +793,11 @@ public class CacheConfiguration implements Cloneable {
             this.diskAccessStripes = stripes;
         }
     }
-    
+
     /**
      * Builder which sets the number of disk stripes. RandomAccessFiles used to access the data file. By default there
      * is one stripe.
+     *
      * @return this configuration instance
      * @see #setDiskAccessStripes(int)
      */
@@ -758,11 +805,12 @@ public class CacheConfiguration implements Cloneable {
         setDiskAccessStripes(stripes);
         return this;
     }
-    
+
     /**
      * Sets the maximum number elements on Disk. 0 means unlimited.
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param maxElementsOnDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
      */
     public void setMaxElementsOnDisk(int maxElementsOnDisk) {
@@ -777,6 +825,7 @@ public class CacheConfiguration implements Cloneable {
      * Builder which sets the maximum number elements on Disk. 0 means unlimited.
      * <p/>
      * This property can be modified dynamically while the cache is operating.
+     *
      * @param maxElementsOnDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
      * @return this configuration instance
      * @see #setMaxElementsOnDisk(int)
@@ -808,6 +857,7 @@ public class CacheConfiguration implements Cloneable {
      * 2 minutes is the default.
      * This is not the same thing as time to live or time to idle. When the thread runs it checks
      * these things. So this value is how often we check for expiry.
+     *
      * @return this configuration instance
      * @see #setDiskExpiryThreadIntervalSeconds(long)
      */
@@ -827,12 +877,13 @@ public class CacheConfiguration implements Cloneable {
      * @return true is this configuration is frozen - it cannot be changed dynamically.
      */
     public boolean isFrozen() {
-      return frozen;
+        return frozen;
     }
 
     /**
      * Getter to the CopyStrategy set in the config (really? how?).
      * This will always return the same unique instance per cache
+     *
      * @return the {@link CopyStrategy} for instance for this cache
      */
     public CopyStrategy getCopyStrategy() {
@@ -842,6 +893,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it returns
+     *
      * @param copyOnRead true, if copyOnRead
      */
     public CacheConfiguration copyOnRead(boolean copyOnRead) {
@@ -851,6 +903,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it returns
+     *
      * @return true, is copyOnRead
      */
     public boolean isCopyOnRead() {
@@ -860,6 +913,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it returns
+     *
      * @param copyOnRead true, if copyOnRead
      */
     public void setCopyOnRead(final boolean copyOnRead) {
@@ -868,6 +922,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it gets
+     *
      * @param copyOnWrite true, if copyOnWrite
      */
     public CacheConfiguration copyOnWrite(boolean copyOnWrite) {
@@ -877,6 +932,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it gets
+     *
      * @return true, if copyOnWrite
      */
     public boolean isCopyOnWrite() {
@@ -886,6 +942,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Whether the Cache should copy elements it gets
+     *
      * @param copyOnWrite true, if copyOnWrite
      */
     public void setCopyOnWrite(final boolean copyOnWrite) {
@@ -894,14 +951,16 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the CopyStrategyConfiguration for this cache
+     *
      * @param copyStrategyConfiguration the CopyStrategy Configuration
      */
     public void addCopyStrategy(CopyStrategyConfiguration copyStrategyConfiguration) {
         this.copyStrategyConfiguration = copyStrategyConfiguration;
     }
-    
+
     /**
      * Returns the copyStrategyConfiguration
+     *
      * @return the copyStrategyConfiguration
      */
     public CopyStrategyConfiguration getCopyStrategyConfiguration() {
@@ -933,6 +992,7 @@ public class CacheConfiguration implements Cloneable {
     
     /**
      * Getter to the default TM to use
+     *
      * @return the default one if set, or null
      */
     public Object getDefaultTransactionManager() {
@@ -941,6 +1001,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Setter to the default TM
+     *
      * @param defaultTransactionManager the default TM, can be null to fall back to TMLookup
      */
     public void setDefaultTransactionManager(final Object defaultTransactionManager) {
@@ -1092,7 +1153,7 @@ public class CacheConfiguration implements Cloneable {
         checkDynamicChange();
         cacheLoaderConfigurations.add(factory);
     }
-    
+
     /**
      * Configuration for the CacheDecoratorFactoryConfiguration.
      */
@@ -1169,6 +1230,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the transactionalMode
+     *
      * @param transactionalMode one of OFF or XA
      * @return this configuration instance
      * @see #setTransactionalMode(String)
@@ -1180,6 +1242,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the transactionalMode
+     *
      * @param transactionalMode one of OFF or XA enum values
      * @return this configuration instance
      * @see #setTransactionalMode(String)
@@ -1218,7 +1281,30 @@ public class CacheConfiguration implements Cloneable {
         return statistics;
     }
 
-    private void validateConfiguration() {
+    /**
+     * Used to validate what should be a complete Cache Configuration.
+     *
+     * @throws InvalidConfigurationException if the configuration is invalid.
+     */
+    public void validateCompleteConfiguration() {
+
+        validateConfiguration();
+
+        //Extra checks that a completed cache config should have
+
+        if (name == null) {
+            throw new InvalidConfigurationException("Caches must be named.");
+        }
+    }
+
+
+    /**
+     * Used to validate a Cache Configuration.
+     *
+     * @throws InvalidConfigurationException if the configuration is invalid.
+     */
+    public void validateConfiguration() {
+
 
         if (terracottaConfiguration != null && terracottaConfiguration.isClustered()) {
             if (overflowToDisk) {
@@ -1360,7 +1446,7 @@ public class CacheConfiguration implements Cloneable {
     public int getDiskAccessStripes() {
         return diskAccessStripes;
     }
-    
+
     /**
      * Only used when cache is clustered with Terracotta
      *
@@ -1395,7 +1481,7 @@ public class CacheConfiguration implements Cloneable {
     public List getCacheLoaderConfigurations() {
         return cacheLoaderConfigurations;
     }
-    
+
     /**
      * Accessor
      *
@@ -1613,7 +1699,7 @@ public class CacheConfiguration implements Cloneable {
     public void internalSetLogging(boolean logging) {
         this.logging = logging;
     }
-    
+
     /**
      * Intended for internal use only, and subject to change.
      * This is called from the store implementations to reflect the new coherent value

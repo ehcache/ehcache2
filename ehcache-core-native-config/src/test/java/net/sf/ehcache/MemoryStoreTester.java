@@ -108,7 +108,7 @@ public class MemoryStoreTester extends AbstractCacheTest {
     protected void createMemoryOnlyStore(MemoryStoreEvictionPolicy evictionPolicy) throws CacheException {
         manager.removeCache("testMemoryOnly");
         cache = new Cache("testMemoryOnly", 12000, evictionPolicy, false, System.getProperty("java.io.tmpdir"),
-                true, 60, 30, false, 60, null);
+                false, 60, 30, false, 60, null);
         manager.addCache(cache);
         store = cache.getStore();
     }
@@ -121,7 +121,7 @@ public class MemoryStoreTester extends AbstractCacheTest {
      */
     protected void createMemoryOnlyStore(MemoryStoreEvictionPolicy evictionPolicy, int memoryStoreSize) throws CacheException {
         manager.removeCache("test");
-        cache = new Cache("test", memoryStoreSize, evictionPolicy, false, null, true, 60, 30, false, 60, null);
+        cache = new Cache("test", memoryStoreSize, evictionPolicy, false, null, false, 60, 30, false, 60, null);
         manager.addCache(cache);
         store = cache.getStore();
     }
@@ -561,7 +561,7 @@ public class MemoryStoreTester extends AbstractCacheTest {
 
     @Test
     public void testShrinkingAndGrowingMemoryStore() {
-        cache = new Cache("testShrinkingAndGrowingMemoryStore", 50, false, true, 120, 120);
+        cache = new Cache("testShrinkingAndGrowingMemoryStore", 50, false, false, 120, 120);
         manager.addCache(cache);
         store = cache.getStore();
 
