@@ -179,7 +179,7 @@ public class Cache implements Ehcache, StoreListener {
     static {
         Class<? extends Store> nativeClass;
         try {
-            nativeClass = (Class<? extends Store>) Class.forName("net.sf.ehcache.store.nativecache.NativeCacheStore");
+            nativeClass = (Class<? extends Store>) Class.forName("net.sf.ehcache.store.offheap.OffHeapStore");
             NATIVE_CONSTRUCTOR = nativeClass.getConstructor(Cache.class);
             LOG.info("Native Cache Extensions Enabled");
         } catch (ClassNotFoundException e) {
