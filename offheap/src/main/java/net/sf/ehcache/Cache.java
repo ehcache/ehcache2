@@ -21,7 +21,10 @@ import net.sf.ehcache.bootstrap.BootstrapCacheLoaderFactory;
 import net.sf.ehcache.concurrent.CacheLockProvider;
 import net.sf.ehcache.concurrent.LockType;
 import net.sf.ehcache.concurrent.Sync;
-import net.sf.ehcache.config.*;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.CacheWriterConfiguration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
+import net.sf.ehcache.config.TerracottaConfiguration;
 import net.sf.ehcache.event.CacheEventListener;
 import net.sf.ehcache.event.CacheEventListenerFactory;
 import net.sf.ehcache.event.RegisteredEventListeners;
@@ -66,10 +69,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -950,61 +953,7 @@ public class Cache implements Ehcache, StoreListener {
             }
 
             final Store store;
-
-            if (this.configuration.getStoreFactoryConfiguration() != null) {
-                StoreConfiguration storeConfiguration = this.configuration.getStoreFactoryConfiguration();
-                Properties props = storeConfiguration.getAnyProperties();
-                String fqcn = storeConfiguration.getFullyQualifiedClassPath();
-
-                // Following code checks that the configured class:
-                // 1. implements the Store interface
-                // 2. defines at least one of those constructor signatures:
-                //    <init>(CacheConfiguration, Properties) or <init>(Properties) or <init>()
-                // then tries to instantiate it
-                try {
-                    Class storeClass = Class.forName(fqcn);
-                    if (!Store.class.isAssignableFrom(storeClass))
-                        throw new CacheException("Store class for cache '" + configuration.getName() + "' does not implement " + Store.class.getName());
-
-                    Store builtStore = null;
-                    try {
-                        Constructor<Store> ctor = storeClass.getConstructor(CacheConfiguration.class, Properties.class);
-                        builtStore = ctor.newInstance(this.configuration, props);
-                    } catch (NoSuchMethodException e) {
-                        // try next one
-                    } catch (Exception e) {
-                        throw new CacheException("Cannot instantiate Store for cache '" + configuration.getName() + "'", e);
-                    }
-
-                    if (builtStore == null) {
-                        try {
-                            Constructor<Store> ctor = storeClass.getConstructor(Properties.class);
-                            builtStore = ctor.newInstance(props);
-                        } catch (NoSuchMethodException e) {
-                            // try next one
-                        } catch (Exception e) {
-                            throw new CacheException("Cannot instantiate Store for cache '" + configuration.getName() + "'", e);
-                        }
-                    }
-
-                    if (builtStore == null) {
-                        try {
-                            Constructor<Store> ctor = storeClass.getConstructor();
-                            builtStore = ctor.newInstance();
-                        } catch (NoSuchMethodException e2) {
-                            throw new CacheException("Store class for cache '" + configuration.getName() + "' does not have any one of the required constructors. " +
-                                    "One of <init>(CacheConfiguration, Properties) or <init>(Properties) or <init>() is required");
-                        } catch (Exception e) {
-                            throw new CacheException("Cannot instantiate Store for cache '" + configuration.getName() + "'", e);
-                        }
-                    }
-
-                    store = builtStore;
-                } catch (ClassNotFoundException e) {
-                    throw new CacheException("Store class for cache '" + configuration.getName() + "'  not found", e);
-                }
-
-            } else if (isTerracottaClustered()) {
+            if (isTerracottaClustered()) {
                 store = cacheManager.createTerracottaStore(this);
                 boolean unlockedReads = !this.configuration.getTerracottaConfiguration().getCoherentReads();
                 // if coherentReads=false, make coherent=false

@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -288,11 +287,6 @@ public class CacheConfiguration implements Cloneable {
     protected TerracottaConfiguration terracottaConfiguration;
 
     /**
-     * The StoreConfiguration.
-     */
-    protected StoreConfiguration storeConfiguration;
-
-    /**
      * The CacheWriterConfiguration.
      */
     protected CacheWriterConfiguration cacheWriterConfiguration = DEFAULT_CACHE_WRITER_CONFIGURATION;
@@ -386,10 +380,6 @@ public class CacheConfiguration implements Cloneable {
         cloneCacheLoaderConfigurations(config);
 
         cloneCacheDecoratorConfigurations(config);
-
-        if (storeConfiguration != null) {
-            config.storeConfiguration = storeConfiguration.clone();
-        }
 
         config.listeners = new CopyOnWriteArraySet<CacheConfigurationListener>();
 
@@ -1182,17 +1172,6 @@ public class CacheConfiguration implements Cloneable {
         return this;
     }
 
-    public final void addStore(StoreConfiguration configuration) {
-        this.storeConfiguration = configuration;
-        validateConfiguration();
-    }
-
-    public final CacheConfiguration store(StoreConfiguration configuration) {
-        addStore(configuration);
-        return this;
-    }
-
-
     /**
      * Allows BeanHandler to add the CacheWriterConfiguration to the configuration.
      */
@@ -1477,16 +1456,6 @@ public class CacheConfiguration implements Cloneable {
      */
     public List getCacheLoaderConfigurations() {
         return cacheLoaderConfigurations;
-    }
-
-
-    /**
-     * Accessor
-     *
-     * @return the configuration
-     */
-    public StoreConfiguration getStoreFactoryConfiguration() {
-        return storeConfiguration;
     }
 
     /**

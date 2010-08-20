@@ -73,7 +73,6 @@
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheEventListenerFactory"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheExtensionFactory"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheLoaderFactory"/>
-                <xs:element minOccurs="0" maxOccurs="1" ref="store"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="bootstrapCacheLoaderFactory"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="cacheExceptionHandlerFactory"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="terracotta"/>
@@ -105,7 +104,6 @@
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheExtensionFactory"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheLoaderFactory"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="cacheDecoratorFactory"/>
-                <xs:element minOccurs="0" maxOccurs="1" ref="store"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="bootstrapCacheLoaderFactory"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="cacheExceptionHandlerFactory"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="terracotta"/>
@@ -130,14 +128,6 @@
             <xs:attribute name="copyOnRead" type="xs:boolean" use="optional" default="false"/>
             <xs:attribute name="copyOnWrite" type="xs:boolean" use="optional" default="false"/>
             <xs:attribute name="logging" type="xs:boolean" use="optional" default="false"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="store">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
-            </xs:sequence>
-            <xs:attribute name="class" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="cacheEventListenerFactory">

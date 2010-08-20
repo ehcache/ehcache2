@@ -600,26 +600,6 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         assertEquals(1, sampleCacheNoOptionalAttributes.getCacheConfiguration().getDiskAccessStripes());
     }
 
-    @Test
-    public void testStoreConfigElements() throws Exception {
-        File file = new File(TEST_CONFIG_DIR + "ehcache-store.xml");
-        Configuration configuration = ConfigurationFactory.parseConfiguration(file);
-
-        CacheConfiguration cacheConfiguration = configuration.getCacheConfigurations().get("defaultStorageStrategy");
-
-        StoreConfiguration storeConfiguration = cacheConfiguration.getStoreFactoryConfiguration();
-        assertEquals("my.pkg.OffHeapStore", storeConfiguration.getFullyQualifiedClassPath());
-        assertEquals("8Gb", storeConfiguration.getAnyProperties().getProperty("maximalSize"));
-        assertEquals("true", storeConfiguration.getAnyProperties().getProperty("fast"));
-
-        CacheConfiguration otherCacheConfiguration = configuration.getCacheConfigurations().get("otherDefaultStorageStrategy");
-
-        storeConfiguration = otherCacheConfiguration.getStoreFactoryConfiguration();
-        assertEquals("my.other.pkg.OffHeapStore", storeConfiguration.getFullyQualifiedClassPath());
-        assertEquals("1Gb", storeConfiguration.getAnyProperties().getProperty("maximalSize"));
-        assertEquals("false", storeConfiguration.getAnyProperties().getProperty("slow"));
-    }
-
 
     /**
      * Tests that the loader successfully loads from ehcache-nodisk.xml
