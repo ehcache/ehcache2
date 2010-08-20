@@ -69,10 +69,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -233,6 +233,7 @@ public class Cache implements Ehcache, StoreListener {
     private volatile boolean allowDisable = true;
 
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private static final String OFF_HEAP_STORE_CLASSNAME = "net.sf.ehcache.ee.store.OffHeapStore";
 
     /**
      * 2.0 and higher Constructor
@@ -953,7 +954,26 @@ public class Cache implements Ehcache, StoreListener {
             }
 
             final Store store;
-            if (isTerracottaClustered()) {
+            if (configuration.isOverflowToOffHeap()) {
+                try {
+                    Class<Store> storeClass = (Class<Store>) Class.forName(OFF_HEAP_STORE_CLASSNAME);
+
+                    try {
+                        store = storeClass.getConstructor(CacheConfiguration.class).newInstance(configuration);
+                    } catch (NoSuchMethodException e) {
+                        throw new CacheException("Cannot find constructor <init>(CacheConfiguration) in store class " + OFF_HEAP_STORE_CLASSNAME, e);
+                    } catch (InvocationTargetException e) {
+                        throw new CacheException("Cannot instantiate store " + OFF_HEAP_STORE_CLASSNAME, e);
+                    } catch (InstantiationException e) {
+                        throw new CacheException("Cannot instantiate store " + OFF_HEAP_STORE_CLASSNAME, e);
+                    } catch (IllegalAccessException e) {
+                        throw new CacheException("Cannot instantiate store " + OFF_HEAP_STORE_CLASSNAME, e);
+                    }
+                } catch (ClassNotFoundException e) {
+                    throw new CacheException("Cannot load offheap store class " + OFF_HEAP_STORE_CLASSNAME, e);
+                }
+            }
+            else if (isTerracottaClustered()) {
                 store = cacheManager.createTerracottaStore(this);
                 boolean unlockedReads = !this.configuration.getTerracottaConfiguration().getCoherentReads();
                 // if coherentReads=false, make coherent=false

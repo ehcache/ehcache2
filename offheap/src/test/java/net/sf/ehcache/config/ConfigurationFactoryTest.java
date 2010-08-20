@@ -45,14 +45,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
@@ -1619,5 +1612,18 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
 
     }
 
+    @Test
+    public void testValidStoreConfigElements() throws Exception {
+        File file = new File(TEST_CONFIG_DIR + "ehcache-store.xml");
+        Configuration configuration = ConfigurationFactory.parseConfiguration(file);
+
+        CacheConfiguration cacheConfiguration = configuration.getCacheConfigurations().get("offheap1");
+        assertEquals(16777216, cacheConfiguration.getMaxMemoryOffHeapInBytes());
+        assertEquals(true, cacheConfiguration.isOverflowToOffHeap());
+
+        cacheConfiguration = configuration.getCacheConfigurations().get("offheap2");
+        assertEquals(2147483648L, cacheConfiguration.getMaxMemoryOffHeapInBytes());
+        assertEquals(false, cacheConfiguration.isOverflowToOffHeap());
+    }
 
 }
