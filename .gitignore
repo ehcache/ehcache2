@@ -1,7 +1,5 @@
 /target
+/ehcache-web.i*
 /.settings
 /.classpath
 /.project
-/*.iml
-/*.ipr
-/*.iws
