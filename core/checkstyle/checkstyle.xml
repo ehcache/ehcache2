@@ -16,7 +16,7 @@
     </module>
     <!-- Duplicate Code -->
     <module name="StrictDuplicateCode">
-        <property name="min" value="20"/>
+        <property name="min" value="30"/>
     </module>
     <!--<module name="NewlineAtEndOfFile"/>-->
 
@@ -34,6 +34,8 @@
 
     <module name="TreeWalker">
         <!--<property name="cacheFile" value="checkstyle.cache}"/>-->
+        <!--Java 5 checks-->
+        <!--<module name="MissingDeprecated"/>-->
 
         <!-- javadoc -->
         <module name="JavadocType">
@@ -87,11 +89,11 @@
             <property name="tokens" value="CTOR_DEF"/>
         </module>
         <module name="ParameterNumber">
-            <property name="max" value="10"/>
+            <property name="max" value="8"/>
             <property name="tokens" value="METHOD_DEF"/>
         </module>
         <module name="ParameterNumber">
-            <property name="max" value="10"/>
+            <property name="max" value="12"/>
             <property name="tokens" value="CTOR_DEF"/>
         </module>
         <module name="AnonInnerLength">
@@ -127,8 +129,9 @@
             <property name="option" value="eol"/>
         </module>
 
-        <module name="ModifierOrder"/> 
-        <module name="RedundantModifier"/>
+        <!-- Modifiers -->
+        <!--<module name="ModifierOrder"/> Bug reported. Want this to work -->
+        <!--<module name="RedundantModifier"/>-->
 
         <!-- Blocks -->
         <module name="EmptyBlock">
@@ -204,7 +207,8 @@
 
         <!-- Class Design -->
         <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
+        <!--Seems to be broken in 4.4-->
+        <!--<module name="HideUtilityClassConstructor"/>-->
         <module name="InterfaceIsType"/>
         <module name="MutableException"/>
         <module name="ThrowsCount">
@@ -219,14 +223,14 @@
             <property name="max" value="4"/>
         </module>
         <module name="ClassDataAbstractionCoupling">
-            <property name="max" value="10"/>
+            <property name="max" value="15"/>
         </module>
         <module name="ClassFanOutComplexity">
-            <property name="max" value="30"/>
+            <property name="max" value="40"/>
         </module>
         <module name="CyclomaticComplexity">
             <property name="severity" value="error"/>
-            <property name="max" value="10"/>
+            <property name="max" value="12"/>
         </module>
         <module name="NPathComplexity">
             <property name="max" value="50"/>
@@ -237,6 +241,11 @@
             <!-- . matches any character, so we need to
                  escape it and use \. to match dots. -->
             <property name="format" value="System\.out\.println"/>
+            <property name="illegalPattern" value="true"/>
+        </module>
+        <!-- Make sure j.u.l. is used -->
+        <module name="Regexp">
+            <property name="format" value="import org\.apache\.commons\.logging\.Log;"/>
             <property name="illegalPattern" value="true"/>
         </module>
         <!-- Make sure we are using safe element.get methods everywhere -->
