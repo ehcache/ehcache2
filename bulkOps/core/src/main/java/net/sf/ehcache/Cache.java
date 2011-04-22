@@ -1324,6 +1324,15 @@ public class Cache implements Ehcache, StoreListener {
         put(element, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
+        for (Element element : elements) {
+            put(element);
+        }
+    }
+
 
     /**
      * Put an element in the cache.
@@ -1539,6 +1548,17 @@ public class Cache implements Ehcache, StoreListener {
         } else {
             return searchInStoreWithoutStats(key, false, true);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
+        Map<Object, Element> rv = new HashMap<Object, Element>();
+        for (Object key : keys) {
+            rv.put(key, get(key));
+        }
+        return rv;
     }
 
     /**
@@ -1995,6 +2015,15 @@ public class Cache implements Ehcache, StoreListener {
      */
     public final boolean remove(Object key) throws IllegalStateException {
         return remove(key, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(Collection<Object> keys) throws IllegalStateException {
+        for (Object key : keys) {
+            remove(key);
+        }
     }
 
 

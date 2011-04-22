@@ -19,6 +19,7 @@ package net.sf.ehcache.constructs;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,17 @@ public class EhcacheDecoratorAdapter implements Ehcache {
     /**
      * {@inheritDoc}
      */
+    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
+        Map<Object, Element> rv = new HashMap<Object, Element>();
+        for (Object key : keys) {
+            rv.put(key, get(key));
+        }
+        return rv;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Element get(Serializable key) throws IllegalStateException, CacheException {
         return underlyingCache.get(key);
     }
@@ -114,6 +126,15 @@ public class EhcacheDecoratorAdapter implements Ehcache {
     /**
      * {@inheritDoc}
      */
+    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
+        for (Element element : elements) {
+            put(element);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void putQuiet(Element element) throws IllegalArgumentException, IllegalStateException, CacheException {
         underlyingCache.putQuiet(element);
     }
@@ -137,6 +158,15 @@ public class EhcacheDecoratorAdapter implements Ehcache {
      */
     public boolean remove(Object key) throws IllegalStateException {
         return underlyingCache.remove(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(Collection<Object> keys) throws IllegalStateException {
+        for (Object key : keys) {
+            remove(key);
+        }
     }
 
     /**
