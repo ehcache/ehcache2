@@ -39,8 +39,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -2297,6 +2300,65 @@ public class CacheTest extends AbstractCacheTest {
         Element cAfter = cache.get("a key");
         assertEquals(3L, cAfter.getVersion());
 
+    }
+
+    /**
+     * When bulkOperations are working fine
+     *
+     * @throws CacheException
+     * @throws InterruptedException
+     */
+    @Test
+    public void testBulkOperations() throws CacheException, InterruptedException {
+        Cache cache = new Cache("cache", 1000, true, false, 100000, 200000, false, 1);
+        manager.addCache(cache);
+
+        int numOfElements = 100;
+        Set<Element> elements = new HashSet<Element>();
+        for(int i = 0; i < numOfElements; i++){
+            elements.add(new Element("key" + i, "value" + i));
+        }
+        cache.putAll(elements);
+        assertEquals(numOfElements, cache.getSize());
+
+        Set keySet1 = new HashSet<String>();
+        for(int i = 0; i < numOfElements; i++){
+            keySet1.add("key"+i);
+        }
+
+        Map<Object, Element> rv = cache.getAll(keySet1);
+        assertEquals(numOfElements, rv.size());
+
+        for(Element element : rv.values()){
+            assertTrue(elements.contains(element));
+        }
+
+        Collection<Element> values = rv.values();
+        for(Element element : elements){
+            assertTrue(values.contains(element));
+        }
+
+        Random rand = new Random();
+        Set keySet2 = new HashSet<String>();
+        for(int i = 0; i < numOfElements/2; i++){
+            keySet2.add("key" + rand.nextInt(numOfElements));
+        }
+
+        rv = cache.getAll(keySet2);
+        assertEquals(keySet2.size(), rv.size());
+
+        for(Element element : rv.values()){
+            assertTrue(elements.contains(element));
+        }
+
+        assertEquals(keySet2, rv.keySet());
+
+        cache.removeAll(keySet2);
+        assertEquals(numOfElements - keySet2.size(), cache.getSize());
+
+        for(Object key : keySet2){
+            assertNull(cache.get(key));
+        }
     }
 
     static void assertWithTolerance(long expected, long tolerance, long actual) {
