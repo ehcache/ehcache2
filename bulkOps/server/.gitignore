@@ -1,0 +1,7 @@
+/*.ipr
+/.classpath
+/*.i*
+/generated
+/.project
+/target
+/.settings
