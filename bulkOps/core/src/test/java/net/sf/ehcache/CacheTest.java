@@ -2359,6 +2359,9 @@ public class CacheTest extends AbstractCacheTest {
         for(Object key : keySet2){
             assertNull(cache.get(key));
         }
+
+        cache.removeAll();
+        assertEquals(0, cache.getSize());
     }
 
     static void assertWithTolerance(long expected, long tolerance, long actual) {
