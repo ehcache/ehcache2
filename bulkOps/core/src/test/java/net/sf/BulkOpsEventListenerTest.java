@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.sf.ehcache.AbstractCacheTest;
 import net.sf.ehcache.Cache;
@@ -105,6 +106,106 @@ public class BulkOpsEventListenerTest extends AbstractCacheTest {
         assertEquals(0, cache.getSize());
     }
 
+    @Test
+    public void testMultiThreadedBulkOps() throws InterruptedException{
+        Cache cache = new Cache("cache", 1000000, true, false, 100000, 200000, false, 1);
+        manager.addCache(cache);
+
+        TestCacheEventListener eventListener = new TestCacheEventListener();
+        cache.getCacheEventNotificationService().registerListener(eventListener);
+
+        Producer p1 = new Producer(cache, 0, 3 * 60 * 1000);
+        Producer p2 = new Producer(cache, 1000000, 3 * 60 * 1000);
+        Thread[] th = new Thread[4];
+        th[0] = new Thread(p1, "p1");
+        th[1] = new Thread(p2, "p2");
+        th[0].start();
+        th[1].start();
+
+        Consumer c1 = new Consumer(cache, 0, 2 * 60 * 1000);
+        Consumer c2 = new Consumer(cache, 1000000, 2 * 60 * 1000);
+        th[2] = new Thread(c1, "c1");
+        th[3] = new Thread(c2, "c2");
+
+        Thread.sleep(10000);
+        th[2].start();
+        th[3].start();
+
+        for(Thread t : th){
+            t.join();
+        }
+
+        assertEquals(p1.numPuts.intValue() + p2.numPuts.intValue(), eventListener.elementsPut.size());
+        assertEquals(c1.numRemoved.intValue() + c2.numRemoved.intValue(), eventListener.elementsRemoved.size());
+    }
+
+    private static class Producer implements Runnable{
+        private final AtomicInteger numPuts = new AtomicInteger(0);
+        private final Cache cache;
+        private final int startIndex;
+        private final int timeToRunMills;
+        private final long startTime = System.currentTimeMillis();
+
+        public Producer(Cache cache, int start, int timeToRunMills) {
+            this.cache = cache;
+            this.startIndex = start;
+            this.timeToRunMills = timeToRunMills;
+        }
+
+        public void run() {
+            int i = startIndex;
+            Random rand = new Random();
+            while(System.currentTimeMillis() - startTime <= timeToRunMills){
+                int batch = rand.nextInt(100);
+                Set<Element> elements = new HashSet<Element>();
+                for(int j = 0; j < batch; j++){
+                    elements.add(new Element("key" + i, "value" + i));
+                    i++;
+                }
+                this.cache.putAll(elements);
+                numPuts.addAndGet(batch);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static class Consumer implements Runnable{
+        private final AtomicInteger numRemoved = new AtomicInteger(0);
+        private final Cache cache;
+        private final int startIndex;
+        private final int timeToRunMills;
+        private final long startTime = System.currentTimeMillis();
+
+        public Consumer(Cache cache, int start, int timeToRunMills) {
+            this.cache = cache;
+            this.startIndex = start;
+            this.timeToRunMills = timeToRunMills;
+        }
+
+        public void run() {
+            int i = startIndex;
+            Random rand = new Random();
+            while(System.currentTimeMillis() - startTime <= timeToRunMills){
+                int batch = rand.nextInt(100);
+                Set elements = new HashSet<String>();
+                for(int j = 0; j < batch; j++){
+                    elements.add("key" + i);
+                    i++;
+                }
+                this.cache.removeAll(elements);
+                numRemoved.addAndGet(batch);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     private static class TestCacheEventListener implements CacheEventListener{
         Set<Element> elementsPut = Collections.synchronizedSet(new HashSet<Element>());
