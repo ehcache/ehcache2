@@ -18,6 +18,7 @@ package net.sf.ehcache.terracotta;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +238,12 @@ public class TestRejoinStore implements TerracottaStore {
     public boolean put(Element element) throws CacheException {
         alwaysCalledMethod();
         return map.put(element.getKey(), element) == null;
+    }
+
+    public void putAll(Collection<Element> elements) throws CacheException {
+        for (Element element : elements) {
+            put(element);
+        }
     }
 
     public Element putIfAbsent(Element element) throws NullPointerException {

@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -161,6 +162,16 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
      */
     public final boolean put(final Element element) throws CacheException {
         return putInternal(element, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO write own implementation
+        for (Element element : elements) {
+            put(element);
+        }
     }
 
     /**

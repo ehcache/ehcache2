@@ -17,6 +17,7 @@
 package net.sf.ehcache.constructs.nonstop.store;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +102,15 @@ public class LocalReadsOnTimeoutStore implements NonstopStore {
     public boolean put(Element element) throws IllegalArgumentException, IllegalStateException, CacheException {
         // no-op
         return false;
+    }
+
+    /**
+     * {@inheritDoc}.
+     * <p>
+     * This is a no-op
+     */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        return;
     }
 
     /**

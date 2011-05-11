@@ -15,6 +15,7 @@
  */
 package net.sf.ehcache.transaction.xa;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -413,6 +414,16 @@ public class XATransactionStore extends AbstractTransactionStore {
 
         Element oldElement = getQuietFromUnderlyingStore(element.getObjectKey());
         return internalPut(new StorePutCommand(oldElement, copyElementForWrite(element)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO write own implementation
+        for (Element element : elements) {
+            put(element);
+        }
     }
 
     /**

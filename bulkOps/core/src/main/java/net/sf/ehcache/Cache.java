@@ -1362,6 +1362,33 @@ public class Cache implements Ehcache, StoreListener {
     }
 
     /**
+     * Puts a collection of elements in the cache.
+     * <p/>
+     * Resets the access statistics on each element, which would be the case if it has previously been
+     * gotten from a cache, and is now being put back.
+     * <p/>
+     * Also notifies the CacheEventListener that:
+     * <ul>
+     * <li>each element was put, but only if the Element was actually put.
+     * <li>if the element exists in the cache, that an update has occurred, even if the element would be expired
+     * if it was requested
+     * </ul>
+     * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
+     * This exception should be caught in those circumstances.
+     *
+     * @param elements                     A collection of Elements. If Serializable it can fully participate in replication and the DiskStore. If it is
+     *                                    <code>null</code> or the key is <code>null</code>, it is ignored as a NOOP.
+     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     *                                    further notification to doNotNotifyCacheReplicators cache peers
+     * @throws IllegalStateException    if the cache is not {@link Status#STATUS_ALIVE}
+     * @throws IllegalArgumentException if the element is null
+     */
+    public final void putAll(Collection<Element> elements, boolean doNotNotifyCacheReplicators) throws IllegalArgumentException,
+            IllegalStateException, CacheException {
+        putAllInternal(elements, doNotNotifyCacheReplicators, false);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void putWithWriter(Element element) throws IllegalArgumentException, IllegalStateException, CacheException {
@@ -1430,6 +1457,84 @@ public class Cache implements Ehcache, StoreListener {
                 element.updateUpdateStatistics();
             }
             notifyPutInternalListeners(element, doNotNotifyCacheReplicators, elementExists);
+        }
+    }
+
+    private void putAllInternal(Collection<Element> elements, boolean doNotNotifyCacheReplicators, boolean useCacheWriter) {
+        if (useCacheWriter) {
+            //TODO implement this
+            return;
+        }
+
+        checkStatus();
+
+        if (disabled) {
+            return;
+        }
+
+        if (elements.remove(null)) {
+            if (doNotNotifyCacheReplicators) {
+
+                LOG.debug("Element from replicated put is null. This happens because the element is a SoftReference" +
+                        " and it has been collected. Increase heap memory on the JVM or set -Xms to be the same as " +
+                        "-Xmx to avoid this problem.");
+
+            }
+        }
+
+        if (elements.isEmpty()) {
+            return;
+        }
+
+        Set<Element> elementsWithNullObjectKey = new HashSet<Element>();
+        for (Element element : elements) {
+            if (element.getObjectKey() == null) {
+                elementsWithNullObjectKey.add(element);
+            }
+        }
+
+        //nulls are ignored
+        elements.removeAll(elementsWithNullObjectKey);
+        if (elements.isEmpty()) {
+            return;
+        }
+
+        for (Element element : elements) {
+            element.resetAccessStatistics();
+            applyDefaultsToElementWithoutLifespanSet(element);
+        }
+
+        //TODO : check what we can do for this
+        backOffIfDiskSpoolFull();
+
+        if (useCacheWriter) {
+            //TODO : implement this case
+            return;
+//            boolean elementExists = false;
+//            boolean notifyListeners = true;
+//            try {
+//                elementExists = !compoundStore.putWithWriter(elements, cacheWriterManager);
+//            } catch (StoreUpdateException e) {
+//                elementExists = e.isUpdate();
+//                notifyListeners = configuration.getCacheWriterConfiguration().getNotifyListenersOnException();
+//                RuntimeException cause = e.getCause();
+//                if (cause instanceof CacheWriterManagerException) {
+//                    throw ((CacheWriterManagerException)cause).getCause();
+//                }
+//                throw cause;
+//            } finally {
+//                if (elementExists) {
+//                    elements.updateUpdateStatistics();
+//                }
+//                if (notifyListeners) {
+//                    notifyPutInternalListeners(elements, doNotNotifyCacheReplicators, elementExists);
+//                }
+//            }
+        } else {
+            compoundStore.putAll(elements);
+            for(Element element : elements){
+                notifyPutInternalListeners(element, doNotNotifyCacheReplicators, false);
+            }
         }
     }
 

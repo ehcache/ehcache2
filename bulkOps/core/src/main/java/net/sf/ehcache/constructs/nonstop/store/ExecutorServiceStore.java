@@ -17,6 +17,7 @@
 package net.sf.ehcache.constructs.nonstop.store;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -315,6 +316,22 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
             return timeoutBehaviorResolver.resolveTimeoutBehaviorStore().put(element);
         }
         return rv;
+    }
+
+    /**
+     * {@inheritDoc}.
+     */
+    public void putAll(final Collection<Element> elements) throws CacheException {
+        try {
+            executeWithExecutor(new Callable<Void>() {
+                public Void call() throws Exception {
+                    nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().putAll(elements);
+                    return null;
+                }
+            }, nonstopConfiguration.getTimeoutMillis() * nonstopConfiguration.getBulkOpsTimeoutMultiplyFactor());
+        } catch (TimeoutException e) {
+            timeoutBehaviorResolver.resolveTimeoutBehaviorStore().removeAll();
+        }
     }
 
     /**

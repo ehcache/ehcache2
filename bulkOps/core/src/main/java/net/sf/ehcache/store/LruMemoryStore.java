@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,14 @@ public class LruMemoryStore extends AbstractStore {
      */
     public final boolean put(Element element) throws CacheException {
         return putInternal(element, null);
+    }
+
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO Write our own implementation
+        for (Element element : elements) {
+            put(element);
+        }
+
     }
 
     /**
@@ -349,7 +358,7 @@ public class LruMemoryStore extends AbstractStore {
         boolean spooled = false;
         if (cache.getCacheConfiguration().isOverflowToDisk()) {
             if (!element.isSerializable()) {
-                if (LOG.isWarnEnabled()) { 
+                if (LOG.isWarnEnabled()) {
                     LOG.warn(new StringBuilder("Object with key ").append(element.getObjectKey())
                             .append(" is not Serializable and cannot be overflowed to disk").toString());
                 }

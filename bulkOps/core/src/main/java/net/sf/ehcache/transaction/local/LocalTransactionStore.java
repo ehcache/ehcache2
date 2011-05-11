@@ -39,6 +39,7 @@ import net.sf.ehcache.writer.CacheWriterManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -232,6 +233,17 @@ public class LocalTransactionStore extends AbstractTransactionStore {
             }
 
         } // while
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO write our own implementation
+        for (Element element : elements) {
+            put(element);
+        }
+
     }
 
     /**
