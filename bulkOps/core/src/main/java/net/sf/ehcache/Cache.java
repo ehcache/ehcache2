@@ -1478,7 +1478,6 @@ public class Cache implements Ehcache, StoreListener {
                 LOG.debug("Element from replicated put is null. This happens because the element is a SoftReference" +
                         " and it has been collected. Increase heap memory on the JVM or set -Xms to be the same as " +
                         "-Xmx to avoid this problem.");
-
             }
         }
 

@@ -40,7 +40,7 @@ import org.junit.Test;
 public class BulkOpsEventListenerTest extends AbstractCacheTest {
 
     @Test
-    public void testBulkOpsEventListener() throws Throwable{
+    public void testBulkOpsEventListener() throws Throwable {
         Cache cache = new Cache("cache", 1000, true, false, 100000, 200000, false, 1);
         manager.addCache(cache);
 
@@ -139,7 +139,7 @@ public class BulkOpsEventListenerTest extends AbstractCacheTest {
         assertEquals(c1.numRemoved.intValue() + c2.numRemoved.intValue(), eventListener.elementsRemoved.size());
     }
 
-    private static class Producer implements Runnable{
+    private static class Producer implements Runnable {
         private final AtomicInteger numPuts = new AtomicInteger(0);
         private final Cache cache;
         private final int startIndex;
@@ -241,7 +241,6 @@ public class BulkOpsEventListenerTest extends AbstractCacheTest {
 
         public void notifyRemoveAll(Ehcache cache) {
             // TODO Auto-generated method stub
-
         }
 
         @Override

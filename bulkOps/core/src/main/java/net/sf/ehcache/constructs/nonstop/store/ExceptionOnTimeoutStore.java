@@ -114,7 +114,7 @@ public final class ExceptionOnTimeoutStore implements NonstopStore {
      * <p>
      * Throws {@link NonStopCacheException}
      */
-    public void putAll(Collection<Element> elements) throws CacheException {
+    public void putAll(final Collection<Element> elements) throws CacheException {
         throw new NonStopCacheException("put for elements - '" + elements + "' timed out");
     }
 
