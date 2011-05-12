@@ -1532,7 +1532,7 @@ public class Cache implements Ehcache, StoreListener {
 //            }
         } else {
             compoundStore.putAll(elements);
-            for(Element element : elements){
+            for (Element element : elements) {
                 notifyPutInternalListeners(element, doNotNotifyCacheReplicators, false);
             }
         }
