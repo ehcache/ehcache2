@@ -1328,9 +1328,7 @@ public class Cache implements Ehcache, StoreListener {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
-        for (Element element : elements) {
-            put(element);
-        }
+        putAll(elements, false);
     }
 
 
