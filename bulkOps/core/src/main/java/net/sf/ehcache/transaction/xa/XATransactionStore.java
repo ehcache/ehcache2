@@ -466,9 +466,9 @@ public class XATransactionStore extends AbstractTransactionStore {
      */
     public Collection<Element> removeAll(Collection<Object> keys) {
         Collection<Element> removedElements = new HashSet<Element>();
-        for(Object key : keys) {
+        for (Object key : keys) {
             Element element = remove(key);
-            if(element != null) {
+            if (element != null) {
                 removedElements.add(element);
             }
         }

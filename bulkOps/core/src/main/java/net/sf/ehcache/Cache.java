@@ -2331,12 +2331,13 @@ public class Cache implements Ehcache, StoreListener {
     private void removeAllInternal(final Collection<Object>keys, boolean expiry, boolean notifyListeners,
             boolean doNotNotifyCacheReplicators, boolean useCacheWriter)
     throws IllegalStateException {
-        if(keys == null || keys.isEmpty()) {
+        if (keys == null || keys.isEmpty()) {
             return;
         }
 
         if (useCacheWriter) {
-//            TODO: need to implement this
+//            TODO need to implement this
+            return;
         }
 
         checkStatus();
@@ -2345,7 +2346,7 @@ public class Cache implements Ehcache, StoreListener {
 
 
         if (useCacheWriter) {
-//            TODO: need to implement this
+//            TODO need to implement this
             return;
 //            try {
 //                elementsFromStore = compoundStore.removeWithWriter(keys, cacheWriterManager);
@@ -2359,7 +2360,7 @@ public class Cache implements Ehcache, StoreListener {
         } else {
             elementsFromStore = compoundStore.removeAll(keys);
         }
-        for(Element element : elementsFromStore) {
+        for (Element element : elementsFromStore) {
             notifyRemoveInternalListeners(element.getObjectKey(), expiry, notifyListeners, doNotNotifyCacheReplicators,
                     element);
         }

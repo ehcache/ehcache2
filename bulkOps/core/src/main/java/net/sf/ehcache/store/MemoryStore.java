@@ -16,6 +16,14 @@
 
 package net.sf.ehcache.store;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
@@ -25,16 +33,9 @@ import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheConfigurationListener;
 import net.sf.ehcache.store.chm.SelectableConcurrentHashMap;
 import net.sf.ehcache.writer.CacheWriterManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * A Store implementation suitable for fast, concurrent in memory stores. The policy is determined by that
@@ -59,7 +60,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
     protected static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
     /**
-     * Set optimisation for 100 concurrent threads.
+     * Set optimization for 100 concurrent threads.
      */
     protected static final int CONCURRENCY_LEVEL = 100;
 
@@ -236,11 +237,11 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
      * {@inheritDoc}
      */
     public Collection<Element> removeAll(final Collection<Object> keys) {
-//        TODO: implement this and removeAllWithWriter
+//        TODO implement this and removeAllWithWriter
         Collection<Element> removedElements = new HashSet<Element>();
-        for(Object key : keys) {
+        for (Object key : keys) {
             Element element = remove(key);
-            if(element!=null) {
+            if (element != null) {
                 removedElements.add(element);
             }
         }

@@ -323,7 +323,7 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
      * {@inheritDoc}.
      */
     public void putAll(final Collection<Element> elements) throws CacheException {
-//        TODO: implement removeAllWithWriter
+//        TODO implement removeAllWithWriter
         try {
             executeWithExecutor(new Callable<Void>() {
                 public Void call() throws Exception {

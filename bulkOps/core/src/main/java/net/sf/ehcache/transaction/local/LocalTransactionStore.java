@@ -15,6 +15,15 @@
  */
 package net.sf.ehcache.transaction.local;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
@@ -38,15 +47,6 @@ import net.sf.ehcache.writer.CacheWriterManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * A Store implementation with support for local transactions
@@ -322,9 +322,9 @@ public class LocalTransactionStore extends AbstractTransactionStore {
      */
     public Collection<Element> removeAll(Collection<Object> keys) {
         Collection<Element> removedElements = new HashSet<Element>();
-        for(Object key : keys) {
+        for (Object key : keys) {
             Element element = remove(key);
-            if(element!=null) {
+            if (element != null) {
                 removedElements.add(element);
             }
         }

@@ -255,9 +255,9 @@ public abstract class CompoundStore extends AbstractStore {
      * {@inheritDoc}
      */
     public Collection<Element> removeAll(Collection<Object> keys) {
-        // TODO: need to implement this
+//        TODO need to implement this
         Collection<Element> removedElements = new HashSet<Element>();
-        for(Object key : keys) {
+        for (Object key : keys) {
             removedElements.add(remove(key));
         }
         return removedElements;
@@ -805,7 +805,7 @@ public abstract class CompoundStore extends AbstractStore {
     /**
      * Sync implementation that wraps the segment locks
      */
-    private final static class ReadWriteLockSync implements Sync {
+    private static final class ReadWriteLockSync implements Sync {
 
         private final ReentrantReadWriteLock lock;
 

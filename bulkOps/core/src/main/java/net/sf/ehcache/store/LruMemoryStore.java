@@ -170,11 +170,11 @@ public class LruMemoryStore extends AbstractStore {
      * {@inheritDoc}
      */
     public final Collection<Element> removeAll(final Collection<Object> keys) {
-//        TODO: implement this and removeAllWithWriter
+//        TODO implement this and removeAllWithWriter
         Collection<Element> removedElements = new HashSet<Element>();
-        for(Object key : keys) {
+        for (Object key : keys) {
             Element element = remove(key);
-            if(element!=null) {
+            if (element != null) {
                 removedElements.add(element);
             }
         }
