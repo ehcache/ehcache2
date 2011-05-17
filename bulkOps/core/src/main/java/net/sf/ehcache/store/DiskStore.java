@@ -538,6 +538,34 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
     /**
      * {@inheritDoc}
      */
+    public final synchronized Collection<Element> removeAll(Collection<Object> keys) {
+        Collection<Element> removedElements = new HashSet<Element>();
+        for (Object key : keys) {
+            try {
+                checkActive();
+                // Remove the entry from the spool
+                Element element = (Element) spool.remove(key);
+
+                // Remove the entry from the file. Could be in both places.
+                final DiskElement diskElement = (DiskElement) diskElements.remove(key);
+                if (diskElement != null) {
+                    element = loadElementFromDiskElement(diskElement);
+                    freeBlock(diskElement);
+                }
+                removedElements.add(element);
+            } catch (Exception exception) {
+                String message = name + "Cache: Could not remove disk store entry for key " + key
+                        + ". Error was " + exception.getMessage();
+                LOG.error(message, exception);
+                throw new CacheException(message);
+            }
+        }
+        return removedElements;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Element removeWithWriter(Object key, CacheWriterManager writerManager) {
         throw new UnsupportedOperationException("Disk store isn't meant to interact with cache writers.");
     }
@@ -1581,4 +1609,5 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
             LOG.debug("Failed to delete file {}", f.getName());
         }
     }
+
 }

@@ -199,9 +199,13 @@ public class MockStoreWithFlag implements TerracottaStore {
         return null;
     }
 
+    public Collection<Element> removeAll(Collection<Object> keys) {
+        markAccessFlag();
+        return null;
+    }
+
     public void removeAll() throws CacheException {
         markAccessFlag();
-
     }
 
     public Element removeElement(Element element, ElementValueComparator comparator) throws NullPointerException {

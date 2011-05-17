@@ -396,6 +396,13 @@ public class NonstopStoreImpl implements NonstopTimeoutBehaviorStoreResolver, Re
     /**
      * {@inheritDoc}
      */
+    public Collection<Element> removeAll(final Collection<Object> keys) {
+        return executorServiceStore.removeAll(keys);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void removeAll() throws CacheException {
         executorServiceStore.removeAll();
     }

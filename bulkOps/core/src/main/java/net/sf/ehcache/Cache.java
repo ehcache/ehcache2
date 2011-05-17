@@ -2122,12 +2122,28 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public void removeAll(Collection<Object> keys) throws IllegalStateException {
-        for (Object key : keys) {
-            remove(key);
-        }
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
+        removeAll(keys, false);
     }
 
+
+    /**
+     * Removes a collection of {@link Element}s from the Cache. This also removes it from any
+     * stores it may be in.
+     * <p/>
+     * Also notifies the CacheEventListener after the elements were removed, but only if an Element
+     * with the key actually existed.
+     * <p/>
+     * Synchronization is handled within the method.
+     *
+     * @param keys                         the collection of keys to operate on
+     * @param doNotNotifyCacheReplicators whether the removeAll is coming from a doNotNotifyCacheReplicators cache peer, in which case this removeAll should not initiate a
+     *                                    further notification to doNotNotifyCacheReplicators cache peers
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
+     */
+    public final void removeAll(final Collection<Object> keys, boolean doNotNotifyCacheReplicators) throws IllegalStateException {
+        removeAllInternal(keys, false, true, doNotNotifyCacheReplicators, false);
+    }
 
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
@@ -2142,7 +2158,7 @@ public class Cache implements Ehcache, StoreListener {
      * This exception should be caught in those circumstances.
      *
      * @param key                         the element key to operate on
-     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     * @param doNotNotifyCacheReplicators whether the remove is coming from a doNotNotifyCacheReplicators cache peer, in which case this remove should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
@@ -2161,7 +2177,7 @@ public class Cache implements Ehcache, StoreListener {
      * Synchronization is handled within the method.
      *
      * @param key                         the element key to operate on
-     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     * @param doNotNotifyCacheReplicators whether the remove is coming from a doNotNotifyCacheReplicators cache peer, in which case this remove should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
@@ -2286,6 +2302,67 @@ public class Cache implements Ehcache, StoreListener {
         }
 
         return removed;
+    }
+
+    /**
+     * Removes or expires a collection of {@link Element}s from the Cache after an attempt to get it determined that it should be expired.
+     * This also removes it from any stores it may be in.
+     * <p/>
+     * Also notifies the CacheEventListener after the element has expired, but only if an Element
+     * with the key actually existed.
+     * <p/>
+     * Synchronization is handled within the method.
+     * <p/>
+     * If a removeAll was called, listeners are notified, regardless of whether the element existed or not.
+     * This allows distributed cache listeners to remove elements from a cluster regardless of whether they
+     * existed locally.
+     * <p/>
+     * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
+     * This exception should be caught in those circumstances.
+     *
+     * @param keys                        a collection of keys to operate on
+     * @param expiry                      if the reason this method is being called is to expire the element
+     * @param notifyListeners             whether to notify listeners
+     * @param doNotNotifyCacheReplicators whether not to notify cache replicators
+     * @param useCacheWriter              if the element should else be removed from the cache writer
+     * @return true if the element was removed, false if it was not found in the cache
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
+     */
+    private void removeAllInternal(final Collection<Object>keys, boolean expiry, boolean notifyListeners,
+            boolean doNotNotifyCacheReplicators, boolean useCacheWriter)
+    throws IllegalStateException {
+        if(keys == null || keys.isEmpty()) {
+            return;
+        }
+
+        if (useCacheWriter) {
+//            TODO: need to implement this
+        }
+
+        checkStatus();
+        Collection<Element> elementsFromStore = null;
+        keys.remove(null);
+
+
+        if (useCacheWriter) {
+//            TODO: need to implement this
+            return;
+//            try {
+//                elementsFromStore = compoundStore.removeWithWriter(keys, cacheWriterManager);
+//            } catch (CacheWriterManagerException e) {
+//                if (configuration.getCacheWriterConfiguration().getNotifyListenersOnException()) {
+//                    notifyRemoveInternalListeners(keys, expiry, notifyListeners, doNotNotifyCacheReplicators,
+//                            elementsFromStore);
+//                }
+//                throw e.getCause();
+//            }
+        } else {
+            elementsFromStore = compoundStore.removeAll(keys);
+        }
+        for(Element element : elementsFromStore) {
+            notifyRemoveInternalListeners(element.getObjectKey(), expiry, notifyListeners, doNotNotifyCacheReplicators,
+                    element);
+        }
     }
 
     /**

@@ -29,23 +29,23 @@ import net.sf.ehcache.store.compound.factories.DiskPersistentStorageFactory;
 /**
  * Implements a persistent-to-disk store.
  * <p>
- * All new elements are automatically scheduled for writing to disk.  In addition 
+ * All new elements are automatically scheduled for writing to disk.  In addition
  * the store will cache Elements in memory up to the in-memory capacity.
- * 
+ *
  * @author Chris Dennis
  */
 public final class DiskPersistentStore extends CompoundStore implements CacheConfigurationListener {
 
     private final DiskPersistentStorageFactory disk;
-    
+
     private DiskPersistentStore(DiskPersistentStorageFactory disk, CacheConfiguration config) {
         super(disk, config.isCopyOnRead(), config.isCopyOnWrite(), config.getCopyStrategy());
         this.disk = disk;
     }
-    
+
     /**
      * Creates a persitent-to-disk store for the given cache, using the given disk path.
-     * 
+     *
      * @param cache cache that fronts this store
      * @param diskStorePath disk path to store data in
      * @return a fully initialized store

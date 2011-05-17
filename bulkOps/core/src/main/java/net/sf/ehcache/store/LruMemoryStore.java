@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +164,21 @@ public class LruMemoryStore extends AbstractStore {
      */
     public final Element remove(Object key) {
         return removeInternal(key, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final Collection<Element> removeAll(final Collection<Object> keys) {
+//        TODO: implement this and removeAllWithWriter
+        Collection<Element> removedElements = new HashSet<Element>();
+        for(Object key : keys) {
+            Element element = remove(key);
+            if(element!=null) {
+                removedElements.add(element);
+            }
+        }
+        return removedElements;
     }
 
     /**

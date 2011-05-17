@@ -19,6 +19,7 @@ package net.sf.ehcache.store.compound;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -248,6 +249,18 @@ public abstract class CompoundStore extends AbstractStore {
 
         int hash = hash(key.hashCode());
         return segmentFor(hash).remove(key, hash, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Element> removeAll(Collection<Object> keys) {
+        // TODO: need to implement this
+        Collection<Element> removedElements = new HashSet<Element>();
+        for(Object key : keys) {
+            removedElements.add(remove(key));
+        }
+        return removedElements;
     }
 
     /**

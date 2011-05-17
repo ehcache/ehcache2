@@ -309,6 +309,13 @@ public final class NoOpOnTimeoutStore implements NonstopStore {
     /**
      * {@inheritDoc}
      */
+    public Collection<Element> removeAll(Collection<Object> keys) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void removeAll() throws CacheException {
     }
 

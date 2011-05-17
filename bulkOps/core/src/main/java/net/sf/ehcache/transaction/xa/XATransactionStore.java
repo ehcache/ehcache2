@@ -17,6 +17,7 @@ package net.sf.ehcache.transaction.xa;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -459,6 +460,20 @@ public class XATransactionStore extends AbstractTransactionStore {
         return isNull;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Element> removeAll(Collection<Object> keys) {
+        Collection<Element> removedElements = new HashSet<Element>();
+        for(Object key : keys) {
+            Element element = remove(key);
+            if(element != null) {
+                removedElements.add(element);
+            }
+        }
+        return removedElements;
+    }
 
     /**
      * {@inheritDoc}

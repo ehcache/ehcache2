@@ -403,6 +403,21 @@ public class LegacyStoreWrapper extends AbstractStore {
     /**
      * {@inheritDoc}
      */
+    public Collection<Element> removeAll(final Collection<Object> keys) {
+        //TODO: implement removeAllWithWriter
+        Collection<Element> removedElements = new HashSet<Element>();
+        for (Object key : keys) {
+            Element element = remove(key);
+            if (element != null) {
+                removedElements.add(element);
+            }
+        }
+        return removedElements;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void removeAll() throws CacheException {
         memory.removeAll();
         if (disk != null) {

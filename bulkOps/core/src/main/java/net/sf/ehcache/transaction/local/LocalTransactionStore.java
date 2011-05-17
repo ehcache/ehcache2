@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -314,6 +315,20 @@ public class LocalTransactionStore extends AbstractTransactionStore {
                 return copyElementForRead(oldElement);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Element> removeAll(Collection<Object> keys) {
+        Collection<Element> removedElements = new HashSet<Element>();
+        for(Object key : keys) {
+            Element element = remove(key);
+            if(element!=null) {
+                removedElements.add(element);
+            }
+        }
+        return removedElements;
     }
 
     /**
