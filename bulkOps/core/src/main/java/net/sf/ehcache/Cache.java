@@ -34,7 +34,6 @@ import net.sf.ehcache.config.SearchAttribute;
 import net.sf.ehcache.config.TerracottaConfiguration;
 import net.sf.ehcache.config.TerracottaConfiguration.Consistency;
 import net.sf.ehcache.config.TerracottaConfiguration.StorageStrategy;
-import net.sf.ehcache.constructs.nonstop.CacheManagerExecutorServiceFactory;
 import net.sf.ehcache.constructs.nonstop.NonstopActiveDelegateHolder;
 import net.sf.ehcache.constructs.nonstop.NonstopExecutorService;
 import net.sf.ehcache.constructs.nonstop.store.NonstopStoreImpl;
@@ -195,6 +194,8 @@ public class Cache implements Ehcache, StoreListener {
     private static final int EXECUTOR_KEEP_ALIVE_TIME = 60000;
     private static final int EXECUTOR_MAXIMUM_POOL_SIZE = Math.min(10, Runtime.getRuntime().availableProcessors());
     private static final int EXECUTOR_CORE_POOL_SIZE = 1;
+    private static final String EHCACHE_CLUSTERREDSTORE_MAX_CONCURRENCY_PROP = "ehcache.clusteredStore.maxConcurrency";
+    private static final int  DEFAULT_EHCACHE_CLUSTERREDSTORE_MAX_CONCURRENCY = 4096;
 
     static {
         try {
@@ -989,7 +990,6 @@ public class Cache implements Ehcache, StoreListener {
                 throw new IllegalStateException("Cannot initialise the " + configuration.getName()
                         + " cache because its status is not STATUS_UNINITIALISED");
             }
-
             if (configuration.getMaxElementsInMemory() == 0) {
                 LOG.warn("Cache: " + configuration.getName() +
                         " has a maxElementsInMemory of 0.  " +
@@ -1043,6 +1043,18 @@ public class Cache implements Ehcache, StoreListener {
                         && !getCacheConfiguration().getTerracottaConfiguration().isLocalCacheEnabled()) {
                     throw new InvalidConfigurationException("Local Cache cannot be disabled with " + StorageStrategy.CLASSIC
                             + " Storage strategy. Please enable local cache or use " + StorageStrategy.DCV2);
+                }
+                int maxConcurrency = Integer.getInteger(EHCACHE_CLUSTERREDSTORE_MAX_CONCURRENCY_PROP,
+                        DEFAULT_EHCACHE_CLUSTERREDSTORE_MAX_CONCURRENCY);
+                if (getCacheConfiguration().getTerracottaConfiguration().getConcurrency() > maxConcurrency) {
+                    throw new InvalidConfigurationException("Maximum supported concurrency for Terracotta clustered caches is "
+                            + maxConcurrency + ". Please reconfigure cache '" + getName() + "' with concurrency value <= " + maxConcurrency
+                            + " or use system property '" + EHCACHE_CLUSTERREDSTORE_MAX_CONCURRENCY_PROP + "' to override the default");
+                }
+                if (getCacheConfiguration().getMaxElementsOnDisk() == 0) {
+                    LOG.warn("Performance may degrade and server disks could run out of space!\nThe distributed cache {} does not have " +
+                             "maxElementsOnDisk set. Failing to set maxElementsOnDisk could mean no eviction of its elements from the " +
+                             "Terracotta Server Array disk store. To avoid this, set maxElementsOnDisk to a non-zero value.", getName());
                 }
                 if (!getCacheConfiguration().getTerracottaConfiguration().isStorageStrategySet()) {
                     getCacheConfiguration().getTerracottaConfiguration().storageStrategy(
@@ -1108,7 +1120,6 @@ public class Cache implements Ehcache, StoreListener {
                     }
                 }
             }
-
             /* note: this isn't part of makeXaStrictTransactionalIfNeeded() as only xa_strict supports NonStop, meaning that only
              * that transactional store can be wrapped by NonStopStore. Other TX modes have to wrap the NonStop store due to their
              * lack of NonStop support (ie: lack of transaction context suspension/resuming).
@@ -1715,7 +1726,7 @@ public class Cache implements Ehcache, StoreListener {
     }
 
     /**
-     * The load method provides a means to "pre load" the cache. This method will, asynchronously, load the specified
+     * The load method provides a means to "pre-load" the cache. This method will, asynchronously, load the specified
      * object into the cache using the associated CacheLoader. If the object already exists in the cache, no action is
      * taken. If no loader is associated with the object, no object will be loaded into the cache. If a problem is
      * encountered during the retrieving or loading of the object, an exception should be logged. If the "arg" argument
@@ -2016,7 +2027,7 @@ public class Cache implements Ehcache, StoreListener {
             } else {
                 element.updateAccessStatistics();
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(getName() + "Cache: " + getName() + " store hit for " + key);
+                    LOG.debug("Cache: " + getName() + " store hit for " + key);
                 }
 
                 if (wasOffHeap) {
@@ -4165,8 +4176,7 @@ public class Cache implements Ehcache, StoreListener {
             }
 
             // reset all other holders associated with the new store
-            nonstopExecutorService = CacheManagerExecutorServiceFactory.getInstance().getOrCreateNonstopExecutorService(
-                    cache.getCacheManager());
+            nonstopExecutorService = cache.getCacheManager().getNonstopExecutorService();
             Object context = underlyingTerracottaStore.getInternalContext();
             if (context instanceof CacheLockProvider) {
                 underlyingCacheLockProvider = (CacheLockProvider) context;
