@@ -110,7 +110,7 @@ public interface Store {
     /**
      * Removes a collection of items from the cache.
      */
-    Collection<Element> removeAll(Collection<Object> keys);
+    void removeAll(Collection<Object> keys);
 
     /**
      * Removes an item from the store and the cache writer manager in an atomic operation.

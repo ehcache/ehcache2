@@ -372,10 +372,10 @@ public class JtaLocalTransactionStore extends AbstractTransactionStore {
     /**
      * {@inheritDoc}
      */
-    public Collection<Element> removeAll(Collection<Object> keys) {
+    public void removeAll(Collection<Object> keys) {
         registerInJtaContext();
         try {
-            return underlyingStore.removeAll(keys);
+            underlyingStore.removeAll(keys);
         } catch (CacheException e) {
             setRollbackOnly();
             throw e;

@@ -17,12 +17,11 @@ package net.sf.ehcache.transaction.local;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
@@ -320,15 +319,10 @@ public class LocalTransactionStore extends AbstractTransactionStore {
     /**
      * {@inheritDoc}
      */
-    public Collection<Element> removeAll(Collection<Object> keys) {
-        Collection<Element> removedElements = new HashSet<Element>();
+    public void removeAll(Collection<Object> keys) {
         for (Object key : keys) {
-            Element element = remove(key);
-            if (element != null) {
-                removedElements.add(element);
-            }
+            remove(key);
         }
-        return removedElements;
     }
 
     /**

@@ -538,8 +538,7 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
     /**
      * {@inheritDoc}
      */
-    public final synchronized Collection<Element> removeAll(Collection<Object> keys) {
-        Collection<Element> removedElements = new HashSet<Element>();
+    public final synchronized void removeAll(Collection<Object> keys) {
         for (Object key : keys) {
             try {
                 checkActive();
@@ -552,7 +551,6 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
                     element = loadElementFromDiskElement(diskElement);
                     freeBlock(diskElement);
                 }
-                removedElements.add(element);
             } catch (Exception exception) {
                 String message = name + "Cache: Could not remove disk store entry for key " + key
                         + ". Error was " + exception.getMessage();
@@ -560,7 +558,6 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
                 throw new CacheException(message);
             }
         }
-        return removedElements;
     }
 
     /**

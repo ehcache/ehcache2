@@ -18,7 +18,6 @@ package net.sf.ehcache.constructs.nonstop.store;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -424,18 +423,17 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
     /**
      * {@inheritDoc}.
      */
-    public Collection<Element> removeAll(final Collection<Object> keys) {
-        Collection<Element> removedElements = new HashSet<Element>();
+    public void removeAll(final Collection<Object> keys) {
         try {
-            removedElements = executeWithExecutor(new Callable<Collection<Element>>() {
-                public Collection<Element> call() throws Exception {
-                    return nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().removeAll(keys);
+            executeWithExecutor(new Callable<Void>() {
+                public Void call() throws Exception {
+                    nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().removeAll(keys);
+                    return null;
                 }
             });
         } catch (TimeoutException e) {
-            return timeoutBehaviorResolver.resolveTimeoutBehaviorStore().removeAll(keys);
+            timeoutBehaviorResolver.resolveTimeoutBehaviorStore().removeAll(keys);
         }
-        return removedElements;
     }
 
     /**

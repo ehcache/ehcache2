@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -262,16 +261,11 @@ public class TestRejoinStore implements TerracottaStore {
         return map.remove(key);
     }
 
-    public Collection<Element> removeAll(Collection<Object> keys) {
+    public void removeAll(Collection<Object> keys) {
         alwaysCalledMethod();
-        Collection<Element> removedElements = new HashSet<Element>();
         for(Object key : keys) {
-            Element element = map.remove(key);
-            if(element != null) {
-                removedElements.add(element);
-            }
+            map.remove(key);
         }
-        return removedElements;
     }
 
     public void removeAll() throws CacheException {

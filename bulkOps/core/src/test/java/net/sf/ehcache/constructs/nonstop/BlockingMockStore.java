@@ -213,9 +213,8 @@ public class BlockingMockStore implements TerracottaStore {
         return null;
     }
 
-    public Collection<Element> removeAll(Collection<Object> keys) {
+    public void removeAll(Collection<Object> keys) {
         neverReturn();
-        return null;
     }
 
     public void removeAll() throws CacheException {

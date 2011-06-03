@@ -254,13 +254,11 @@ public abstract class CompoundStore extends AbstractStore {
     /**
      * {@inheritDoc}
      */
-    public Collection<Element> removeAll(Collection<Object> keys) {
-//        TODO need to implement this
+    public void removeAll(Collection<Object> keys) {
         Collection<Element> removedElements = new HashSet<Element>();
         for (Object key : keys) {
-            removedElements.add(remove(key));
+            remove(key);
         }
-        return removedElements;
     }
 
     /**

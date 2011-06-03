@@ -2153,7 +2153,7 @@ public class Cache implements Ehcache, StoreListener {
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     public final void removeAll(final Collection<Object> keys, boolean doNotNotifyCacheReplicators) throws IllegalStateException {
-        removeAllInternal(keys, false, true, doNotNotifyCacheReplicators, false);
+        removeAllInternal(keys, false, true, doNotNotifyCacheReplicators);
     }
 
     /**
@@ -2335,45 +2335,22 @@ public class Cache implements Ehcache, StoreListener {
      * @param expiry                      if the reason this method is being called is to expire the element
      * @param notifyListeners             whether to notify listeners
      * @param doNotNotifyCacheReplicators whether not to notify cache replicators
-     * @param useCacheWriter              if the element should else be removed from the cache writer
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
-    private void removeAllInternal(final Collection<Object>keys, boolean expiry, boolean notifyListeners,
-            boolean doNotNotifyCacheReplicators, boolean useCacheWriter)
-    throws IllegalStateException {
+    private void removeAllInternal(final Collection<Object> keys, boolean expiry, boolean notifyListeners,
+            boolean doNotNotifyCacheReplicators) throws IllegalStateException {
         if (keys == null || keys.isEmpty()) {
             return;
         }
 
-        if (useCacheWriter) {
-//            TODO need to implement this
-            return;
-        }
-
         checkStatus();
-        Collection<Element> elementsFromStore = null;
         keys.remove(null);
 
-
-        if (useCacheWriter) {
-//            TODO need to implement this
-            return;
-//            try {
-//                elementsFromStore = compoundStore.removeWithWriter(keys, cacheWriterManager);
-//            } catch (CacheWriterManagerException e) {
-//                if (configuration.getCacheWriterConfiguration().getNotifyListenersOnException()) {
-//                    notifyRemoveInternalListeners(keys, expiry, notifyListeners, doNotNotifyCacheReplicators,
-//                            elementsFromStore);
-//                }
-//                throw e.getCause();
-//            }
-        } else {
-            elementsFromStore = compoundStore.removeAll(keys);
-        }
-        for (Element element : elementsFromStore) {
-            notifyRemoveInternalListeners(element.getObjectKey(), expiry, notifyListeners, doNotNotifyCacheReplicators,
-                    element);
+        compoundStore.removeAll(keys);
+        for (Object key : keys) {
+            Element syntheticElement = new Element(key, null);
+            notifyRemoveInternalListeners(key, false, notifyListeners, doNotNotifyCacheReplicators, syntheticElement);
         }
     }
 

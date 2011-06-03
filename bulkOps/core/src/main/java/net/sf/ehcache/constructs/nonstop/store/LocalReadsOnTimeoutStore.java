@@ -128,9 +128,8 @@ public class LocalReadsOnTimeoutStore implements NonstopStore {
      * <p>
      * This is a no-op
      */
-    public Collection<Element> removeAll(final Collection<Object> keys) throws IllegalStateException {
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
         //no-op
-        return null;
     }
 
     /**

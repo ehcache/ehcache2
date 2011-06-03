@@ -16,21 +16,21 @@
 
 package net.sf.ehcache.store;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.writer.CacheWriterManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -169,16 +169,10 @@ public class LruMemoryStore extends AbstractStore {
     /**
      * {@inheritDoc}
      */
-    public final Collection<Element> removeAll(final Collection<Object> keys) {
-//        TODO implement this and removeAllWithWriter
-        Collection<Element> removedElements = new HashSet<Element>();
+    public final void removeAll(final Collection<Object> keys) {
         for (Object key : keys) {
-            Element element = remove(key);
-            if (element != null) {
-                removedElements.add(element);
-            }
+            remove(key);
         }
-        return removedElements;
     }
 
     /**

@@ -18,7 +18,6 @@ package net.sf.ehcache.store;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -236,16 +235,10 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
     /**
      * {@inheritDoc}
      */
-    public Collection<Element> removeAll(final Collection<Object> keys) {
-//        TODO implement this and removeAllWithWriter
-        Collection<Element> removedElements = new HashSet<Element>();
+    public void removeAll(final Collection<Object> keys) {
         for (Object key : keys) {
-            Element element = remove(key);
-            if (element != null) {
-                removedElements.add(element);
-            }
+            remove(key);
         }
-        return removedElements;
     }
 
     /**

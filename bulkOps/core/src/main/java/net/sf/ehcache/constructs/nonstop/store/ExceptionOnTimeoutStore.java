@@ -132,7 +132,7 @@ public final class ExceptionOnTimeoutStore implements NonstopStore {
      * <p>
      * Throws {@link NonStopCacheException}
      */
-    public Collection<Element> removeAll(final Collection<Object> keys) throws IllegalStateException {
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
         throw new NonStopCacheException("remove for key - '" + keys + "' timed out");
     }
 
