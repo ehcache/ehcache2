@@ -420,7 +420,6 @@ public class XATransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        // TODO write own implementation
         for (Element element : elements) {
             put(element);
         }

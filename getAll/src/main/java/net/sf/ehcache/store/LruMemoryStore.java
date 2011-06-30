@@ -100,7 +100,6 @@ public class LruMemoryStore extends AbstractStore {
      * {@inheritDoc}
      */
     public final void putAll(Collection<Element> elements) throws CacheException {
-        // TODO Write our own implementation
         for (Element element : elements) {
             put(element);
         }

@@ -19,7 +19,6 @@ package net.sf.ehcache.store.compound;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -144,7 +143,6 @@ public abstract class CompoundStore extends AbstractStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        // TODO implement our own putAll
         for (Element element : elements) {
             put(element);
         }
@@ -255,7 +253,6 @@ public abstract class CompoundStore extends AbstractStore {
      * {@inheritDoc}
      */
     public void removeAll(Collection<Object> keys) {
-        Collection<Element> removedElements = new HashSet<Element>();
         for (Object key : keys) {
             remove(key);
         }

@@ -71,7 +71,7 @@ public interface Store {
 
     /**
      * Puts a collection of elements into the store.
-     * @param elements of elements to be put in the store
+     * @param elements Collection of elements to be put in the store
      */
     void putAll(Collection<Element> elements) throws CacheException;
 

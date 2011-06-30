@@ -169,7 +169,6 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        // TODO write own implementation
         for (Element element : elements) {
             put(element);
         }

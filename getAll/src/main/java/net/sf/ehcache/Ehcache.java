@@ -80,18 +80,19 @@ public interface Ehcache extends Cloneable {
 
 
     /**
-     * Puts a collection of elements in the cache.
+     * Puts a collection of elements in the cache. Throws a NullPointerException if any of the element in the
+     * collection is null
      * Also notifies the CacheEventListener that:
      * <ul>
-     * <li>the elements were put. The puts happen in batches and the notifications are thrown for every batch put
-     * <li>if the element exists in the cache, that an update has occurred, even if the element would be expired
-     * if it was requested
+     * <li>the elements were put. The puts happen in batches and the notifications are thrown for every put in the
+     * batch irrespective of whether the element is present in the cache or not i.e even updates wouuld be considered
+     * as new entries
      * </ul>
      *
-     * @param elements a mutable collection of elements to be put in the cache.
+     * @param elements a collection of elements to be put in the cache.
      *        If Serializable it can fully participate in replication and the DiskStore.
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
-     * @throws IllegalArgumentException if the element is null
+     * @throws IllegalArgumentException if the elements is null
      * @throws CacheException
      * @since 2.5
      */
@@ -348,7 +349,8 @@ public interface Ehcache extends Cloneable {
      * stores it may be in.
      * <p/>
      * Also notifies the CacheEventListener after the elements were removed.
-     * @param keys                   a mutable collection of keys to operate on
+     * Notification is sent for every key irrespective of whether the key was present in the cache or not
+     * @param keys                   a collection of keys to operate on
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @since 2.5
      */

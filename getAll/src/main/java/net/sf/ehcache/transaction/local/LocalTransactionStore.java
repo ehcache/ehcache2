@@ -239,7 +239,6 @@ public class LocalTransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        // TODO write our own implementation
         for (Element element : elements) {
             put(element);
         }

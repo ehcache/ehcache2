@@ -445,14 +445,7 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
         boolean newPut = !this.containsKey(element.getObjectKey());
         try {
             checkActive();
-
-            // Spool the element
-            if (spoolAndExpiryThread.isAlive()) {
-                spool.put(element.getObjectKey(), element);
-            } else {
-                LOG.error(name + "Cache: Elements cannot be written to disk store because the spool thread has died.");
-                spool.clear();
-            }
+            putElement(element);
             return newPut;
         } catch (Exception e) {
             LOG.error(name + "Cache: Could not write disk store element for " + element.getObjectKey()
@@ -470,19 +463,22 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
     public final void putAll(final Collection<Element> elements) {
         try {
             checkActive();
-
-            // Spool the element
-            if (spoolAndExpiryThread.isAlive()) {
-                for (Element element : elements) {
-                    spool.put(element.getObjectKey(), element);
-                }
-            } else {
-                LOG.error(name + "Cache: Elements cannot be written to disk store because the spool thread has died.");
-                spool.clear();
+            for (Element element : elements) {
+                put(element);
             }
         } catch (Exception e) {
             LOG.error(name + "Cache: Could not write disk store element for " + elements
                     + ". Initial cause was " + e.getMessage(), e);
+        }
+    }
+
+    private void putElement(final Element element) {
+        // Spool the element
+        if (spoolAndExpiryThread.isAlive()) {
+            spool.put(element.getObjectKey(), element);
+        } else {
+            LOG.error(name + "Cache: Elements cannot be written to disk store because the spool thread has died.");
+            spool.clear();
         }
     }
 
