@@ -27,6 +27,7 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
@@ -461,6 +462,31 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
     }
 
     /**
+     * Puts a Collection of elements into the disk store.
+     * <p/>
+     * This method is not synchronized. It is however threadsafe. It uses fine-grained
+     * synchronization on the spool.
+     */
+    public final void putAll(final Collection<Element> elements) {
+        try {
+            checkActive();
+
+            // Spool the element
+            if (spoolAndExpiryThread.isAlive()) {
+                for (Element element : elements) {
+                    spool.put(element.getObjectKey(), element);
+                }
+            } else {
+                LOG.error(name + "Cache: Elements cannot be written to disk store because the spool thread has died.");
+                spool.clear();
+            }
+        } catch (Exception e) {
+            LOG.error(name + "Cache: Could not write disk store element for " + elements
+                    + ". Initial cause was " + e.getMessage(), e);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
@@ -506,6 +532,15 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
                     + ". Error was " + exception.getMessage();
             LOG.error(message, exception);
             throw new CacheException(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final synchronized void removeAll(Collection<Object> keys) {
+        for (Object key : keys) {
+            remove(key);
         }
     }
 
@@ -1555,4 +1590,5 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
             LOG.debug("Failed to delete file {}", f.getName());
         }
     }
+
 }

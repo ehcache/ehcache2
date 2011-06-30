@@ -1335,6 +1335,13 @@ public class Cache implements Ehcache, StoreListener {
         put(element, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
+        putAll(elements, false);
+    }
+
 
     /**
      * Put an element in the cache.
@@ -1361,6 +1368,33 @@ public class Cache implements Ehcache, StoreListener {
     public final void put(Element element, boolean doNotNotifyCacheReplicators) throws IllegalArgumentException,
             IllegalStateException, CacheException {
         putInternal(element, doNotNotifyCacheReplicators, false);
+    }
+
+    /**
+     * Puts a collection of elements in the cache.
+     * <p/>
+     * Resets the access statistics on each element, which would be the case if it has previously been
+     * gotten from a cache, and is now being put back.
+     * <p/>
+     * Also notifies the CacheEventListener that:
+     * <ul>
+     * <li>each element was put, but only if the Element was actually put.
+     * <li>if the element exists in the cache, that an update has occurred, even if the element would be expired
+     * if it was requested
+     * </ul>
+     * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
+     * This exception should be caught in those circumstances.
+     *
+     * @param elements                     A mutable collection of Elements. If Serializable it can fully participate in replication and the DiskStore. If it is
+     *                                    <code>null</code> or elements keys are <code>null</code>, it is ignored as a NOOP.
+     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     *                                    further notification to doNotNotifyCacheReplicators cache peers
+     * @throws IllegalStateException    if the cache is not {@link Status#STATUS_ALIVE}
+     * @throws IllegalArgumentException if the element is null
+     */
+    public final void putAll(Collection<Element> elements, boolean doNotNotifyCacheReplicators) throws IllegalArgumentException,
+            IllegalStateException, CacheException {
+        putAllInternal(elements, doNotNotifyCacheReplicators, false);
     }
 
     /**
@@ -1432,6 +1466,56 @@ public class Cache implements Ehcache, StoreListener {
                 element.updateUpdateStatistics();
             }
             notifyPutInternalListeners(element, doNotNotifyCacheReplicators, elementExists);
+        }
+    }
+
+    private void putAllInternal(Collection<Element> elements, boolean doNotNotifyCacheReplicators, boolean useCacheWriter) {
+        if (useCacheWriter) {
+            //TODO implement this
+            return;
+        }
+
+        checkStatus();
+
+        if (disabled || elements == null || elements.isEmpty()) {
+            return;
+        }
+
+        if (elements.remove(null)) {
+            if (doNotNotifyCacheReplicators) {
+                LOG.debug("Element from replicated put is null. This happens because the element is a SoftReference" +
+                        " and it has been collected. Increase heap memory on the JVM or set -Xms to be the same as " +
+                        "-Xmx to avoid this problem.");
+            }
+        }
+
+        Iterator<Element> itr = elements.iterator();
+        while (itr.hasNext()) {
+            if (itr.next().getObjectKey() == null) {
+                itr.remove();
+            }
+        }
+
+        if (elements.isEmpty()) {
+            return;
+        }
+
+        for (Element element : elements) {
+            element.resetAccessStatistics();
+            applyDefaultsToElementWithoutLifespanSet(element);
+        }
+
+        //TODO : check what we can do for this
+        backOffIfDiskSpoolFull();
+
+        if (useCacheWriter) {
+            //TODO : implement this case
+            return;
+        } else {
+            compoundStore.putAll(elements);
+            for (Element element : elements) {
+                notifyPutInternalListeners(element, doNotNotifyCacheReplicators, false);
+            }
         }
     }
 
@@ -1550,6 +1634,20 @@ public class Cache implements Ehcache, StoreListener {
         } else {
             return searchInStoreWithoutStats(key, false, true);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
+        Map<Object, Element> retMap = new HashMap<Object, Element>();
+        for (Object key : keys) {
+            Element element = get(key);
+            if (element != null) {
+                retMap.put(key, element);
+            }
+        }
+        return retMap;
     }
 
     /**
@@ -2011,6 +2109,30 @@ public class Cache implements Ehcache, StoreListener {
         return remove(key, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
+        removeAll(keys, false);
+    }
+
+
+    /**
+     * Removes a collection of {@link Element}s from the Cache. This also removes it from any
+     * stores it may be in.
+     * <p/>
+     * Also notifies the CacheEventListener after the elements were removed.
+     * <p/>
+     * Synchronization is handled within the method.
+     *
+     * @param keys                         a mutable collection of keys to operate on
+     * @param doNotNotifyCacheReplicators whether the removeAll is coming from a doNotNotifyCacheReplicators cache peer, in which case this removeAll should not initiate a
+     *                                    further notification to doNotNotifyCacheReplicators cache peers
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
+     */
+    public final void removeAll(final Collection<Object> keys, boolean doNotNotifyCacheReplicators) throws IllegalStateException {
+        removeAllInternal(keys, false, true, doNotNotifyCacheReplicators);
+    }
 
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
@@ -2025,7 +2147,7 @@ public class Cache implements Ehcache, StoreListener {
      * This exception should be caught in those circumstances.
      *
      * @param key                         the element key to operate on
-     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     * @param doNotNotifyCacheReplicators whether the remove is coming from a doNotNotifyCacheReplicators cache peer, in which case this remove should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
@@ -2044,7 +2166,7 @@ public class Cache implements Ehcache, StoreListener {
      * Synchronization is handled within the method.
      *
      * @param key                         the element key to operate on
-     * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
+     * @param doNotNotifyCacheReplicators whether the remove is coming from a doNotNotifyCacheReplicators cache peer, in which case this remove should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
@@ -2096,8 +2218,7 @@ public class Cache implements Ehcache, StoreListener {
      * Removes or expires an {@link Element} from the Cache after an attempt to get it determined that it should be expired.
      * This also removes it from any stores it may be in.
      * <p/>
-     * Also notifies the CacheEventListener after the element has expired, but only if an Element
-     * with the key actually existed.
+     * Also notifies the CacheEventListener after the element has expired.
      * <p/>
      * Synchronization is handled within the method.
      * <p/>
@@ -2169,6 +2290,44 @@ public class Cache implements Ehcache, StoreListener {
         }
 
         return removed;
+    }
+
+    /**
+     * Removes or expires a collection of {@link Element}s from the Cache after an attempt to get it determined that it should be expired.
+     * This also removes it from any stores it may be in.
+     * <p/>
+     * Also notifies the CacheEventListener after the element has expired.
+     * <p/>
+     * Synchronization is handled within the method.
+     * <p/>
+     * If a removeAll was called, listeners are notified, regardless of whether the element existed or not.
+     * This allows distributed cache listeners to remove elements from a cluster regardless of whether they
+     * existed locally.
+     * <p/>
+     * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
+     * This exception should be caught in those circumstances.
+     *
+     * @param keys                        a mutable collection of keys to operate on
+     * @param expiry                      if the reason this method is being called is to expire the element
+     * @param notifyListeners             whether to notify listeners
+     * @param doNotNotifyCacheReplicators whether not to notify cache replicators
+     * @return true if the element was removed, false if it was not found in the cache
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
+     */
+    private void removeAllInternal(final Collection<Object> keys, boolean expiry, boolean notifyListeners,
+            boolean doNotNotifyCacheReplicators) throws IllegalStateException {
+        if (keys == null || keys.isEmpty()) {
+            return;
+        }
+
+        checkStatus();
+        keys.remove(null);
+
+        compoundStore.removeAll(keys);
+        for (Object key : keys) {
+            Element syntheticElement = new Element(key, null);
+            notifyRemoveInternalListeners(key, false, notifyListeners, doNotNotifyCacheReplicators, syntheticElement);
+        }
     }
 
     /**

@@ -19,6 +19,7 @@ package net.sf.ehcache.store.compound;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.sf.ehcache.CacheEntry;
+import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.concurrent.CacheLockProvider;
@@ -141,6 +143,15 @@ public abstract class CompoundStore extends AbstractStore {
     /**
      * {@inheritDoc}
      */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO implement our own putAll
+        for (Element element : elements) {
+            put(element);
+        }
+    }
+    /**
+     * {@inheritDoc}
+     */
     public boolean putWithWriter(Element element, CacheWriterManager writerManager) {
         boolean newPut = put(element);
         if (writerManager != null) {
@@ -238,6 +249,16 @@ public abstract class CompoundStore extends AbstractStore {
 
         int hash = hash(key.hashCode());
         return segmentFor(hash).remove(key, hash, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(Collection<Object> keys) {
+        Collection<Element> removedElements = new HashSet<Element>();
+        for (Object key : keys) {
+            remove(key);
+        }
     }
 
     /**
@@ -782,7 +803,7 @@ public abstract class CompoundStore extends AbstractStore {
     /**
      * Sync implementation that wraps the segment locks
      */
-    private final static class ReadWriteLockSync implements Sync {
+    private static final class ReadWriteLockSync implements Sync {
 
         private final ReentrantReadWriteLock lock;
 

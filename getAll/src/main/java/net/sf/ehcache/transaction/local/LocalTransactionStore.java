@@ -15,6 +15,14 @@
  */
 package net.sf.ehcache.transaction.local;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
@@ -38,13 +46,6 @@ import net.sf.ehcache.writer.CacheWriterManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * A Store implementation with support for local transactions
@@ -237,6 +238,17 @@ public class LocalTransactionStore extends AbstractTransactionStore {
     /**
      * {@inheritDoc}
      */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        // TODO write our own implementation
+        for (Element element : elements) {
+            put(element);
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Element getQuiet(Object key) {
         if (key == null) {
             return null;
@@ -301,6 +313,15 @@ public class LocalTransactionStore extends AbstractTransactionStore {
                 LOG.debug("get: cache [{}] key [{}] not soft locked, returning underlying element", cacheName, key);
                 return copyElementForRead(oldElement);
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(Collection<Object> keys) {
+        for (Object key : keys) {
+            remove(key);
         }
     }
 

@@ -16,19 +16,21 @@
 
 package net.sf.ehcache.store;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.writer.CacheWriterManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -97,6 +99,16 @@ public class LruMemoryStore extends AbstractStore {
     /**
      * {@inheritDoc}
      */
+    public final void putAll(Collection<Element> elements) throws CacheException {
+        // TODO Write our own implementation
+        for (Element element : elements) {
+            put(element);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public final boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
         return putInternal(element, writerManager);
     }
@@ -152,6 +164,15 @@ public class LruMemoryStore extends AbstractStore {
      */
     public final Element remove(Object key) {
         return removeInternal(key, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final void removeAll(final Collection<Object> keys) {
+        for (Object key : keys) {
+            remove(key);
+        }
     }
 
     /**
@@ -349,7 +370,7 @@ public class LruMemoryStore extends AbstractStore {
         boolean spooled = false;
         if (cache.getCacheConfiguration().isOverflowToDisk()) {
             if (!element.isSerializable()) {
-                if (LOG.isWarnEnabled()) { 
+                if (LOG.isWarnEnabled()) {
                     LOG.warn(new StringBuilder("Object with key ").append(element.getObjectKey())
                             .append(" is not Serializable and cannot be overflowed to disk").toString());
                 }

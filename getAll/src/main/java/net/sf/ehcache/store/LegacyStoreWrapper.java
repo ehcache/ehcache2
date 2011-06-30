@@ -19,6 +19,7 @@ package net.sf.ehcache.store;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -34,23 +35,23 @@ import net.sf.ehcache.writer.CacheWriterManager;
 
 /**
  * A wrapper to convert a legacy pair of stores into a new style compound store.
- * 
+ *
  * @author Chris Dennis
  */
 public class LegacyStoreWrapper extends AbstractStore {
 
     private static final int SYNC_STRIPES = 64;
-    
+
     private final Store memory;
     private final Store disk;
     private final RegisteredEventListeners eventListeners;
     private final CacheConfiguration config;
-    
+
     private final StripedReadWriteLockSync sync = new StripedReadWriteLockSync(SYNC_STRIPES);
-    
+
     /**
      * Create a correctly locked store wrapper around the supplied in-memory and on disk stores.
-     * 
+     *
      * @param memory in-memory store
      * @param disk on disk store
      * @param eventListeners event listener to fire on
@@ -142,7 +143,7 @@ public class LegacyStoreWrapper extends AbstractStore {
      * {@inheritDoc}
      */
     public void expireElements() {
-     
+
         for (Object key : memory.getKeys()) {
             Sync s = sync.getSyncForKey(key);
             s.lock(LockType.WRITE);
@@ -234,7 +235,7 @@ public class LegacyStoreWrapper extends AbstractStore {
         } else {
             HashSet<Object> keys = new HashSet<Object>();
             keys.addAll(memory.getKeys());
-            keys.addAll(disk.getKeys());            
+            keys.addAll(disk.getKeys());
             return new ArrayList(keys);
         }
     }
@@ -341,7 +342,7 @@ public class LegacyStoreWrapper extends AbstractStore {
         if (element == null) {
             return false;
         }
-        
+
         Sync s = sync.getSyncForKey(element.getObjectKey());
         s.lock(LockType.WRITE);
         try {
@@ -355,11 +356,20 @@ public class LegacyStoreWrapper extends AbstractStore {
     /**
      * {@inheritDoc}
      */
+    public void putAll(Collection<Element> elements) throws CacheException {
+        for (Element element : elements) {
+            put(element);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
         if (element == null) {
             return false;
         }
-        
+
         Sync s = sync.getSyncForKey(element.getObjectKey());
         s.lock(LockType.WRITE);
         try {
@@ -387,6 +397,15 @@ public class LegacyStoreWrapper extends AbstractStore {
             return m;
         } finally {
             s.unlock(LockType.WRITE);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAll(final Collection<Object> keys) {
+        for (Object key : keys) {
+            remove(key);
         }
     }
 
@@ -446,7 +465,7 @@ public class LegacyStoreWrapper extends AbstractStore {
      */
     public Element putIfAbsent(Element element) throws NullPointerException {
         Sync lock = sync.getSyncForKey(element.getObjectKey());
-        
+
         lock.lock(LockType.WRITE);
         try {
             Element e = getQuiet(element.getObjectKey());
@@ -464,7 +483,7 @@ public class LegacyStoreWrapper extends AbstractStore {
      */
     public Element removeElement(Element element, ElementValueComparator comparator) throws NullPointerException {
         Sync lock = sync.getSyncForKey(element.getObjectKey());
-        
+
         lock.lock(LockType.WRITE);
         try {
             Element current = getQuiet(element.getObjectKey());
@@ -484,7 +503,7 @@ public class LegacyStoreWrapper extends AbstractStore {
     public boolean replace(Element old, Element element, ElementValueComparator comparator)
             throws NullPointerException, IllegalArgumentException {
         Sync lock = sync.getSyncForKey(old.getObjectKey());
-        
+
         lock.lock(LockType.WRITE);
         try {
             Element current = getQuiet(old.getObjectKey());
@@ -504,7 +523,7 @@ public class LegacyStoreWrapper extends AbstractStore {
      */
     public Element replace(Element element) throws NullPointerException {
         Sync lock = sync.getSyncForKey(element.getObjectKey());
-        
+
         lock.lock(LockType.WRITE);
         try {
             Element current = getQuiet(element.getObjectKey());
