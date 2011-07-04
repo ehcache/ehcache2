@@ -40,11 +40,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -2372,6 +2375,40 @@ public class CacheTest extends AbstractCacheTest {
 
         cache.removeAll();
         assertEquals(0, cache.getSize());
+
+        cache.putAll(elements);
+        assertEquals(elements.size(), cache.getSize());
+
+        Set keySet3 = new HashSet<String>();
+        for(int i = 0; i < numOfElements; i++){
+            keySet3.add("key" + 2 * i);
+        }
+        cache.removeAll(keySet3);
+        assertEquals(numOfElements/2, cache.getSize());
+
+        Set keySet4 = new HashSet<String>();
+        for(int i = 0; i < 2 * numOfElements; i++){
+            keySet4.add("key" + i);
+        }
+
+        Map<Object, Element> actual = cache.getAll(keySet4);
+        Map<Object, Element> expected = new HashMap<Object, Element>();
+
+        for(int i = 0; i < numOfElements; i++) {
+            if(i % 2 == 0) {
+                expected.put("key" + i, null);
+            } else {
+                Element val = actual.get("key" + i);
+                assertNotNull("val for key" + i + " is " + val, val);
+                expected.put("key" + i, val);
+            }
+        }
+
+        for(int i = numOfElements; i < 2 * numOfElements; i++) {
+            expected.put("key" + i, null);
+        }
+
+        assertEquals(expected, actual);
     }
 
     static class GetCacheMemorySize implements Callable<Long> {
