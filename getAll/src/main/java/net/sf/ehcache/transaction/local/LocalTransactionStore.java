@@ -242,7 +242,6 @@ public class LocalTransactionStore extends AbstractTransactionStore {
         for (Element element : elements) {
             put(element);
         }
-
     }
 
     /**

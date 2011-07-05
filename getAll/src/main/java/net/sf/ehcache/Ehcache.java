@@ -80,12 +80,12 @@ public interface Ehcache extends Cloneable {
 
 
     /**
-     * Puts a collection of elements in the cache. Throws a NullPointerException if any of the element in the
+     * Puts a collection of elements in the cache. Throws a NullPointerException if any element in the
      * collection is null
      * Also notifies the CacheEventListener that:
      * <ul>
      * <li>the elements were put. The puts happen in batches and the notifications are thrown for every put in the
-     * batch irrespective of whether the element is present in the cache or not i.e even updates wouuld be considered
+     * batch irrespective of whether the element is present in the cache or not i.e even updates would be considered
      * as new entries
      * </ul>
      *
@@ -223,12 +223,13 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets all the elements from the cache for the keys provided. Updates Element Statistics
+     * Throws a NullPointerException if any key in the collection is null
      * <p/>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peek into the Element to see its last access time with get
      *
      * @param keys a collection of keys for which value is to be fetched
-     * @return Map of key and elements for the provided keys, value will be null for the key which doesn't exist
+     * @return Map of key and elements for the provided keys, value will be null for the keys which do not exist
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @see #isExpired
      * @since 1.2
@@ -346,7 +347,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Removes given set of {@link net.sf.ehcache.Element} from the Cache. This also removes them from any
-     * stores it may be in.
+     * stores it may be in. Throws a NullPointerException if any key in the collection is null
      * <p/>
      * Also notifies the CacheEventListener after the elements were removed.
      * Notification is sent for every key irrespective of whether the key was present in the cache or not

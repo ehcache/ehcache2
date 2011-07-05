@@ -1451,10 +1451,6 @@ public class Cache implements Ehcache, StoreListener {
     }
 
     private void putAllInternal(Collection<Element> elements, boolean doNotNotifyCacheReplicators) {
-        if (elements.isEmpty()) {
-            return;
-        }
-
         checkStatus();
 
         if (disabled || elements == null || elements.isEmpty()) {
@@ -1592,6 +1588,12 @@ public class Cache implements Ehcache, StoreListener {
      * {@inheritDoc}
      */
     public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
+        checkStatus();
+
+        if (disabled || keys == null || keys.isEmpty()) {
+            return null;
+        }
+
         Map<Object, Element> retMap = new HashMap<Object, Element>();
         for (Object key : keys) {
             Element element = get(key);
@@ -2255,11 +2257,11 @@ public class Cache implements Ehcache, StoreListener {
      */
     private void removeAllInternal(final Collection<Object> keys, boolean expiry, boolean notifyListeners,
             boolean doNotNotifyCacheReplicators) throws IllegalStateException {
-        if (keys == null || keys.isEmpty()) {
+        checkStatus();
+
+        if (disabled || keys == null || keys.isEmpty()) {
             return;
         }
-
-        checkStatus();
 
         compoundStore.removeAll(keys);
         for (Object key : keys) {

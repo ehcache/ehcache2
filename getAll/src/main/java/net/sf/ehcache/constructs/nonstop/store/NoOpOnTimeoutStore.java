@@ -282,7 +282,6 @@ public final class NoOpOnTimeoutStore implements NonstopStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        return;
     }
 
     /**
