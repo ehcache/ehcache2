@@ -157,4 +157,11 @@ public abstract class AbstractStore implements Store {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public int getPinnedCount() {
+        return 0;
+    }
+
 }

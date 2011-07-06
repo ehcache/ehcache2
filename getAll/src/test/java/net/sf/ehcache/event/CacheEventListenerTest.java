@@ -308,10 +308,10 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         cache.put(element);
 
         //expire
-        assertBy(2 * cache.getCacheConfiguration().getTimeToLiveSeconds(), TimeUnit.SECONDS, elementAt(cache, key), nullValue());
+        assertBy(10, TimeUnit.SECONDS, elementAt(cache, key), nullValue());
 
         //the TestCacheEventListener does a put of a new Element with the same key on expiry
-        assertBy(10, TimeUnit.SECONDS, elementAt(cache, key), notNullValue());
+        assertNotNull(cache.get(key));
         Element newElement = cache.get(key);
         assertNotNull(newElement);
         assertEquals("set on notify", newElement.getValue());
@@ -672,7 +672,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
 
         //Check expiry from memory store in 1 second
         cache.put(element);
-        Thread.sleep(1999);
+        Thread.sleep(5999);
 
         //Trigger expiry
         cache.get(key);
@@ -697,7 +697,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         }
 
         //Wait for expiry
-        Thread.sleep(1999);
+        Thread.sleep(5999);
 
         //Trigger expiry
         for (int i = 0; i < 20; i++) {
@@ -727,7 +727,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         }
 
         // Wait for expiry and expiry thread
-        Thread.sleep(2999);
+        Thread.sleep(5999);
 
         List notifications = CountingCacheEventListener.getCacheElementsExpired(cache);
         for (int i = 0; i < notifications.size(); i++) {

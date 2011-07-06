@@ -305,6 +305,13 @@ public class NonstopStoreImpl implements NonstopTimeoutBehaviorStoreResolver, Re
     /**
      * {@inheritDoc}
      */
+    public int getPinnedCount() {
+        return executorServiceStore.getPinnedCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void flush() throws IOException {
         executorServiceStore.flush();
     }

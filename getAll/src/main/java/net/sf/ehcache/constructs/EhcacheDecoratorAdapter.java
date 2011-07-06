@@ -212,6 +212,13 @@ public class EhcacheDecoratorAdapter implements Ehcache {
     /**
      * {@inheritDoc}
      */
+    public long calculateOnDiskSize() throws IllegalStateException, CacheException {
+        return underlyingCache.calculateOnDiskSize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void clearStatistics() {
         underlyingCache.clearStatistics();
     }

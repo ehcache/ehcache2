@@ -588,7 +588,7 @@ public class RMICacheReplicatorTest extends AbstractRMITest {
         waitForPropagate();
 
         //local initiating cache's counting listener should have been notified
-        assertEquals(4, CountingCacheEventListener.getCacheElementsUpdated(cache1).size());
+        assertEquals(3, CountingCacheEventListener.getCacheElementsUpdated(cache1).size());
         //remote receiving caches' counting listener should have been notified
         assertEquals(3, CountingCacheEventListener.getCacheElementsUpdated(cache2).size());
 
@@ -1197,25 +1197,5 @@ public class RMICacheReplicatorTest extends AbstractRMITest {
             }
             return null;
         }
-    }
-
-    private static void waitForClusterMembership(int time, TimeUnit unit, final String cacheName, final CacheManager ... managers) {
-        assertBy(time, unit, new Callable<Integer>() {
-
-            public Integer call() throws Exception {
-                Integer minimumPeers = null;
-                for (CacheManager manager : managers) {
-                    int peers = manager.getCacheManagerPeerProvider("RMI").listRemoteCachePeers(manager.getEhcache(cacheName)).size();
-                    if (minimumPeers == null || peers < minimumPeers) {
-                        minimumPeers = peers;
-                    }
-                }
-                if (minimumPeers == null) {
-                    return 0;
-                } else {
-                    return minimumPeers + 1;
-                }
-            }
-        }, is(managers.length));
     }
 }
