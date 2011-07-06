@@ -277,7 +277,6 @@ public class JtaLocalTransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        checkNull(elements);
         registerInJtaContext();
         try {
             underlyingStore.putAll(elements);
@@ -374,7 +373,6 @@ public class JtaLocalTransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void removeAll(Collection<Object> keys) {
-        checkNull(keys);
         registerInJtaContext();
         try {
             underlyingStore.removeAll(keys);

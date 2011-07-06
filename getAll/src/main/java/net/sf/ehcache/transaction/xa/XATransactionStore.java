@@ -420,7 +420,6 @@ public class XATransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void putAll(Collection<Element> elements) throws CacheException {
-        checkNull(elements);
         for (Element element : elements) {
             put(element);
         }
@@ -464,7 +463,6 @@ public class XATransactionStore extends AbstractTransactionStore {
      * {@inheritDoc}
      */
     public void removeAll(Collection<Object> keys) {
-        checkNull(keys);
         for (Object key : keys) {
             remove(key);
         }

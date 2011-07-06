@@ -90,7 +90,7 @@ public interface Ehcache extends Cloneable {
      * </ul>
      *
      * @param elements a collection of elements to be put in the cache.
-     *        If Serializable it can fully participate in replication and the DiskStore.
+     *        If elements are Serializable it can fully participate in replication and the DiskStore.
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws IllegalArgumentException if the elements is null
      * @throws CacheException
