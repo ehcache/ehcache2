@@ -33,6 +33,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.event.CacheEventListener;
 
 import org.junit.Test;
@@ -41,7 +42,16 @@ public class BulkOpsEventListenerTest extends AbstractCacheTest {
 
     @Test
     public void testBulkOpsEventListener() throws Throwable {
-        Cache cache = new Cache("cache", 1000, true, false, 100000, 200000, false, 1);
+        CacheConfiguration cacheConfiguration = new CacheConfiguration();
+        cacheConfiguration.setName("cache");
+        cacheConfiguration.setMaxElementsInMemory(1000);
+        cacheConfiguration.setOverflowToDisk(true);
+        cacheConfiguration.setEternal(false);
+        cacheConfiguration.setTimeToLiveSeconds(100000);
+        cacheConfiguration.setTimeToIdleSeconds(200000);
+        cacheConfiguration.setDiskPersistent(false);
+        cacheConfiguration.setDiskExpiryThreadIntervalSeconds(1);
+        Cache cache = new Cache(cacheConfiguration);
         manager.addCache(cache);
 
         TestCacheEventListener eventListener = new TestCacheEventListener();
