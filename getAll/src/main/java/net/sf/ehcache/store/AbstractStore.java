@@ -17,6 +17,7 @@
 package net.sf.ehcache.store;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -135,6 +136,12 @@ public abstract class AbstractStore implements Store {
      */
     public <T> Attribute<T> getSearchAttribute(String attributeName) throws CacheException {
         return null;
+    }
+
+    protected void checkNull(Collection collection) {
+        if(collection.contains(null)){
+            throw new NullPointerException("Collection contains a null entry");
+        }
     }
 
 }

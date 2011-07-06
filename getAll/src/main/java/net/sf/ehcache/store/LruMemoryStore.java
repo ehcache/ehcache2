@@ -100,6 +100,7 @@ public class LruMemoryStore extends AbstractStore {
      * {@inheritDoc}
      */
     public final void putAll(Collection<Element> elements) throws CacheException {
+        checkNull(elements);
         for (Element element : elements) {
             put(element);
         }
@@ -169,6 +170,7 @@ public class LruMemoryStore extends AbstractStore {
      * {@inheritDoc}
      */
     public final void removeAll(final Collection<Object> keys) {
+        checkNull(keys);
         for (Object key : keys) {
             remove(key);
         }

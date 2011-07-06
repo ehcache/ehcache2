@@ -455,12 +455,13 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
     }
 
     /**
-     * Puts a Collection of elements into the disk store.
+     * {@inheritDoc}
      * <p/>
      * This method is not synchronized. It is however threadsafe. It uses fine-grained
      * synchronization on the spool.
      */
     public final void putAll(final Collection<Element> elements) {
+        checkNull(elements);
         try {
             checkActive();
             for (Element element : elements) {
@@ -535,6 +536,7 @@ public class DiskStore extends AbstractStore implements CacheConfigurationListen
      * {@inheritDoc}
      */
     public final synchronized void removeAll(Collection<Object> keys) {
+        checkNull(keys);
         for (Object key : keys) {
             remove(key);
         }

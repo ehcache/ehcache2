@@ -71,6 +71,9 @@ public interface Store {
 
     /**
      * Puts a collection of elements into the store.
+     * For each element that is put a new put event is thrown for all listeners irrespective of whether the
+     * element was present in the cache or not
+     * A null pointer exception is thrown if any element in the collection is null
      * @param elements Collection of elements to be put in the store
      */
     void putAll(Collection<Element> elements) throws CacheException;
