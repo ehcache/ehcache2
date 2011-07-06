@@ -94,10 +94,11 @@ public interface Ehcache extends Cloneable {
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws IllegalArgumentException if the elements is null
      * @throws CacheException
+     * @throws NullPointerException if any element is null in the collection
      * @since 2.5
      */
     void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException,
-            CacheException;
+            CacheException, NullPointerException;
 
     /**
      * Put an element in the cache.
@@ -231,10 +232,11 @@ public interface Ehcache extends Cloneable {
      * @param keys a collection of keys for which value is to be fetched
      * @return Map of key and elements for the provided keys, value will be null for the keys which do not exist
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
+     * @throws NullPointerException if any key is null in the collection
      * @see #isExpired
      * @since 1.2
      */
-    Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException;
+    Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException, NullPointerException;
 
     /**
      * Gets an element from the cache, without updating Element statistics. Cache statistics are
@@ -353,9 +355,10 @@ public interface Ehcache extends Cloneable {
      * Notification is sent for every key irrespective of whether the key was present in the cache or not
      * @param keys                   a collection of keys to operate on
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
+     * @throws NullPointerException if any key is null in the collection
      * @since 2.5
      */
-    void removeAll(Collection<Object> keys) throws IllegalStateException;
+    void removeAll(Collection<Object> keys) throws IllegalStateException, NullPointerException;
 
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any

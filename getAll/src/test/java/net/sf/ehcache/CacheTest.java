@@ -46,8 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -69,6 +67,7 @@ import net.sf.ehcache.store.compound.CompoundStore;
 import net.sf.ehcache.util.RetryAssert;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -2409,6 +2408,46 @@ public class CacheTest extends AbstractCacheTest {
         }
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testNullEntries() {
+        Cache cache = new Cache("NPECache", 1000, true, false, 100000, 200000, false, 1);
+        manager.addCache(cache);
+
+        int numOfElements = 100;
+        Set<Element> elements = new HashSet<Element>();
+        for (int i = 0; i < numOfElements; i++) {
+            elements.add(new Element("key" + i, "value" + i));
+        }
+
+        elements.add(null);
+        try {
+            cache.putAll(elements);
+            Assert.fail("Was able to put a null element");
+        } catch (NullPointerException e) {
+            // expected exception
+        }
+
+        Set keys = new HashSet<String>();
+        for (int i = 0; i < numOfElements; i++) {
+            keys.add("key" + i);
+        }
+
+        keys.add(null);
+        try {
+            cache.getAll(keys);
+            Assert.fail("was able to get null keys");
+        } catch (NullPointerException e) {
+            // expected exception
+        }
+
+        try {
+            cache.removeAll(keys);
+            Assert.fail("was able to remove null keys");
+        } catch (NullPointerException e) {
+            // expected exception
+        }
     }
 
     static class GetCacheMemorySize implements Callable<Long> {

@@ -1338,7 +1338,8 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
+    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException, NullPointerException {
+        checkNull(elements);
         putAll(elements, false);
     }
 
@@ -1587,7 +1588,8 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
+    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException, NullPointerException {
+        checkNull(keys);
         checkStatus();
 
         if (disabled || keys == null || keys.isEmpty()) {
@@ -2064,7 +2066,8 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException, NullPointerException {
+        checkNull(keys);
         removeAll(keys, false);
     }
 
@@ -3934,6 +3937,11 @@ public class Cache implements Ehcache, StoreListener {
         }
     }
 
+    private void checkNull(Collection collection) throws NullPointerException {
+        if(collection.contains(null)) {
+            throw new NullPointerException("Collection contains null entries");
+        }
+    }
     /**
      * Private class maintaining status of the cache
      *
