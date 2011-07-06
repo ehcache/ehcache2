@@ -15,13 +15,12 @@
  */
 package net.sf.ehcache.transaction.xa;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.transaction.RollbackException;
@@ -419,15 +418,6 @@ public class XATransactionStore extends AbstractTransactionStore {
     /**
      * {@inheritDoc}
      */
-    public void putAll(Collection<Element> elements) throws CacheException {
-        for (Element element : elements) {
-            put(element);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
         LOG.debug("cache {} putWithWriter {}", cache.getName(), element);
         // this forces enlistment so the XA transaction timeout can be propagated to the XA resource
@@ -456,16 +446,6 @@ public class XATransactionStore extends AbstractTransactionStore {
         }
         context.addCommand(putCommand, element);
         return isNull;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public void removeAll(Collection<Object> keys) {
-        for (Object key : keys) {
-            remove(key);
-        }
     }
 
     /**

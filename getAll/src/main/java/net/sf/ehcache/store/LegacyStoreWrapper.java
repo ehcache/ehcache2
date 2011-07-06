@@ -19,7 +19,6 @@ package net.sf.ehcache.store;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -356,15 +355,6 @@ public class LegacyStoreWrapper extends AbstractStore {
     /**
      * {@inheritDoc}
      */
-    public void putAll(Collection<Element> elements) throws CacheException {
-        for (Element element : elements) {
-            put(element);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
         if (element == null) {
             return false;
@@ -397,15 +387,6 @@ public class LegacyStoreWrapper extends AbstractStore {
             return m;
         } finally {
             s.unlock(LockType.WRITE);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void removeAll(final Collection<Object> keys) {
-        for (Object key : keys) {
-            remove(key);
         }
     }
 

@@ -16,6 +16,37 @@
 
 package net.sf.ehcache;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
+
 import net.sf.ehcache.bootstrap.BootstrapCacheLoader;
 import net.sf.ehcache.bootstrap.BootstrapCacheLoaderFactory;
 import net.sf.ehcache.cluster.CacheCluster;
@@ -75,13 +106,13 @@ import net.sf.ehcache.store.compound.impl.OverflowToDiskStore;
 import net.sf.ehcache.terracotta.TerracottaClient;
 import net.sf.ehcache.terracotta.TerracottaNotRunningException;
 import net.sf.ehcache.transaction.SoftLockFactory;
+import net.sf.ehcache.transaction.TransactionIDFactory;
 import net.sf.ehcache.transaction.local.JtaLocalTransactionStore;
 import net.sf.ehcache.transaction.local.LocalTransactionStore;
-import net.sf.ehcache.transaction.TransactionIDFactory;
 import net.sf.ehcache.transaction.manager.TransactionManagerLookup;
 import net.sf.ehcache.transaction.xa.EhcacheXAResource;
-import net.sf.ehcache.transaction.xa.XATransactionStore;
 import net.sf.ehcache.transaction.xa.EhcacheXAResourceImpl;
+import net.sf.ehcache.transaction.xa.XATransactionStore;
 import net.sf.ehcache.util.ClassLoaderUtil;
 import net.sf.ehcache.util.NamedThreadFactory;
 import net.sf.ehcache.util.PropertyUtil;
@@ -91,39 +122,9 @@ import net.sf.ehcache.writer.CacheWriter;
 import net.sf.ehcache.writer.CacheWriterFactory;
 import net.sf.ehcache.writer.CacheWriterManager;
 import net.sf.ehcache.writer.CacheWriterManagerException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
-import java.util.Map.Entry;
-import java.util.concurrent.AbstractExecutorService;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Cache is the central class in ehcache. Caches have {@link Element}s and are managed
@@ -1338,8 +1339,7 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException, NullPointerException {
-        checkNull(elements);
+    public void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException, CacheException {
         putAll(elements, false);
     }
 
@@ -1454,7 +1454,7 @@ public class Cache implements Ehcache, StoreListener {
     private void putAllInternal(Collection<Element> elements, boolean doNotNotifyCacheReplicators) {
         checkStatus();
 
-        if (disabled || elements == null || elements.isEmpty()) {
+        if (disabled || elements.isEmpty()) {
             return;
         }
 
@@ -1588,11 +1588,10 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException, NullPointerException {
-        checkNull(keys);
+    public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
         checkStatus();
 
-        if (disabled || keys == null || keys.isEmpty()) {
+        if (disabled || keys.isEmpty()) {
             return null;
         }
 
@@ -2066,8 +2065,7 @@ public class Cache implements Ehcache, StoreListener {
     /**
      * {@inheritDoc}
      */
-    public void removeAll(final Collection<Object> keys) throws IllegalStateException, NullPointerException {
-        checkNull(keys);
+    public void removeAll(final Collection<Object> keys) throws IllegalStateException {
         removeAll(keys, false);
     }
 
@@ -2262,7 +2260,7 @@ public class Cache implements Ehcache, StoreListener {
             boolean doNotNotifyCacheReplicators) throws IllegalStateException {
         checkStatus();
 
-        if (disabled || keys == null || keys.isEmpty()) {
+        if (disabled || keys.isEmpty()) {
             return;
         }
 
@@ -3937,11 +3935,6 @@ public class Cache implements Ehcache, StoreListener {
         }
     }
 
-    private void checkNull(Collection collection) throws NullPointerException {
-        if(collection.contains(null)) {
-            throw new NullPointerException("Collection contains null entries");
-        }
-    }
     /**
      * Private class maintaining status of the cache
      *

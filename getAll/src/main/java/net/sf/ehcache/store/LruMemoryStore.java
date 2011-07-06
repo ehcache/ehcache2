@@ -17,7 +17,6 @@
 package net.sf.ehcache.store;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -99,15 +98,6 @@ public class LruMemoryStore extends AbstractStore {
     /**
      * {@inheritDoc}
      */
-    public final void putAll(Collection<Element> elements) throws CacheException {
-        for (Element element : elements) {
-            put(element);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public final boolean putWithWriter(Element element, CacheWriterManager writerManager) throws CacheException {
         return putInternal(element, writerManager);
     }
@@ -163,15 +153,6 @@ public class LruMemoryStore extends AbstractStore {
      */
     public final Element remove(Object key) {
         return removeInternal(key, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public final void removeAll(final Collection<Object> keys) {
-        for (Object key : keys) {
-            remove(key);
-        }
     }
 
     /**

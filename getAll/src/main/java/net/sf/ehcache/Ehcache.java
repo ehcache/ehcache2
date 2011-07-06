@@ -94,11 +94,9 @@ public interface Ehcache extends Cloneable {
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws IllegalArgumentException if the elements is null
      * @throws CacheException
-     * @throws NullPointerException if any element is null in the collection
-     * @since 2.5
      */
     void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException,
-            CacheException, NullPointerException;
+            CacheException;
 
     /**
      * Put an element in the cache.
@@ -234,7 +232,6 @@ public interface Ehcache extends Cloneable {
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws NullPointerException if any key is null in the collection
      * @see #isExpired
-     * @since 1.2
      */
     Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException, NullPointerException;
 
@@ -356,7 +353,6 @@ public interface Ehcache extends Cloneable {
      * @param keys                   a collection of keys to operate on
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws NullPointerException if any key is null in the collection
-     * @since 2.5
      */
     void removeAll(Collection<Object> keys) throws IllegalStateException, NullPointerException;
 
