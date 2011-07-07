@@ -81,18 +81,18 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Puts a collection of elements in the cache. Throws a NullPointerException if any element in the
-     * collection is null
-     * Also notifies the CacheEventListener that:
+     * collection is null. Also notifies the CacheEventListener that:
      * <ul>
-     * <li>the elements were put. The puts happen in batches and the notifications are thrown for every put in the
-     * batch irrespective of whether the element is present in the cache or not i.e even updates would be considered
-     * as new entries
+     * <li>the elements were put. The puts{@link net.sf.ehcache.Ehcache.put} happen in batches and the notifications are thrown for every put in the
+     * batch irrespective of whether the element is present in the cache or not i.e this method consider
+     * each element as new entry.
+     * </li>
      * </ul>
-     *
+     * This operation is partially completed if any element or any key is null
      * @param elements a collection of elements to be put in the cache.
      *        If elements are Serializable it can fully participate in replication and the DiskStore.
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
-     * @throws IllegalArgumentException if the elements is null
+     * @throws NullPointerException     if the elements is null or any key of element is null
      * @throws CacheException
      */
     void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException,
@@ -350,9 +350,10 @@ public interface Ehcache extends Cloneable {
      * <p/>
      * Also notifies the CacheEventListener after the elements were removed.
      * Notification is sent for every key irrespective of whether the key was present in the cache or not
+     * This operation is partially completed if any element or any key is null
      * @param keys                   a collection of keys to operate on
-     * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
-     * @throws NullPointerException if any key is null in the collection
+     * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
+     * @throws NullPointerException     if any key is null in the collection
      */
     void removeAll(Collection<Object> keys) throws IllegalStateException, NullPointerException;
 

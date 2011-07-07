@@ -16,10 +16,6 @@
 
 package net.sf.ehcache.store;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
 import net.sf.ehcache.CacheEntry;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
