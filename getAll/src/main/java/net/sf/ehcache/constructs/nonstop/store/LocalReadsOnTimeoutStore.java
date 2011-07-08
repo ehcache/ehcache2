@@ -504,13 +504,6 @@ public class LocalReadsOnTimeoutStore implements NonstopStore {
     /**
      * {@inheritDoc}
      */
-    public int getPinnedCount() {
-        return nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().getPinnedCount();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Set getLocalKeys() {
         return nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().getLocalKeys();
     }
