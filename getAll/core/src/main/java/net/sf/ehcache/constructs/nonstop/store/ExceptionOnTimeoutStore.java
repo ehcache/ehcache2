@@ -92,6 +92,13 @@ public final class ExceptionOnTimeoutStore implements NonstopStore {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public Map<Object, Element> getAllQuiet(Collection<Object> keys) {
+        throw new NonStopCacheException("getAllQuiet for '" + keys.size() + "' keys timed out");
+    }
+
+    /**
      * {@inheritDoc}.
      * <p>
      * Throws {@link NonStopCacheException}

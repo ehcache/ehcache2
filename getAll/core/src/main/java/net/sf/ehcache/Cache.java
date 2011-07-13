@@ -1651,12 +1651,8 @@ public class Cache implements Ehcache, StoreListener {
             return null;
         }
 
-        Map<Object, Element> retMap = new HashMap<Object, Element>();
-        for (Object key : keys) {
-            Element element = get(key);
-            retMap.put(key, element);
-        }
-        return retMap;
+        //TODO : handle the case when statistics is enabled
+        return searchAllInStoreWithoutStats(keys, false, true);
     }
 
     /**
@@ -2044,6 +2040,24 @@ public class Cache implements Ehcache, StoreListener {
             }
         }
         return element;
+    }
+
+
+    private Map<Object, Element> searchAllInStoreWithoutStats(Collection<Object> keys, boolean quiet, boolean notifyListeners) {
+        Map<Object, Element> elements = compoundStore.getAllQuiet(keys);
+
+        for (Entry<Object, Element> entry : elements.entrySet()) {
+            Element element = entry.getValue();
+            if (element != null) {
+                if (isExpired(element)) {
+                    tryRemoveImmediately(entry.getKey(), notifyListeners);
+                    elements.put(entry.getKey(), null);
+                } else if (!(quiet || skipUpdateAccessStatistics(element))) {
+                    element.updateAccessStatistics();
+                }
+            }
+        }
+        return elements;
     }
 
     private void tryRemoveImmediately(final Object key, final boolean notifyListeners) {
