@@ -398,7 +398,7 @@ public interface Store {
     public <T> Attribute<T> getSearchAttribute(String attributeName);
 
     /**
-     * Retries the elements associated with a set of keys
+     * Retries the elements associated with a set of keys without updating the statistics
      * Keys which are not present in the cache will have null values associated
      * with them in the returned map
      *
@@ -406,4 +406,14 @@ public interface Store {
      * @return a map of keys and their corresponding values
      */
     Map<Object, Element> getAllQuiet(Collection<Object> keys);
+
+    /**
+     * Retries the elements associated with a set of keys and update the statistics
+     * Keys which are not present in the cache will have null values associated
+     * with them in the returned map
+     *
+     * @param keys a collection of keys to look for
+     * @return a map of keys and their corresponding values
+     */
+    Map<Object, Element> getAll(Collection<Object> keys);
 }

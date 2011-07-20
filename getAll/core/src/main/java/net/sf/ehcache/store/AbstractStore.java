@@ -168,4 +168,15 @@ public abstract class AbstractStore implements Store {
         }
         return elements;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Object, Element> getAll(Collection<Object> keys) {
+        Map<Object, Element> elements = new HashMap<Object, Element>();
+        for (Object key : keys) {
+            elements.put(key, get(key));
+        }
+        return elements;
+    }
 }

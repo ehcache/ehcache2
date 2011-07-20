@@ -214,6 +214,10 @@ public class TestRejoinStore implements TerracottaStore {
         return rv;
     }
 
+    public Map<Object, Element> getAll(Collection<Object> keys) {
+        return getAllQuiet(keys);
+    }
+
     public int getSize() {
         alwaysCalledMethod();
         return 0;

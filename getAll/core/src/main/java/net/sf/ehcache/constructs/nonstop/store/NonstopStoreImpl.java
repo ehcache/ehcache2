@@ -354,6 +354,13 @@ public class NonstopStoreImpl implements NonstopTimeoutBehaviorStoreResolver, Re
     /**
      * {@inheritDoc}
      */
+    public Map<Object, Element> getAll(Collection<Object> keys) {
+        return executorServiceStore.getAll(keys);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int getSize() {
         return executorServiceStore.getSize();
     }

@@ -403,6 +403,23 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public Map<Object, Element> getAll(final Collection<Object> keys) {
+        Map<Object, Element> rv = null;
+        try {
+            rv = executeWithExecutor(new Callable<Map<Object, Element>>() {
+                public java.util.Map<Object, Element> call() throws Exception {
+                    return nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().getAll(keys);
+                };
+            }, nonstopConfiguration.getTimeoutMillis() * nonstopConfiguration.getBulkOpsTimeoutMultiplyFactor());
+        } catch (TimeoutException e) {
+            return timeoutBehaviorResolver.resolveTimeoutBehaviorStore().getAll(keys);
+        }
+        return rv;
+    }
+
+    /**
      * {@inheritDoc}.
      */
     public List getKeys() {

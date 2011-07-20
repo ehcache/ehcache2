@@ -239,6 +239,13 @@ public final class NoOpOnTimeoutStore implements NonstopStore {
     /**
      * {@inheritDoc}
      */
+    public Map<Object, Element> getAll(Collection<Object> keys) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int getSize() {
         return 0;
     }
