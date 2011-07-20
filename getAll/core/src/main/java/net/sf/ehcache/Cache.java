@@ -45,6 +45,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
 import net.sf.ehcache.bootstrap.BootstrapCacheLoader;
@@ -1545,7 +1546,7 @@ public class Cache implements Ehcache, StoreListener {
             try {
                 Thread.sleep(BACK_OFF_TIME_MILLIS);
             } catch (InterruptedException e) {
-                // do not care if this happens
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -1689,14 +1690,18 @@ public class Cache implements Ehcache, StoreListener {
             if (element != null) {
                 return element;
             }
-            Future future = asynchronousLoad(key, loader, loaderArgument);
 
             //wait for result
             long cacheLoaderTimeoutMillis = configuration.getCacheLoaderTimeoutMillis();
+            final Object value;
             if (cacheLoaderTimeoutMillis > 0) {
-                future.get(cacheLoaderTimeoutMillis, TimeUnit.MILLISECONDS);
+                final Future<AtomicReference<Object>> future = asynchronousLoad(key, loader, loaderArgument);
+                value = future.get(cacheLoaderTimeoutMillis, TimeUnit.MILLISECONDS).get();
             } else {
-                future.get();
+                value = loadValueUsingLoader(key, loader, loaderArgument);
+            }
+            if (value != null) {
+                put(new Element(key, value), false);
             }
         } catch (TimeoutException e) {
             throw new LoaderTimeoutException("Timeout on load for key " + key, e);
@@ -1736,7 +1741,7 @@ public class Cache implements Ehcache, StoreListener {
             return;
         }
 
-        asynchronousLoad(key, null, null);
+        asynchronousPut(key, null, null);
     }
 
     /**
@@ -1973,28 +1978,20 @@ public class Cache implements Ehcache, StoreListener {
     }
 
     private Element searchInStoreWithStats(Object key) {
-        boolean wasOnDisk = false;
+        boolean wasInMemory = compoundStore.containsKeyInMemory(key);
         boolean wasOffHeap = false;
         boolean hasOffHeap = getCacheConfiguration().isOverflowToOffHeap();
         boolean isTCClustered = getCacheConfiguration().isTerracottaClustered();
-        boolean hasOnDisk = isTCClustered || getCacheConfiguration().isOverflowToDisk();
+        boolean hasOnDisk = isTCClustered || getCacheConfiguration().isOverflowToDisk() || getCacheConfiguration().isDiskPersistent();
         Element element;
 
-        if (!compoundStore.containsKeyInMemory(key)) {
+        if (!wasInMemory) {
             liveCacheStatisticsData.cacheMissInMemory();
             if (hasOffHeap) {
                 wasOffHeap = compoundStore.containsKeyOffHeap(key);
             }
-          if (!wasOffHeap) {
-              if (hasOffHeap) {
-                  liveCacheStatisticsData.cacheMissOffHeap();
-              }
-              wasOnDisk = compoundStore.containsKeyOnDisk(key);
-              if (hasOnDisk && !wasOnDisk) {
-                  liveCacheStatisticsData.cacheMissOnDisk();
-              }
-          }
         }
+
         element = compoundStore.get(key);
 
         if (element != null) {
@@ -2011,16 +2008,26 @@ public class Cache implements Ehcache, StoreListener {
                     LOG.debug("Cache: " + getName() + " store hit for " + key);
                 }
 
-                if (wasOffHeap) {
+                if (wasInMemory) {
+                    liveCacheStatisticsData.cacheHitInMemory();
+                } else if (wasOffHeap) {
                     liveCacheStatisticsData.cacheHitOffHeap();
-                } else if (wasOnDisk) {
+                } else if (hasOffHeap) {
+                    liveCacheStatisticsData.cacheMissOffHeap();
                     liveCacheStatisticsData.cacheHitOnDisk();
                 } else {
-                    liveCacheStatisticsData.cacheHitInMemory();
+                    liveCacheStatisticsData.cacheHitOnDisk();
                 }
             }
         } else {
             liveCacheStatisticsData.cacheMissNotFound();
+            if (hasOffHeap) {
+                liveCacheStatisticsData.cacheMissOffHeap();
+            }
+            if (hasOnDisk) {
+                liveCacheStatisticsData.cacheMissOnDisk();
+            }
+
             if (LOG.isDebugEnabled()) {
                 LOG.debug(configuration.getName() + " cache - Miss");
             }
@@ -3252,14 +3259,14 @@ public class Cache implements Ehcache, StoreListener {
     }
 
     /**
-     * Does the asynchronous loading.
+     * Does the asynchronous put into the cache of the asynchronously loaded value.
      *
-     * @param key
+     * @param key the key to load
      * @param specificLoader a specific loader to use. If null the default loader is used.
-     * @param argument
+     * @param argument the argument to pass to the writer
      * @return a Future which can be used to monitor execution
      */
-    Future asynchronousLoad(final Object key, final CacheLoader specificLoader, final Object argument) {
+    Future asynchronousPut(final Object key, final CacheLoader specificLoader, final Object argument) {
         return getExecutorService().submit(new Runnable() {
 
             /**
@@ -3270,24 +3277,12 @@ public class Cache implements Ehcache, StoreListener {
                     //Test to see if it has turned up in the meantime
                     boolean existsOnRun = isKeyInCache(key);
                     if (!existsOnRun) {
-                        Object value;
-                        if (specificLoader == null) {
-                            if (registeredCacheLoaders.size() == 0) {
-                                return;
-                            }
-                            value = loadWithRegisteredLoaders(argument, key);
-                        } else {
-                            if (argument == null) {
-                                value = specificLoader.load(key);
-                            } else {
-                                value = specificLoader.load(key, argument);
-                            }
-                        }
+                        Object value = loadValueUsingLoader(key, specificLoader, argument);
                         if (value != null) {
                             put(new Element(key, value), false);
                         }
                     }
-                } catch (Throwable e) {
+                } catch (RuntimeException e) {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Problem during load. Load will not be completed. Cause was " + e.getCause(), e);
                     }
@@ -3295,6 +3290,62 @@ public class Cache implements Ehcache, StoreListener {
                 }
             }
         });
+    }
+
+    /**
+     * Does the asynchronous loading. But doesn't put it into the cache
+     *
+     * @param key the key to load
+     * @param specificLoader a specific loader to use. If null the default loader is used.
+     * @param argument the argument to pass to the writer
+     * @return a Future which can be used to monitor execution
+     */
+    Future<AtomicReference<Object>> asynchronousLoad(final Object key, final CacheLoader specificLoader, final Object argument) {
+        final AtomicReference<Object> result = new AtomicReference<Object>();
+        return getExecutorService().submit(new Runnable() {
+
+            /**
+             * Calls the CacheLoader and puts the result in the Cache
+             */
+            public void run() throws CacheException {
+                try {
+                    //Test to see if it has turned up in the meantime
+                    boolean existsOnRun = isKeyInCache(key);
+                    if (!existsOnRun) {
+                        Object value = loadValueUsingLoader(key, specificLoader, argument);
+                        if (value != null) {
+                            result.set(value);
+                        }
+                    }
+                } catch (RuntimeException e) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Problem during load. Load will not be completed. Cause was " + e.getCause(), e);
+                    }
+                    throw new CacheException("Problem during load. Load will not be completed. Cause was " + e.getCause(), e);
+                }
+            }
+        }, result);
+    }
+
+    /**
+     * Will attempt to load the value for a key, either using the passedin loader, or falling back to registered ones
+     * @param key the key to load for
+     * @param specificLoader the loader to use, can be null to fallback to Cache registered loaders
+     * @param argument the argument to pass the loader
+     * @return null if not present in the underlying SoR or if no loader available, otherwise the loaded object
+     */
+    private Object loadValueUsingLoader(final Object key, final CacheLoader specificLoader, final Object argument) {
+        Object value = null;
+        if (specificLoader != null) {
+            if (argument == null) {
+                value = specificLoader.load(key);
+            } else {
+                value = specificLoader.load(key, argument);
+            }
+        } else if (!registeredCacheLoaders.isEmpty()) {
+            value = loadWithRegisteredLoaders(argument, key);
+        }
+        return value;
     }
 
     private Object loadWithRegisteredLoaders(Object argument, Object key) throws CacheException {

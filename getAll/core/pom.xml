@@ -33,7 +33,7 @@
         <skipCheckstyle>false</skipCheckstyle>
         <test.tmp.dir>${project.build.directory}/tmp</test.tmp.dir>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
-	<tests.supplemental.args></tests.supplemental.args>
+        <tests.supplemental.args></tests.supplemental.args>
     </properties>
 
     <dependencies>
@@ -44,13 +44,6 @@
             <version>1.6.1</version>
             <scope>compile</scope>
         </dependency>
-
-	    <dependency>
-	      <groupId>net.sf.ehcache</groupId>
-	      <artifactId>sizeof-agent</artifactId>
-	      <version>1.0.0-SNAPSHOT</version>
-	      <scope>compile</scope>
-	    </dependency>
 
         <!--
               With slf4j, users must choose a concrete logging implementation at
@@ -95,6 +88,12 @@
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>sizeof-agent</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -506,6 +505,9 @@
                         <net.sf.ehcache.speedAdjustmentFactor>${net.sf.ehcache.speedAdjustmentFactor}</net.sf.ehcache.speedAdjustmentFactor>
                         <java.io.tmpdir>${test.tmp.dir}</java.io.tmpdir>
                     </systemPropertyVariables>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>net.sf.ehcache:sizeof-agent</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -543,12 +545,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configLocation>${basedir}/checkstyle/checkstyle.xml
-                    </configLocation>
-                    <suppressionsLocation>${basedir}/checkstyle/suppressions.xml
-                    </suppressionsLocation>
-                    <headerLocation>${basedir}/checkstyle/ClassHeader.txt
-                    </headerLocation>
+                    <configLocation>${basedir}/checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>${basedir}/checkstyle/suppressions.xml</suppressionsLocation>
+                    <headerLocation>${basedir}/checkstyle/ClassHeader.txt</headerLocation>
                     <skip>${skipCheckstyle}</skip>
                     <enableRSS>false</enableRSS>
                     <linkXRef>true</linkXRef>
@@ -680,6 +679,18 @@
                 <testDir>src/test/perf</testDir>
                 <testResources>src/test/perfResources</testResources>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <argLine>${tests.supplemental.args} -Xmx512m</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <!--

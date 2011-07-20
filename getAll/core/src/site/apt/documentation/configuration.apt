@@ -89,6 +89,7 @@
 	leaving each cache to share in one large pool of memory.
 
 ---
+
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      	xsi:noNamespaceSchemaLocation="ehcache.xsd"
      	maxBytesLocalHeap="1M" maxBytesLocalOffHeap="16M">
@@ -196,6 +197,63 @@
 
 	Overallocations can only be detected at configuration time. For this reason we do not permit the use of max element count
 	(e.g. maxElementsInMemory) configuration with CacheManager storage pools.
+
+*** Sizing of cached entries
+
+  Elements put in a memory limited cache will have their memory sizes measured. The entire Element instance added
+  to the cache is measured, including key and value, as well as the memory footprint of adding that instance to
+  internal data structures. Key and value are measured as object graphs - each reference is followed and the object
+  reference also measured. This goes on recursively.
+
+  Shared references will be measured by each class that references it. This will result in an overstatement. Shared references
+  should therefore be ignored.
+
+*** Ignoring for size calculations
+
+  References can be ignored using the <<<@IgnoreSizeOf>>> annotation.
+
+  The annotation may be declared at the class level or on field.
+  with the fully qualified class name of classes to be ingored and/or fields to be ignored during the measurement
+  when adding an new entry to the cache.
+
+    This example shows how to ignore the <<<Dog>>> class.
+
+---
+
+---
+
+    This shows how to ignore the <<<sharedInstance>>> field.
+
+---
+  public static class MyCacheEntry {
+    @IgnoreSizeOf
+    private final SharedClass sharedInstance;
+    ...
+  }
+---
+
+    Finally packages may be also ignored as per the following example:
+
+---
+
+---
+
+  Alternatively you may declare ignored classes and fields in a file using and specify a <<<net.sf.ehcache.sizeof.filter>>> system property
+  to point to file.
+
+
+
+---
+# That field references a common graph between all cached entries
+com.pany.domain.cache.MyCacheEntry.sharedInstance
+# This will ignore all instances of that type
+com.pany.domain.SharedState
+# This ignores a package
+com.pany.example
+---
+
+  Note that these measurements and configureations only apply to on heap storage. Once Elements are moved to off-heap, disk or Terracotta, they
+  are serialized as byte arrays. The serialized size is then used as the basis for measurement.
 
 *** Eviction when using CacheManager level storage
 
@@ -359,6 +417,7 @@ The TerracottaStoreBootstrapCacheLoaderFactory is configured as follows:
                     snapshotOnShutDown=true,
                     doKeySnapshot=false,
                     doKeySnapshotOnDedicatedThread=false"/>
+---
 
     The configuration properties are:
 
@@ -515,7 +574,6 @@ The TerracottaStoreBootstrapCacheLoaderFactory is configured as follows:
              xsi:noNamespaceSchemaLocation="ehcache.xsd"
              updateCheck="false" monitoring="autodetect"
              dynamicConfig="true">
-
 ---
 
 

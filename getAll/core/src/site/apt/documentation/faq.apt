@@ -1,4 +1,4 @@
- ---
+ 
  Ehcache - Frequently Asked Questions
  ---
 
@@ -70,7 +70,7 @@ Ehcache - Frequently Asked Questions
 
      Because the memory store has a fixed maximum number of
     elements, it will have a maximum memory use equal to the number of
-    elements * the average size. When an element is added beyond the
+    elements multiplied by the average size. When an element is added beyond the
     maximum size, the LRU element gets pushed into the DiskStore.
 
      While we could have an expiry thread to expire elements periodically,
@@ -93,8 +93,7 @@ Ehcache - Frequently Asked Questions
 
      The documentation has been updated with comprehensive coverage of the
     schema for Ehcache and all elements and attributes, including whether
-    they are mandatory. See the {{{http://ehcache.org/documentation/#mozTocId258426}Declarative
-    Configuration}} chapter.
+    they are mandatory. See the {{{http://ehcache.org/documentation/#mozTocId258426}DeclarativeConfiguration}} chapter.
 
 * Can I use Ehcache as a memory cache only?
 
@@ -163,7 +162,7 @@ Ehcache - Frequently Asked Questions
      Yes. There is a System Property based method of disabling ehcache. If disabled no elements will be added to a cache.
      Set the property "net.sf.ehcache.disabled=true" to disable ehcache.
 
-     This can easily be done using <<<-Dnet.sf.ehcache.disabled=true>>>> in the command line.
+     This can easily be done using <<<-Dnet.sf.ehcache.disabled=true>>> in the command line.
 
 * How do I dynamically change Cache attributes at runtime?
 
@@ -220,7 +219,6 @@ Ehcache - Frequently Asked Questions
 
 <cacheManagerPeerListenerFactory
 class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"/>
-
 ---
 
     and then at least one cache declaration with
@@ -233,7 +231,6 @@ class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"/>
     in it. An example cache is:
 
 ---
-
     <cache name="sampleDistributedCache1"
            maxElementsInMemory="10"
            eternal="false"
@@ -295,7 +292,7 @@ class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"/>
 * How do I get a memory only-cache to persist to disk between VM restarts?
 
     While disk persistence between restarts is a feature of the DiskStore only, you can get the same behaviour for a memory only cache
-    by setting up a cache with maxElementsInMemory set to Integer.MAX_VALUE, 2147483647 and diskPersistent set to true.
+    by setting up a cache with <<<maxElementsInMemory>>> set to a value appropriate for your environment and <<<diskPersistent>>> set to true.
 
     You can manually call flush() to flush to disk. It is a good idea to set <<<clearOnFlush>>> to false so that the MemoryStore is not
      cleared each time. You can then call flush() to persist whenever you wish.

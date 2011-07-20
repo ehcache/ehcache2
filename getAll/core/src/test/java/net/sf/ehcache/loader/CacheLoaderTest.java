@@ -22,12 +22,15 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
+import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.extension.TestCacheExtension;
 import org.junit.After;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -70,6 +73,17 @@ public class CacheLoaderTest {
         if (!manager.getStatus().equals(Status.STATUS_SHUTDOWN)) {
             manager.shutdown();
         }
+    }
+
+    @Test
+    public void testWorksWithTransactionalCaches() {
+        Cache cache = new Cache(new CacheConfiguration("txLoaderCache", 100)
+            .transactionalMode(CacheConfiguration.TransactionalMode.LOCAL));
+        manager.addCache(cache);
+        manager.getTransactionController().begin();
+        final Element element = cache.getWithLoader(10, new CountingCacheLoader(), null);
+        assertThat((Integer) element.getValue(), equalTo(0));
+        manager.getTransactionController().commit();
     }
 
     @Test

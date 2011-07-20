@@ -16,6 +16,8 @@
 
 package net.sf.ehcache.distribution;
 
+import static net.sf.ehcache.util.RetryAssert.assertBy;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -68,10 +70,6 @@ public class RMICacheReplicatorWithLargePayloadTest extends AbstractRMITest {
      * CacheManager 3 in the cluster
      */
     protected CacheManager manager3;
-    /**
-     * CacheManager 4 in the cluster
-     */
-    protected CacheManager manager4;
 
     /**
      * {@inheritDoc} Sets up two caches: cache1 is local. cache2 is to be receive updates
@@ -89,9 +87,7 @@ public class RMICacheReplicatorWithLargePayloadTest extends AbstractRMITest {
         manager2 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-2.xml");
         manager3 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-3.xml");
         // allow cluster to be established
-        waitForClusterMembership(10, TimeUnit.SECONDS, "QGfMIUgUraSgqLuqSfjKHzncdIyWadsvsOiDihOvlPbupWrMBD", manager1, manager2, manager3);
-        // enable distributed removeAlls to finish
-        waitForPropagate();
+        waitForClusterMembership(10, TimeUnit.SECONDS, Arrays.asList(manager1.getCacheNames()), manager1, manager2, manager3);
     }
 
     private void failFastInsufficientMemory() {
@@ -126,9 +122,6 @@ public class RMICacheReplicatorWithLargePayloadTest extends AbstractRMITest {
         if (manager3 != null) {
             manager3.shutdown();
         }
-        if (manager4 != null) {
-            manager4.shutdown();
-        }
 
         RetryAssert.assertBy(30, TimeUnit.SECONDS, new Callable<Set<Thread>>() {
             public Set<Thread> call() throws Exception {
@@ -151,83 +144,63 @@ public class RMICacheReplicatorWithLargePayloadTest extends AbstractRMITest {
         payloadList = PayloadUtil.createCompressedPayloadList(localPeers, 150);
         Assert.assertTrue("Payload is not big enough for cacheManager-3", payloadList.size() > 1);
 
-        manager4 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-4.xml");
-        localPeers = manager4.getCachePeerListener("RMI").getBoundCachePeers();
-        payloadList = PayloadUtil.createCompressedPayloadList(localPeers, 150);
-        Assert.assertTrue("Payload is not big enough for cacheManager-4", payloadList.size() > 1);
-
-        manager4.shutdown();
-    }
-
-    /**
-     * 3 cache managers should means that each cache has two remote peers
-     */
-
-    @Test
-    public void testRemoteCachePeersEqualsNumberOfCacheManagersInCluster() {
-
-        doTestRemoteCachePeers(2);
-    }
-
-    private void doTestRemoteCachePeers(int expectedRemotePeerCount) {
-        CacheManagerPeerProvider provider = manager1.getCacheManagerPeerProvider("RMI");
-        for (String cacheName : manager1.getCacheNames()) {
-            List remotePeersOfCache1 = provider.listRemoteCachePeers(manager1.getCache(cacheName));
-            assertEquals(expectedRemotePeerCount, remotePeersOfCache1.size());
+        CacheManager manager4 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-4.xml");
+        try {
+            localPeers = manager4.getCachePeerListener("RMI").getBoundCachePeers();
+            payloadList = PayloadUtil.createCompressedPayloadList(localPeers, 150);
+            Assert.assertTrue("Payload is not big enough for cacheManager-4", payloadList.size() > 1);
+        } finally {
+            manager4.shutdown();
         }
     }
 
     /**
      * Does a new cache manager in the cluster get detected?
      */
-
     @Test
     public void testRemoteCachePeersDetectsNewCacheManager() throws InterruptedException {
-        doTestRemoteCachePeers(2);
         // Add new CacheManager to cluster
-        manager4 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-4.xml");
-        // Allow detection to occur
-        Thread.sleep(10020);
-        doTestRemoteCachePeers(3);
+        CacheManager manager4 = new CacheManager(AbstractCacheTest.TEST_CONFIG_DIR + "distribution/ehcache-distributed-big-payload-4.xml");
+        try {
+            // Allow detection to occur
+            waitForClusterMembership(10020, TimeUnit.MILLISECONDS, Arrays.asList(manager1.getCacheNames()), manager1, manager2, manager3, manager4);
+        } finally {
+            manager4.shutdown();
+        }
     }
 
     /**
      * Does a down cache manager in the cluster get removed?
      */
-
     @Test
     public void testRemoteCachePeersDetectsDownCacheManager() throws InterruptedException {
-        doTestRemoteCachePeers(2);
         // Drop a CacheManager from the cluster
         manager3.shutdown();
         // Allow change detection to occur. Heartbeat 1 second and is not stale until 5000
-        Thread.sleep(11020);
-        doTestRemoteCachePeers(1);
+        waitForClusterMembership(11020, TimeUnit.MILLISECONDS, Arrays.asList(manager1.getCacheNames()), manager1, manager2);
     }
 
     /**
      * Does a down cache manager in the cluster get removed?
      */
-
     @Test
     public void testRemoteCachePeersDetectsDownCacheManagerSlow() throws InterruptedException {
-
+        MulticastKeepaliveHeartbeatSender.setHeartBeatInterval(2000);
         try {
-            doTestRemoteCachePeers(2);
-
-            MulticastKeepaliveHeartbeatSender.setHeartBeatInterval(2000);
             Thread.sleep(2000);
-
             // Drop a CacheManager from the cluster
             manager3.shutdown();
 
-            // Insuffiecient time, should be alive till now
-            doTestRemoteCachePeers(2);
+            // Insufficient time, should be alive till now
+            CacheManagerPeerProvider provider = manager1.getCacheManagerPeerProvider("RMI");
+            for (String cacheName : manager1.getCacheNames()) {
+                List remotePeersOfCache1 = provider.listRemoteCachePeers(manager1.getCache(cacheName));
+                assertEquals(2, remotePeersOfCache1.size());
+            }
         } finally {
             MulticastKeepaliveHeartbeatSender.setHeartBeatInterval(1000);
             Thread.sleep(2000);
         }
-
     }
 
     /**
@@ -239,46 +212,31 @@ public class RMICacheReplicatorWithLargePayloadTest extends AbstractRMITest {
     public void testPutProgagatesFromAndToEveryCacheManagerAndCache() throws CacheException, InterruptedException {
 
         // Put
-        String[] cacheNames = manager1.getCacheNames();
-        int numberOfCaches = 3;// getNumberOfReplicatingCachesInCacheManager();
+        final String[] cacheNames = manager1.getCacheNames();
         Arrays.sort(cacheNames);
         for (int i = 0; i < cacheNames.length; i++) {
             String name = cacheNames[i];
-            manager1.getCache(name).put(new Element("" + i, Integer.valueOf(i)));
+            manager1.getCache(name).put(new Element(Integer.toString(i), Integer.valueOf(i)));
             // Add some non serializable elements that should not get propagated
             manager1.getCache(name).put(new Element("nonSerializable" + i, new Object()));
         }
 
-        waitForPropagate();
+        assertBy(10, TimeUnit.SECONDS, new Callable<Boolean>() {
 
-        for (int i = 0; i < cacheNames.length; i++) {
-            String name = cacheNames[i];
-            Element element = manager2.getCache(name).get("" + i);
-            assertNotNull(element);
-            assertEquals("" + i, element.getKey());
-            assertEquals(Integer.valueOf(i), element.getValue());
+            public Boolean call() throws Exception {
+                for (int i = 0; i < cacheNames.length; i++) {
+                    String name = cacheNames[i];
+                    for (CacheManager manager : new CacheManager[] {manager2, manager3}) {
+                        Element element = manager.getCache(name).get(Integer.toString(i));
+                        assertNotNull("Cache : " + name, element);
+                        assertEquals(Integer.toString(i), element.getKey());
+                        assertEquals(Integer.valueOf(i), element.getValue());
 
-            element = manager2.getCache(name).get("nonSerializable" + i);
-            assertNull(element);
-
-            element = manager3.getCache(name).get("" + i);
-            assertNotNull(element);
-            assertEquals("" + i, element.getKey());
-            assertEquals(Integer.valueOf(i), element.getValue());
-
-            element = manager3.getCache(name).get("nonSerializable" + i);
-            assertNull(element);
-        }
-
+                        assertNull(manager.getCache(name).get("nonSerializable" + i));
+                    }
+                }
+                return Boolean.TRUE;
+            }
+        }, is(Boolean.TRUE));
     }
-
-    /**
-     * Need to wait for async
-     *
-     * @throws InterruptedException
-     */
-    protected void waitForPropagate() throws InterruptedException {
-        Thread.sleep(1500);
-    }
-
 }
