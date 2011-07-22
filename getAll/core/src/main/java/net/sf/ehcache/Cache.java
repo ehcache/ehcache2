@@ -2107,6 +2107,10 @@ public class Cache implements Ehcache, StoreListener {
     private Element searchInStoreWithoutStats(Object key, boolean quiet, boolean notifyListeners) {
         Element element = compoundStore.getQuiet(key);
 
+        return elementStatsHelper(key, quiet, notifyListeners, element);
+    }
+
+    private Element elementStatsHelper(Object key, boolean quiet, boolean notifyListeners, Element element) {
         if (element != null) {
             if (isExpired(element)) {
                 tryRemoveImmediately(key, notifyListeners);
@@ -2124,14 +2128,8 @@ public class Cache implements Ehcache, StoreListener {
 
         for (Entry<Object, Element> entry : elements.entrySet()) {
             Element element = entry.getValue();
-            if (element != null) {
-                if (isExpired(element)) {
-                    tryRemoveImmediately(entry.getKey(), notifyListeners);
-                    elements.put(entry.getKey(), null);
-                } else if (!(quiet || skipUpdateAccessStatistics(element))) {
-                    element.updateAccessStatistics();
-                }
-            }
+            Object key = entry.getKey();
+            elements.put(key, elementStatsHelper(key, quiet, notifyListeners, element));
         }
         return elements;
     }
