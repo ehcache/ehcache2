@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package net.sf.ehcache.pool.sizeof.filter;
+package net.sf.ehcache.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,12 +22,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to ignore a field, type or entire package while doing a SizeOf measurement
- * @see net.sf.ehcache.pool.sizeof.SizeOf
+ * Annotation used to suppress FindBugs warnings in Ehcache core code.
+ * 
  * @author Chris Dennis
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE, ElementType.PACKAGE })
-public @interface IgnoreSizeOf {
-
+@Retention(RetentionPolicy.CLASS)
+@Target(value = {ElementType.TYPE, ElementType.FIELD, ElementType.METHOD,
+                 ElementType.PARAMETER, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE })
+public @interface FindBugsSuppressWarnings {
+  /**
+   * List of suppressed FindBugs warnings
+   */
+  String[] value();
 }

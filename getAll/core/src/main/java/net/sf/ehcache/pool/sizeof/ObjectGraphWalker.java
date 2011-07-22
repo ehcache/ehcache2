@@ -22,7 +22,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,8 +36,10 @@ import net.sf.ehcache.pool.sizeof.filter.SizeOfFilter;
 final class ObjectGraphWalker {
 
     // Todo this is probably not what we want...
-    private final ConcurrentMap<String, SoftReference<Collection<Field>>> fieldCache =
-        new ConcurrentHashMap<String, SoftReference<Collection<Field>>>();
+    private final ConcurrentMap<Class<?>, SoftReference<Collection<Field>>> fieldCache =
+            new ConcurrentHashMap<Class<?>, SoftReference<Collection<Field>>>();
+    private final ConcurrentMap<Class<?>, Boolean> classCache =
+            new ConcurrentHashMap<Class<?>, Boolean>();
 
     private final SizeOfFilter sizeOfFilter;
 
@@ -97,7 +98,7 @@ final class ObjectGraphWalker {
             }
 
             Class<?> refClass = ref.getClass();
-            if (sizeOfFilter.filterClass(refClass)) {
+            if (shouldWalkClass(refClass)) {
                 if (refClass.isArray() && !refClass.getComponentType().isPrimitive()) {
                     for (int i = 0; i < Array.getLength(ref); i++) {
                         nullSafeAdd(toVisit, Array.get(ref, i));
@@ -105,10 +106,7 @@ final class ObjectGraphWalker {
                 } else {
                     for (Field field : getFilteredFields(refClass)) {
                         try {
-                            Object o = field.get(ref);
-                            if (!field.getType().isPrimitive()) {
-                                nullSafeAdd(toVisit, o);
-                            }
+                            nullSafeAdd(toVisit, field.get(ref));
                         } catch (IllegalAccessException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -128,39 +126,48 @@ final class ObjectGraphWalker {
      * @param refClass the type
      * @return A collection of fields to be visited
      */
-    Collection<Field> getFilteredFields(Class<?> refClass) {
-        SoftReference<Collection<Field>> ref = fieldCache.get(refClass.getName());
+    private Collection<Field> getFilteredFields(Class<?> refClass) {
+        SoftReference<Collection<Field>> ref = fieldCache.get(refClass);
         Collection<Field> fieldList = ref != null ? ref.get() : null;
         if (fieldList != null) {
             return fieldList;
         } else {
-            Collection<Field> result = Collections.unmodifiableCollection(sizeOfFilter.filterFields(refClass, getAllFields(refClass)));
-            fieldCache.put(refClass.getName(), new SoftReference<Collection<Field>>(result));
+            Collection<Field> result = sizeOfFilter.filterFields(refClass, getAllFields(refClass));
+            fieldCache.put(refClass, new SoftReference<Collection<Field>>(result));
             return result;
         }
     }
 
-    private void nullSafeAdd(final Stack<Object> toVisit, final Object o) {
+    private boolean shouldWalkClass(Class<?> refClass) {
+        Boolean cached = classCache.get(refClass);
+        if (cached == null) {
+            cached = sizeOfFilter.filterClass(refClass);
+            classCache.put(refClass, cached);
+        }
+        return cached.booleanValue();
+    }
+    
+    private static void nullSafeAdd(final Stack<Object> toVisit, final Object o) {
         if (o != null) {
-            toVisit.add(o);
+            toVisit.push(o);
         }
     }
 
     /**
-     * Returns all fields for the entire class hierarchy of a type
+     * Returns all non-primitive fields for the entire class hierarchy of a type
      * @param refClass the type
      * @return all fields for that type
      */
-    static Collection<Field> getAllFields(Class<?> refClass) {
+    private static Collection<Field> getAllFields(Class<?> refClass) {
         Collection<Field> fields = new ArrayList<Field>();
         for (Class<?> klazz = refClass; klazz != null; klazz = klazz.getSuperclass()) {
             for (Field field : klazz.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers())) {
+                if (!Modifier.isStatic(field.getModifiers()) && !field.getType().isPrimitive()) {
                     field.setAccessible(true);
                     fields.add(field);
                 }
             }
         }
-        return Collections.unmodifiableCollection(fields);
+        return fields;
     }
 }

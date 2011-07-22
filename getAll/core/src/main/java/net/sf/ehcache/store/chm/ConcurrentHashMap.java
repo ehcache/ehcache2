@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import net.sf.ehcache.util.FindBugsSuppressWarnings;
+
 /**
  * A hash table supporting full concurrency of retrievals and
  * adjustable expected concurrency for updates. This class obeys the
@@ -706,6 +708,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
      *
      * @return the number of key-value mappings in this map
      */
+    @FindBugsSuppressWarnings("UL_UNRELEASED_LOCK")
     public int size() {
         final Segment<K,V>[] segments = this.segments;
         long sum = 0;
@@ -737,10 +740,13 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
             sum = 0;
             for (int i = 0; i < segments.length; ++i)
                 segments[i].readLock().lock();
-            for (int i = 0; i < segments.length; ++i)
-                sum += segments[i].count;
-            for (int i = 0; i < segments.length; ++i)
-                segments[i].readLock().unlock();
+            try {
+              for (int i = 0; i < segments.length; ++i)
+                  sum += segments[i].count;
+            } finally {
+              for (int i = 0; i < segments.length; ++i)
+                  segments[i].readLock().unlock();
+            }
         }
         if (sum > Integer.MAX_VALUE)
             return Integer.MAX_VALUE;
@@ -789,6 +795,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
      *         specified value
      * @throws NullPointerException if the specified value is null
      */
+    @FindBugsSuppressWarnings("UL_UNRELEASED_LOCK")
     public boolean containsValue(Object value) {
         if (value == null)
             throw new NullPointerException();
@@ -821,22 +828,21 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
             if (cleanSweep)
                 return false;
         }
+
         // Resort to locking all segments
         for (int i = 0; i < segments.length; ++i)
             segments[i].readLock().lock();
-        boolean found = false;
         try {
             for (int i = 0; i < segments.length; ++i) {
                 if (segments[i].containsValue(value)) {
-                    found = true;
-                    break;
+                    return true;
                 }
             }
         } finally {
             for (int i = 0; i < segments.length; ++i)
                 segments[i].readLock().unlock();
         }
-        return found;
+        return false;
     }
 
     /**
