@@ -2048,18 +2048,22 @@ public class Cache implements Ehcache, StoreListener {
         boolean isTCClustered = getCacheConfiguration().isTerracottaClustered();
         boolean hasOnDisk = isTCClustered || getCacheConfiguration().isOverflowToDisk();
         Map<Object, Element> elements;
+        Map<Object, Boolean> wasOffHeapMap = new HashMap<Object, Boolean>();
+        Map<Object, Boolean> wasOnDiskMap = new HashMap<Object, Boolean>();
 
         for (Object key : keys) {
             if (!compoundStore.containsKeyInMemory(key)) {
                 liveCacheStatisticsData.cacheMissInMemory();
                 if (hasOffHeap) {
                     wasOffHeap = compoundStore.containsKeyOffHeap(key);
+                    wasOffHeapMap.put(key, wasOffHeap);
                 }
               if (!wasOffHeap) {
                   if (hasOffHeap) {
                       liveCacheStatisticsData.cacheMissOffHeap();
                   }
                   wasOnDisk = compoundStore.containsKeyOnDisk(key);
+                  wasOnDiskMap.put(key, wasOnDisk);
                   if (hasOnDisk && !wasOnDisk) {
                       liveCacheStatisticsData.cacheMissOnDisk();
                   }
@@ -2068,7 +2072,6 @@ public class Cache implements Ehcache, StoreListener {
         }
         elements = compoundStore.getAll(keys);
 
-        //TODO : something wrong here, wasOffHeap, wasOnDisk is per key basis, not for all keys, need to refactor this
         for (Entry<Object, Element> entry : elements.entrySet()) {
             Object key = entry.getKey();
             Element element = entry.getValue();
@@ -2086,9 +2089,9 @@ public class Cache implements Ehcache, StoreListener {
                         LOG.debug("Cache: " + getName() + " store hit for " + key);
                     }
 
-                    if (wasOffHeap) {
+                    if (wasOffHeapMap.containsKey(key) && wasOffHeapMap.get(key)) {
                         liveCacheStatisticsData.cacheHitOffHeap();
-                    } else if (wasOnDisk) {
+                    } else if (wasOnDiskMap.containsKey(key) && wasOnDiskMap.get(key)) {
                         liveCacheStatisticsData.cacheHitOnDisk();
                     } else {
                         liveCacheStatisticsData.cacheHitInMemory();
