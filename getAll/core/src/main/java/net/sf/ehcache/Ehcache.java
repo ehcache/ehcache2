@@ -367,7 +367,7 @@ public interface Ehcache extends Cloneable {
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      */
     void removeAll(Collection<Object> keys, boolean doNotNotifyCacheReplicators) throws IllegalStateException, NullPointerException;
-    
+
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any
      * stores it may be in.

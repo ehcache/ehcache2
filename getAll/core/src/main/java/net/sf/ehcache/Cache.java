@@ -1648,7 +1648,7 @@ public class Cache implements Ehcache, StoreListener {
     public Map<Object, Element> getAll(Collection<Object> keys) throws IllegalStateException, CacheException {
         checkStatus();
 
-        if (disabled || keys.isEmpty()) {
+        if (disabled) {
             return null;
         }
 
@@ -1658,7 +1658,7 @@ public class Cache implements Ehcache, StoreListener {
             liveCacheStatisticsData.addGetTimeMillis(System.currentTimeMillis() - start);
             return elements;
         } else {
-            return searchAllInStoreWithoutStats(keys, false, true);
+            return searchAllInStoreWithoutStats(keys);
         }
     }
 
@@ -2068,7 +2068,7 @@ public class Cache implements Ehcache, StoreListener {
         }
         elements = compoundStore.getAll(keys);
 
-        //TODO : move this internally to avoid this for loop
+        //TODO : something wrong here, wasOffHeap, wasOnDisk is per key basis, not for all keys, need to refactor this
         for (Entry<Object, Element> entry : elements.entrySet()) {
             Object key = entry.getKey();
             Element element = entry.getValue();
@@ -2123,13 +2123,13 @@ public class Cache implements Ehcache, StoreListener {
     }
 
 
-    private Map<Object, Element> searchAllInStoreWithoutStats(Collection<Object> keys, boolean quiet, boolean notifyListeners) {
+    private Map<Object, Element> searchAllInStoreWithoutStats(Collection<Object> keys) {
         Map<Object, Element> elements = compoundStore.getAllQuiet(keys);
 
         for (Entry<Object, Element> entry : elements.entrySet()) {
             Element element = entry.getValue();
             Object key = entry.getKey();
-            elements.put(key, elementStatsHelper(key, quiet, notifyListeners, element));
+            elements.put(key, elementStatsHelper(key, false, true, element));
         }
         return elements;
     }
