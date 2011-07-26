@@ -2103,6 +2103,7 @@ public class Cache implements Ehcache, StoreListener {
                     LOG.debug(configuration.getName() + " cache - Miss");
                 }
             }
+            elements.put(key, element);
         }
         return elements;
     }
