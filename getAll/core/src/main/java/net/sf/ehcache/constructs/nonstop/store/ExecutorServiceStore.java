@@ -392,7 +392,7 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
         Map<Object, Element> rv = null;
         try {
             rv = executeWithExecutor(new Callable<Map<Object, Element>>() {
-                public java.util.Map<Object, Element> call() throws Exception {
+                public Map<Object, Element> call() throws Exception {
                     return nonstopActiveDelegateHolder.getUnderlyingTerracottaStore().getAllQuiet(keys);
                 };
             }, nonstopConfiguration.getTimeoutMillis() * nonstopConfiguration.getBulkOpsTimeoutMultiplyFactor());
