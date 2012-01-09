@@ -1,6 +1,5 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../main/config/ehcache.xsd">
 
-
     <!-- Sets the path to the directory where cache .data files are created.
 
          If the path is a Java System Property it is replaced by
@@ -10,7 +9,7 @@
          user.home - User's home directory
          user.dir - User's current working directory
          java.io.tmpdir - Default temp file path -->
-    <diskStore path="user.dir/target/diskStore/five"/>
+    <diskStore path="java.io.tmpdir/bad"/>
 
 
     <!--
@@ -32,10 +31,8 @@
 
     If no class is specified, no listener is created. There is no default.
     -->
-<!--
     <cacheManagerEventListenerFactory class="net.sf.ehcache.event.TestCacheManagerEventListenerFactory"
                                       properties="type=counting"/>
--->
 
 
     <!--
@@ -47,10 +44,12 @@
     
     class       - The fully qualified class name of the provider
     properties  - Properties to be interpreted by the factory
+
+    Note this one is broken by not having an rmiUrl list
+
     -->
     <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
-                                     properties="peerDiscovery=automatic, multicastGroupAddress=230.0.0.1, multicastGroupPort=4446, timeToLive=0"/>
-
+                              properties="peerDiscovery=manual, "/>
 
     <!--
         (Enable for distributed operation)
@@ -75,10 +74,9 @@
         - socketTimeoutMillis - the number of seconds client sockets will wait when sending messages to this listener
         until they give up. By default this is 120s.
 
-
     -->
     <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-                                     properties="hostName=, socketTimeoutMillis=120000"/>
+                              properties="hostName=localhost, port=5019, socketTimeoutMillis=2000"/>
 
 
     <!--Default Cache configuration. These will applied to caches programmatically created through
@@ -116,16 +114,10 @@
     <defaultCache
             maxElementsInMemory="10"
             eternal="false"
-            timeToIdleSeconds="100"
-            timeToLiveSeconds="100"
-            overflowToDisk="true">
-        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
-                                   properties="replicateAsynchronously=true,
-                                               replicatePuts=true,
-                                               replicateUpdates=true,
-                                               replicateUpdatesViaCopy=true,
-                                               replicateRemovals=true "/>
-    </defaultCache>
+            timeToIdleSeconds="5"
+            timeToLiveSeconds="10"
+            overflowToDisk="true"
+            />
 
 
     <!--Predefined caches.  Add your cache configuration settings here.
@@ -172,59 +164,49 @@
            timeToLiveSeconds="100"
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LRU"
-           diskExpiryThreadIntervalSeconds="1000"
+           diskExpiryThreadIntervalSeconds="1"
             >
         <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
                                    properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
-        <!--<cacheEventListenerFactory class="net.sf.ehcache.event.CountingCacheEventListenerFactory"/>-->
     </cache>
 
-    <!-- Sample cache named sampleCache2. This one has a 10ms cache replication interval. -->
+    <!-- Sample cache named sampleCache2. -->
     <cache name="sampleCache2"
            maxElementsInMemory="10"
            eternal="false"
            timeToIdleSeconds="100"
            timeToLiveSeconds="100"
-           overflowToDisk="true">
+           overflowToDisk="false">
         <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
-                                   properties="replicateAsynchronously=true,
-                                    replicatePuts=true,
-                                    replicateUpdates=true,
-                                    replicateUpdatesViaCopy=false,
-                                    replicateRemovals=true,
-                                    asynchronousReplicationIntervalMillis=10"/>
-        <bootstrapCacheLoaderFactory class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
-                                   properties="bootstrapAsynchronously=false,
-                                               maximumChunkSizeBytes=5000000"/>
+                                   properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
     </cache>
 
 
-    <!-- Sample cache named sampleCache3. It is set for synchronous replication. -->
+    <!-- Sample cache named sampleCache3. -->
     <cache name="sampleCache3"
            maxElementsInMemory="10"
-           eternal="true"
-           overflowToDisk="true">
-        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
-                                   properties="replicateAsynchronously=false, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
-    </cache>
+           eternal="false"
+           timeToLiveSeconds="1"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="FIFO"
+            />
 
-    <!-- Sample cache named sampleCache4. All missing RMICacheReplicatorFactory properties default to true -->
+    <!-- Sample cache named sampleCache4. -->
     <cache name="sampleCache4"
            maxElementsInMemory="10"
-           eternal="true"
+           eternal="false"
+           timeToLiveSeconds="1"
            overflowToDisk="false"
-           memoryStoreEvictionPolicy="LFU">
-        <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
-    </cache>
+           memoryStoreEvictionPolicy="LFU"
+            />
 
-    <!-- Sample cache names sampleCache5. The missing replicatePuts will default to true -->
     <cache name="sampleCache5"
            maxElementsInMemory="10"
            eternal="false"
            timeToLiveSeconds="100"
            overflowToDisk="false">
         <cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
-                                   properties="replicateAsynchronously=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
+                                   properties="replicateAsynchronously=true, replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=true, replicateRemovals=true "/>
     </cache>
 
     <cache name="sampleCache6"
