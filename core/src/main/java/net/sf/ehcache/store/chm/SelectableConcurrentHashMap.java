@@ -590,14 +590,7 @@ public class SelectableConcurrentHashMap extends ConcurrentHashMap<Object, Eleme
                         while (runs-- > 0) {
                             Element evict = nextExpiredOrToEvict(value);
                             if (evict != null) {
-                                Element removed;
-                                while ((removed = remove(evict.getKey(), hash(evict.getKey().hashCode()), null)) == null) {
-                                    evict = nextExpiredOrToEvict(value);
-                                    if (evict == null) {
-                                        break;
-                                    }
-                                }
-                                evicted[runs] = removed;
+                                evicted[runs] = (remove(evict.getKey(), hash(evict.getKey().hashCode()), null));
                             }
                         }
                     }
@@ -669,7 +662,7 @@ public class SelectableConcurrentHashMap extends ConcurrentHashMap<Object, Eleme
                     evictionIterator = iterator();
                 }
                 final MemoryStoreHashEntry next = evictionIterator.next();
-                if (!next.accessed || next.value.isExpired()) {
+                if (next.value.isExpired() || !next.accessed) {
                     return next.value;
                 } else {
                     final boolean pinned = next.pinned;

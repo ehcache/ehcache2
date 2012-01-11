@@ -71,22 +71,6 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
     }
 
     /**
-     * {inheritDoc}
-     */
-    @Override
-    public void setInMemoryEvictionPolicy(final Policy policy) {
-        authority.setInMemoryEvictionPolicy(policy);
-    }
-
-    /**
-     * {inheritDoc}
-     */
-    @Override
-    public Policy getInMemoryEvictionPolicy() {
-        return authority.getInMemoryEvictionPolicy();
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

@@ -13,7 +13,7 @@
   <version>2.6.0-SNAPSHOT</version>
 
   <name>Ehcache Core</name>
-  <description>This is the ehcache core module. Pair it with other modules for added functionality.</description>
+  <description>Internal ehcache-core module</description>
 
   <licenses>
     <license>
