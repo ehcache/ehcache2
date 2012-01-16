@@ -125,26 +125,39 @@ final class AgentLoader {
      * @return true if agent was loaded (which could have happened thought the -javaagent switch)
      */
     static boolean loadAgent() {
-        if (!agentIsAvailable() && VIRTUAL_MACHINE_LOAD_AGENT != null) {
-            try {
-                String name = ManagementFactory.getRuntimeMXBean().getName();
-                Object vm = VIRTUAL_MACHINE_ATTACH.invoke(null, name.substring(0, name.indexOf('@')));
+        synchronized (AgentLoader.class.getName().intern()) {
+            if (!agentIsAvailable() && VIRTUAL_MACHINE_LOAD_AGENT != null) {
                 try {
-                    File agent = getAgentFile();
-                    LOGGER.info("Trying to load agent @ {}", agent);
-                    if (agent != null) {
-                        VIRTUAL_MACHINE_LOAD_AGENT.invoke(vm, agent.getAbsolutePath());
+                    warnIfOSX();
+                    String name = ManagementFactory.getRuntimeMXBean().getName();
+                    Object vm = VIRTUAL_MACHINE_ATTACH.invoke(null, name.substring(0, name.indexOf('@')));
+                    try {
+                        File agent = getAgentFile();
+                        LOGGER.info("Trying to load agent @ {}", agent);
+                        if (agent != null) {
+                            VIRTUAL_MACHINE_LOAD_AGENT.invoke(vm, agent.getAbsolutePath());
+                        }
+                    } finally {
+                        VIRTUAL_MACHINE_DETACH.invoke(vm);
                     }
-                } finally {
-                    VIRTUAL_MACHINE_DETACH.invoke(vm);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    LOGGER.info("Failed to attach to VM and load the agent: {}: {}", e.getClass(), e.getMessage());
                 }
-            } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.info("Failed to attach to VM and load the agent: {}: {}", e.getClass(), e.getMessage());
             }
-        }
 
-        return agentIsAvailable();
+            return agentIsAvailable();
+        }
+    }
+
+    private static void warnIfOSX() {
+        if (JvmInformation.isOSX() && System.getProperty("java.io.tmpdir") != null) {
+            LOGGER.warn("Loading the SizeOfAgent will probably fail, as you are running on Apple OS X and have a value set for java.io.tmpdir\n" +
+                        "They both result in a bug, not yet fixed by Apple, that won't let us attach to the VM and load the agent.\n" +
+                        "Most probably, you'll also get a full thread-dump after this because of the failure... Nothing to worry about!\n" +
+                        "You can bypass trying to load the Agent entirely by setting the System property '"
+                        + net.sf.ehcache.pool.sizeof.AgentSizeOf.BYPASS_LOADING + "'  to true");
+        }
     }
 
     private static File getAgentFile() throws IOException {
