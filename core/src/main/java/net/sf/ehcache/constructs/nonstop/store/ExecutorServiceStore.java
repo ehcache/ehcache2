@@ -50,6 +50,9 @@ import net.sf.ehcache.store.StoreQuery;
 import net.sf.ehcache.store.TerracottaStore;
 import net.sf.ehcache.writer.CacheWriterManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This implementation executes all operations using a NonstopExecutorService. On Timeout, uses the
  * {@link NonstopTimeoutBehaviorStoreResolver} to
@@ -62,6 +65,11 @@ import net.sf.ehcache.writer.CacheWriterManager;
 public class ExecutorServiceStore implements RejoinAwareNonstopStore {
 
     /**
+     * Logger for executor service
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(ExecutorServiceStore.class.getName());
+
+    /**
      * The NonstopConfiguration of the cache using this store
      */
     protected final NonstopConfiguration nonstopConfiguration;
@@ -70,6 +78,7 @@ public class ExecutorServiceStore implements RejoinAwareNonstopStore {
     private final AtomicBoolean clusterOffline = new AtomicBoolean();
     private final List<RejoinAwareBlockingOperation> rejoinAwareOperations = new CopyOnWriteArrayList<RejoinAwareBlockingOperation>();
     private final ExplicitLockingContextThreadLocal explicitLockingContextThreadLocal;
+
 
     /**
      * Constructor accepting the {@link NonstopActiveDelegateHolder}, {@link NonstopConfiguration} and
