@@ -31,7 +31,7 @@ import net.sf.ehcache.Element;
  * value will fail to be delivered in preference to an OutOfMemory error.
  *
  * @author Greg Luck
- * @version $Id: EventMessage.java 2154 2010-04-06 02:45:52Z cdennis $
+ * @version $Id$
  */
 public class LegacyEventMessage extends EventMessage {
 
