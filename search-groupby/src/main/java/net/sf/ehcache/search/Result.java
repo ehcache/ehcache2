@@ -17,6 +17,7 @@
 package net.sf.ehcache.search;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a single cache entry that has been selected by a cache query.

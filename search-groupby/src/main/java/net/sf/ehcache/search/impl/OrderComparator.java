@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import net.sf.ehcache.search.Result;
 import net.sf.ehcache.store.StoreQuery.Ordering;
 
 /**
@@ -29,9 +28,9 @@ import net.sf.ehcache.store.StoreQuery.Ordering;
  *
  * @author teck
  */
-public class OrderComparator implements Comparator<Result> {
+public class OrderComparator implements Comparator<BaseResult> {
 
-    private final List<Comparator<Result>> comparators;
+    private final List<Comparator<BaseResult>> comparators;
 
     /**
      * Constructor
@@ -39,7 +38,7 @@ public class OrderComparator implements Comparator<Result> {
      * @param orderings
      */
     public OrderComparator(List<Ordering> orderings) {
-        comparators = new ArrayList<Comparator<Result>>();
+        comparators = new ArrayList<Comparator<BaseResult>>();
         int pos = 0;
         for (Ordering ordering : orderings) {
             switch (ordering.getDirection()) {
@@ -63,8 +62,8 @@ public class OrderComparator implements Comparator<Result> {
     /**
      * {@inheritDoc}
      */
-    public int compare(Result o1, Result o2) {
-        for (Comparator<Result> c : comparators) {
+    public int compare(BaseResult o1, BaseResult o2) {
+        for (Comparator<BaseResult> c : comparators) {
             int cmp = c.compare(o1, o2);
             if (cmp != 0) {
                 return cmp;
@@ -76,7 +75,7 @@ public class OrderComparator implements Comparator<Result> {
     /**
      * Simple ascending comparator
      */
-    private static class AscendingComparator implements Comparator<Result>, Serializable {
+    private static class AscendingComparator implements Comparator<BaseResult>, Serializable {
 
         private final int pos;
 
@@ -84,7 +83,7 @@ public class OrderComparator implements Comparator<Result> {
             this.pos = pos;
         }
 
-        public int compare(Result o1, Result o2) {
+        public int compare(BaseResult o1, BaseResult o2) {
             Object attr1 = ((ResultImpl) o1).getSortAttribute(pos);
             Object attr2 = ((ResultImpl) o2).getSortAttribute(pos);
 
@@ -107,7 +106,7 @@ public class OrderComparator implements Comparator<Result> {
     /**
      * Simple descending comparator
      */
-    private static class DescendingComparator implements Comparator<Result>, Serializable {
+    private static class DescendingComparator implements Comparator<BaseResult>, Serializable {
 
         private final int pos;
 
@@ -115,9 +114,9 @@ public class OrderComparator implements Comparator<Result> {
             this.pos = pos;
         }
 
-        public int compare(Result o1, Result o2) {
-            Object attr1 = ((ResultImpl) o1).getSortAttribute(pos);
-            Object attr2 = ((ResultImpl) o2).getSortAttribute(pos);
+        public int compare(BaseResult o1, BaseResult o2) {
+            Object attr1 = o1.getSortAttribute(pos);
+            Object attr2 = o2.getSortAttribute(pos);
 
             if ((attr1 == null) && (attr2 == null)) {
                 return 0;

@@ -50,6 +50,8 @@ class CacheQuery implements Query, StoreQuery {
     private final Set<Attribute<?>> includedAttributes = Collections.synchronizedSet(new HashSet<Attribute<?>>());
     private final List<Criteria> criteria = Collections.synchronizedList(new ArrayList<Criteria>());
     private final List<Aggregator> aggregators = Collections.synchronizedList(new ArrayList<Aggregator>());
+    private final Set<Attribute<?>> groupByAttributes = Collections.synchronizedSet(new HashSet<Attribute<?>>());
+
     private final Cache cache;
 
     /**
@@ -127,6 +129,26 @@ class CacheQuery implements Query, StoreQuery {
     public Query addOrderBy(Attribute<?> attribute, Direction direction) {
         checkFrozen();
         this.orderings.add(new OrderingImpl(attribute, direction));
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Query addGroupBy(Attribute<?>... attributes)
+    {
+        checkFrozen();
+
+        if (attributes == null) {
+            throw new NullPointerException();
+        }
+
+        for (Attribute<?> attribute : attributes) {
+            if (attribute == null) {
+                throw new NullPointerException("null attribute");
+            }
+            groupByAttributes.add(attribute);
+        }
         return this;
     }
 
@@ -216,6 +238,12 @@ class CacheQuery implements Query, StoreQuery {
         return Collections.unmodifiableSet(this.includedAttributes);
     }
 
+    public Set<Attribute<?>> groupByAttributes()
+    {
+        assertFrozen();
+        return Collections.unmodifiableSet(this.groupByAttributes);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -280,6 +308,7 @@ class CacheQuery implements Query, StoreQuery {
         private final int copiedMaxResults = maxResults;
         private final List<Ordering> copiedOrdering = Collections.unmodifiableList(new ArrayList<Ordering>(orderings));
         private final List<AggregatorInstance<?>> copiedAggregators = Collections.unmodifiableList(createAggregatorInstances(aggregators));
+        private final Set<Attribute<?>> copiedGroupByAttributes = Collections.unmodifiableSet(new HashSet<Attribute<?>>(groupByAttributes));
 
         public Criteria getCriteria() {
             return copiedCriteria;
@@ -299,6 +328,10 @@ class CacheQuery implements Query, StoreQuery {
 
         public Set<Attribute<?>> requestedAttributes() {
             return copiedAttributes;
+        }
+
+        public Set<Attribute<?>> groupByAttributes() {
+            return copiedGroupByAttributes;
         }
 
         public int maxResults() {
