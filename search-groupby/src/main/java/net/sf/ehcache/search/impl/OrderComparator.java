@@ -84,8 +84,8 @@ public class OrderComparator implements Comparator<BaseResult> {
         }
 
         public int compare(BaseResult o1, BaseResult o2) {
-            Object attr1 = ((ResultImpl) o1).getSortAttribute(pos);
-            Object attr2 = ((ResultImpl) o2).getSortAttribute(pos);
+            Object attr1 = o1.getSortAttribute(pos);
+            Object attr2 = o2.getSortAttribute(pos);
 
             if ((attr1 == null) && (attr2 == null)) {
                 return 0;
