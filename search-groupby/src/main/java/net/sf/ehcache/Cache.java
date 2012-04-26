@@ -4453,6 +4453,10 @@ public class Cache implements InternalEhcache, StoreListener {
         Set<Attribute<?>> groupBy = query.groupByAttributes();
         if (!groupBy.isEmpty())
         {
+            if (groupBy.contains(Query.KEY))
+                throw new SearchException("Explicit grouping by element key not supported.");
+            if (groupBy.contains(Query.VALUE))
+                throw new SearchException("Grouping by element value not supported.");
             if (!groupBy.containsAll(query.requestedAttributes()))
                 throw new SearchException("Some of the requested attributes not used in group by clause.");
             for (Ordering order: query.getOrdering())
@@ -4462,8 +4466,6 @@ public class Cache implements InternalEhcache, StoreListener {
             }
             if (query.requestsValues() || query.requestsKeys())
                 throw new SearchException("It is not possible to include keys or values with group by queries.");
-
-            // TODO: what about grouping by keys? Sounds stupid but not illegal in SQL
         }
     }
 }

@@ -28,9 +28,9 @@ import net.sf.ehcache.store.StoreQuery.Ordering;
  *
  * @author teck
  */
-public class OrderComparator implements Comparator<BaseResult> {
+public class OrderComparator<T extends BaseResult> implements Comparator<T> {
 
-    private final List<Comparator<BaseResult>> comparators;
+    private final List<Comparator<T>> comparators;
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ public class OrderComparator implements Comparator<BaseResult> {
      * @param orderings
      */
     public OrderComparator(List<Ordering> orderings) {
-        comparators = new ArrayList<Comparator<BaseResult>>();
+        comparators = new ArrayList<Comparator<T>>();
         int pos = 0;
         for (Ordering ordering : orderings) {
             switch (ordering.getDirection()) {
@@ -62,8 +62,8 @@ public class OrderComparator implements Comparator<BaseResult> {
     /**
      * {@inheritDoc}
      */
-    public int compare(BaseResult o1, BaseResult o2) {
-        for (Comparator<BaseResult> c : comparators) {
+    public int compare(T o1, T o2) {
+        for (Comparator<T> c : comparators) {
             int cmp = c.compare(o1, o2);
             if (cmp != 0) {
                 return cmp;
@@ -75,7 +75,7 @@ public class OrderComparator implements Comparator<BaseResult> {
     /**
      * Simple ascending comparator
      */
-    private static class AscendingComparator implements Comparator<BaseResult>, Serializable {
+    private class AscendingComparator implements Comparator<T>, Serializable {
 
         private final int pos;
 
@@ -83,7 +83,7 @@ public class OrderComparator implements Comparator<BaseResult> {
             this.pos = pos;
         }
 
-        public int compare(BaseResult o1, BaseResult o2) {
+        public int compare(T o1, T o2) {
             Object attr1 = o1.getSortAttribute(pos);
             Object attr2 = o2.getSortAttribute(pos);
 
@@ -106,7 +106,7 @@ public class OrderComparator implements Comparator<BaseResult> {
     /**
      * Simple descending comparator
      */
-    private static class DescendingComparator implements Comparator<BaseResult>, Serializable {
+    private class DescendingComparator implements Comparator<T>, Serializable {
 
         private final int pos;
 
@@ -114,7 +114,7 @@ public class OrderComparator implements Comparator<BaseResult> {
             this.pos = pos;
         }
 
-        public int compare(BaseResult o1, BaseResult o2) {
+        public int compare(T o1, T o2) {
             Object attr1 = o1.getSortAttribute(pos);
             Object attr2 = o2.getSortAttribute(pos);
 
