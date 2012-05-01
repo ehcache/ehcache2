@@ -18,7 +18,6 @@ package net.sf.ehcache.search.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.ehcache.store.StoreQuery;
 
@@ -30,10 +29,10 @@ import net.sf.ehcache.store.StoreQuery;
 public class GroupedResultImpl extends BaseResult {
     private final Map<String, Object> attributes;
     private final Object[] sortAttributes;
-    private final Set<Object> groupByValues;
+    private final Map<String, Object> groupByValues;
 
     public GroupedResultImpl(StoreQuery query, Map<String, Object> attributes, Object[] sortAttributes,
-            List<Object> aggregatorResults, Set<Object> groupBy) {
+            List<Object> aggregatorResults, Map<String, Object> groupBy) {
         super(query);
         this.attributes = attributes;
         this.sortAttributes = sortAttributes;
@@ -61,7 +60,7 @@ public class GroupedResultImpl extends BaseResult {
         return sortAttributes[pos];
     }
 
-    Set<Object> getGroupByValues()
+    Map<String, Object> getGroupByValues()
     {
         return groupByValues;
     }
