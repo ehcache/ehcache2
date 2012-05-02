@@ -135,8 +135,7 @@ class CacheQuery implements Query, StoreQuery {
     /**
      * {@inheritDoc}
      */
-    public Query addGroupBy(Attribute<?>... attributes)
-    {
+    public Query addGroupBy(Attribute<?>... attributes) {
         checkFrozen();
 
         if (attributes == null) {
@@ -238,8 +237,10 @@ class CacheQuery implements Query, StoreQuery {
         return Collections.unmodifiableSet(this.includedAttributes);
     }
 
-    public Set<Attribute<?>> groupByAttributes()
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Attribute<?>> groupByAttributes() {
         assertFrozen();
         return Collections.unmodifiableSet(this.groupByAttributes);
     }

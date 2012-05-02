@@ -1,5 +1,5 @@
 /**
- *  Copyright 2003-2012 Terracotta, Inc.
+ *  Copyright 2003-2010 Terracotta, Inc.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,6 +31,15 @@ public class GroupedResultImpl extends BaseResult {
     private final Object[] sortAttributes;
     private final Map<String, Object> groupByValues;
 
+    /**
+     * Constructor
+     *
+     * @param query
+     * @param attributes
+     * @param sortAttributes
+     * @param aggregatorResults
+     * @param groupBy
+     */
     public GroupedResultImpl(StoreQuery query, Map<String, Object> attributes, Object[] sortAttributes,
             List<Object> aggregatorResults, Map<String, Object> groupBy) {
         super(query);
@@ -60,8 +69,10 @@ public class GroupedResultImpl extends BaseResult {
         return sortAttributes[pos];
     }
 
-    Map<String, Object> getGroupByValues()
-    {
+    /**
+     * {@inheritDoc}
+     */
+    Map<String, Object> getGroupByValues() {
         return groupByValues;
     }
 }

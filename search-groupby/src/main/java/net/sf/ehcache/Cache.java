@@ -4443,29 +4443,31 @@ public class Cache implements InternalEhcache, StoreListener {
 
     }
 
-    private void validateSearchQuery(StoreQuery query) throws SearchException
-    {
+    private void validateSearchQuery(StoreQuery query) throws SearchException {
         if (!query.requestsKeys() && !query.requestsValues() && query.requestedAttributes().isEmpty() && query.getAggregatorInstances().isEmpty()) {
             String msg = "No results specified. " +
             "Please specify one or more of includeKeys(), includeValues(), includeAggregator() or includeAttribute()";
             throw new SearchException(msg);
         }
         Set<Attribute<?>> groupBy = query.groupByAttributes();
-        if (!groupBy.isEmpty())
-        {
-            if (groupBy.contains(Query.KEY))
+        if (!groupBy.isEmpty()) {
+            if (groupBy.contains(Query.KEY)) {
                 throw new SearchException("Explicit grouping by element key not supported.");
-            if (groupBy.contains(Query.VALUE))
-                throw new SearchException("Grouping by element value not supported.");
-            if (!groupBy.containsAll(query.requestedAttributes()))
-                throw new SearchException("Some of the requested attributes not used in group by clause.");
-            for (Ordering order: query.getOrdering())
-            {
-                if (!groupBy.contains(order.getAttribute()))
-                    throw new SearchException("All ordering attributes must be present in group by clause.");
             }
-            if (query.requestsValues() || query.requestsKeys())
+            if (groupBy.contains(Query.VALUE)) {
+                throw new SearchException("Grouping by element value not supported.");
+            }
+            if (!groupBy.containsAll(query.requestedAttributes())) {
+                throw new SearchException("Some of the requested attributes not used in group by clause.");
+            }
+            for (Ordering order : query.getOrdering()) {
+                if (!groupBy.contains(order.getAttribute())) {
+                    throw new SearchException("All ordering attributes must be present in group by clause.");
+                }
+            }
+            if (query.requestsValues() || query.requestsKeys()) {
                 throw new SearchException("It is not possible to include keys or values with group by queries.");
+            }
         }
     }
 }

@@ -27,6 +27,7 @@ import net.sf.ehcache.store.StoreQuery.Ordering;
  * Compound sort ordering comparactor
  *
  * @author teck
+ * @param <T>
  */
 public class OrderComparator<T extends BaseResult> implements Comparator<T> {
 
