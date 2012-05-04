@@ -24,8 +24,11 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import junit.framework.Assert;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
@@ -137,6 +140,76 @@ public class BasicSearchTest {
         assertEquals(1, results.size());
         Object key = results.all().iterator().next().getKey();
         assertEquals("value", cache.get(key).getObjectValue());
+        cacheManager.shutdown();
+    }
+
+    @Test
+    public void testBasicGroupBy() {
+        CacheManager cacheManager = new CacheManager(getClass().getResource("/ehcache-search.xml"));
+        Ehcache cache = cacheManager.getEhcache("cache1");
+        assertTrue(cache.isSearchable());
+
+        int numOfDepts = 10;
+        int numOfMalesPerDept = 100;
+        int numOfFemalesPerDept = 100;
+
+        for (int i = 0; i < numOfDepts; i++) {
+            for (int j = 0; j < numOfMalesPerDept; j++) {
+                cache.put(new Element("male" + i + "-" + j, new Person("male" + j, j, Gender.MALE, "dept" + i)));
+            }
+
+            for (int j = 0; j < numOfMalesPerDept; j++) {
+                cache.put(new Element("female" + i + "-" + j, new Person("female" + j, j, Gender.FEMALE, "dept" + i)));
+            }
+        }
+
+        Query query;
+        Results results;
+
+        query = cache.createQuery();
+        query.includeAttribute(cache.getSearchAttribute("dept"));
+        query.includeAttribute(cache.getSearchAttribute("gender"));
+        query.includeAggregator(cache.getSearchAttribute("age").sum());
+        query.includeAggregator(cache.getSearchAttribute("age").min());
+        query.includeAggregator(cache.getSearchAttribute("age").max());
+        query.addGroupBy(cache.getSearchAttribute("dept"));
+        query.addOrderBy(cache.getSearchAttribute("dept"), Direction.DESCENDING);
+        query.addOrderBy(cache.getSearchAttribute("gender"), Direction.ASCENDING);
+        query.addGroupBy(cache.getSearchAttribute("gender"));
+        query.end();
+
+        results = query.execute();
+
+        Assert.assertEquals(numOfDepts * 2, results.size());
+
+        int i = 1;
+        for (Iterator<Result> iter = results.all().iterator(); iter.hasNext();) {
+            Result maleResult = iter.next();
+            System.out.println("XXXXXXXXX: " + maleResult);
+            Assert.assertEquals("dept" + (numOfDepts - i), maleResult.getAttribute(cache.getSearchAttribute("dept")));
+            Assert.assertEquals(Gender.MALE, maleResult.getAttribute(cache.getSearchAttribute("gender")));
+
+            List aggregateResults = maleResult.getAggregatorResults();
+            Assert.assertEquals(3, aggregateResults.size());
+            Assert.assertEquals(numOfMalesPerDept * (numOfMalesPerDept - 1) / 2, ((Long)aggregateResults.get(0)).intValue());
+            Assert.assertEquals(0, ((Integer)aggregateResults.get(1)).intValue());
+            Assert.assertEquals(numOfMalesPerDept  - 1, ((Integer)aggregateResults.get(2)).intValue());
+
+            Result femaleResult = iter.next();
+            System.out.println("XXXXXXXXX: " + femaleResult);
+
+            Assert.assertEquals("dept" + (numOfDepts - i), femaleResult.getAttribute(cache.getSearchAttribute("dept")));
+            Assert.assertEquals(Gender.FEMALE, femaleResult.getAttribute(cache.getSearchAttribute("gender")));
+
+            aggregateResults = femaleResult.getAggregatorResults();
+            Assert.assertEquals(3, aggregateResults.size());
+            Assert.assertEquals(numOfFemalesPerDept * (numOfFemalesPerDept - 1) / 2, ((Long)aggregateResults.get(0)).intValue());
+            Assert.assertEquals(0, ((Integer)aggregateResults.get(1)).intValue());
+            Assert.assertEquals(numOfFemalesPerDept  - 1, ((Integer)aggregateResults.get(2)).intValue());
+
+            i++;
+        }
+
         cacheManager.shutdown();
     }
 

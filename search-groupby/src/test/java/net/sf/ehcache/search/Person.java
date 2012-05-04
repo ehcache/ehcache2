@@ -18,6 +18,8 @@ package net.sf.ehcache.search;
 
 import java.io.Serializable;
 
+import net.sf.ehcache.search.Person.Gender;
+
 /**
  * A domain object used for testing
  *
@@ -28,11 +30,17 @@ public class Person implements Serializable {
     private final String name;
     private final int age;
     private final Gender gender;
+    private final String dept;
 
     public Person(String name, int age, Gender gender) {
+        this(name, age, gender, "engg");
+    }
+
+    public Person(String name, int age, Gender gender, String dept) {
         this.name = name;
         this.age = age;
         this.gender = gender;
+        this.dept = dept;
     }
 
     public String getName() {
@@ -47,9 +55,13 @@ public class Person implements Serializable {
         return gender;
     }
 
+    public String getDepartment() {
+        return this.dept;
+    }
+
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(name:" + name + ", age:" + age + ", sex:" + gender.name().toLowerCase() + ")";
+        return getClass().getSimpleName() + "(name:" + name + ", age:" + age + ", sex:" + gender.name().toLowerCase() +", dept: " + dept + ")";
     }
 
     enum Gender {
