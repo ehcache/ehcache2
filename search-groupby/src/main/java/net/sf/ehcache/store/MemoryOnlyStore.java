@@ -117,7 +117,6 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
         boolean hasOrder = !query.getOrdering().isEmpty();
 
         final Set<Attribute<?>> groupByAttributes = query.groupByAttributes();
-        final Map<String, Object> groupByValues = new HashMap<String, Object>();
         final boolean isGroupBy = !groupByAttributes.isEmpty();
         final Map<Set, Result> groupByResults = new HashMap<Set, Result>();
         final Map<Set, List<AggregatorInstance<?>>> groupByAggregators = new HashMap<Set, List<AggregatorInstance<?>>>();
@@ -143,25 +142,7 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
                     if (!isGroupBy) {
                         results.add(new ResultImpl(element.getObjectKey(), element.getObjectValue(), query, attributes, sortAttributes));
                     } else {
-                        Set grpAttributeSet = new HashSet();
-                        for (Attribute<?> grpAttribute : groupByAttributes) {
-                            Object value = attributeExtractors.get(grpAttribute.getAttributeName()).attributeFor(element,
-                                    grpAttribute.getAttributeName());
-                            grpAttributeSet.add(value);
-                            groupByValues.put(grpAttribute.getAttributeName(), value);
-                        }
-
-                        Result result = groupByResults.get(grpAttributeSet);
-
-                        if (result == null) {
-                            groupByAggregators.put(grpAttributeSet, query.getAggregatorInstances());
-                            result = new GroupedResultImpl(query, attributes, sortAttributes, Collections.EMPTY_LIST, groupByValues);
-                            groupByResults.put(grpAttributeSet, result);
-                        }
-
-                        // aggregate the result
-                        List<Object> aggregatorResults = getAggregatedGroupByAttributes(groupByAggregators.get(grpAttributeSet), element);
-                        ((BaseResult) result).setAggregateResults(aggregatorResults);
+                        processForGroupBy(query, groupByResults, groupByAggregators, element, attributes, sortAttributes);
                     }
                 }
 
@@ -207,6 +188,31 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
 
         return new ResultsImpl(results, query.requestsKeys(), query.requestsValues(), !query.requestedAttributes().isEmpty(), anyMatches
                 && !aggregators.isEmpty());
+    }
+
+    private void processForGroupBy(StoreQuery query, final Map<Set, Result> groupByResults,
+            final Map<Set, List<AggregatorInstance<?>>> groupByAggregators, Element element, final Map<String, Object> attributes,
+            final Object[] sortAttributes) {
+        Set grpAttributeSet = new HashSet();
+        final Set<Attribute<?>> groupByAttributes = query.groupByAttributes();
+        final Map<String, Object> groupByValues = new HashMap<String, Object>();
+        for (Attribute<?> grpAttribute : groupByAttributes) {
+            Object value = attributeExtractors.get(grpAttribute.getAttributeName()).attributeFor(element, grpAttribute.getAttributeName());
+            grpAttributeSet.add(value);
+            groupByValues.put(grpAttribute.getAttributeName(), value);
+        }
+
+        Result result = groupByResults.get(grpAttributeSet);
+
+        if (result == null) {
+            groupByAggregators.put(grpAttributeSet, query.getAggregatorInstances());
+            result = new GroupedResultImpl(query, attributes, sortAttributes, Collections.EMPTY_LIST, groupByValues);
+            groupByResults.put(grpAttributeSet, result);
+        }
+
+        // aggregate the result
+        List<Object> aggregatorResults = getAggregatedGroupByAttributes(groupByAggregators.get(grpAttributeSet), element);
+        ((BaseResult) result).setAggregateResults(aggregatorResults);
     }
 
     private Map<String, Object> getRequestedAttributes(StoreQuery query, Element element) {

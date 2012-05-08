@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package net.sf.ehcache.search;
+package net.sf.ehcache.search.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -39,11 +40,20 @@ import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.SearchAttribute;
 import net.sf.ehcache.config.Searchable;
+import net.sf.ehcache.search.Attribute;
+import net.sf.ehcache.search.Direction;
+import net.sf.ehcache.search.Person;
+import net.sf.ehcache.search.Query;
+import net.sf.ehcache.search.Result;
+import net.sf.ehcache.search.Results;
+import net.sf.ehcache.search.SearchException;
+import net.sf.ehcache.search.SearchTestUtil;
 import net.sf.ehcache.search.Person.Gender;
 import net.sf.ehcache.search.aggregator.Aggregator;
 import net.sf.ehcache.search.aggregator.AggregatorException;
 import net.sf.ehcache.search.aggregator.AggregatorInstance;
 import net.sf.ehcache.search.expression.Or;
+import net.sf.ehcache.search.impl.GroupedResultImpl;
 
 import org.junit.Test;
 
@@ -189,6 +199,12 @@ public class BasicSearchTest {
             Assert.assertEquals("dept" + (numOfDepts - i), maleResult.getAttribute(cache.getSearchAttribute("dept")));
             Assert.assertEquals(Gender.MALE, maleResult.getAttribute(cache.getSearchAttribute("gender")));
 
+            Assert.assertTrue(maleResult instanceof GroupedResultImpl);
+            Map<String, Object> groupByValues = ((GroupedResultImpl) maleResult).getGroupByValues();
+            Assert.assertEquals(2, groupByValues.size());
+            Assert.assertEquals("dept" + (numOfDepts - i), groupByValues.get("dept"));
+            Assert.assertEquals(Gender.MALE, groupByValues.get("gender"));
+
             List aggregateResults = maleResult.getAggregatorResults();
             Assert.assertEquals(3, aggregateResults.size());
             Assert.assertEquals(numOfMalesPerDept * (numOfMalesPerDept - 1) / 2, ((Long)aggregateResults.get(0)).intValue());
@@ -200,6 +216,12 @@ public class BasicSearchTest {
 
             Assert.assertEquals("dept" + (numOfDepts - i), femaleResult.getAttribute(cache.getSearchAttribute("dept")));
             Assert.assertEquals(Gender.FEMALE, femaleResult.getAttribute(cache.getSearchAttribute("gender")));
+
+            Assert.assertTrue(femaleResult instanceof GroupedResultImpl);
+            groupByValues = ((GroupedResultImpl) femaleResult).getGroupByValues();
+            Assert.assertEquals(2, groupByValues.size());
+            Assert.assertEquals("dept" + (numOfDepts - i), groupByValues.get("dept"));
+            Assert.assertEquals(Gender.FEMALE, groupByValues.get("gender"));
 
             aggregateResults = femaleResult.getAggregatorResults();
             Assert.assertEquals(3, aggregateResults.size());

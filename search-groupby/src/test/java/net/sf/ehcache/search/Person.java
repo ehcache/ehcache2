@@ -64,7 +64,7 @@ public class Person implements Serializable {
         return getClass().getSimpleName() + "(name:" + name + ", age:" + age + ", sex:" + gender.name().toLowerCase() +", dept: " + dept + ")";
     }
 
-    enum Gender {
+    public enum Gender {
         MALE, FEMALE;
     }
 
