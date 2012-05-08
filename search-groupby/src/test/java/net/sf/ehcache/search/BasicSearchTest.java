@@ -158,7 +158,7 @@ public class BasicSearchTest {
                 cache.put(new Element("male" + i + "-" + j, new Person("male" + j, j, Gender.MALE, "dept" + i)));
             }
 
-            for (int j = 0; j < numOfMalesPerDept; j++) {
+            for (int j = 0; j < numOfFemalesPerDept; j++) {
                 cache.put(new Element("female" + i + "-" + j, new Person("female" + j, j, Gender.FEMALE, "dept" + i)));
             }
         }

@@ -16,6 +16,15 @@
 
 package net.sf.ehcache.store;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -29,21 +38,11 @@ import net.sf.ehcache.search.attribute.AttributeExtractor;
 import net.sf.ehcache.search.expression.Criteria;
 import net.sf.ehcache.search.impl.AggregateOnlyResult;
 import net.sf.ehcache.search.impl.BaseResult;
+import net.sf.ehcache.search.impl.GroupedResultImpl;
 import net.sf.ehcache.search.impl.OrderComparator;
 import net.sf.ehcache.search.impl.ResultImpl;
 import net.sf.ehcache.search.impl.ResultsImpl;
 import net.sf.ehcache.transaction.SoftLock;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A memory-only store with support for all caching features.
@@ -118,8 +117,8 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
         boolean hasOrder = !query.getOrdering().isEmpty();
 
         final Set<Attribute<?>> groupByAttributes = query.groupByAttributes();
+        final Map<String, Object> groupByValues = new HashMap<String, Object>();
         final boolean isGroupBy = !groupByAttributes.isEmpty();
-        boolean isGroupByHasAggregaorts = false;
         final Map<Set, Result> groupByResults = new HashMap<Set, Result>();
         final Map<Set, List<AggregatorInstance<?>>> groupByAggregators = new HashMap<Set, List<AggregatorInstance<?>>>();
         final int maxResults = query.maxResults();
@@ -138,75 +137,31 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
                 anyMatches = true;
 
                 if (includeResults) {
-                    final Map<String, Object> attributes;
-                    if (query.requestedAttributes().isEmpty()) {
-                        attributes = Collections.emptyMap();
-                    } else {
-                        attributes = new HashMap<String, Object>();
-                        for (Attribute attribute : query.requestedAttributes()) {
-                            String name = attribute.getAttributeName();
-                            attributes.put(name, attributeExtractors.get(name).attributeFor(element, name));
-                        }
-                    }
-
-                    // make sure that all the group by attributes are populated
-                    if (isGroupBy) {
-                        for (Attribute<?> groupByAttr : groupByAttributes) {
-                            String name = groupByAttr.getAttributeName();
-                            if (!attributes.containsKey(name)) {
-                                attributes.put(name, attributeExtractors.get(name).attributeFor(element, name));
-                            }
-                        }
-                    }
-
-                    final Object[] sortAttributes;
-                    List<StoreQuery.Ordering> orderings = query.getOrdering();
-                    if (orderings.isEmpty()) {
-                        sortAttributes = EMPTY_OBJECT_ARRAY;
-                    } else {
-                        sortAttributes = new Object[orderings.size()];
-                        for (int i = 0; i < sortAttributes.length; i++) {
-                            String name = orderings.get(i).getAttribute().getAttributeName();
-                            sortAttributes[i] = attributeExtractors.get(name).attributeFor(element, name);
-                        }
-                    }
+                    final Map<String, Object> attributes = getRequestedAttributes(query, element);
+                    final Object[] sortAttributes = getSortAttributes(query, element);
 
                     if (!isGroupBy) {
                         results.add(new ResultImpl(element.getObjectKey(), element.getObjectValue(), query, attributes, sortAttributes));
                     } else {
                         Set grpAttributeSet = new HashSet();
                         for (Attribute<?> grpAttribute : groupByAttributes) {
-                            grpAttributeSet.add(attributeExtractors.get(grpAttribute.getAttributeName()).attributeFor(element,
-                                    grpAttribute.getAttributeName()));
+                            Object value = attributeExtractors.get(grpAttribute.getAttributeName()).attributeFor(element,
+                                    grpAttribute.getAttributeName());
+                            grpAttributeSet.add(value);
+                            groupByValues.put(grpAttribute.getAttributeName(), value);
                         }
 
                         Result result = groupByResults.get(grpAttributeSet);
 
                         if (result == null) {
-                            result = new ResultImpl(element.getObjectKey(), element.getObjectValue(), query, attributes, sortAttributes);
-                            groupByResults.put(grpAttributeSet, result);
                             groupByAggregators.put(grpAttributeSet, query.getAggregatorInstances());
+                            result = new GroupedResultImpl(query, attributes, sortAttributes, Collections.EMPTY_LIST, groupByValues);
+                            groupByResults.put(grpAttributeSet, result);
                         }
 
-                        for (AggregatorInstance<?> aggregator : groupByAggregators.get(grpAttributeSet)) {
-                            Attribute<?> attribute = aggregator.getAttribute();
-                            if (attribute == null) {
-                                aggregator.accept(null);
-                            } else {
-                                Object val = attributeExtractors.get(attribute.getAttributeName()).attributeFor(element,
-                                        attribute.getAttributeName());
-                                aggregator.accept(val);
-                            }
-                        }
-                        List<Object> aggregateResults = aggregators.isEmpty() ? Collections.emptyList() : new ArrayList<Object>();
-                        for (AggregatorInstance<?> aggregator : groupByAggregators.get(grpAttributeSet)) {
-                            aggregateResults.add(aggregator.aggregateResult());
-                            isGroupByHasAggregaorts = true;
-                        }
-                        ((BaseResult) result).setAggregateResults(aggregateResults);
-
-                        if (maxResults >= 0 && groupByResults.size() >= maxResults)
-                            break;
+                        // aggregate the result
+                        List<Object> aggregatorResults = getAggregatedGroupByAttributes(groupByAggregators.get(grpAttributeSet), element);
+                        ((BaseResult) result).setAggregateResults(aggregatorResults);
                     }
                 }
 
@@ -216,17 +171,22 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
             }
         }
 
-        if (!isGroupBy) {
-            if (hasOrder) {
-                Collections.sort(results, new OrderComparator(query.getOrdering()));
-                // trim results to max length if necessary
-                int max = query.maxResults();
-                if (max >= 0 && (results.size() > max)) {
-                    results.subList(max, results.size()).clear();
-                    results.trimToSize();
-                }
+        if (hasOrder) {
+            if (isGroupBy) {
+                results = new ArrayList<Result>();
+                results.addAll(groupByResults.values());
             }
 
+            Collections.sort(results, new OrderComparator(query.getOrdering()));
+            // trim results to max length if necessary
+            int max = query.maxResults();
+            if (max >= 0 && (results.size() > max)) {
+                results.subList(max, results.size()).clear();
+                results.trimToSize();
+            }
+        }
+
+        if (!isGroupBy) {
             List<Object> aggregateResults = aggregators.isEmpty() ? Collections.emptyList() : new ArrayList<Object>();
             for (AggregatorInstance<?> aggregator : aggregators) {
                 aggregateResults.add(aggregator.aggregateResult());
@@ -243,20 +203,24 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
                     ((BaseResult) result).setAggregateResults(aggregateResults);
                 }
             }
-
-            return new ResultsImpl(results, query.requestsKeys(), query.requestsValues(), !query.requestedAttributes().isEmpty(),
-                    anyMatches && !aggregateResults.isEmpty());
-        } else {
-            results = new ArrayList<Result>();
-            results.addAll(groupByResults.values());
-
-            if (hasOrder) {
-                Collections.sort(results, new OrderComparator(query.getOrdering()));
-            }
-
-            return new ResultsImpl(results, query.requestsKeys(), query.requestsValues(), !query.requestedAttributes().isEmpty(),
-                    anyMatches && isGroupByHasAggregaorts);
         }
+
+        return new ResultsImpl(results, query.requestsKeys(), query.requestsValues(), !query.requestedAttributes().isEmpty(), anyMatches
+                && !aggregators.isEmpty());
+    }
+
+    private Map<String, Object> getRequestedAttributes(StoreQuery query, Element element) {
+        final Map<String, Object> attributes;
+        if (query.requestedAttributes().isEmpty()) {
+            attributes = Collections.emptyMap();
+        } else {
+            attributes = new HashMap<String, Object>();
+            for (Attribute attribute : query.requestedAttributes()) {
+                String name = attribute.getAttributeName();
+                attributes.put(name, attributeExtractors.get(name).attributeFor(element, name));
+            }
+        }
+        return attributes;
     }
 
     private void aggregate(List<AggregatorInstance<?>> aggregators, Element element) {
@@ -269,6 +233,40 @@ public final class MemoryOnlyStore extends FrontEndCacheTier<NullStore, MemorySt
                 aggregator.accept(val);
             }
         }
+    }
+
+    private List<Object> getAggregatedGroupByAttributes(List<AggregatorInstance<?>> aggregators, Element element) {
+        for (AggregatorInstance<?> aggregator : aggregators) {
+            Attribute<?> attribute = aggregator.getAttribute();
+            if (attribute == null) {
+                aggregator.accept(null);
+            } else {
+                Object val = attributeExtractors.get(attribute.getAttributeName()).attributeFor(element, attribute.getAttributeName());
+                aggregator.accept(val);
+            }
+        }
+        List<Object> aggregateResults = aggregators.isEmpty() ? Collections.emptyList() : new ArrayList<Object>();
+        for (AggregatorInstance<?> aggregator : aggregators) {
+            aggregateResults.add(aggregator.aggregateResult());
+        }
+
+        return aggregateResults;
+    }
+
+    private Object[] getSortAttributes(StoreQuery query, Element element) {
+        Object[] sortAttributes;
+        List<StoreQuery.Ordering> orderings = query.getOrdering();
+        if (orderings.isEmpty()) {
+            sortAttributes = EMPTY_OBJECT_ARRAY;
+        } else {
+            sortAttributes = new Object[orderings.size()];
+            for (int i = 0; i < sortAttributes.length; i++) {
+                String name = orderings.get(i).getAttribute().getAttributeName();
+                sortAttributes[i] = attributeExtractors.get(name).attributeFor(element, name);
+            }
+        }
+
+        return sortAttributes;
     }
 
     /**
