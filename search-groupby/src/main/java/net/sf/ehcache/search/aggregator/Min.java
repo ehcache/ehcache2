@@ -36,6 +36,11 @@ public class Min<T> implements AggregatorInstance<T> {
         this.attribute = attribute;
     }
 
+    public Min<T> createClone()
+    {
+        return new Min(attribute);
+    }
+
     /**
      * {@inheritDoc}
      * <p/>

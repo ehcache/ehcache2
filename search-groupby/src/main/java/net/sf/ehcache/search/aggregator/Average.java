@@ -36,6 +36,11 @@ public class Average implements AggregatorInstance<Double> {
         this.attribute = attribute;
     }
 
+    public Average createClone()
+    {
+        return new Average(attribute);
+    }
+
     /**
      * {@inheritDoc}
      * <p/>

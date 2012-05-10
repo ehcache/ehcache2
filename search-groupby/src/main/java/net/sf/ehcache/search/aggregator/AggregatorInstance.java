@@ -25,7 +25,7 @@ import net.sf.ehcache.search.Attribute;
  * @param <T>
  *            the runtime type of aggregation result
  */
-public interface AggregatorInstance<T> {
+public interface AggregatorInstance<T> extends DeepCopy{
 
     /**
      * Add the given value to the aggregator function

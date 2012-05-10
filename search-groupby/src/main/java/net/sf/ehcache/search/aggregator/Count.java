@@ -28,6 +28,10 @@ public class Count implements AggregatorInstance<Integer> {
 
     private int count;
 
+    public Count createClone()
+    {
+        return new Count();
+    }
     /**
      * {@inheritDoc}
      */
@@ -45,7 +49,7 @@ public class Count implements AggregatorInstance<Integer> {
     /**
      * {@inheritDoc}
      */
-    public Attribute<?> getAttribute() {
+    public Attribute<Integer> getAttribute() {
         return null;
     }
 

@@ -38,6 +38,10 @@ public class Sum implements AggregatorInstance<Long> {
         this.attribute = attribute;
     }
 
+    public Sum createClone()
+    {
+        return new Sum(attribute);
+    }
     /**
      * {@inheritDoc}
      * <p/>
@@ -50,9 +54,9 @@ public class Sum implements AggregatorInstance<Long> {
 
         if (input instanceof Number) {
             if (engine == null) {
-                engine = Engine.create((Number) input);
+                engine = Engine.create((Number)input);
             } else {
-                engine.accept((Number) input);
+                engine.accept((Number)input);
             }
         } else {
             throw new AggregatorException("Non-number type encounted: " + input.getClass());

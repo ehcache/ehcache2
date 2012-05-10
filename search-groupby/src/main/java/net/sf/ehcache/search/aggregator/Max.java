@@ -36,6 +36,10 @@ public class Max<T> implements AggregatorInstance<T> {
         this.attribute = attribute;
     }
 
+    public Max<T> createClone()
+    {
+        return new Max(attribute);
+    }
     /**
      * {@inheritDoc}
      * <p/>
