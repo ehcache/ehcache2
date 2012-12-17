@@ -7,3 +7,5 @@
 /.ant-targets*
 /bin
 /btm*.tlog
+/.checkstyle
+/nbactions-Checkstyle.xml
