@@ -1,0 +1,11 @@
+/ehcache-core.i*
+/nb-configuration.xml
+/.classpath
+/ehcache.i*
+/.project
+/target
+/.ant-targets*
+/bin
+/btm*.tlog
+/.checkstyle
+/nbactions-Checkstyle.xml
