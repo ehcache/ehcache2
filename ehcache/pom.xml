@@ -4,160 +4,308 @@
 
   <parent>
     <groupId>net.sf.ehcache</groupId>
-    <artifactId>ehcache-root</artifactId>
-    <version>2.10.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <artifactId>ehcache-parent</artifactId>
+    <version>2.16</version>
+    <relativePath/>
   </parent>
 
-  <artifactId>ehcache</artifactId>
-  <packaging>jar</packaging>
-  <name>ehcache</name>
-  <description>Ehcache is an open source, standards-based cache used to boost performance,
-  offload the database and simplify scalability. Ehcache is robust, proven and full-featured and
-  this has made it the most widely-used Java-based cache.</description>
+  <name>ehcache-root</name>
+  <artifactId>ehcache-root</artifactId>
+  <packaging>pom</packaging>
+  <version>2.10.0.0.1</version>
 
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>src/assemble/EHCACHE-CORE-LICENSE.txt</url>
-    </license>
-  </licenses>
-  <url>http://ehcache.org</url>
-
-
+  <scm>
+    <developerConnection>scm:git:https://github.com/ehcache/ehcache2.git</developerConnection>
+  </scm>
+  
   <properties>
-    <kit.name>${project.artifactId}-${project.version}-distribution</kit.name>
-    <root.dir>${project.build.directory}/${kit.name}</root.dir>
-    <terracotta.kit.path>${project.build.directory}/tmp/terracotta</terracotta.kit.path>
+    <slf4j.version>1.7.7</slf4j.version>
+    <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
-    <skipJavadoc>false</skipJavadoc>
-    <devmode>true</devmode>
+    <surefire.version>2.15</surefire.version>
+    <terracotta-toolkit-api-internal.version>1.17</terracotta-toolkit-api-internal.version>
+    <management-core.version>2.0.5</management-core.version>
+    <clustered-entity-management.version>0.8.0</clustered-entity-management.version>
+    <statistics.version>1.0.2</statistics.version>
+    <quartz.version>2.2.1</quartz.version>
+    <jetty.version>8.1.15.v20140411</jetty.version>
   </properties>
 
-  <dependencies>
-    <!-- internal components used for shading which will be removed in final 
-      pom -->
-    <dependency>
-      <groupId>net.sf.ehcache.internal</groupId>
-      <artifactId>ehcache-terracotta-bootstrap</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ehcache.internal</groupId>
-      <artifactId>ehcache-rest-agent</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ehcache.internal</groupId>
-      <artifactId>ehcache-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ehcache.internal</groupId>
-      <artifactId>ehcache-scheduled-refresh</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ehcache.internal</groupId>
-      <artifactId>ehcache-search-parser</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>    
-    <dependency>
-      <groupId>org.terracotta</groupId>
-      <artifactId>product-upgradability-testing-utils</artifactId>
-      <version>0.9.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.btm</groupId>
-      <artifactId>btm</artifactId>
-      <version>2.1.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
-      <version>2.2.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.6.6</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>ehcache-core</module>
+    <module>terracotta</module>
+    <module>ehcache</module>
+    <module>management-ehcache-v1</module>
+    <module>management-ehcache-v2</module>
+    <module>management-ehcache-impl</module>
+    <module>ehcache-scheduled-refresh</module>
+    <module>ehcache-search-parser</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Required dependencies -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.terracotta.internal</groupId>
+        <artifactId>statistics</artifactId>
+        <version>${statistics.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.terracotta</groupId>
+        <artifactId>management-core-resources</artifactId>
+        <version>${management-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.terracotta</groupId>
+        <artifactId>clustered-entity-management</artifactId>
+        <version>${clustered-entity-management.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>gf-3122</groupId>
+        <artifactId>gf.javax.servlet-api</artifactId>
+        <version>3.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.orbit</groupId>
+        <artifactId>javax.servlet</artifactId>
+        <version>3.0.0.v201112011016</version>
+      </dependency>
+
+      <!-- Provided dependencies -->
+      <dependency>
+        <groupId>org.terracotta.toolkit</groupId>
+        <artifactId>terracotta-toolkit-api-internal</artifactId>
+        <version>${terracotta-toolkit-api-internal.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.0.1</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>3.5.1-Final</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>jta</artifactId>
+        <version>1.1</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.ehcache</groupId>
+        <artifactId>sizeof-agent</artifactId>
+        <version>1.0.1</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <!-- Test dependencies -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-jdk14</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.btm</groupId>
+        <artifactId>btm</artifactId>
+        <version>2.1.3</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.hibernate</groupId>
+        <artifactId>hibernate</artifactId>
+        <version>2.1.8</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>1.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-library</artifactId>
+        <version>1.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>1.6.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>3.4.GA</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-ehcache</artifactId>
+        <version>3.3.2.GA</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <artifactId>ehcache</artifactId>
+            <groupId>net.sf.ehcache</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.5.3.0_1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>1.9.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xsom</groupId>
+        <artifactId>xsom</artifactId>
+        <version>20100725</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.beanshell</groupId>
+        <artifactId>bsh</artifactId>
+        <version>1.3.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.quartz-scheduler</groupId>
+        <artifactId>quartz</artifactId>
+        <version>${quartz.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.easymock</groupId>
+        <artifactId>easymock</artifactId>
+        <version>3.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.powermock</groupId>
+        <artifactId>powermock-api-easymock</artifactId>
+        <version>1.4.10</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.powermock</groupId>
+        <artifactId>powermock-module-junit4</artifactId>
+        <version>1.4.10</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-TIMs</id>
-            <configuration>
-              <includeGroupIds>org.terracotta.modules</includeGroupIds>
-              <outputDirectory>${project.build.outputDirectory}/META-INF/terracotta/TIMs</outputDirectory>
-              <excludes>**/META-INF/maven/**,**/license.txt,**/thirdpartylicenses.txt</excludes>
-            </configuration>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.terracotta</groupId>
-        <artifactId>maven-forge-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-manifest</id>
-            <phase>package</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-            <configuration>
-              <rootPath>${basedir}/..</rootPath>
-              <manifestFile>${project.build.directory}/MANIFEST.MF</manifestFile>
-              <manifestEntries>
-                <License>Apache Software License, Version 2.0</License>
-                <Terracotta-ProjectStatus>Supported</Terracotta-ProjectStatus>
-                <Terracotta-Name>${project.artifactId}</Terracotta-Name>
-                <Terracotta-Description>${project.description}</Terracotta-Description>
-              </manifestEntries>
-            </configuration>
-          </execution>
-          <execution>
-            <id>enforce-dependencies</id>
-            <goals>
-              <goal>enforceDependencies</goal>
-            </goals>
-            <phase>verify</phase>
-            <configuration>
-              <enforceGroupId>net.sf.ehcache.internal</enforceGroupId>
-              <enforceArtifactId>ehcache-core</enforceArtifactId>
-              <enforceVersion>${project.version}</enforceVersion>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire.version}</version>
+          <configuration>
+            <skip>true</skip><!-- we use maven-forge-plugin to run tests -->
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.9.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.terracotta</groupId>
+          <artifactId>maven-forge-plugin</artifactId>
+          <version>${maven-forge-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>2.3</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.terracotta.maven.plugins</groupId>
+              <artifactId>terracotta-shader</artifactId>
+              <version>1.2</version>
+            </dependency>
+          </dependencies>          
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.gmaven</groupId>
+          <artifactId>gmaven-plugin</artifactId>
+          <version>${gmaven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rmic-maven-plugin</artifactId>
+          <version>1.1</version>
+        </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -168,11 +316,11 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javacc-maven-plugin</artifactId>
                     <versionRange>[2.6,)</versionRange>
                     <goals>
-                      <goal>list</goal>
+                      <goal>javacc</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
@@ -185,232 +333,157 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.terracotta</groupId>
+        <artifactId>maven-forge-plugin</artifactId>      
+        <executions>
+          <execution>
+            <id>generateBuildInfoFile</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>buildinfo</goal>
+            </goals>
+            <configuration>
+              <generateBuildInfoFile>true</generateBuildInfoFile>
+              <buildInfoLocation>${project.build.outputDirectory}</buildInfoLocation>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>    
+    </plugins>
   </build>
 
   <profiles>
     <profile>
-      <id>devmode</id>
-      <activation>
-        <property>
-          <name>devmode</name>
-          <value>true</value>
-        </property>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>list-dependencies</id>
-                <configuration>
-                  <outputFile>${project.build.outputDirectory}/META-INF/devmode/${project.groupId}/${project.artifactId}/dependencies.txt</outputFile>
-                </configuration>                
-                <goals>
-                  <goal>list</goal>
-                </goals>
-                <phase>compile</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>          
-      </build>
+      <id>system-tests</id>
+      <modules>
+        <module>system-tests</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>dist</id>
+      <modules>
+        <module>distribution</module>
+      </modules>
     </profile>
 
+    <!-- Profile for running only check-short -->
     <profile>
-      <id>fullmode</id>
-      <activation>
-        <property>
-          <name>devmode</name>
-          <value>false</value>
-        </property>
-      </activation>
+      <id>check-short</id>
+      <properties>
+        <checkshort>true</checkshort>
+        <skipJavadoc>true</skipJavadoc>
+      </properties>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9</version>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections-maven</artifactId>
+            <version>0.9.9-RC1</version>
+            <configuration>
+              <scanners>org.reflections.scanners.TypeAnnotationsScanner</scanners>
+              <destinations>${project.build.directory}/reflections.xml</destinations>
+              <tests>true</tests>
+              <parallel>true</parallel>
+            </configuration>
             <executions>
               <execution>
-                <id>create-javadoc</id>
-                <phase>prepare-package</phase>
                 <goals>
-                  <goal>jar</goal>
+                  <goal>reflections</goal>
                 </goals>
-                <configuration>
-                  <skip>${skipJavadoc}</skip>
-                  <author>true</author>
-                  <minmemory>128m</minmemory>
-                  <maxmemory>512</maxmemory>              
-                  <quiet>true</quiet>
-                  <header><![CDATA[<a href="/" target="_top">ehcache</a>]]></header>
-                  <doctitle>${project.name} ${project.version} API</doctitle>
-                  <windowtitle>${project.name} ${project.version} API</windowtitle>
-                  <bottom>Copyright 2001-{currentYear}, Terracotta, Inc.</bottom>
-                  <overview>${basedir}/src/main/java/net/sf/ehcache/overview.html</overview>
-                  <includeDependencySources>true</includeDependencySources>      
-                  <dependencySourceIncludes>
-                    <dependencySourceInclude>net.sf.ehcache.internal:ehcache-core</dependencySourceInclude>
-                  </dependencySourceIncludes>
-                </configuration>                
+                <phase>process-test-classes</phase>
               </execution>
             </executions>
           </plugin>       
-          
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>            
+            <groupId>org.terracotta</groupId>
+            <artifactId>maven-forge-plugin</artifactId>
             <configuration>
-              <shaderHint>record-shader</shaderHint>
-              <useBaseVersion>true</useBaseVersion>
-              <createSourcesJar>true</createSourcesJar>
-              <artifactSet>
-                <includes>
-                  <include>net.sf.ehcache.internal:*</include>
-                  <include>org.terracotta.internal:statistics</include>
-                  <include>com.terracotta:clustered-entity-management</include>
-                </includes>
-              </artifactSet>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/maven/com.terracotta/**</exclude>
-                    <exclude>META-INF/maven/net.sf.ehcache.internal/**</exclude>
-                    <exclude>META-INF/maven/org.terracotta.internal/**</exclude>
-                    <exclude>**/license.txt</exclude>
-                    <exclude>**/thirdpartylicenses.txt</exclude>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                    <exclude>**/LICENSE</exclude>
-                    <exclude>**/LICENSE.txt</exclude>
-                    <exclude>**/NOTICE</exclude>
-                    <exclude>**/NOTICE.txt</exclude>
-                    <exclude>**/ASL2.0</exclude>
-                    <exclude>**/DEPENDENCIES</exclude>                    
-                  </excludes>
-                </filter>
-              </filters>
-              <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-              <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
-                  <resource>MANIFEST.MF</resource>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>META-INF/MANIFEST.MF</resource>
-                  <file>${project.build.directory}/MANIFEST.MF</file>
-                </transformer>
-              </transformers>
+              <useReflectionFile>true</useReflectionFile>
+              <groups>org.terracotta.test.categories.CheckShorts</groups>
+              <systemProperties>
+                <property>
+                  <name>net.sf.ehcache.skipUpdateCheck</name>
+                  <value>true</value>
+                </property>
+                <property>
+                  <name>java.awt.headless</name>
+                  <value>true</value>
+                </property>
+              </systemProperties>
             </configuration>
-            <executions>
-              <execution>
-                <id>shade-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>shade</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.7</version>
-            <executions>
-              <execution>
-                <id>unpack-jar-for-bundling</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
-                    <unzip src="${project.build.directory}/${project.artifactId}-${project.version}.jar" dest="${project.build.outputDirectory}"/>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>           
-          <plugin>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>maven-bundle-plugin</artifactId>
-            <version>2.3.7</version>
-            <configuration>
-              <manifestLocation>${project.build.directory}</manifestLocation>
-              <instructions>
-                <Import-Package>bitronix.tm;resolution:=optional,
-              bitronix.tm.resource.ehcache;resolution:=optional,
-              com.atomikos.*;resolution:=optional,
-              com.atomikos.icatch.jta;resolution:=optional,
-              weblogic.transaction;resolution:=optional,
-              javax.transaction;resolution:=optional,
-              javax.servlet;resolution:=optional,
-              javax.net.ssl;resolution:=optional,
-              javax.activation;resolution:=optional,
-              javax.xml.stream;resolution:=optional,
-              javax.xml.transform.sax;resolution:=optional,
-              javax.xml.transform.dom;resolution:=optional,
-              javax.xml.transform.stream;resolution:=optional,
-              org.hibernate.*;resolution:=optional,
-              org.terracotta.toolkit.*;resolution:=optional,
-              org.quartz.*;resolution:=optional,
-              org.terracotta.quartz.*;resolution:=optional,
-              !sun.misc,*
-                </Import-Package>
-                <Export-Package>net.sf.ehcache.*</Export-Package>
-                <Private-Package>org.terracotta.*</Private-Package>
-                <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
-              </instructions>
-              <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
-            </configuration>
-            <executions>
-              <execution>
-                <id>generate-osgi-headers</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>manifest</goal>
-                </goals>
-              </execution>
-            </executions>            
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.gmaven</groupId>
-            <artifactId>gmaven-plugin</artifactId>
-            <version>${gmaven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>repackage-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <source>
-                    def jarFile = new File(project.build.directory, "${project.artifactId}-${project.version}.jar")
-                    ant.copy(file: new File(project.build.directory, "dependency-reduced-pom.xml"),
-                             tofile: new File(project.build.outputDirectory, "META-INF/maven/${project.groupId}/${project.artifactId}/pom.xml"))
-                    ant.jar(destfile: jarFile, basedir: new File(project.build.outputDirectory).getAbsolutePath(), manifest: new File(project.build.directory, "MANIFEST.MF"))
-                  </source>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>           
         </plugins>
       </build>
     </profile>
+    <profile>
+      <!-- Profile to configure deployment to Terracotta Nexus using pro features -->
+      <id>deploy-terracotta</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.sonatype.plugins</groupId>
+              <artifactId>nexus-staging-maven-plugin</artifactId>
+              <version>1.6.1</version>
+              <extensions>true</extensions>
+              <configuration>
+                <!-- The Base URL of Nexus instance where we want to stage -->
+                <nexusUrl>http://nexus.terracotta.eur.ad.sag</nexusUrl>
+                <!-- The server "id" element from settings to use authentication from -->
+                <serverId>terracotta-nexus-staging</serverId>
+                <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Profile needed even though identical with one found in parent pom as distributionManagement is declared locally -->
+      <id>deploy-sonatype</id>
+      <distributionManagement>
+        <repository>
+          <id>sonatype-nexus-staging</id>
+          <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+      </distributionManagement>
+    </profile>
   </profiles>
+
+  <distributionManagement>
+    <repository>
+      <id>terracotta-nexus-staging</id>
+      <name>Terracotta Nexus Staging Repository</name>
+      <url>${terracotta-nexus-staging-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>terracotta-os-snapshots</id>
+       <uniqueVersion>false</uniqueVersion>
+       <name>Terracotta OS Snapshots Repository</name>
+       <url>${terracotta-os-snapshots-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <repositories>
     <repository>
       <id>terracotta-snapshots</id>
       <url>http://www.terracotta.org/download/reflector/snapshots</url>
     </repository>
-
     <repository>
       <id>terracotta-releases</id>
       <url>http://www.terracotta.org/download/reflector/releases</url>
@@ -426,11 +499,5 @@
       <id>terracotta-releases</id>
       <url>http://www.terracotta.org/download/reflector/releases</url>
     </pluginRepository>
-  </pluginRepositories>
-
-  <issueManagement>
-    <system>JIRA</system>
-    <url>https://jira.terracotta.org/jira/browse/EHC</url>
-  </issueManagement>
-
+  </pluginRepositories>   
 </project>
