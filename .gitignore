@@ -1,3 +1,11 @@
+/ehcache.iws
+/ehcache.i*
+/ehcache-debugger.i*
+/ehcache-jcache.i*
+/ehcache-parent.i*
+/ehcache-server.i*
+/target
+/.settings
 /.classpath
 /.project
-/target
+/.idea
