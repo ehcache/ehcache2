@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.jayway.restassured.RestAssured.expect;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsString;
@@ -109,7 +110,7 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
             .rootPath("get(0)")
             .body("agentId", equalTo("embedded"))
             .body("agencyOf", equalTo("Ehcache"))
-            .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManagerProgrammatic,testCacheManager"))
+            .body("rootRepresentables.cacheManagerNames", allOf(containsString("testCacheManagerProgrammatic"), containsString("testCacheManager")))
             .statusCode(200)
             .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION);
     cacheManagerMaxBytes.clearAll();
