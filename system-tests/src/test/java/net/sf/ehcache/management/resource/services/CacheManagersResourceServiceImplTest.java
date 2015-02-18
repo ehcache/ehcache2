@@ -12,7 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.jayway.restassured.RestAssured.expect;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * @author: Anthony Dahanne
@@ -153,15 +157,15 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     String agentsFilter = "";
     String cmsFilter = "";
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).attributes.CacheMetrics.testCache2", hasItems(0, 0, 0, 0))
-            .body("get(0).attributes.CacheNames.get(0)", equalTo("testCache2"))
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCacheManager"))
-            .body("get(1).attributes.CacheMetrics.testCache", hasItems(0, 0, 0, 0))
-            .body("get(1).attributes.CacheNames.get(0)", equalTo("testCache"))
             .body("size()", is(2))
+            .rootPath("find { it.name == 'testCacheManagerProgrammatic' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.CacheMetrics.testCache2", hasItems(0, 0, 0, 0))
+              .body("attributes.CacheNames.get(0)", equalTo("testCache2"))
+            .rootPath("find { it.name == 'testCacheManager' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.CacheMetrics.testCache", hasItems(0, 0, 0, 0))
+              .body("attributes.CacheNames.get(0)", equalTo("testCache"))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter);
 
@@ -219,14 +223,14 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     cmsFilter = "";
     // we check nothing has changed
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).attributes.CacheMetrics.testCache2", hasItems(0,0,0,0))
-            .body("get(0).attributes.CacheNames.get(0)", equalTo("testCache2"))
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCacheManager"))
-            .body("get(1).attributes.CacheMetrics.testCache", hasItems(0,0,0,0))
-            .body("get(1).attributes.CacheNames.get(0)", equalTo("testCache"))
+            .rootPath("find { it.name == 'testCacheManagerProgrammatic' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.CacheMetrics.testCache2", hasItems(0, 0, 0, 0))
+              .body("attributes.CacheNames.get(0)", equalTo("testCache2"))
+            .rootPath("find { it.name == 'testCacheManager' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.CacheMetrics.testCache", hasItems(0, 0, 0, 0))
+              .body("attributes.CacheNames.get(0)", equalTo("testCache"))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter);
   }
@@ -330,13 +334,14 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
 
     expect().log().ifError()
             .statusCode(400)
-            .body("details", equalTo("You are not allowed to update those attributes : name MaxBytesLocalDisk MaxBytesLocalHeap . " +
-                    "Only MaxBytesLocalDiskAsString and MaxBytesLocalHeapAsString can be updated for a CacheManager."))
+            .body("details", allOf(containsString("You are not allowed to update those attributes : name "),
+                                   containsString("MaxBytesLocalDisk"), containsString("MaxBytesLocalHeap"),
+                                   containsString(" . Only MaxBytesLocalDiskAsString and MaxBytesLocalHeapAsString can be updated for a CacheManager.")))
             .body("error", equalTo("Failed to update cache manager"))
             .given()
             .contentType(ContentType.JSON)
             .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter);
+            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter);
 
     // we check nothing has changed
     expect()
