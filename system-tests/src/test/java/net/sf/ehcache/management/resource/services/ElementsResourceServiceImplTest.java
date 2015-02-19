@@ -14,9 +14,10 @@ import static com.jayway.restassured.RestAssured.expect;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
- * @author: Anthony Dahanne
  * The aim of this test is to check via HTTP that the ehcache standalone agent /tc-management-api/agents/cacheManagers/caches/elements endpoint
  * works fine
+ *
+ * @author Anthony Dahanne
  */
 public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper {
   protected static final String EXPECTED_RESOURCE_LOCATION = "{baseUrl}/tc-management-api/agents{agentIds}/cacheManagers{cmIds}/caches{cacheIds}/elements";
@@ -72,9 +73,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
 
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(1000))
+            .rootPath("find { it.name == 'testCache2' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.InMemorySize", equalTo(1000))
             .statusCode(200)
             .when().get(STANDALONE_BASE_URL + "/tc-management-api/agents/cacheManagers/caches");
 
@@ -87,9 +88,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
             .when().delete(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter,cachesFilter);
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(0))
+            .rootPath("find { it.name == 'testCache2' }")
+              .body("agentId", equalTo("embedded"))
+              .body("attributes.InMemorySize", equalTo(0))
             .statusCode(200)
             .when().get(STANDALONE_BASE_URL + "/tc-management-api/agents/cacheManagers/caches");
 
@@ -111,9 +112,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
     final String agentsFilter = ";ids=" + agentId;
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(1000))
+            .rootPath(" find { it.name == 'testCache2' }")
+              .body("agentId", equalTo(agentId))
+              .body("attributes.InMemorySize", equalTo(1000))
             .statusCode(200)
             .when().get(CLUSTERED_BASE_URL + "/tc-management-api/agents" + agentsFilter + "/cacheManagers/caches");
 
@@ -125,9 +126,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
             .when().delete(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter,cmsFilter,cachesFilter);
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(0))
+            .rootPath(" find { it.name == 'testCache2' }")
+              .body("agentId", equalTo(agentId))
+              .body("attributes.InMemorySize", equalTo(0))
             .statusCode(200)
             .when().get(CLUSTERED_BASE_URL + "/tc-management-api/agents" + agentsFilter + "/cacheManagers/caches");
 

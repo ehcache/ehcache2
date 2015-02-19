@@ -109,19 +109,19 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
     cachesFilter = "";
     // we precise 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).statName", equalTo("LocalHeapSize"))
-            .body("get(0).statValueByTimeMillis.size()", greaterThan(0))
-            .body("get(0).statValueByTimeMillis.values()[0]", greaterThan(0))
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCache"))
-            .body("get(1).cacheManagerName", equalTo("testCacheManager"))
-            .body("get(1).statName", equalTo("LocalHeapSize"))
-            .body("get(1).statValueByTimeMillis.size()", greaterThan(0))
-            .body("get(1).statValueByTimeMillis.values()[0]", greaterThan(0))
             .body("size()", is(2))
+            .rootPath("find { it.name =='testCache2' }")
+              .body("agentId", equalTo("embedded"))
+              .body("cacheManagerName", equalTo("testCacheManagerProgrammatic"))
+              .body("statName", equalTo("LocalHeapSize"))
+              .body("statValueByTimeMillis.size()", greaterThan(0))
+              .body("statValueByTimeMillis.values()[0]", greaterThan(0))
+            .rootPath("find { it.name =='testCache' }")
+              .body("agentId", equalTo("embedded"))
+              .body("cacheManagerName", equalTo("testCacheManager"))
+              .body("statName", equalTo("LocalHeapSize"))
+              .body("statValueByTimeMillis.size()", greaterThan(0))
+              .body("statValueByTimeMillis.values()[0]", greaterThan(0))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL,agentsFilter,cmsFilter,cachesFilter,samplesFilter);
 
@@ -146,13 +146,10 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
 
     String agentId = getEhCacheAgentId();
     final String agentsFilter = ";ids=" + agentId;
-    String cmsFilter = "";
-    String cachesFilter = "";
-    String samplesFilter = "";
+    String cmsFilter= ";names=testCacheManagerProgrammatic";
+    String cachesFilter = ";names=testCache2";
+    String samplesFilter = ";names=LocalHeapSize";
 
-    cmsFilter= ";names=testCacheManagerProgrammatic";
-    cachesFilter = ";names=testCache2";
-    samplesFilter = ";names=LocalHeapSize";
     // we precise the cacheManager, cache and 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
             .body("get(0).agentId", equalTo(agentId))
@@ -186,19 +183,19 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
     cachesFilter = "";
     // we precise 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).statName", equalTo("LocalHeapSize"))
-            .body("get(0).statValueByTimeMillis.size()", greaterThan(0))
-            .body("get(0).statValueByTimeMillis.values()[0]", greaterThan(0))
-            .body("get(1).agentId", equalTo(agentId))
-            .body("get(1).name", equalTo("testCache"))
-            .body("get(1).cacheManagerName", equalTo("testCacheManager"))
-            .body("get(1).statName", equalTo("LocalHeapSize"))
-            .body("get(1).statValueByTimeMillis.size()", greaterThan(0))
-            .body("get(1).statValueByTimeMillis.values()[0]", greaterThan(0))
             .body("size()", is(2))
+            .rootPath("find { it.name =='testCache2' }")
+              .body("agentId", equalTo(agentId))
+              .body("cacheManagerName", equalTo("testCacheManagerProgrammatic"))
+              .body("statName", equalTo("LocalHeapSize"))
+              .body("statValueByTimeMillis.size()", greaterThan(0))
+              .body("statValueByTimeMillis.values()[0]", greaterThan(0))
+            .rootPath("find { it.name =='testCache' }")
+              .body("agentId", equalTo(agentId))
+              .body("cacheManagerName", equalTo("testCacheManager"))
+              .body("statName", equalTo("LocalHeapSize"))
+              .body("statValueByTimeMillis.size()", greaterThan(0))
+              .body("statValueByTimeMillis.values()[0]", greaterThan(0))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL,agentsFilter,cmsFilter,cachesFilter,samplesFilter);
 
