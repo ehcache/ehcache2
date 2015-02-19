@@ -13,7 +13,12 @@ import java.io.UnsupportedEncodingException;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
 
 /**
  * The aim of this test is to check via HTTP that the ehcache standalone agent /tc-management-api/agents/cacheManagers/caches/config endpoint
@@ -47,16 +52,14 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
 
     String xml = expect()
         .contentType(ContentType.JSON)
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
         .body("[0].agentId", equalTo("embedded"))
-        .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-        .body("[0].cacheName", equalTo("testCache2"))
         .body("[1].agentId", equalTo("embedded"))
-        .body("[1].cacheManagerName", equalTo("testCacheManager"))
-        .body("[1].cacheName", equalTo("testCache"))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
-        .jsonPath().get("[1].xml").toString();
+        .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
     NodeImpl cache = xmlPath.get("cache");
@@ -92,15 +95,13 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
     String xml = expect()
         .contentType(ContentType.JSON)
         .body("[0].agentId", equalTo(agentId))
-        .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-        .body("[0].cacheName", equalTo("testCache2"))
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
         .body("[1].agentId", equalTo(agentId))
-        .body("[1].cacheManagerName", equalTo("testCacheManager"))
-        .body("[1].cacheName", equalTo("testCache"))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
-        .jsonPath().get("[1].xml").toString();
+        .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
     NodeImpl cache = xmlPath.get("cache");

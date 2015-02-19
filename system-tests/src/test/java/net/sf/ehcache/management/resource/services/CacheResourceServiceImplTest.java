@@ -1,6 +1,8 @@
 package net.sf.ehcache.management.resource.services;
 
 import static com.jayway.restassured.RestAssured.expect;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +17,7 @@ import net.sf.ehcache.config.TerracottaClientConfiguration;
 import net.sf.ehcache.config.TerracottaConfiguration;
 import net.sf.ehcache.management.resource.CacheEntity;
 
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -236,25 +239,25 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
 
 
     expect().contentType(ContentType.JSON)
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCacheStandaloneARC"))
-            .body("get(1).cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
-            .body("get(1).attributes.LocalHeapSizeInBytes", greaterThan(0))
-            .body("get(1).attributes.InMemorySize", equalTo(1000))
-            .body("get(1).attributes.LocalDiskSize", greaterThan(0))
-            .body("get(1).attributes.LocalHeapSize", equalTo(1000))
-            .body("get(1).attributes.SizeSample", equalTo(1000))
-            .body("get(1).attributes.DiskExpiryThreadIntervalSeconds", equalTo(120))
-            .body("get(1).attributes.LocalHeapSizeInBytesSample", greaterThan(0))
-            .body("get(1).attributes.LocalDiskSizeSample", greaterThan(0))
-            .body("get(1).attributes.LocalDiskSizeInBytes", greaterThan(0))
-            .body("get(1).attributes.Size", equalTo(1000))
-            .body("get(1).attributes.LocalHeapSizeSample", equalTo(1000))
-            .body("get(1).attributes.PutCount", equalTo(1000))
-            .body("get(1).attributes.LocalDiskSizeInBytesSample", greaterThan(0))
-            .body("get(1).attributes.Status", equalTo( "STATUS_ALIVE"))
-            .body("get(0).name", equalTo("testCache"))
             .body("size()", is(2))
+            .body("find { it.name == 'testCache' }.agentId", equalTo("embedded"))
+            .rootPath("find { it.name == 'testCacheStandaloneARC' }")
+              .body("agentId", equalTo("embedded"))
+              .body("cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
+              .body("attributes.LocalHeapSizeInBytes", greaterThan(0))
+              .body("attributes.InMemorySize", equalTo(1000))
+              .body("attributes.LocalDiskSize", greaterThan(0))
+              .body("attributes.LocalHeapSize", equalTo(1000))
+              .body("attributes.SizeSample", equalTo(1000))
+              .body("attributes.DiskExpiryThreadIntervalSeconds", equalTo(120))
+              .body("attributes.LocalHeapSizeInBytesSample", greaterThan(0))
+              .body("attributes.LocalDiskSizeSample", greaterThan(0))
+              .body("attributes.LocalDiskSizeInBytes", greaterThan(0))
+              .body("attributes.Size", equalTo(1000))
+              .body("attributes.LocalHeapSizeSample", equalTo(1000))
+              .body("attributes.PutCount", equalTo(1000))
+              .body("attributes.LocalDiskSizeInBytesSample", greaterThan(0))
+              .body("attributes.Status", equalTo("STATUS_ALIVE"))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
 
@@ -535,14 +538,16 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     String cachesFilter = ";names=testCache";
 
     expect().statusCode(400)
-            .body("details", equalTo("You are not allowed to update those attributes : name LocalOffHeapSizeInBytes Pinned . " +
-                    "Only TimeToIdleSeconds Enabled MaxBytesLocalDiskAsString MaxBytesLocalHeapAsString MaxElementsOnDisk" +
-                    " TimeToLiveSeconds MaxEntriesLocalHeap LoggingEnabled NodeBulkLoadEnabled MaxEntriesInCache can be updated for a Cache."))
+            .body("details", allOf(containsString("You are not allowed to update those attributes : name LocalOffHeapSizeInBytes Pinned . Only"),
+                                   containsString("TimeToIdleSeconds"), containsString("Enabled"), containsString("MaxBytesLocalDiskAsString"),
+                                   containsString("MaxBytesLocalHeapAsString"), containsString("MaxElementsOnDisk"), containsString("TimeToLiveSeconds"),
+                                   containsString("MaxEntriesLocalHeap"), containsString("LoggingEnabled"), containsString("NodeBulkLoadEnabled"),
+                                   containsString("MaxEntriesInCache"), Matchers.containsString(" can be updated for a Cache.")))
             .body("error", equalTo("Failed to create or update cache"))
             .given()
             .contentType(ContentType.JSON)
             .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter ="";
     // we check nothing has changed

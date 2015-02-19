@@ -50,14 +50,12 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
     String xml = expect()
         .contentType(ContentType.JSON)
-        .body("[0].agentId", equalTo("embedded"))
-        .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-        .body("[1].agentId", equalTo("embedded"))
-        .body("[1].cacheManagerName", equalTo("testCacheManager"))
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo("embedded"))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo("embedded"))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter)
-        .jsonPath().get("[0].xml").toString();
+        .jsonPath().get("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
     NodeImpl cacheManager = xmlPath.get("ehcache");
@@ -110,14 +108,12 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
     String xml = expect()
         .contentType(ContentType.JSON)
-        .body("[0].agentId", equalTo(agentId))
-        .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
-        .body("[1].agentId", equalTo(agentId))
-        .body("[1].cacheManagerName", equalTo("testCacheManager"))
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo(agentId))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo(agentId))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter)
-        .jsonPath().get("[0].xml").toString();
+        .jsonPath().get("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.xml").toString();
 
 
     XmlPath xmlPath = new XmlPath(xml);

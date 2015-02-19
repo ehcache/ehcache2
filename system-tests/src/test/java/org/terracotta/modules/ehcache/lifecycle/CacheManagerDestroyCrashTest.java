@@ -10,14 +10,18 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.config.TerracottaConfiguration;
 
+import org.mockito.Mockito;
+import org.objenesis.ObjenesisStd;
 import org.terracotta.ehcache.tests.AbstractCacheTestBase;
 import org.terracotta.ehcache.tests.ClientBase;
+import org.terracotta.test.util.TestBaseUtil;
 import org.terracotta.toolkit.Toolkit;
 
 import com.tc.test.config.model.TestConfig;
 import com.terracotta.entity.ClusteredEntityManager;
 import com.terracotta.entity.ehcache.ClusteredCacheManager;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +38,14 @@ public class CacheManagerDestroyCrashTest extends AbstractCacheTestBase {
     public CacheManagerDestroyCrashTest(TestConfig testConfig) {
         super("lifecycle/cache-destroy.xml", testConfig, CacheManagerCreateClient.class,
                 CacheManagerEntityDestroyCrashClient.class);
+    }
+
+    @Override
+    protected String createClassPath(Class client) throws IOException {
+        String classpath = super.createClassPath(client);
+        classpath = addToClasspath(classpath, TestBaseUtil.jarFor(Mockito.class));
+        classpath = addToClasspath(classpath, TestBaseUtil.jarFor(ObjenesisStd.class));
+        return classpath;
     }
 
     public static class CacheManagerCreateClient extends ClientBase {
