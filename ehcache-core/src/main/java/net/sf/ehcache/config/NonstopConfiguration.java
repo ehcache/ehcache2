@@ -67,7 +67,7 @@ public class NonstopConfiguration implements Cloneable {
     private volatile long timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     private volatile long searchTimeoutMillis = DEFAULT_SEARCH_TIMEOUT_MILLIS;
     private volatile int bulkOpsTimeoutMultiplyFactor = DEFAULT_BULK_OP_TIMEOUT_FACTOR;
-    private TimeoutBehaviorConfiguration timeoutBehavior = DEFAULT_TIMEOUT_BEHAVIOR;
+    private TimeoutBehaviorConfiguration timeoutBehavior = new TimeoutBehaviorConfiguration(DEFAULT_TIMEOUT_BEHAVIOR);
     private volatile boolean configFrozen;
 
     /**
