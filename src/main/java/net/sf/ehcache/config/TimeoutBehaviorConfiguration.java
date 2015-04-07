@@ -58,6 +58,22 @@ public class TimeoutBehaviorConfiguration implements Cloneable {
     public static final String CUSTOM_TYPE_FACTORY_PROPERTY_NAME = "customFactoryClassName";
 
     /**
+     * Default constructor
+     */
+    public TimeoutBehaviorConfiguration() {
+    }
+
+    /**
+     * Copy constructor
+     * @param ref the reference to copy
+     */
+    public TimeoutBehaviorConfiguration(TimeoutBehaviorConfiguration ref) {
+        this.propertySeparator = ref.propertySeparator;
+        this.properties = ref.properties;
+        this.type = ref.type;
+    }
+
+    /**
      * Enum encapsulating type of TimeoutBehavior
      *
      * @author Abhishek Sanoujam
