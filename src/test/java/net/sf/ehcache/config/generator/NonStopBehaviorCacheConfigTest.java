@@ -33,7 +33,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -59,7 +59,7 @@ public class NonStopBehaviorCacheConfigTest {
       // Make sure the generated XML contains the updated nonstop timeout behavior
       DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
       DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-      Document doc = dBuilder.parse(new ByteArrayInputStream(cfgText.getBytes(StandardCharsets.UTF_8)));
+      Document doc = dBuilder.parse(new ByteArrayInputStream(cfgText.getBytes(Charset.forName("UTF-8"))));
       XPath xpath = XPathFactory.newInstance().newXPath();
       XPathExpression expr = xpath.compile("/ehcache/cache[@name='A1']/terracotta/nonstop/timeoutBehavior/@type");
 
