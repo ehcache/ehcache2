@@ -1,10 +1,8 @@
 package net.sf.ehcache.management.resource.services;
 
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.path.xml.NodeChildrenImpl;
 import com.jayway.restassured.internal.path.xml.NodeImpl;
 import com.jayway.restassured.path.xml.XmlPath;
-import com.jayway.restassured.path.xml.element.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,10 +11,9 @@ import org.junit.Test;
 import java.io.UnsupportedEncodingException;
 
 import static com.jayway.restassured.RestAssured.expect;
-import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.get;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 /**
@@ -35,7 +32,7 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
   @Before
   public void setUp() throws UnsupportedEncodingException {
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
   }
 
   @Test
@@ -101,15 +98,17 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
   @Test
   public void getCacheManagersTest__clustered() throws Exception {
-    String agentId = getEhCacheAgentId();
-    String agentsFilter = ";ids=" + agentId;
+    String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId + "," + cacheManagerMaxElementsAgentId;
     String cmsFilter = "";
 
+    System.out.println( "response: \n" +
+      get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter).asString()
+    );
 
     String xml = expect()
         .contentType(ContentType.JSON)
-        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo(agentId))
-        .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo(agentId))
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo(cacheManagerMaxBytesAgentId))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo(cacheManagerMaxElementsAgentId))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter)
@@ -137,7 +136,7 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
     String filteredXml = expect()
         .contentType(ContentType.JSON)
-        .body("[0].agentId", equalTo(agentId))
+        .body("[0].agentId", equalTo(cacheManagerMaxElementsAgentId))
         .body("[0].cacheManagerName", equalTo("testCacheManager"))
         .statusCode(200)
         .when()

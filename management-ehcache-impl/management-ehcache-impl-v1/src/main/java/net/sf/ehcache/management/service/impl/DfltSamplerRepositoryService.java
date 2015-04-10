@@ -147,6 +147,8 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
   @Override
   public Collection<CacheManagerEntity> createCacheManagerEntities(Set<String> cacheManagerNames,
       Set<String> attributes) {
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
+
     CacheManagerEntityBuilder builder = null;
     Collection<CacheManagerEntity> entities;
     cacheManagerSamplerRepoLock.readLock().lock();
@@ -154,6 +156,9 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
     try {
       if (cacheManagerNames == null) {
         for (SamplerRepoEntry entry : cacheManagerSamplerRepo.values()) {
+          if (!entry.isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           builder = builder == null ? CacheManagerEntityBuilder.createWith(entry.getCacheManagerSampler()) : builder
               .add(entry.getCacheManagerSampler());
         }
@@ -161,6 +166,9 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
           if (entry != null) {
+            if (!entry.isConnectedToCluster(requestClusterUUID)) {
+              continue;
+            }
             builder = builder == null ? CacheManagerEntityBuilder.createWith(entry.getCacheManagerSampler()) : builder
                 .add(entry.getCacheManagerSampler());
           }
@@ -182,12 +190,16 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
   public Collection<CacheManagerConfigEntity> createCacheManagerConfigEntities(Set<String> cacheManagerNames) {
     CacheManagerConfigurationEntityBuilder builder = null;
     Collection<CacheManagerConfigEntity> entities;
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
     try {
       if (cacheManagerNames == null) {
         for (SamplerRepoEntry entry : cacheManagerSamplerRepo.values()) {
+          if (!entry.isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           builder = builder == null ? CacheManagerConfigurationEntityBuilder
               .createWith(entry.getCacheManagerSampler()) : builder.add(entry.getCacheManagerSampler());
         }
@@ -195,7 +207,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
 
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             builder = builder == null ? CacheManagerConfigurationEntityBuilder
                 .createWith(entry.getCacheManagerSampler()) : builder.add(entry.getCacheManagerSampler());
           }
@@ -219,6 +231,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       Set<String> attributes) {
     CacheEntityBuilder builder = null;
     Collection<CacheEntity> entities;
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -227,6 +240,9 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
     try {
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
+          if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           enableNonStopFor(entry.getValue(), false);
           disabledSamplerRepoEntries.add(entry.getValue());
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
@@ -237,7 +253,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             enableNonStopFor(entry, false);
             disabledSamplerRepoEntries.add(entry);
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
@@ -266,6 +282,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       Set<String> cacheNames) {
     CacheConfigurationEntityBuilder builder = null;
     Collection<CacheConfigEntity> entities;
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -273,6 +290,9 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
+            if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+              continue;
+            }
             builder = builder == null ? CacheConfigurationEntityBuilder
                 .createWith(entry.getValue().getCacheManagerSampler(), sampler.getCacheName()) : builder
                 .add(entry.getValue().getCacheManagerSampler(), sampler.getCacheName());
@@ -281,7 +301,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
               builder = builder == null ? CacheConfigurationEntityBuilder
                   .createWith(entry.getCacheManagerSampler(), sampler.getCacheName()) : builder
@@ -307,6 +327,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       Set<String> cacheNames,
       Set<String> sampleNames) {
     CacheStatisticSampleEntityBuilder builder = CacheStatisticSampleEntityBuilder.createWith(sampleNames);
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -315,6 +336,9 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
     try {
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
+          if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           enableNonStopFor(entry.getValue(), false);
           disabledSamplerRepoEntries.add(entry.getValue());
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
@@ -324,7 +348,7 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             enableNonStopFor(entry, false);
             disabledSamplerRepoEntries.add(entry);
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
@@ -650,6 +674,12 @@ public class DfltSamplerRepositoryService implements ManagementServerLifecycle,
       for (String cName : cNames) {
         cacheSamplersByName.put(cName, new CacheSamplerImpl(cacheManager.getEhcache(cName)));
       }
+    }
+
+    public boolean isConnectedToCluster(String uuid) {
+      return uuid == null // local requests
+              || cacheManager.getClusterUUID().equals("") // unclustered cache managers
+              || cacheManager.getClusterUUID().equals(uuid);
     }
 
     public CacheManagerSampler getCacheManagerSampler() {

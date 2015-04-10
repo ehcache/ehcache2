@@ -12,11 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.jayway.restassured.RestAssured.expect;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * @author: Anthony Dahanne
@@ -34,7 +30,7 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
 
   @Before
   public void setUp() throws UnsupportedEncodingException {
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
   }
 
   @Test
@@ -289,8 +285,7 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     attributes.put("MaxBytesLocalDiskAsString", "6M");
     cacheManagerEntity.getAttributes().putAll(attributes);
 
-    String agentId = getEhCacheAgentId();
-    final String agentsFilter = ";ids=" + agentId;
+    final String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId;
     String cmsFilter = ";names=testCacheManagerProgrammatic";
 
     expect().log().ifError()
@@ -303,7 +298,7 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
 
     expect()
             .contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
+            .body("get(0).agentId", equalTo(cacheManagerMaxBytesAgentId))
             .body("get(0).name", equalTo("testCacheManagerProgrammatic"))
             .body("get(0).attributes.MaxBytesLocalHeapAsString", equalTo("12M"))
             .body("get(0).attributes.MaxBytesLocalDiskAsString", equalTo("6M"))

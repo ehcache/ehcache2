@@ -107,15 +107,4 @@ public abstract class AbstractManagementServer implements ManagementServer {
     return sl;
   }
 
-
-  @Override
-  public void addClientUUID(String clientUUID) {
-    remoteAgentEndpointImpl.addClientUUID(clientUUID);
-  }
-
-  @Override
-  public void removeClientUUID(String clientUUID) {
-    remoteAgentEndpointImpl.removeClientUUID(clientUUID);
-  }
-
 }

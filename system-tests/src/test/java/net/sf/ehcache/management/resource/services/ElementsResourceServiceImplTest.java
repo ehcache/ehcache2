@@ -29,7 +29,7 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
 
   @Before
   public void setUp() throws UnsupportedEncodingException {
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
   }
 
   @Test
@@ -108,12 +108,11 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
     for (int i=0; i<1000 ; i++) {
       exampleCache.put(new Element("key" + i, "value" + i));
     }
-    String agentId = getEhCacheAgentId();
-    final String agentsFilter = ";ids=" + agentId;
+    final String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId;
 
     expect().contentType(ContentType.JSON)
             .rootPath(" find { it.name == 'testCache2' }")
-              .body("agentId", equalTo(agentId))
+              .body("agentId", equalTo(cacheManagerMaxBytesAgentId))
               .body("attributes.InMemorySize", equalTo(1000))
             .statusCode(200)
             .when().get(CLUSTERED_BASE_URL + "/tc-management-api/agents" + agentsFilter + "/cacheManagers/caches");
@@ -127,7 +126,7 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
 
     expect().contentType(ContentType.JSON)
             .rootPath(" find { it.name == 'testCache2' }")
-              .body("agentId", equalTo(agentId))
+              .body("agentId", equalTo(cacheManagerMaxBytesAgentId))
               .body("attributes.InMemorySize", equalTo(0))
             .statusCode(200)
             .when().get(CLUSTERED_BASE_URL + "/tc-management-api/agents" + agentsFilter + "/cacheManagers/caches");

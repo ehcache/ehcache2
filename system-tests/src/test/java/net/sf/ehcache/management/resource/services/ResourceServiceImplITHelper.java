@@ -1,5 +1,6 @@
 package net.sf.ehcache.management.resource.services;
 
+import com.tc.util.concurrent.ThreadUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
@@ -17,6 +18,8 @@ import com.tc.test.config.builder.TcConfig;
 import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
 import com.tc.util.PortChooser;
+
+import java.io.IOException;
 
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.path.json.JsonPath.from;
@@ -41,7 +44,9 @@ public abstract class ResourceServiceImplITHelper {
   protected static final String BASEURI = "http://localhost";
   protected static final String INFO = "/info";
   protected static CacheManager cacheManagerMaxBytes;
+  protected static String cacheManagerMaxBytesAgentId;
   protected static CacheManager cacheManagerMaxElements;
+  protected static String cacheManagerMaxElementsAgentId;
 
   protected static final String STANDALONE_BASE_URL = BASEURI +":" + STANDALONE_REST_AGENT_PORT;
   protected static final String CLUSTERED_BASE_URL =  BASEURI +":" + MANAGEMENT_PORT;
@@ -63,6 +68,7 @@ public abstract class ResourceServiceImplITHelper {
     clusterManager = new ClusterManager(clazz,tcConfig);
     clusterManager.addExtraJvmArg("-Xmx768m");
     clusterManager.addExtraJvmArg("-XX:MaxPermSize=128m");
+//    clusterManager.addExtraJvmArg("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5555");
     clusterManager.start();
 
     cacheManagerMaxElements = getCacheManagerMaxEntries();
@@ -79,8 +85,19 @@ public abstract class ResourceServiceImplITHelper {
     clusterManager.stop();
   }
 
+  static String waitUntilEhcacheAgentUp(String clusterUuid) {
+    while (true) {
+      String response = get(CLUSTERED_BASE_URL + "/tc-management-api/agents/cacheManagers").asString();
+      try {
+        return from(response).get("find{it.attributes.ClusterUUID == '" + clusterUuid + "'}.agentId");
+      } catch (IllegalArgumentException iae) {
+        ThreadUtil.reallySleep(500);
+      }
+    }
+  }
 
-  protected static CacheManager getCacheManagerMaxbytes() {
+
+  protected static CacheManager getCacheManagerMaxBytes() {
     Configuration configuration = new Configuration();
     configuration.setName("testCacheManagerProgrammatic");
     configuration.updateCheck(false);
@@ -98,6 +115,7 @@ public abstract class ResourceServiceImplITHelper {
     CacheManager mgr = new CacheManager(configuration);
     Cache exampleCache = mgr.getCache("testCache2");
     assert (exampleCache != null);
+    cacheManagerMaxBytesAgentId = waitUntilEhcacheAgentUp(mgr.getClusterUUID());
     return mgr;
   }
 
@@ -119,6 +137,7 @@ public abstract class ResourceServiceImplITHelper {
     CacheManager mgr = new CacheManager(configuration);
     Cache exampleCache = mgr.getCache("testCache");
     assert (exampleCache != null);
+    cacheManagerMaxElementsAgentId = waitUntilEhcacheAgentUp(mgr.getClusterUUID());
     return mgr;
   }
 
@@ -128,10 +147,10 @@ public abstract class ResourceServiceImplITHelper {
   }
 
 
-  protected String getEhCacheAgentId() {
-    // looking up the ehcache agent id, so that we ask for it throguh the tsa
-    String agentsReponse = get(CLUSTERED_BASE_URL + "/tc-management-api/agents").asString();
-    return from(agentsReponse).get("find{it.agencyOf == 'Ehcache'}.agentId");
-  }
+//  protected String getEhCacheAgentId() {
+//    // looking up the ehcache agent id, so that we ask for it throguh the tsa
+//    String agentsReponse = get(CLUSTERED_BASE_URL + "/tc-management-api/agents").asString();
+//    return from(agentsReponse).get("find{it.agencyOf == 'Ehcache'}.agentId");
+//  }
 
 }

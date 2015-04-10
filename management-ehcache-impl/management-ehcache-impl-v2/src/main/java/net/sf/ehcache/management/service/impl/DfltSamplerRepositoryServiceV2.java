@@ -24,13 +24,10 @@ import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.ClusteredInstanceFactoryAccessor;
 import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheConfigurationListener;
 import net.sf.ehcache.config.ManagementRESTServiceConfiguration;
-import net.sf.ehcache.constructs.nonstop.NonStopCacheException;
-import net.sf.ehcache.event.CacheEventListener;
 import net.sf.ehcache.event.CacheManagerEventListener;
 import net.sf.ehcache.management.resource.CacheConfigEntityV2;
 import net.sf.ehcache.management.resource.CacheEntityV2;
@@ -241,6 +238,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       Set<String> attributes) {
     ResponseEntityV2<CacheManagerEntityV2> responseEntityV2 = new ResponseEntityV2<CacheManagerEntityV2>();
 
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
     CacheManagerEntityBuilderV2 builder = null;
     Collection<CacheManagerEntityV2> entities;
     cacheManagerSamplerRepoLock.readLock().lock();
@@ -248,13 +246,16 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     try {
       if (cacheManagerNames == null) {
         for (SamplerRepoEntry entry : cacheManagerSamplerRepo.values()) {
+          if (!entry.isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           builder = builder == null ? CacheManagerEntityBuilderV2.createWith(entry.getCacheManagerSampler()) : builder
               .add(entry.getCacheManagerSampler());
         }
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             builder = builder == null ? CacheManagerEntityBuilderV2.createWith(entry.getCacheManagerSampler()) : builder
                 .add(entry.getCacheManagerSampler());
           }
@@ -279,12 +280,16 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
 
     CacheManagerConfigurationEntityBuilderV2 builder = null;
     Collection<CacheManagerConfigEntityV2> entities;
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
     try {
       if (cacheManagerNames == null) {
         for (SamplerRepoEntry entry : cacheManagerSamplerRepo.values()) {
+          if (!entry.isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           builder = builder == null ? CacheManagerConfigurationEntityBuilderV2
             .createWith(entry.getCacheManagerSampler()) : builder.add(entry.getCacheManagerSampler());
         }
@@ -292,7 +297,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
 
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             builder = builder == null ? CacheManagerConfigurationEntityBuilderV2
               .createWith(entry.getCacheManagerSampler()) : builder.add(entry.getCacheManagerSampler());
           }
@@ -318,6 +323,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     ResponseEntityV2<CacheEntityV2> responseEntityV2 = new ResponseEntityV2<CacheEntityV2>();
     CacheEntityBuilderV2 builder = null;
     Collection<CacheEntityV2> entities;
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -326,6 +332,9 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     try {
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
+          if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           enableNonStopFor(entry.getValue(), false);
           disabledSamplerRepoEntries.add(entry.getValue());
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
@@ -336,7 +345,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             enableNonStopFor(entry, false);
             disabledSamplerRepoEntries.add(entry);
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
@@ -367,6 +376,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     CacheConfigurationEntityBuilderV2 builder = null;
     Collection<CacheConfigEntityV2> entities;
     ResponseEntityV2<CacheConfigEntityV2> responseEntityV2 = new ResponseEntityV2<CacheConfigEntityV2>();
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -374,6 +384,9 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
+            if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+              continue;
+            }
             builder = builder == null ? CacheConfigurationEntityBuilderV2
               .createWith(entry.getValue().getCacheManagerSampler(), sampler.getCacheName()) : builder
               .add(entry.getValue().getCacheManagerSampler(), sampler.getCacheName());
@@ -382,7 +395,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
               builder = builder == null ? CacheConfigurationEntityBuilderV2
                 .createWith(entry.getCacheManagerSampler(), sampler.getCacheName()) : builder
@@ -410,6 +423,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       Set<String> sampleNames) {
     CacheStatisticSampleEntityBuilderV2 builder = CacheStatisticSampleEntityBuilderV2.createWith(sampleNames);
     ResponseEntityV2<CacheStatisticSampleEntityV2> responseEntityV2 = new ResponseEntityV2<CacheStatisticSampleEntityV2>();
+    String requestClusterUUID = remoteAgentEndpoint.getRequestClusterUUID();
 
     cacheManagerSamplerRepoLock.readLock().lock();
 
@@ -418,6 +432,9 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     try {
       if (cacheManagerNames == null) {
         for (Map.Entry<String, SamplerRepoEntry> entry : cacheManagerSamplerRepo.entrySet()) {
+          if (!entry.getValue().isConnectedToCluster(requestClusterUUID)) {
+            continue;
+          }
           enableNonStopFor(entry.getValue(), false);
           disabledSamplerRepoEntries.add(entry.getValue());
           for (CacheSampler sampler : entry.getValue().getComprehensiveCacheSamplers(cacheNames)) {
@@ -427,7 +444,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
       } else {
         for (String cmName : cacheManagerNames) {
           SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cmName);
-          if (entry != null) {
+          if (entry != null && entry.isConnectedToCluster(requestClusterUUID)) {
             enableNonStopFor(entry, false);
             disabledSamplerRepoEntries.add(entry);
             for (CacheSampler sampler : entry.getComprehensiveCacheSamplers(cacheNames)) {
@@ -773,6 +790,12 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
         ehcache.addPropertyChangeListener(propertyChangeListener);
         ehcache.getCacheConfiguration().addConfigurationListener(samplerCacheConfigurationListener);
       }
+    }
+
+    public boolean isConnectedToCluster(String uuid) {
+      return uuid == null // local requests
+              || cacheManager.getClusterUUID().equals("") // unclustered cache managers
+              || cacheManager.getClusterUUID().equals(uuid);
     }
 
     public CacheManagerSampler getCacheManagerSampler() {

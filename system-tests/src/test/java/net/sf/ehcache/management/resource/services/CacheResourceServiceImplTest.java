@@ -484,8 +484,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
       attributes.put("NodeBulkLoadEnabled", Boolean.TRUE); //ONLY FOR CLUSTERED !!!
       attributes.put("Enabled", Boolean.FALSE);
 
-      String agentId = getEhCacheAgentId();
-      final String agentsFilter = ";ids=" + agentId;
+      final String agentsFilter = ";ids=" + clusteredCacheManagerAgentId;
       String cmsFilter = ";names=testCacheManagerClustered";
       String cachesFilter = ";names=testCacheClustered";
       cacheEntity.getAttributes().putAll(attributes);
@@ -499,7 +498,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
       cmsFilter = "";
       // we check the properties were changed
       expect().contentType(ContentType.JSON)
-              .body("get(0).agentId", equalTo(agentId))
+              .body("get(0).agentId", equalTo(clusteredCacheManagerAgentId))
               .body("get(0).name", equalTo("testCacheClustered"))
               .body("get(0).attributes.MaxEntriesInCache", equalTo(30000))
               .body("get(0).attributes.MaxEntriesLocalHeap", equalTo(20000))
@@ -660,6 +659,8 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     return mgr;
   }
 
+  private String clusteredCacheManagerAgentId;
+
   private CacheManager createClusteredCacheManager() {
     Configuration configuration = new Configuration();
     configuration.setName("testCacheManagerClustered");
@@ -675,6 +676,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     CacheManager mgr = new CacheManager(configuration);
     Cache exampleCache = mgr.getCache("testCacheClustered");
     assert (exampleCache != null);
+    clusteredCacheManagerAgentId = ResourceServiceImplITHelper.waitUntilEhcacheAgentUp(mgr.getClusterUUID());
     return mgr;
   }
 

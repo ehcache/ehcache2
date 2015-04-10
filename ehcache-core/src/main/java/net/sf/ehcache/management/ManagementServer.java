@@ -66,7 +66,7 @@ public interface ManagementServer {
     public void initialize(ManagementRESTServiceConfiguration configuration);
 
     /**
-     * Register the cluster endpoint of a specific client to enable
+     * Register a cluster endpoint of a specific client to enable
      * clustered monitoring.
      *
      * @param clientUUID the client UUID
@@ -74,24 +74,10 @@ public interface ManagementServer {
     public void registerClusterRemoteEndpoint(String clientUUID);
 
     /**
-     * add a reference to the clientUUID to the EhCache Mbean
-     * That allows the TSA to keep track of all the toolkit clients
-     * available through an agent
+     * Unregister a previously registered cluster endpoint.
      *
      * @param clientUUID the client UUID
      */
-    void addClientUUID(String clientUUID);
-
-    /**
-     * remove the reference to the clientUUID from the EhCache Mbean
-     *
-     * @param clientUUID the client UUID
-     */
-    void removeClientUUID(String clientUUID);
-
-  /**
-     * Unregister the previously registered cluster endpoint.
-     */
-    public void unregisterClusterRemoteEndpoint();
+    public void unregisterClusterRemoteEndpoint(String clientUUID);
 
 }

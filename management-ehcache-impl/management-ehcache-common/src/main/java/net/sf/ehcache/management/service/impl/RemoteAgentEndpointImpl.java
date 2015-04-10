@@ -4,34 +4,29 @@
  */
 package net.sf.ehcache.management.service.impl;
 
+import net.sf.ehcache.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terracotta.management.l1bridge.AbstractRemoteAgentEndpointImpl;
-import org.terracotta.management.l1bridge.RemoteCallDescriptor;
 
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.ReflectionException;
+import javax.management.StandardMBean;
+import java.lang.management.ManagementFactory;
+import java.util.Map;
+
 
 public class RemoteAgentEndpointImpl extends AbstractRemoteAgentEndpointImpl implements RemoteAgentEndpointImplMBean {
   private static final Logger LOG = LoggerFactory.getLogger(RemoteAgentEndpointImpl.class);
 
   public static final String AGENCY = "Ehcache";
-  public static final String MBEAN_NAME_PREFIX = "net.sf.ehcache:type=" + IDENTIFIER;
+  public static final String MBEAN_NAME_PREFIX = "net.sf.ehcache:type=" + IDENTIFIER + ",agency=" + AGENCY;
 
-  private final ThreadLocal<Boolean> tsaBridged = new ThreadLocal<Boolean>() {
-    @Override
-    protected Boolean initialValue() {
-      return false;
-    }
-  };
+  private final ThreadLocal<String> requestClusterUUID = new ThreadLocal<String>();
 
-  private ObjectName objectName;
-  private final List<String> clientUUIDs =  new ArrayList<String>();
+  private final Map<String, ObjectName> objectNames = new ConcurrentHashMap<String, ObjectName>();
 
   public RemoteAgentEndpointImpl() {
   }
@@ -40,30 +35,43 @@ public class RemoteAgentEndpointImpl extends AbstractRemoteAgentEndpointImpl imp
     return false;
   }
 
-  public boolean isTsaBridged() {
-    return tsaBridged.get();
+  public String getRequestClusterUUID() {
+    return requestClusterUUID.get();
   }
 
-  public void registerMBean(String clientUUID) {
+  public boolean isTsaBridged() {
+    return getRequestClusterUUID() != null;
+  }
+
+  public void registerMBean(final String clientUUID) {
     if (clientUUID == null) {
       throw new NullPointerException("clientUUID cannot be null");
     }
+
     ObjectName objectName;
     try {
       objectName = new ObjectName(MBEAN_NAME_PREFIX + ",node=" + clientUUID);
       MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-      platformMBeanServer.registerMBean(this, objectName);
-    } catch (InstanceAlreadyExistsException iaee) {
-      // the MBean has already been registered, ignore it
-      objectName = null;
+      platformMBeanServer.registerMBean(new StandardMBean(this, RemoteAgentEndpointImplMBean.class) {
+        @Override
+        public Object invoke(String actionName, Object[] params, String[] signature) throws MBeanException, ReflectionException {
+          try {
+            requestClusterUUID.set(clientUUID);
+            return super.invoke(actionName, params, signature);
+          } finally {
+            requestClusterUUID.remove();
+          }
+        }
+      }, objectName);
     } catch (Exception e) {
       LOG.warn("Error registering RemoteAgentEndpointImpl MBean with UUID: " + clientUUID, e);
       objectName = null;
     }
-    this.objectName = objectName;
+    this.objectNames.put(clientUUID, objectName);
   }
 
-  public void unregisterMBean() {
+  public void unregisterMBean(String clientUUID) {
+    ObjectName objectName = objectNames.remove(clientUUID);
     if (objectName == null) {
       return;
     }
@@ -72,20 +80,6 @@ public class RemoteAgentEndpointImpl extends AbstractRemoteAgentEndpointImpl imp
       platformMBeanServer.unregisterMBean(objectName);
     } catch (Exception e) {
       LOG.warn("Error unregistering RemoteAgentEndpointImpl MBean : " + objectName, e);
-    }
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public byte[] invoke(RemoteCallDescriptor remoteCallDescriptor) throws Exception {
-    try {
-      tsaBridged.set(true);
-      return super.invoke(remoteCallDescriptor);
-    } finally {
-      tsaBridged.set(false);
     }
   }
 
@@ -105,16 +99,4 @@ public class RemoteAgentEndpointImpl extends AbstractRemoteAgentEndpointImpl imp
     return AGENCY;
   }
 
-  public void addClientUUID(String clientUUID) {
-    clientUUIDs.add(clientUUID);
-  }
-
-  @Override
-  public String[] getClientUUIDs() {
-    return clientUUIDs.toArray(new String[0]);
-  }
-
-  public void removeClientUUID(String clientUUID) {
-    clientUUIDs.remove(clientUUID);
-  }
 }

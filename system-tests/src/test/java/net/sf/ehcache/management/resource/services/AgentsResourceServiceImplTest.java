@@ -104,7 +104,7 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
    */
   public void getAgentsTest__TwoCacheManagers() throws Exception {
     // we configure the second cache manager programmatically
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
     // let's check the agent was edited correctly server side
     expect().contentType(ContentType.JSON)
             .rootPath("get(0)")
@@ -128,7 +128,6 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
             .body("get(0).rootRepresentables.urls", Matchers.equalTo("http://localhost:" + MANAGEMENT_PORT))
             .body("get(1).agentId", anyOf(containsString("localhost_"), containsString("127.0.0.1_"), containsString("localhost.localdomain_"), containsString("localhost.home_")))
             .body("get(1).agencyOf", Matchers.equalTo("Ehcache"))
-            .body("get(1).rootRepresentables.ClientUUIDs", Matchers.notNullValue())
             .statusCode(200)
             .when().get(CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
 

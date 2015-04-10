@@ -5,9 +5,7 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ManagementRESTServiceConfiguration;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -57,21 +55,15 @@ public class ManagementServerLoaderTest {
             ManagementServerLoader.ManagementServerHolder managementServerHolder = ManagementServerLoader.MGMT_SVR_BY_BIND.get("");
             DummyManagementServerImpl dms = (DummyManagementServerImpl)managementServerHolder.getManagementServer();
             assertThat(dms.status, is(DummyManagementServerImpl.Status.STARTED));
-            assertThat(managementServerHolder.getRegisteredClientUUID(), equalTo("uuid1"));
 
             ManagementServerLoader.register(cacheManager2, "uuid2", cacheManager2.getConfiguration().getManagementRESTService());
             assertThat(dms.status, is(DummyManagementServerImpl.Status.STARTED));
-            // check that the UUID of the 1st client is still the reference for clustered access to the agent
-            assertThat(managementServerHolder.getRegisteredClientUUID(), equalTo("uuid1"));
 
             ManagementServerLoader.unregister("", cacheManager1);
             assertThat(dms.status, is(DummyManagementServerImpl.Status.STARTED));
-            // check that the UUID of the 2nd client is now the reference for clustered access to the agent
-            assertThat(managementServerHolder.getRegisteredClientUUID(), equalTo("uuid2"));
 
             ManagementServerLoader.unregister("", cacheManager2);
             assertThat(dms.status, is(DummyManagementServerImpl.Status.STOPPED));
-            assertNull(managementServerHolder.getRegisteredClientUUID());
         } finally {
             cacheManager2.shutdown();
             cacheManager1.shutdown();

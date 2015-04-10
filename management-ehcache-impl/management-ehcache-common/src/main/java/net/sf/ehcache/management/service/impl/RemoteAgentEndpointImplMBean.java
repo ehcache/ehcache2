@@ -11,6 +11,4 @@ import org.terracotta.management.l1bridge.RemoteAgentEndpoint;
  */
 public interface RemoteAgentEndpointImplMBean extends RemoteAgentEndpoint {
 
-  String[] getClientUUIDs();
-
 }

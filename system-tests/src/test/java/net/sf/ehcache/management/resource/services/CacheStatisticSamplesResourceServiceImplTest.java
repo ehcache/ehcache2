@@ -26,7 +26,7 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
   @BeforeClass
   public static void setUpCluster() throws Exception {
     setUpCluster(CacheStatisticSamplesResourceServiceImplTest.class);
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
   }
 
   @Before
@@ -144,15 +144,14 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
    */
   public void getCacheStatisticSamples__clustered() throws Exception {
 
-    String agentId = getEhCacheAgentId();
-    final String agentsFilter = ";ids=" + agentId;
+    String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId;
     String cmsFilter= ";names=testCacheManagerProgrammatic";
     String cachesFilter = ";names=testCache2";
     String samplesFilter = ";names=LocalHeapSize";
 
     // we precise the cacheManager, cache and 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
+            .body("get(0).agentId", equalTo(cacheManagerMaxBytesAgentId))
             .body("get(0).name", equalTo("testCache2"))
             .body("get(0).cacheManagerName", equalTo("testCacheManagerProgrammatic"))
             .body("get(0).statName", equalTo("LocalHeapSize"))
@@ -167,7 +166,7 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
     cmsFilter= "";
     // we precise the cache and 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
+            .body("get(0).agentId", equalTo(cacheManagerMaxBytesAgentId))
             .body("get(0).name", equalTo("testCache2"))
             .body("get(0).cacheManagerName", equalTo("testCacheManagerProgrammatic"))
             .body("get(0).statName", equalTo("LocalHeapSize"))
@@ -180,18 +179,19 @@ public class CacheStatisticSamplesResourceServiceImplTest extends ResourceServic
             .when().get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter,cmsFilter,cachesFilter,samplesFilter);
 
 
+    agentsFilter = "";
     cachesFilter = "";
     // we precise 2 stats we want to retrieve
     expect().contentType(ContentType.JSON)
             .body("size()", is(2))
             .rootPath("find { it.name =='testCache2' }")
-              .body("agentId", equalTo(agentId))
+              .body("agentId", equalTo(cacheManagerMaxBytesAgentId))
               .body("cacheManagerName", equalTo("testCacheManagerProgrammatic"))
               .body("statName", equalTo("LocalHeapSize"))
               .body("statValueByTimeMillis.size()", greaterThan(0))
               .body("statValueByTimeMillis.values()[0]", greaterThan(0))
             .rootPath("find { it.name =='testCache' }")
-              .body("agentId", equalTo(agentId))
+              .body("agentId", equalTo(cacheManagerMaxElementsAgentId))
               .body("cacheManagerName", equalTo("testCacheManager"))
               .body("statName", equalTo("LocalHeapSize"))
               .body("statValueByTimeMillis.size()", greaterThan(0))

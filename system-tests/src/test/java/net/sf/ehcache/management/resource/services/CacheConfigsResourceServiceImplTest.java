@@ -16,7 +16,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 
@@ -36,7 +35,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
 
   @Before
   public void setUp() throws UnsupportedEncodingException {
-    cacheManagerMaxBytes = getCacheManagerMaxbytes();
+    cacheManagerMaxBytes = getCacheManagerMaxBytes();
   }
 
   @Test
@@ -89,15 +88,14 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
   public void getCacheConfigsTest__clustered() throws Exception {
     String cmsFilter = "";
     String cachesFilter = "";
-    String agentId = getEhCacheAgentId();
-    String agentsFilter = ";ids=" + agentId;
+      String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId + "," + cacheManagerMaxElementsAgentId;
 
     String xml = expect()
         .contentType(ContentType.JSON)
-        .body("[0].agentId", equalTo(agentId))
+        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo(cacheManagerMaxBytesAgentId))
         .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
         .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
-        .body("[1].agentId", equalTo(agentId))
+        .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo(cacheManagerMaxElementsAgentId))
         .statusCode(200)
       .when()
         .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
@@ -114,7 +112,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
 
     String filteredXml = expect()
         .contentType(ContentType.JSON)
-        .body("[0].agentId", equalTo(agentId))
+        .body("[0].agentId", equalTo(cacheManagerMaxBytesAgentId))
         .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
         .body("[0].cacheName", equalTo("testCache2"))
         .statusCode(200)
