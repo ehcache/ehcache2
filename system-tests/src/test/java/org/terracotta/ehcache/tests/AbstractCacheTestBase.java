@@ -44,6 +44,8 @@ public class AbstractCacheTestBase extends AbstractTestBase {
                                Class<? extends AbstractClientBase>... c) {
     super(testConfig);
     this.ehcacheConfigPath = ehcacheConfigPath;
+    testConfig.getL2Config().setOffHeapEnabled(true);
+    testConfig.getL2Config().setMaxOffHeapDataSize(512);
     testConfig.getL2Config().setMaxHeap(1024);
     testConfig.getL2Config().setMinHeap(256);
     testConfig.getClientConfig().addExtraClientJvmArg("-Dnet.sf.ehcache.skipUpdateCheck=true");
