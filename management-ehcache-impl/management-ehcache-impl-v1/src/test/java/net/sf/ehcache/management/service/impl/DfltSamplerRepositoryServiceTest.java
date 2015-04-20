@@ -42,7 +42,8 @@ public class DfltSamplerRepositoryServiceTest {
   public void setUp() throws Exception {
     ManagementRESTServiceConfiguration managementRESTServiceConfiguration = new ManagementRESTServiceConfiguration();
     managementRESTServiceConfiguration.setEnabled(true);
-    repositoryService = new DfltSamplerRepositoryService(managementRESTServiceConfiguration, null);
+    RemoteAgentEndpointImpl remoteAgentEndpoint = mock(RemoteAgentEndpointImpl.class);
+    repositoryService = new DfltSamplerRepositoryService(managementRESTServiceConfiguration, remoteAgentEndpoint);
 
     Configuration configuration = new Configuration();
     configuration.setName("testCacheManager");
