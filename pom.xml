@@ -12,7 +12,7 @@
   <name>ehcache-root</name>
   <artifactId>ehcache-root</artifactId>
   <packaging>pom</packaging>
-  <version>2.7.8-SNAPSHOT</version>
+  <version>2.7.8</version>
 
   <scm>
     <developerConnection>scm:git:https://github.com/ehcache/ehcache2.git</developerConnection>
@@ -28,7 +28,7 @@
     <management-core.version>1.2.3</management-core.version>
     <terracotta-toolkit-api-internal.version>1.1</terracotta-toolkit-api-internal.version>
     <statistics.version>1.0.1</statistics.version>
-    <quartz.version>2.2.2-SNAPSHOT</quartz.version>
+    <quartz.version>2.2.1</quartz.version>
 
     <!-- Remove once parent pom updated -->
     <terracotta-nexus-staging-url>http://nexus.terracotta.eur.ad.sag/service/local/staging/deploy/maven2</terracotta-nexus-staging-url>
