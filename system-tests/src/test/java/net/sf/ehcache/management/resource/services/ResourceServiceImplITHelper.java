@@ -1,5 +1,6 @@
 package net.sf.ehcache.management.resource.services;
 
+import com.tc.test.config.builder.OffHeap;
 import com.tc.util.concurrent.ThreadUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -59,6 +60,7 @@ public abstract class ResourceServiceImplITHelper {
                     new TcMirrorGroup()
                             .server(
                                     new TcServer().managementPort(MANAGEMENT_PORT).tsaGroupPort(TSA_GROUP_PORT)
+                                            .offHeap(new OffHeap().enabled(true).maxDataSize("512m"))
                             )
             );
 
