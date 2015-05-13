@@ -18,6 +18,7 @@ package net.sf.ehcache;
 
 import static net.sf.ehcache.util.RetryAssert.assertBy;
 import static org.hamcrest.collection.IsArrayContainingInOrder.arrayContaining;
+import static org.hamcrest.collection.IsArrayContainingInAnyOrder.arrayContainingInAnyOrder;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -580,7 +581,7 @@ public class CacheManagerTest {
         configuration.cache(new CacheConfiguration("bar", 100));
         CacheManager manager = new CacheManager(configuration);
         try {
-            assertThat(manager.getCacheNames(), arrayContaining("foo", "bar"));
+            assertThat(manager.getCacheNames(), arrayContainingInAnyOrder("foo", "bar"));
         } finally {
             manager.shutdown();
         }
