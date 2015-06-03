@@ -205,7 +205,7 @@ public class TerracottaConfiguration implements Cloneable {
     }
 
     /**
-     * Used by BeanHandler to set the compressionEnaled flag during parsing
+     * Used by BeanHandler to set the compressionEnabled flag during parsing
      */
     public void setCompressionEnabled(boolean enabled) {
         this.compressionEnabled = enabled;
