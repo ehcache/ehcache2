@@ -483,6 +483,7 @@ public class CacheManager {
         addShutdownHookIfRequired();
 
         cacheManagerTimer = new FailSafeTimer(getName());
+        checkForUpdateIfNeeded(configuration.getUpdateCheck());
 
         mbeanRegistrationProvider = MBEAN_REGISTRATION_PROVIDER_FACTORY.createMBeanRegistrationProvider(configuration);
         

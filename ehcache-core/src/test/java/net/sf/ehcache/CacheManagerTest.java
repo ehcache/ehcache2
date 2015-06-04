@@ -504,6 +504,20 @@ public class CacheManagerTest {
         new CacheManager(mgrConfig).shutdown();
     }
 
+    @Test
+    public void testDefaultUpdateCheckIsFalse() throws IOException {
+        URL configUrl = this.getClass().getResource("/ehcache-no-update.xml");
+        Configuration config = ConfigurationFactory.parseConfiguration(configUrl);
+        assertFalse(config.getUpdateCheck());
+    }
+    
+    @Test
+    public void testConfigureUpdateCheckToBeTrue() throws IOException {
+        URL configUrl = this.getClass().getResource("/ehcache-with-update.xml");
+        Configuration config = ConfigurationFactory.parseConfiguration(configUrl);
+        assertTrue(config.getUpdateCheck());
+    }
+    
     /**
      * Tests that the CacheManager was successfully created
      */
