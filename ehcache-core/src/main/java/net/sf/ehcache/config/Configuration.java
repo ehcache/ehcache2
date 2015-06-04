@@ -61,7 +61,7 @@ public final class Configuration {
     /**
      * Default value for updateCheck
      */
-    public static final boolean DEFAULT_UPDATE_CHECK = true;
+    public static final boolean DEFAULT_UPDATE_CHECK = false;
     /**
      * Default value for defaultTransactionTimeoutInSeconds
      */
