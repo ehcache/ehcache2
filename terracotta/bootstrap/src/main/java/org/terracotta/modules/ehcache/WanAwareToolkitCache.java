@@ -40,6 +40,8 @@ public class WanAwareToolkitCache<K, V> implements BufferingToolkitCache<K, V>, 
   private static final Logger LOGGER = LoggerFactory.getLogger(WanAwareToolkitCache.class);
   private static final String CACHE_ACTIVE_KEY = "WAN-CACHE-ACTIVE";
   private static final String ORCHESTRATOR_ALIVE_KEY = "ORCHESTRATOR-ALIVE";
+  private static final String ORCHESTRATOR_MODE = "ORCHESTRATOR-MODE";
+  private static final String REPLICATION_MODE = "REPLICATION-MODE";
 
   private final BufferingToolkitCache<K, V> delegate;
   private final ConcurrentMap<String, Serializable> configMap;
@@ -81,6 +83,8 @@ public class WanAwareToolkitCache<K, V> implements BufferingToolkitCache<K, V>, 
     this.bidirectional = bidirectional;
     configMap.putIfAbsent(CACHE_ACTIVE_KEY, false);
     configMap.putIfAbsent(ORCHESTRATOR_ALIVE_KEY, false);
+    configMap.putIfAbsent(ORCHESTRATOR_MODE, masterCache ? "Master" : "Replica");
+    configMap.putIfAbsent(REPLICATION_MODE, bidirectional ? "BIDIRECTIONAL" : "UNIDIRECTIONAL");
   }
 
   /**
