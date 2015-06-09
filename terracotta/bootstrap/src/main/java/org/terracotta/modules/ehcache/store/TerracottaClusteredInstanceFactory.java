@@ -186,7 +186,15 @@ public class TerracottaClusteredInstanceFactory implements ClusteredInstanceFact
 
   @Override
   public void unlinkCache(String cacheName) {
-    toolkitInstanceFactory.unlinkCache(cacheName);
+    try {
+      toolkitInstanceFactory.unlinkCache(cacheName);
+    } catch (RuntimeException e) {
+      if(e.getClass().getSimpleName().equals("TCNotRunningException")) {
+        LOGGER.info("Terracotta client already shutdown", e);
+      } else {
+        throw e;
+      }
+    }
   }
 
   @Override

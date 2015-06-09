@@ -482,10 +482,18 @@ public class ClusteredStore implements TerracottaStore, StoreListener {
 
   @Override
   public void dispose() {
-    dropLeaderStatus();
-    topology.removeTopologyListener(eventListenersRefresher);
-    backend.removeListener(evictionListener);
-    backend.disposeLocally();
+    try {
+      dropLeaderStatus();
+      topology.removeTopologyListener(eventListenersRefresher);
+      backend.removeListener(evictionListener);
+      backend.disposeLocally();
+    } catch (RuntimeException e) {
+      if(e.getClass().getSimpleName().equals("TCNotRunningException")) {
+        LOG.info("Terracotta client already shutdown", e);
+      } else {
+        throw e;
+      }
+    }
     cacheConfigChangeBridge.disconnectConfigs();
     toolkitInstanceFactory.removeNonStopConfigforCache(cache);
   }
