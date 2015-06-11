@@ -269,7 +269,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     } finally {
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
-    
+
     responseEntityV2.getEntities().addAll(entities);
     return responseEntityV2;
   }

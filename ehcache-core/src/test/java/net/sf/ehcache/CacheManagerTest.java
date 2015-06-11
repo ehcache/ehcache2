@@ -517,7 +517,7 @@ public class CacheManagerTest {
         Configuration config = ConfigurationFactory.parseConfiguration(configUrl);
         assertTrue(config.getUpdateCheck());
     }
-    
+
     /**
      * Tests that the CacheManager was successfully created
      */
