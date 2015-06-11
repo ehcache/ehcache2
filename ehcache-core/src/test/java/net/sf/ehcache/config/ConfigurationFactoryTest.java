@@ -126,7 +126,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
 
         //Check core attributes
         assertEquals(null, configurationHelper.getConfigurationBean().getName());
-        assertEquals(true, configurationHelper.getConfigurationBean().getUpdateCheck());
+        assertEquals(false, configurationHelper.getConfigurationBean().getUpdateCheck());
         assertEquals(Configuration.Monitoring.AUTODETECT, configurationHelper.getConfigurationBean().getMonitoring());
 
         //Check disk store
@@ -328,7 +328,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         ConfigurationHelper configurationHelper = new ConfigurationHelper(manager, configuration);
 
         assertEquals(null, configurationHelper.getConfigurationBean().getName());
-        assertEquals(true, configurationHelper.getConfigurationBean().getUpdateCheck());
+        assertEquals(false, configurationHelper.getConfigurationBean().getUpdateCheck());
         assertEquals(Configuration.Monitoring.AUTODETECT, configurationHelper.getConfigurationBean().getMonitoring());
 
         //Check disk path  <diskStore path="/tmp"/>
@@ -542,7 +542,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         ConfigurationHelper configurationHelper = new ConfigurationHelper(manager, configuration);
 
         assertEquals(null, configurationHelper.getConfigurationBean().getName());
-        assertEquals(true, configurationHelper.getConfigurationBean().getUpdateCheck());
+        assertEquals(false, configurationHelper.getConfigurationBean().getUpdateCheck());
         assertEquals(Configuration.Monitoring.AUTODETECT, configurationHelper.getConfigurationBean().getMonitoring());
 
         //Check disk path  <diskStore path="/tmp"/>
@@ -634,7 +634,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
         ConfigurationHelper configurationHelper = new ConfigurationHelper(manager, configuration);
 
         assertEquals(null, configurationHelper.getConfigurationBean().getName());
-        assertEquals(true, configurationHelper.getConfigurationBean().getUpdateCheck());
+        assertEquals(false, configurationHelper.getConfigurationBean().getUpdateCheck());
         assertEquals(Configuration.Monitoring.AUTODETECT, configurationHelper.getConfigurationBean().getMonitoring());
 
         //Check disk path  <diskStore path="/tmp"/>
@@ -936,7 +936,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
             ConfigurationHelper configurationHelper = new ConfigurationHelper(manager, configuration);
 
             assertEquals(null, configurationHelper.getConfigurationBean().getName());
-            assertEquals(true, configurationHelper.getConfigurationBean().getUpdateCheck());
+            assertEquals(false, configurationHelper.getConfigurationBean().getUpdateCheck());
             assertEquals(Configuration.Monitoring.AUTODETECT, configurationHelper.getConfigurationBean().getMonitoring());
 
             //Check disk path  <diskStore path="/tmp"/>
