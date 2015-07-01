@@ -423,12 +423,17 @@ public class DfltSamplerRepositoryService extends AbstractRemoteAgentEndpointImp
 
     try {
       SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
-      if (entry != null) entry.updateCache(cacheName, resource);
-      else throw new ServiceExecutionException("CacheManager not found !");
+      if (entry != null) {
+        try {
+          enableNonStopFor(entry, false);
+          entry.updateCache(cacheName, resource);
+        } finally {
+          enableNonStopFor(entry, true);
+        }
+      } else throw new ServiceExecutionException("CacheManager not found");
     } finally {
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
-
   }
 
   @Override
@@ -436,12 +441,17 @@ public class DfltSamplerRepositoryService extends AbstractRemoteAgentEndpointImp
                          String cacheName) {
     cacheManagerSamplerRepoLock.readLock().lock();
 
-    SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
     try {
-      enableNonStopFor(entry, false);
-      if (entry != null) entry.clearCache(cacheName);
+      SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
+      if (entry != null) {
+        try {
+          enableNonStopFor(entry, false);
+          entry.clearCache(cacheName);
+        } finally {
+          enableNonStopFor(entry, true);
+        }
+      }
     } finally {
-      enableNonStopFor(entry, true);
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
   }
