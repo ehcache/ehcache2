@@ -455,28 +455,35 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     try {
       SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
       if (entry != null) {
-        entry.updateCache(cacheName, resource);
+        try {
+          enableNonStopFor(entry, false);
+          entry.updateCache(cacheName, resource);
+        } finally {
+          enableNonStopFor(entry, true);
+        }
       } else {
-        throw new ServiceExecutionException("CacheManager not found !");
+        throw new ServiceExecutionException("CacheManager not found");
       }
     } finally {
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
-
   }
 
   @Override
   public void clearCache(String cacheManagerName, String cacheName) {
     cacheManagerSamplerRepoLock.readLock().lock();
 
-    SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
     try {
-      enableNonStopFor(entry, false);
+      SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
       if (entry != null) {
-        entry.clearCache(cacheName);
+        try {
+          enableNonStopFor(entry, false);
+          entry.clearCache(cacheName);
+        } finally {
+          enableNonStopFor(entry, true);
+        }
       }
     } finally {
-      enableNonStopFor(entry, true);
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
   }
@@ -507,7 +514,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
           cms.setEnabled(Boolean.valueOf(enabledAttr.toString()));
         }
       } else {
-        throw new ServiceExecutionException("CacheManager not found !");
+        throw new ServiceExecutionException("CacheManager not found");
       }
     } finally {
       cacheManagerSamplerRepoLock.writeLock().unlock();
@@ -536,7 +543,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
           enableNonStopFor(entry, true);
         }
       } else {
-        throw new ServiceExecutionException("CacheManager not found !");
+        throw new ServiceExecutionException("CacheManager not found");
       }
     } finally {
       cacheManagerSamplerRepoLock.writeLock().unlock();
@@ -883,7 +890,7 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
           }
 
         } else {
-          throw new ServiceExecutionException("Cache not found !");
+          throw new ServiceExecutionException("Cache not found");
         }
       } finally {
         cacheSamplerMapLock.writeLock().unlock();
