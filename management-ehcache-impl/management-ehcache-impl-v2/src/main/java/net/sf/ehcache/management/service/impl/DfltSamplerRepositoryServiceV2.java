@@ -469,14 +469,16 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
     throws ServiceExecutionException {
     cacheManagerSamplerRepoLock.readLock().lock();
 
+    SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
     try {
-      SamplerRepoEntry entry = cacheManagerSamplerRepo.get(cacheManagerName);
+      enableNonStopFor(entry, false);
       if (entry != null) {
         entry.updateCache(cacheName, resource);
       } else {
         throw new ServiceExecutionException("CacheManager not found !");
       }
     } finally {
+      enableNonStopFor(entry, true);
       cacheManagerSamplerRepoLock.readLock().unlock();
     }
 
