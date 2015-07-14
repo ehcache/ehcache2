@@ -1482,7 +1482,7 @@ public class CacheManager {
      * Set the system property net.sf.ehcache.enableShutdownHook=true to turn it on.
      */
     public void shutdown() {
-        synchronized (CacheManager.class) {
+        synchronized (this) {
             if (localTransactionsRecoveryThread != null && localTransactionsRecoveryThread.isAlive()) {
                 localTransactionsRecoveryThread.interrupt();
                 try {
@@ -1555,8 +1555,10 @@ public class CacheManager {
 
             getConfiguration().cleanup();
 
-            final String name = CACHE_MANAGERS_REVERSE_MAP.remove(this);
-            CACHE_MANAGERS_MAP.remove(name);
+            synchronized (CacheManager.class) {
+                final String name = CACHE_MANAGERS_REVERSE_MAP.remove(this);
+                CACHE_MANAGERS_MAP.remove(name);
+            }
         }
     }
 
