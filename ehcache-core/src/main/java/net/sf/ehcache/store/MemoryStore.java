@@ -182,8 +182,9 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
         if (LOG.isDebugEnabled()) {
             LOG.debug("Initialized " + this.getClass().getName() + " for " + cache.getName());
         }
-        if(cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
-            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(), cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
+        if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
+            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
+                cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
               cache.getCacheConfiguration().getClassLoader());
         } else {
             copyStrategyHandler = NO_COPY_STRATEGY_HANDLER;
