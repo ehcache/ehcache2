@@ -85,6 +85,9 @@ public class LruMemoryStore extends AbstractStore {
     private final boolean cachePinned;
     private final boolean elementPinningEnabled;
 
+    private final CopyStrategyHandler copyStrategyHandler;
+
+
     private final OperationObserver<GetOutcome> getObserver = StatisticBuilder.operation(GetOutcome.class).named("get").of(this)
             .tag("local-heap").build();
     private final OperationObserver<PutOutcome> putObserver = StatisticBuilder.operation(PutOutcome.class).named("put").of(this)
@@ -112,6 +115,12 @@ public class LruMemoryStore extends AbstractStore {
         }
         map = new SpoolingLinkedHashMap();
         status = Status.STATUS_ALIVE;
+        if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
+            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(), cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
+              cache.getCacheConfiguration().getClassLoader());
+        } else {
+            copyStrategyHandler = MemoryStore.NO_COPY_STRATEGY_HANDLER;
+        }
     }
 
     private boolean determineCachePinned(CacheConfiguration cacheConfiguration) {
@@ -423,14 +432,14 @@ public class LruMemoryStore extends AbstractStore {
                     LOG.warn(new StringBuilder("Object with key ").append(element.getObjectKey())
                             .append(" is not Serializable and cannot be overflowed to disk").toString());
                 }
-                cache.getCacheEventNotificationService().notifyElementEvicted(element, false);
+                cache.getCacheEventNotificationService().notifyElementEvicted(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
             } else {
                 spoolToDisk(element);
             }
         } else {
             evictionObserver.begin();
             evictionObserver.end(EvictionOutcome.SUCCESS);
-            cache.getCacheEventNotificationService().notifyElementEvicted(element, false);
+            cache.getCacheEventNotificationService().notifyElementEvicted(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
         }
     }
 
@@ -440,7 +449,7 @@ public class LruMemoryStore extends AbstractStore {
      * @param element
      */
     protected final void notifyExpiry(Element element) {
-        cache.getCacheEventNotificationService().notifyElementExpiry(element, false);
+        cache.getCacheEventNotificationService().notifyElementExpiry(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
     }
 
 
