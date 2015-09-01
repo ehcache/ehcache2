@@ -75,9 +75,13 @@ import static net.sf.ehcache.statistics.StatisticBuilder.operation;
  *
  * @author Terracotta
  * @version $Id$
- * @version $Id$
  */
 public class MemoryStore extends AbstractStore implements CacheConfigurationListener, Store {
+
+    /**
+     * A CopyStrategyHandler that just does nothing.
+     */
+    static final CopyStrategyHandler NO_COPY_STRATEGY_HANDLER = new CopyStrategyHandler(false, false, null, null);
 
     /**
      * This is the default from {@link java.util.concurrent.ConcurrentHashMap}. It should never be used, because we size
@@ -115,6 +119,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
     private final OperationObserver<RemoveOutcome> removeObserver = operation(RemoveOutcome.class).named("remove").of(this).tag("local-heap").build();
 
     private final boolean storePinned;
+    private final CopyStrategyHandler copyStrategyHandler;
 
     /**
      * The maximum size of the store (0 == no limit)
@@ -176,6 +181,13 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Initialized " + this.getClass().getName() + " for " + cache.getName());
+        }
+        if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
+            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
+                cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
+              cache.getCacheConfiguration().getClassLoader());
+        } else {
+            copyStrategyHandler = NO_COPY_STRATEGY_HANDLER;
         }
     }
 
@@ -404,7 +416,8 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
         for (Object key : keySet()) {
             final Element element = expireElement(key);
             if (element != null) {
-                cache.getCacheEventNotificationService().notifyElementExpiry(element, false);
+                cache.getCacheEventNotificationService()
+                    .notifyElementExpiry(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
             }
         }
     }
@@ -525,7 +538,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
      * @param element the element to notify about its expiry
      */
     private void notifyExpiry(final Element element) {
-        cache.getCacheEventNotificationService().notifyElementExpiry(element, false);
+        cache.getCacheEventNotificationService().notifyElementExpiry(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
     }
 
     /**
@@ -536,7 +549,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
     protected void notifyDirectEviction(final Element element) {
         evictionObserver.begin();
         evictionObserver.end(EvictionOutcome.SUCCESS);
-        cache.getCacheEventNotificationService().notifyElementEvicted(element, false);
+        cache.getCacheEventNotificationService().notifyElementEvicted(copyStrategyHandler.copyElementForReadIfNeeded(element), false);
     }
 
     /**
@@ -885,7 +898,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
             }
             if (remove != null) {
                 evictionObserver.end(EvictionOutcome.SUCCESS);
-                cache.getCacheEventNotificationService().notifyElementEvicted(element, false);
+                cache.getCacheEventNotificationService().notifyElementEvicted(copyStrategyHandler.copyElementForReadIfNeeded(remove), false);
             }
             return remove != null;
         }
