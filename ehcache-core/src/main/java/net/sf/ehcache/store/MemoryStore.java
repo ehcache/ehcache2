@@ -79,11 +79,6 @@ import static net.sf.ehcache.statistics.StatisticBuilder.operation;
 public class MemoryStore extends AbstractStore implements CacheConfigurationListener, Store {
 
     /**
-     * A CopyStrategyHandler that just does nothing.
-     */
-    static final CopyStrategyHandler NO_COPY_STRATEGY_HANDLER = new CopyStrategyHandler(false, false, null, null);
-
-    /**
      * This is the default from {@link java.util.concurrent.ConcurrentHashMap}. It should never be used, because we size
      * the map to the max size of the store.
      */
@@ -97,6 +92,8 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
     private static final int MAX_EVICTION_RATIO = 5;
 
     private static final Logger LOG = LoggerFactory.getLogger(MemoryStore.class.getName());
+
+    private static final CopyStrategyHandler NO_COPY_STRATEGY_HANDLER = new CopyStrategyHandler(false, false, null, null);
 
     /**
      * Eviction outcome observer
@@ -182,12 +179,21 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
         if (LOG.isDebugEnabled()) {
             LOG.debug("Initialized " + this.getClass().getName() + " for " + cache.getName());
         }
-        if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
-            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
+        copyStrategyHandler = getCopyStrategyHandler(cache);
+    }
+
+    static CopyStrategyHandler getCopyStrategyHandler(final Ehcache cache) {
+        if (cache.getCacheConfiguration().isXaTransactional() || cache.getCacheConfiguration().isXaStrictTransactional()
+            || cache.getCacheConfiguration().isLocalTransactional()) {
+            return new TxCopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
+                cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
+                cache.getCacheConfiguration().getClassLoader());
+        } else if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
+            return new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
                 cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
               cache.getCacheConfiguration().getClassLoader());
         } else {
-            copyStrategyHandler = NO_COPY_STRATEGY_HANDLER;
+            return NO_COPY_STRATEGY_HANDLER;
         }
     }
 

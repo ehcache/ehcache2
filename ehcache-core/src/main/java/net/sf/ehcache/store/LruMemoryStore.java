@@ -115,13 +115,7 @@ public class LruMemoryStore extends AbstractStore {
         }
         map = new SpoolingLinkedHashMap();
         status = Status.STATUS_ALIVE;
-        if (cache.getCacheConfiguration().isCopyOnRead() || cache.getCacheConfiguration().isCopyOnWrite()) {
-            copyStrategyHandler = new CopyStrategyHandler(cache.getCacheConfiguration().isCopyOnRead(),
-                cache.getCacheConfiguration().isCopyOnWrite(), cache.getCacheConfiguration().getCopyStrategy(),
-              cache.getCacheConfiguration().getClassLoader());
-        } else {
-            copyStrategyHandler = MemoryStore.NO_COPY_STRATEGY_HANDLER;
-        }
+        copyStrategyHandler = MemoryStore.getCopyStrategyHandler(cache);
     }
 
     private boolean determineCachePinned(CacheConfiguration cacheConfiguration) {
