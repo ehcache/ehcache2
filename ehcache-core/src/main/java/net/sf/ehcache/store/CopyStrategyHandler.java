@@ -24,7 +24,7 @@ import net.sf.ehcache.store.compound.ReadWriteCopyStrategy;
  *
  * @author ljacomet
  */
-public final class CopyStrategyHandler {
+public class CopyStrategyHandler {
 
     private final boolean copyOnRead;
     private final boolean copyOnWrite;
