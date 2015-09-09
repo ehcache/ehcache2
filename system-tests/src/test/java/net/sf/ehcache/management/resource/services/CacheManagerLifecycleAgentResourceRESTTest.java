@@ -32,6 +32,7 @@ import org.terracotta.test.util.TestBaseUtil;
 
 import com.jayway.restassured.http.ContentType;
 import com.tc.test.config.builder.ClusterManager;
+import com.tc.test.config.builder.OffHeap;
 import com.tc.test.config.builder.TcConfig;
 import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
@@ -55,7 +56,9 @@ public class CacheManagerLifecycleAgentResourceRESTTest {
                 .mirrorGroup(
                         new TcMirrorGroup()
                                 .server(
-                                        new TcServer().managementPort(ResourceServiceImplITHelper.MANAGEMENT_PORT).tsaGroupPort(ResourceServiceImplITHelper.TSA_GROUP_PORT)
+                                        new TcServer().managementPort(ResourceServiceImplITHelper.MANAGEMENT_PORT)
+                                          .tsaGroupPort(ResourceServiceImplITHelper.TSA_GROUP_PORT)
+                                          .offHeap(new OffHeap().enabled(true).maxDataSize("512m"))
                                 )
                 );
 
