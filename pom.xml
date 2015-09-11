@@ -442,6 +442,9 @@
                 <!-- The server "id" element from settings to use authentication from -->
                 <serverId>terracotta-nexus-staging</serverId>
                 <skipNexusStagingDeployMojo>${skipDeploy}</skipNexusStagingDeployMojo>
+		<tags>
+			<tcversioninfo>${env.NEXUSREPOTAG}</tcversioninfo>
+		</tags>
               </configuration>
             </plugin>
           </plugins>
