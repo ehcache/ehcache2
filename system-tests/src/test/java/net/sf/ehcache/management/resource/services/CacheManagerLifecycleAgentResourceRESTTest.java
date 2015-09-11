@@ -108,8 +108,8 @@ public class CacheManagerLifecycleAgentResourceRESTTest {
         CacheManager cacheManagerTwo = CacheManager.newInstance(configuration);
         try {
             expect().contentType(ContentType.JSON)
-                    .body("size()", is(2))
-                    .statusCode(200)
+                    .body("size()", is(3))
+                    .statusCode(200).log().all()
                     .when().get(ResourceServiceImplITHelper.CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
         } finally {
             cacheManagerTwo.shutdown();
