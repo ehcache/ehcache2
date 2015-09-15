@@ -36,6 +36,7 @@ import com.tc.test.config.builder.OffHeap;
 import com.tc.test.config.builder.TcConfig;
 import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
+import com.tc.util.concurrent.ThreadUtil;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static org.hamcrest.CoreMatchers.is;
@@ -107,10 +108,11 @@ public class CacheManagerLifecycleAgentResourceRESTTest {
         cacheManager.addCache(new Cache(getCacheConfiguration()));
         CacheManager cacheManagerTwo = CacheManager.newInstance(configuration);
         try {
-            expect().contentType(ContentType.JSON)
-                    .body("size()", is(3))
-                    .statusCode(200).log().all()
-                    .when().get(ResourceServiceImplITHelper.CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
+          ThreadUtil.reallySleep(1000);
+          expect().contentType(ContentType.JSON)
+                  .body("size()", is(3))
+                  .statusCode(200)
+                  .when().get(ResourceServiceImplITHelper.CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
         } finally {
             cacheManagerTwo.shutdown();
         }
