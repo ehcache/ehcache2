@@ -43,7 +43,7 @@ public interface SingleOperation extends KeyBasedOperation {
      * @param operations the single operations that need to be regrouped in the batch operation
      * @return the created batch operation
      */
-    public BatchOperation createBatchOperation(List<SingleOperation> operations);
+    public BatchOperation createBatchOperation(List<? extends SingleOperation> operations);
 
     /**
      * Returns a stable identifier for the type this operation can be classified in. This is used to group and order

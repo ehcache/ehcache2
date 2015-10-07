@@ -63,7 +63,7 @@ public class WriteOperation implements SingleOperation {
     /**
      * {@inheritDoc}
      */
-    public BatchOperation createBatchOperation(List<SingleOperation> operations) {
+    public BatchOperation createBatchOperation(List<? extends SingleOperation> operations) {
         final List<Element> elements = new ArrayList<Element>();
         for (KeyBasedOperation operation : operations) {
             elements.add(((WriteOperation) operation).element);
