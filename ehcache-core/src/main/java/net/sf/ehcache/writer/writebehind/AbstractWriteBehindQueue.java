@@ -17,9 +17,9 @@
 package net.sf.ehcache.writer.writebehind;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,7 +36,6 @@ import net.sf.ehcache.config.CacheWriterConfiguration;
 import net.sf.ehcache.writer.CacheWriter;
 import net.sf.ehcache.writer.writebehind.operations.DeleteOperation;
 import net.sf.ehcache.writer.writebehind.operations.SingleOperation;
-import net.sf.ehcache.writer.writebehind.operations.SingleOperationType;
 import net.sf.ehcache.writer.writebehind.operations.WriteOperation;
 
 /**
@@ -367,34 +366,18 @@ public abstract class AbstractWriteBehindQueue implements WriteBehind {
       final int batchSize = determineBatchSize(quarantined);
 
       // create batches that are separated by operation type
-      final Map<SingleOperationType, List<SingleOperation>> separatedItemsPerType =
-              new TreeMap<SingleOperationType, List<SingleOperation>>();
-      for (int i = 0; i < batchSize; i++) {
-          final SingleOperation item = quarantined.get(i);
-
-          if (LOGGER.isLoggable(Level.CONFIG)) {
-              LOGGER.config(getThreadName() + " : processItems() : adding " + item + " to next batch");
-          }
-
-          List<SingleOperation> itemsPerType = separatedItemsPerType.get(item.getType());
-          if (null == itemsPerType) {
-              itemsPerType = new ArrayList<SingleOperation>();
-              separatedItemsPerType.put(item.getType(), itemsPerType);
-          }
-
-          itemsPerType.add(item);
-      }
+      List<List<? extends SingleOperation>> batches = createMonomorphicBatches(quarantined.subList(0, batchSize));
 
       // execute the batch operations
-      for (List<SingleOperation> itemsPerType : separatedItemsPerType.values()) {
+      for (List<? extends SingleOperation> batch : batches) {
           int executionsLeft = retryAttempts + 1;
           while (executionsLeft-- > 0) {
               try {
-                  itemsPerType.get(0).createBatchOperation(itemsPerType).performBatchOperation(cacheWriter);
+                  batch.get(0).createBatchOperation(batch).performBatchOperation(cacheWriter);
                   break;
               } catch (final RuntimeException e) {
                   if (executionsLeft <= 0) {
-                      for (SingleOperation singleOperation : itemsPerType) {
+                      for (SingleOperation singleOperation : batch) {
                           singleOperation.throwAway(cacheWriter, e);
                       }
                   } else {
@@ -419,6 +402,52 @@ public abstract class AbstractWriteBehindQueue implements WriteBehind {
       if (!quarantined.isEmpty()) {
           reassemble(quarantined);
       }
+  }
+
+  private List<List<? extends SingleOperation>> createMonomorphicBatches(List<SingleOperation> batch) {
+
+      final List<List<? extends SingleOperation>> closedBatches = new ArrayList<List<? extends SingleOperation>>();
+
+      Set<Object> deletedKeys = new HashSet<Object>();
+      Set<Object> writtenKeys = new HashSet<Object>();
+      List<DeleteOperation> deleteBatch = new ArrayList<DeleteOperation>();
+      List<WriteOperation> writeBatch = new ArrayList<WriteOperation>();
+
+      for (SingleOperation item : batch) {
+          if (LOGGER.isLoggable(Level.CONFIG)) {
+              LOGGER.config(getThreadName() + " : processItems() : adding " + item + " to next batch");
+          }
+
+          if (item instanceof WriteOperation) {
+              if (deletedKeys.contains(item.getKey())) {
+                  //close the current delete batch
+                  closedBatches.add(deleteBatch);
+                  deleteBatch = new ArrayList<DeleteOperation>();
+                  deletedKeys = new HashSet<Object>();
+              }
+              writeBatch.add((WriteOperation) item);
+              writtenKeys.add(item.getKey());
+          } else if (item instanceof DeleteOperation) {
+              if (writtenKeys.contains(item.getKey())) {
+                  //close the current write batch
+                  closedBatches.add(writeBatch);
+                  writeBatch = new ArrayList<WriteOperation>();
+                  writtenKeys = new HashSet<Object>();
+              }
+              deleteBatch.add((DeleteOperation) item);
+              deletedKeys.add(item.getKey());
+          } else {
+              throw new AssertionError();
+          }
+      }
+    
+      if (!writeBatch.isEmpty()) {
+          closedBatches.add(writeBatch);
+      }
+      if (!deleteBatch.isEmpty()) {
+          closedBatches.add(deleteBatch);
+      }
+      return closedBatches;
   }
 
   private void processSingleOperation(List<SingleOperation> quarantined) {
