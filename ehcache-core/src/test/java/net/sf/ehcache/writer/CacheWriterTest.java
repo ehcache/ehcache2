@@ -1047,6 +1047,45 @@ public class CacheWriterTest {
         }
     }
 
+    @Test
+    public void testWriteOrdering() throws Exception {
+        CacheManager manager = createCacheManager();
+        try {
+            Cache cache = new Cache(
+                    new CacheConfiguration("writeOrdering", 100)
+                            .cacheWriter(new CacheWriterConfiguration()
+                                    .writeMode(CacheWriterConfiguration.WriteMode.WRITE_BEHIND)
+                                    .minWriteDelay(1)
+                                    .writeBatching(true)
+                                    .writeBatchSize(8)));
+            TestCacheWriterRetries writer = new TestCacheWriterRetries(0);
+            cache.registerCacheWriter(writer);
+
+            manager.addCache(cache);
+
+            cache.removeWithWriter("key");
+            cache.putWithWriter(new Element("key", "value1"));
+            cache.removeWithWriter("key");
+            cache.putWithWriter(new Element("key", "value2"));
+            cache.removeWithWriter("key");
+            cache.putWithWriter(new Element("key", "value3"));
+            cache.removeWithWriter("key");
+            cache.putWithWriter(new Element("key", "value4"));
+
+            RetryAssert.assertBy(4, TimeUnit.SECONDS, writeEvents(writer), hasSize(8));
+            assertThat(writer.getWriterEvents().get(0).getRemovedKey(), is((Object) "key"));
+            assertThat(writer.getWriterEvents().get(1).getAddedElement().getObjectValue(), is((Object) "value1"));
+            assertThat(writer.getWriterEvents().get(2).getRemovedKey(), is((Object) "key"));
+            assertThat(writer.getWriterEvents().get(3).getAddedElement().getObjectValue(), is((Object) "value2"));
+            assertThat(writer.getWriterEvents().get(4).getRemovedKey(), is((Object) "key"));
+            assertThat(writer.getWriterEvents().get(5).getAddedElement().getObjectValue(), is((Object) "value3"));
+            assertThat(writer.getWriterEvents().get(6).getRemovedKey(), is((Object) "key"));
+            assertThat(writer.getWriterEvents().get(7).getAddedElement().getObjectValue(), is((Object) "value4"));
+        } finally {
+            manager.shutdown();
+        }
+    }
+
     private static Callable<Set<Object>> writtenElements(final TestCacheWriter writer) {
         return new Callable<Set<Object>>() {
             @Override
