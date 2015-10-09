@@ -308,6 +308,13 @@ public final class Configuration {
 
     /**
      * Builder to set the cache manager name.
+     * <P/>
+     * Cache manager names have constraints on the characters they can use:
+     * <ul>
+     *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     * </ul>
+     * Note that a clustered cache manager is by default registered as MBean.
      *
      * @see #setName(String)
      * @param name
@@ -321,6 +328,13 @@ public final class Configuration {
 
     /**
      * Allows BeanHandler to set the CacheManager name.
+     * <P/>
+     * Cache manager names have constraints on the characters they can use:
+     * <ul>
+     *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     * </ul>
+     * Note that a clustered cache manager is by default registered as MBean.
      */
     public final void setName(String name) {
         assertArgumentNotNull("name", name);

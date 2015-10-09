@@ -521,8 +521,17 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the name of the cache.
+     * <P/>
+     * Cache names have constraints on the characters they can use:
+     * <ul>
+     *     <li>the '/' character is illegal,</li>
+     *     <li>the '#' character does not work with RMI replication,</li>
+     *     <li>caches that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     * </ul>
+     * Note that caches inside a clustered cache manager are by default registered as MBean.
      *
-     * @param name the cache name. This must be unique. The / character is illegal. The # character does not work with RMI replication.
+     * @param name the cache name. This must be unique.
      */
     public final void setName(String name) {
         checkDynamicChange();
@@ -532,8 +541,17 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder to set the name of the cache.
+     * <P/>
+     * Cache names have constraints on the characters they can use:
+     * <ul>
+     *     <li>the '/' character is illegal,</li>
+     *     <li>the '#' character does not work with RMI replication,</li>
+     *     <li>caches that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     * </ul>
+     * Note that caches inside a clustered cache manager are by default registered as MBean.
      *
-     * @param name the cache name. This must be unique. The / character is illegal. The # character does not work with RMI replication.
+     * @param name the cache name. This must be unique.
      * @return this configuration instance
      * @see #setName(String)
      */
