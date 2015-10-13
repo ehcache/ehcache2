@@ -38,6 +38,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>gf-3122</groupId>
+      <artifactId>gf.javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
       <scope>test</scope>
@@ -86,41 +90,6 @@
     </plugins>
   </build>
   
-  <profiles>
-    <profile>
-      <id>sag-deps</id>
-      <activation>
-        <property>
-          <name>sag-deps</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>gf-3122</groupId>
-          <artifactId>gf.javax.servlet-api</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>community-deps</id>
-      <activation>
-        <property>
-          <name>sag-deps</name>
-          <value>false</value>
-        </property>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.eclipse.jetty.orbit</groupId>
-          <artifactId>javax.servlet</artifactId>
-        </dependency>
-      </dependencies>
-    </profile> 
-  </profiles>
-
   <repositories>
     <repository>
       <id>terracotta-snapshots</id>
