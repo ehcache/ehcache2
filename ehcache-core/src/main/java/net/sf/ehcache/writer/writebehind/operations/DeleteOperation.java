@@ -73,7 +73,7 @@ public class DeleteOperation implements SingleOperation {
     /**
      * {@inheritDoc}
      */
-    public BatchOperation createBatchOperation(List<SingleOperation> operations) {
+    public BatchOperation createBatchOperation(List<? extends SingleOperation> operations) {
         final List<CacheEntry> entries = new ArrayList<CacheEntry>();
         for (KeyBasedOperation operation : operations) {
             entries.add(((DeleteOperation) operation).entry);
