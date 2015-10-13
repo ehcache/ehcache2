@@ -1,0 +1,5 @@
+This project depends on repackaged GlassFish libraries.
+They can be identified by their groupId starting with gf-*.
+
+The source code for these libraries can be found at https://svn.java.net/svn/glassfish~svn/.
+Otherwise contact <tc-oss@softwareag.com> to get the source code for these libraries.
