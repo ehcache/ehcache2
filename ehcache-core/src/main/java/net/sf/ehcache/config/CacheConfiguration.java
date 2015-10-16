@@ -524,7 +524,7 @@ public class CacheConfiguration implements Cloneable {
      *     <li>the '/' character is illegal,</li>
      *     <li>the '#' character does not work with RMI replication,</li>
      *     <li>caches that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
-     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' and '?'.</li>
      * </ul>
      * Note that caches inside a clustered cache manager are by default registered as MBean.
      *
@@ -544,7 +544,7 @@ public class CacheConfiguration implements Cloneable {
      *     <li>the '/' character is illegal,</li>
      *     <li>the '#' character does not work with RMI replication,</li>
      *     <li>caches that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
-     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' and '?'.</li>
      * </ul>
      * Note that caches inside a clustered cache manager are by default registered as MBean.
      *
