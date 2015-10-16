@@ -306,7 +306,7 @@ public final class Configuration {
      * Cache manager names have constraints on the characters they can use:
      * <ul>
      *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
-     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' and '?'.</li>
      * </ul>
      * Note that a clustered cache manager is by default registered as MBean.
      *
@@ -326,7 +326,7 @@ public final class Configuration {
      * Cache manager names have constraints on the characters they can use:
      * <ul>
      *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
-     *         This means the following characters are illegal: ',', '=', ':', '"', '*' or '?'.</li>
+     *         This means the following characters are illegal: ',', '=', ':', '"', '*' and '?'.</li>
      * </ul>
      * Note that a clustered cache manager is by default registered as MBean.
      */

@@ -19,8 +19,8 @@ The attributes of <ehcache> are:
 for documentation or to distinguish Terracotta clustered cache state.  With Terracotta
 clustered caches, a combination of CacheManager name and cache name uniquely identify a
 particular cache store in the Terracotta clustered memory. There is a restriction on characters
-in the name in case MBeans are used. See javax.management.ObjectName javadoc, restrictions for
-unquoted values apply.
+in the name in case MBeans are used. See the section describing restrictions for unquoted values
+in the javax.management.ObjectName javadoc.
 * updateCheck - an optional boolean flag specifying whether this CacheManager should check
 for new versions of Ehcache over the Internet.  If not specified, updateCheck="true".
 * dynamicConfig - an optional setting that can be used to disable dynamic configuration of caches
@@ -456,7 +456,7 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
     name:
     Sets the name of the cache. This is used to identify the cache. It must be unique.
     There is a restriction on characters in the name in case MBeans are used.
-    See javax.management.ObjectName javadoc, restrictions for unquoted values apply.
+    See the section describing restrictions for unquoted values in the javax.management.ObjectName javadoc.
 
     The following attributes and elements are optional.
 
