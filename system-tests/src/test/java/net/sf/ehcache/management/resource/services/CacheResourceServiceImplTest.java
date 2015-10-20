@@ -197,7 +197,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     cmsFilter = ";names=pif";
     cachesFilter = ";names=testCache";
     expect().statusCode(400)
-            .body("details", equalTo("CacheManager not found !"))
+            .body("details", equalTo("CacheManager not found"))
             .body("error", equalTo("Failed to create or update cache"))
             .given()
             .contentType(ContentType.JSON)
@@ -453,7 +453,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
 
     CacheEntity cacheEntity = new CacheEntity();
     expect().statusCode(400)
-            .body("details", equalTo("CacheManager not found !"))
+            .body("details", equalTo("CacheManager not found"))
             .body("error", equalTo("Failed to create or update cache"))
             .given()
             .contentType(ContentType.JSON)
