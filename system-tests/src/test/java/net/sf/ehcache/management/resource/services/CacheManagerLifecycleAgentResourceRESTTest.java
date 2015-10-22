@@ -32,9 +32,11 @@ import org.terracotta.test.util.TestBaseUtil;
 
 import com.jayway.restassured.http.ContentType;
 import com.tc.test.config.builder.ClusterManager;
+import com.tc.test.config.builder.OffHeap;
 import com.tc.test.config.builder.TcConfig;
 import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
+import com.tc.util.concurrent.ThreadUtil;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static org.hamcrest.CoreMatchers.is;
@@ -55,7 +57,9 @@ public class CacheManagerLifecycleAgentResourceRESTTest {
                 .mirrorGroup(
                         new TcMirrorGroup()
                                 .server(
-                                        new TcServer().managementPort(ResourceServiceImplITHelper.MANAGEMENT_PORT).tsaGroupPort(ResourceServiceImplITHelper.TSA_GROUP_PORT)
+                                        new TcServer().managementPort(ResourceServiceImplITHelper.MANAGEMENT_PORT)
+                                          .tsaGroupPort(ResourceServiceImplITHelper.TSA_GROUP_PORT)
+                                          .offHeap(new OffHeap().enabled(true).maxDataSize("512m"))
                                 )
                 );
 
@@ -104,10 +108,11 @@ public class CacheManagerLifecycleAgentResourceRESTTest {
         cacheManager.addCache(new Cache(getCacheConfiguration()));
         CacheManager cacheManagerTwo = CacheManager.newInstance(configuration);
         try {
-            expect().contentType(ContentType.JSON)
-                    .body("size()", is(2))
-                    .statusCode(200)
-                    .when().get(ResourceServiceImplITHelper.CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
+          ThreadUtil.reallySleep(1000);
+          expect().contentType(ContentType.JSON)
+                  .body("size()", is(3))
+                  .statusCode(200)
+                  .when().get(ResourceServiceImplITHelper.CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
         } finally {
             cacheManagerTwo.shutdown();
         }
