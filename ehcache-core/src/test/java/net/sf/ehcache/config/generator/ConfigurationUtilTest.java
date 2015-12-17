@@ -2,13 +2,9 @@ package net.sf.ehcache.config.generator;
 
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.config.MemoryUnit;
 
 import org.junit.Test;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
