@@ -28,7 +28,7 @@
     <management-core.version>2.0.14</management-core.version>
     <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
-    <quartz.version>2.2.2</quartz.version>
+    <quartz.version>2.2.3</quartz.version>
     <jetty.version>8.1.15.v20140411</jetty.version>
   </properties>
 
