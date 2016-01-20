@@ -262,10 +262,9 @@ public class BruteForceSearchManager implements SearchManager {
 
     private Map<String, AttributeExtractor> getCombinedExtractors(Map<String, AttributeExtractor> configExtractors, DynamicAttributesExtractor
             dynIndexer, Element element) {
-        Map<String, AttributeExtractor> combinedExtractors = new HashMap<String, AttributeExtractor>();
-        combinedExtractors.putAll(configExtractors);
-
         if (dynIndexer != null) {
+            Map<String, AttributeExtractor> combinedExtractors = new HashMap<String, AttributeExtractor>();
+            combinedExtractors.putAll(configExtractors);
             Map<String, ?> dynamic = DynamicSearchChecker.getSearchAttributes(element, configExtractors.keySet(),
                     dynIndexer);
 
@@ -285,8 +284,10 @@ public class BruteForceSearchManager implements SearchManager {
                             entry.getKey()));
                 }
             }
+            return combinedExtractors;
+        } else {
+            return configExtractors;
         }
-        return combinedExtractors;
     }
 
     private Object[] getSortAttributes(StoreQuery query, Map<String, AttributeExtractor> extractors, Element element) {
