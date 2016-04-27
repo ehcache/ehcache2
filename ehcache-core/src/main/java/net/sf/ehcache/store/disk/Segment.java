@@ -765,6 +765,7 @@ public class Segment extends ReentrantReadWriteLock {
             if (incomingDiskSize < 0) {
                 // replace must not fail here but it could if the memory freed by the previous replace has been stolen in the meantime
                 // that's why it is forced, even if that could make the pool go over limit
+                free(fault, true);
                 long deleteSize = onHeapPoolAccessor.replace(fault.onHeapSize, key, expect, NULL_HASH_ENTRY, true);
                 LOG.debug("fault failed to add on disk, deleted {} from heap", deleteSize);
                 expect.onHeapSize = fault.onHeapSize + deleteSize;
