@@ -71,8 +71,6 @@ public class ConfigurationElement extends SimpleNodeElement {
         }
         // add the attributes
         addAttribute(new SimpleNodeAttribute("name", configuration.getName()).optional(true));
-        addAttribute(new SimpleNodeAttribute("updateCheck", configuration.getUpdateCheck()).optional(true).defaultValue(
-                String.valueOf(Configuration.DEFAULT_UPDATE_CHECK)));
         addAttribute(new SimpleNodeAttribute("monitoring", configuration.getMonitoring()).optional(true).defaultValue(
                 Configuration.DEFAULT_MONITORING.name().toLowerCase()));
         addAttribute(new SimpleNodeAttribute("dynamicConfig", configuration.getDynamicConfig()).optional(true).defaultValue(

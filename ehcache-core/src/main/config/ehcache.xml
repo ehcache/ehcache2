@@ -21,8 +21,6 @@ clustered caches, a combination of CacheManager name and cache name uniquely ide
 particular cache store in the Terracotta clustered memory. There is a restriction on characters
 in the name in case MBeans are used. See the section describing restrictions for unquoted values
 in the javax.management.ObjectName javadoc.
-* updateCheck - an optional boolean flag specifying whether this CacheManager should check
-for new versions of Ehcache over the Internet.  If not specified, updateCheck="true".
 * dynamicConfig - an optional setting that can be used to disable dynamic configuration of caches
 associated with this CacheManager.  By default this is set to true - i.e. dynamic configuration
 is enabled.  Dynamically configurable caches can have their TTI, TTL and maximum disk and
@@ -56,7 +54,7 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
 
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="ehcache.xsd"
-         updateCheck="true" monitoring="autodetect"
+         monitoring="autodetect"
          dynamicConfig="true" maxBytesLocalHeap="400M" maxBytesLocalOffHeap="2G">
 
 -->

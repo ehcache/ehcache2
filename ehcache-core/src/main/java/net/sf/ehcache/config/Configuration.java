@@ -59,10 +59,6 @@ public final class Configuration {
      */
     public static final boolean DEFAULT_DYNAMIC_CONFIG = true;
     /**
-     * Default value for updateCheck
-     */
-    public static final boolean DEFAULT_UPDATE_CHECK = false;
-    /**
      * Default value for defaultTransactionTimeoutInSeconds
      */
     public static final int  DEFAULT_TRANSACTION_TIMEOUT = 15;
@@ -184,7 +180,6 @@ public final class Configuration {
     }
 
     private String cacheManagerName;
-    private boolean updateCheck = DEFAULT_UPDATE_CHECK;
     private int defaultTransactionTimeoutInSeconds = DEFAULT_TRANSACTION_TIMEOUT;
     private Monitoring monitoring = DEFAULT_MONITORING;
     private DiskStoreConfiguration diskStoreConfiguration;
@@ -361,29 +356,25 @@ public final class Configuration {
      *            {@code true} if the update check should be turned on; or {@code false} otherwise
      * @return this configuration instance
      */
+    @Deprecated
     public final Configuration updateCheck(boolean updateCheck) {
-        setUpdateCheck(updateCheck);
         return this;
     }
 
     /**
      * Allows BeanHandler to set the updateCheck flag.
      */
+    @Deprecated
     public final void setUpdateCheck(boolean updateCheck) {
-        String prop = "updateCheck";
-        final boolean publish = checkDynChange(prop);
-        final boolean oldValue = this.updateCheck;
-        this.updateCheck = updateCheck;
-        if (publish) {
-            firePropertyChange(prop, oldValue, updateCheck);
-        }
+    //  no-op
     }
 
     /**
      * Get flag for updateCheck
      */
+    @Deprecated
     public final boolean getUpdateCheck() {
-        return this.updateCheck;
+        return false;
     }
 
     /**

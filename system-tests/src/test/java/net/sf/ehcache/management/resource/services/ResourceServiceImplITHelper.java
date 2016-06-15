@@ -102,7 +102,6 @@ public abstract class ResourceServiceImplITHelper {
   protected static CacheManager getCacheManagerMaxBytes() {
     Configuration configuration = new Configuration();
     configuration.setName("testCacheManagerProgrammatic");
-    configuration.updateCheck(false);
     configuration.setMaxBytesLocalDisk("10M");
     configuration.setMaxBytesLocalHeap("5M");
     TerracottaClientConfiguration terracottaConfiguration = new TerracottaClientConfiguration().url(CLUSTER_URL);
@@ -125,7 +124,6 @@ public abstract class ResourceServiceImplITHelper {
   protected static CacheManager getCacheManagerMaxEntries() {
     Configuration configuration = new Configuration();
     configuration.setName("testCacheManager");
-    configuration.updateCheck(false);
     configuration.addTerracottaConfig(new TerracottaClientConfiguration().url(CLUSTER_URL));
     CacheConfiguration defaultCacheConfiguration = new CacheConfiguration().eternal(true).terracotta(new TerracottaConfiguration()).maxEntriesLocalHeap(10000);
     CacheConfiguration cacheConfiguration = new CacheConfiguration().name("testCache").terracotta(new TerracottaConfiguration()).maxEntriesLocalHeap(10000);

@@ -21,7 +21,6 @@ import net.sf.ehcache.store.Store;
 import net.sf.ehcache.transaction.SoftLockFactory;
 import net.sf.ehcache.transaction.SoftLockManager;
 import net.sf.ehcache.transaction.TransactionIDFactory;
-import net.sf.ehcache.util.UpdateChecker;
 import net.sf.ehcache.writer.writebehind.WriteBehind;
 
 /**
@@ -77,11 +76,4 @@ public interface FeaturesManager {
      * Called on {@code CacheManager} shutdown and on exception during CacheManager bootstrapping.
      */
     void dispose();
-
-    /**
-     * Create update checker
-     *
-     * @return UpdateChecker instance
-     */
-    UpdateChecker createUpdateChecker();
 }

@@ -98,6 +98,5 @@ public class ContainerTestSetup extends StandaloneTwoServerTestSetup {
   @Override
   protected void configureServerParamers(StandardAppServerParameters params) {
     super.configureServerParamers(params);
-    params.appendJvmArgs("-Dnet.sf.ehcache.skipUpdateCheck=true");
   }
 }

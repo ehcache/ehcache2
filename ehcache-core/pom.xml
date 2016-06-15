@@ -183,7 +183,6 @@
           <reportFormat>plain</reportFormat>
           <redirectTestOutputToFile>false</redirectTestOutputToFile>
           <systemPropertyVariables>
-            <net.sf.ehcache.skipUpdateCheck>true</net.sf.ehcache.skipUpdateCheck>
             <java.awt.headless>true</java.awt.headless>
             <net.sf.ehcache.speedAdjustmentFactor>${net.sf.ehcache.speedAdjustmentFactor}</net.sf.ehcache.speedAdjustmentFactor>
             <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
@@ -520,10 +519,6 @@
                 <exclude>**/*$*</exclude>
               </excludes>
               <systemProperties>
-                <property>
-                  <name>net.sf.ehcache.skipUpdateCheck</name>
-                  <value>true</value>
-                </property>
                 <property>
                   <name>java.awt.headless</name>
                   <value>true</value>

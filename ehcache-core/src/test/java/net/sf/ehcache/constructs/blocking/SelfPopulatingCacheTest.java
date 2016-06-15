@@ -81,8 +81,6 @@ public class SelfPopulatingCacheTest extends CacheTest {
     @Override
     @Before
     public void setUp() throws Exception {
-        //Skip update checks. Causing an OutOfMemoryError
-        System.setProperty("net.sf.ehcache.skipUpdateCheck", "true");
         super.setUp();
         Configuration config = ConfigurationFactory.parseConfiguration().name("selfPopulatingCacheTestCM");
         manager = new CacheManager(config);

@@ -61,7 +61,6 @@ import net.sf.ehcache.transaction.manager.TransactionManagerLookup;
 import net.sf.ehcache.transaction.xa.processor.XARequestProcessor;
 import net.sf.ehcache.util.FailSafeTimer;
 import net.sf.ehcache.util.PropertyUtil;
-import net.sf.ehcache.util.UpdateChecker;
 import net.sf.ehcache.writer.writebehind.WriteBehind;
 
 import org.slf4j.Logger;
@@ -483,7 +482,6 @@ public class CacheManager {
         addShutdownHookIfRequired();
 
         cacheManagerTimer = new FailSafeTimer(getName());
-        checkForUpdateIfNeeded(configuration.getUpdateCheck());
 
         mbeanRegistrationProvider = MBEAN_REGISTRATION_PROVIDER_FACTORY.createMBeanRegistrationProvider(configuration);
         
@@ -713,17 +711,6 @@ public class CacheManager {
      */
     protected ClusteredInstanceFactory getClusteredInstanceFactory() {
         return terracottaClient.getClusteredInstanceFactory();
-    }
-
-    private void checkForUpdateIfNeeded(boolean updateCheckNeeded) {
-        try {
-            if (updateCheckNeeded) {
-                UpdateChecker updateChecker = featuresManager != null ? featuresManager.createUpdateChecker() : new UpdateChecker();
-                cacheManagerTimer.scheduleAtFixedRate(updateChecker, DELAY_UPDATE_CHECK, EVERY_WEEK);
-            }
-        } catch (Throwable t) {
-            LOG.debug("Failed to set up update checker", t);
-        }
     }
 
     /**

@@ -2,7 +2,7 @@
 
 <!-- original resource filename: ehcache-non-eternal.xml -->
 
-<ehcache name="test" updateCheck="false">
+<ehcache name="test">
 
   <defaultCache maxElementsInMemory="1000" eternal="false"
     timeToIdleSeconds="10">
