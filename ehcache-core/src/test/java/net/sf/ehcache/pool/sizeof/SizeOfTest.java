@@ -86,7 +86,7 @@ public class SizeOfTest extends AbstractSizeOfTest {
         verify32bitSizes(sizeOf);
         assertThat(deepSizeOf(sizeOf, new ReentrantReadWriteLock()), is(104L));
       }
-    } else if (version.startsWith("1.7")) {
+    } else if (version.startsWith("1.7") || version.startsWith("1.8")) {
       if (IS_64_BIT) {
         if (COMPRESSED_OOPS) {
           verify64bitCompressedOopsSizes(sizeOf);
