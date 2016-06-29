@@ -106,6 +106,15 @@ public class AllConfigurationGeneratedTest extends TestCase {
                     }
                 }
             }
+            if ("ehcache".equals(eltName)) {
+                Set<NodeAttribute> attributes = entry.getValue();
+                  for (NodeAttribute attribute : attributes) {
+                      if ("updateCheck".equals(attribute.getName())) {
+                          attributes.remove(attribute);
+                          break;
+                      }
+                  }
+            }
         }
         checkUnvisited(unvisited);
 
@@ -126,6 +135,14 @@ public class AllConfigurationGeneratedTest extends TestCase {
             if ("cache".equals(eltName) || "defaultCache".equals(eltName)) {
                 for (NodeAttribute attribute : attributes) {
                     if ("statistics".equals(attribute.getName())) {
+                        attributes.remove(attribute);
+                        break;
+                    }
+                }
+            }
+            if ("ehcache".equals(eltName)) {
+                for (NodeAttribute attribute : attributes) {
+                    if ("updateCheck".equals(attribute.getName())) {
                         attributes.remove(attribute);
                         break;
                     }
