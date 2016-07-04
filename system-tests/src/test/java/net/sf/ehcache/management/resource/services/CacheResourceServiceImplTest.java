@@ -15,6 +15,11 @@ import net.sf.ehcache.config.TerracottaClientConfiguration;
 import net.sf.ehcache.config.TerracottaConfiguration;
 import net.sf.ehcache.management.resource.CacheEntity;
 
+import net.sf.ehcache.util.FixedStringMatchComponent;
+import net.sf.ehcache.util.FlexibleOrderStringMatcher;
+import net.sf.ehcache.util.SetStringMatchComponent;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -413,9 +418,28 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     String cachesFilter = ";names=testCache";
 
     expect().statusCode(400)
-            .body("details", equalTo("You are not allowed to update those attributes : name LocalOffHeapSizeInBytes Pinned . " +
-                    "Only TimeToIdleSeconds Enabled MaxBytesLocalDiskAsString MaxBytesLocalHeapAsString MaxElementsOnDisk" +
-                    " TimeToLiveSeconds MaxEntriesLocalHeap LoggingEnabled NodeBulkLoadEnabled MaxEntriesInCache can be updated for a Cache."))
+            .body("details",
+                    new FlexibleOrderStringMatcher(
+                            new FixedStringMatchComponent("You are not allowed to update those attributes : "),
+                            new SetStringMatchComponent(" . Only", " ",
+                                    "name",
+                                    "LocalOffHeapSizeInBytes",
+                                    "Pinned"),
+                            new FixedStringMatchComponent(" . Only "),
+                            new SetStringMatchComponent(" can be updated", " ",
+                                    "TimeToIdleSeconds",
+                                    "Enabled",
+                                    "MaxBytesLocalDiskAsString",
+                                    "MaxBytesLocalHeapAsString",
+                                    "MaxElementsOnDisk",
+                                    "TimeToLiveSeconds",
+                                    "MaxEntriesLocalHeap",
+                                    "LoggingEnabled",
+                                    "NodeBulkLoadEnabled",
+                                    "MaxEntriesInCache"),
+                            new FixedStringMatchComponent(" can be updated for a Cache.")
+                    )
+            )
             .body("error", equalTo("Failed to create or update cache"))
             .given()
             .contentType(ContentType.JSON)

@@ -2,6 +2,7 @@ package net.sf.ehcache.management.resource.services;
 
 import com.jayway.restassured.http.ContentType;
 import net.sf.ehcache.management.resource.CacheManagerEntity;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -93,12 +94,10 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     String agentsFilter = "";
     String cmsFilter = "";
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).attributes.CacheNames.get(0)", equalTo("testCache2"))
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCacheManager"))
-            .body("get(1).attributes.CacheNames.get(0)", equalTo("testCache"))
+            .body("find{it.get('name') == 'testCacheManagerProgrammatic'}.agentId", equalTo("embedded"))
+            .body("find{it.get('name') == 'testCacheManagerProgrammatic'}.attributes.CacheNames.get(0)", equalTo("testCache2"))
+            .body("find{it.get('name') == 'testCacheManager'}.agentId", equalTo("embedded"))
+            .body("find{it.get('name') == 'testCacheManager'}.attributes.CacheNames.get(0)", equalTo("testCache"))
             .body("size()", is(2))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter);
@@ -157,12 +156,10 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     cmsFilter = "";
     // we check nothing has changed
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheManagerProgrammatic"))
-            .body("get(0).attributes.CacheNames.get(0)", equalTo("testCache2"))
-            .body("get(1).agentId", equalTo("embedded"))
-            .body("get(1).name", equalTo("testCacheManager"))
-            .body("get(1).attributes.CacheNames.get(0)", equalTo("testCache"))
+            .body("find{it.get('name') == 'testCacheManagerProgrammatic'}.agentId", equalTo("embedded"))
+            .body("find{it.get('name') == 'testCacheManagerProgrammatic'}.attributes.CacheNames.get(0)", equalTo("testCache2"))
+            .body("find{it.get('name') == 'testCacheManager'}.agentId", equalTo("embedded"))
+            .body("find{it.get('name') == 'testCacheManager'}.attributes.CacheNames.get(0)", equalTo("testCache"))
             .statusCode(200)
             .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter);
   }
@@ -264,10 +261,18 @@ public class CacheManagersResourceServiceImplTest extends ResourceServiceImplITH
     String agentsFilter = "";
     String cmsFilter = ";names=testCacheManagerProgrammatic";
 
+    String detailsPrefix = "You are not allowed to update those attributes : name ";
+    String detailsSuffix = " . Only MaxBytesLocalDiskAsString and MaxBytesLocalHeapAsString can be updated for a CacheManager.";
+    String allowedDetails1 = detailsPrefix + "MaxBytesLocalDisk MaxBytesLocalHeap" + detailsSuffix;
+    String allowedDetails2 = detailsPrefix + "MaxBytesLocalHeap MaxBytesLocalDisk" + detailsSuffix;
+
     expect().log().ifError()
             .statusCode(400)
-            .body("details", equalTo("You are not allowed to update those attributes : name MaxBytesLocalDisk MaxBytesLocalHeap . " +
-                    "Only MaxBytesLocalDiskAsString and MaxBytesLocalHeapAsString can be updated for a CacheManager."))
+            .body("details", CoreMatchers.anyOf(
+                      equalTo(allowedDetails1),
+                      equalTo(allowedDetails2)
+                    )
+            )
             .body("error", equalTo("Failed to update cache manager"))
             .given()
             .contentType(ContentType.JSON)

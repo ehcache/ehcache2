@@ -72,9 +72,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
 
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(100))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.agentId", equalTo("embedded"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.name", equalTo("testCache2"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.attributes.InMemorySize", equalTo(100))
             .statusCode(200)
             .given()
               .queryParam("show", "InMemorySize")
@@ -89,9 +89,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
             .when().delete(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter,cachesFilter);
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(0))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.agentId", equalTo("embedded"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.name", equalTo("testCache2"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.attributes.InMemorySize", equalTo(0))
             .statusCode(200)
             .given()
               .queryParam("show", "InMemorySize")
@@ -115,9 +115,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
     final String agentsFilter = ";ids=" + agentId;
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(100))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.agentId", equalTo(agentId))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.name", equalTo("testCache2"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.attributes.InMemorySize", equalTo(100))
             .statusCode(200)
             .given()
               .queryParam("show", "InMemorySize")
@@ -131,9 +131,9 @@ public class ElementsResourceServiceImplTest extends ResourceServiceImplITHelper
             .when().delete(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter,cmsFilter,cachesFilter);
 
     expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo(agentId))
-            .body("get(0).name", equalTo("testCache2"))
-            .body("get(0).attributes.InMemorySize", equalTo(0))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.agentId", equalTo(agentId))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.name", equalTo("testCache2"))
+            .body("find{it.get('cacheManagerName') == 'testCacheManagerProgrammatic'}.attributes.InMemorySize", equalTo(0))
             .statusCode(200)
             .given()
               .queryParam("show", "InMemorySize")

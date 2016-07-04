@@ -109,7 +109,10 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
             .rootPath("get(0)")
             .body("agentId", equalTo("embedded"))
             .body("agencyOf", equalTo("Ehcache"))
-            .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManagerProgrammatic,testCacheManager"))
+            .body("rootRepresentables.cacheManagerNames", anyOf(
+                    equalTo("testCacheManagerProgrammatic,testCacheManager"),
+                    equalTo("testCacheManager,testCacheManagerProgrammatic")
+            ))
             .statusCode(200)
             .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION);
     cacheManagerMaxBytes.clearAll();

@@ -60,7 +60,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
     String xml = given().header("accept", "application/xml").get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter,cachesFilter).asString();
     System.out.println(xml);
     XmlPath xmlPath = new XmlPath(xml).setRoot("configurations");
-    NodeImpl configuration = xmlPath.get("configuration[0]");
+    NodeImpl configuration = xmlPath.get("configuration.find{it.@cacheManagerName == 'testCacheManagerProgrammatic'}");
     assertEquals("embedded", configuration.attributes().get("agentId"));
     assertEquals("testCacheManagerProgrammatic", configuration.attributes().get("cacheManagerName"));
     assertEquals("testCache2", configuration.attributes().get("cacheName"));
@@ -111,7 +111,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
 
     System.out.println(xmlThroughClustered);
     XmlPath xmlPath = new XmlPath(xmlThroughClustered).setRoot("configurations");
-    NodeImpl configuration = xmlPath.get("configuration[0]");
+    NodeImpl configuration = xmlPath.get("configuration.find{it.@cacheManagerName == 'testCacheManagerProgrammatic'}");
     assertEquals(agentId, configuration.attributes().get("agentId"));
     assertEquals("testCacheManagerProgrammatic", configuration.attributes().get("cacheManagerName"));
     assertEquals("testCache2", configuration.attributes().get("cacheName"));
