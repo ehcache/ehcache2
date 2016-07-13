@@ -1718,8 +1718,6 @@ public class Cache implements InternalEhcache, StoreListener {
      * If the Element is not in the cache, the associated cache loader will be called. That is either the CacheLoader passed in, or if null,
      * the one associated with the cache. If both are null, no load is performed and null is returned.
      * <p/>
-     * If the loader decides to assign a null value to the Element, an Element with a null value is created and stored in the cache.
-     * <p/>
      * Because this method may take a long time to complete, it is not synchronized. The underlying cache operations
      * are synchronized.
      *
@@ -1727,7 +1725,8 @@ public class Cache implements InternalEhcache, StoreListener {
      * @param loader         the override loader to use. If null, the cache's default loader will be used
      * @param loaderArgument an argument to pass to the CacheLoader.
      * @return an element if it existed or could be loaded, otherwise null
-     * @throws CacheException
+     *
+     * @throws CacheException if the loading fails
      */
     public Element getWithLoader(Object key, CacheLoader loader, Object loaderArgument) throws CacheException {
 
@@ -1756,15 +1755,23 @@ public class Cache implements InternalEhcache, StoreListener {
             } else {
                 value = loadValueUsingLoader(key, loader, loaderArgument);
             }
-            if (value != null) {
-                put(new Element(key, value), false);
+            if (value == null) {
+                return getQuiet(key);
+            } else {
+                Element newElement = new Element(key, value);
+                put(newElement, false);
+                Element fromCache = getQuiet(key);
+                if (fromCache == null) {
+                    return newElement;
+                } else {
+                    return fromCache;
+                }
             }
         } catch (TimeoutException e) {
             throw new LoaderTimeoutException("Timeout on load for key " + key, e);
         } catch (Exception e) {
             throw new CacheException("Exception on load for key " + key, e);
         }
-        return getQuiet(key);
     }
 
     /**
@@ -2477,7 +2484,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
         // null the lockProvider too explicitly to help gc
         lockProvider = null;
-        
+
         cacheStatus.changeState(Status.STATUS_SHUTDOWN);
     }
 
