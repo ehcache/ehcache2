@@ -1,26 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    All content copyright (c) 2003-2008 Terracotta, Inc., except as may
-    otherwise be noted in a separate copyright notice. All rights
-    reserved.
-  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.terracotta</groupId>
     <artifactId>system-tests-parent</artifactId>
-    <version>4.3.2-SNAPSHOT</version>
+    <version>4.3.2.3.12</version>
     <relativePath/>
   </parent>
-
   <groupId>net.sf.ehcache.internal</groupId>
   <artifactId>ehcache-terracotta-system-tests</artifactId>
-  <version>2.10.2-SNAPSHOT</version>
+  <version>2.10.2.3.16</version>
   <name>ehcache-terracotta-system-tests</name>
   <description>System tests for ehcache-terracotta</description>
-
   <properties>
     <surefire.min-memory>512m</surefire.min-memory>
     <surefire.max-memory>1024m</surefire.max-memory>
@@ -32,8 +22,7 @@
     <slf4j.version>1.7.7</slf4j.version>
     <osgi-test-tool.version>1.5</osgi-test-tool.version>
   </properties>
-
-  <dependencies>  
+  <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>terracotta</artifactId>
@@ -50,24 +39,24 @@
       <artifactId>ehcache</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>   
+    </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>management-ehcache-v1</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>  
+    </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>management-ehcache-v2</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>   
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.version}</version>
-    </dependency>   
+    </dependency>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>terracotta-toolkit-runtime</artifactId>
@@ -160,7 +149,6 @@
       <artifactId>rest-assured</artifactId>
       <version>1.8.1</version>
       <exclusions>
-        <!-- Exclude Groovy because of classpath issue -->
         <exclusion>
           <groupId>org.codehaus.groovy</groupId>
           <artifactId>groovy</artifactId>
@@ -179,7 +167,6 @@
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <!-- Needs to be the same version that REST Assured depends on -->
       <version>2.1.2</version>
       <scope>test</scope>
     </dependency>
@@ -187,14 +174,13 @@
       <groupId>net.sf.ehcache.test</groupId>
       <artifactId>hibernate-ehcache-bundle</artifactId>
       <version>${osgi-test-tool.version}</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.terracotta.test</groupId>
       <artifactId>osgi-test-utils</artifactId>
       <version>${osgi-test-tool.version}</version>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -221,11 +207,10 @@
             </goals>
           </execution>
         </executions>
-      </plugin>      
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -253,84 +238,80 @@
       </plugins>
     </pluginManagement>
   </build>
-  
   <profiles>
     <profile>
       <id>include-container-tests</id>
-        <activation> 
-          <property>
-            <name>appserver</name>
-          </property> 
-        </activation>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.terracotta</groupId>
-              <artifactId>maven-forge-plugin</artifactId>
-              <configuration>
-                <includes>
-                  <include>**/container/**/*Test.java</include>
-                </includes>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
+      <activation>
+        <property>
+          <name>appserver</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.terracotta</groupId>
+            <artifactId>maven-forge-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/container/**/*Test.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
-      <!-- this profile nullify the effect of above profile due to usuage of no-appserver on monkeys -->
       <id>no-appserver-tests</id>
-        <activation> 
-          <property>
-            <name>appserver</name>
-            <value>no-appserver</value>
-          </property> 
-        </activation>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.terracotta</groupId>
-              <artifactId>maven-forge-plugin</artifactId>
-              <configuration>
-                <argLine>-Xmx768m</argLine>
-                <argLine>-XX:MaxPermSize=128m</argLine>
-                <includes>
-                  <include>**/*Test.java</include>
-                </includes>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-    </profile>     
+      <activation>
+        <property>
+          <name>appserver</name>
+          <value>no-appserver</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.terracotta</groupId>
+            <artifactId>maven-forge-plugin</artifactId>
+            <configuration>
+              <argLine>-Xmx768m</argLine>
+              <argLine>-XX:MaxPermSize=128m</argLine>
+              <includes>
+                <include>**/*Test.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>deploy-sonatype</id>
       <properties>
         <skipDeploy>true</skipDeploy>
       </properties>
-    </profile>    
+    </profile>
   </profiles>
-
-  <repositories> 
+  <repositories>
     <repository>
       <id>terracotta-snapshots</id>
       <url>http://www.terracotta.org/download/reflector/snapshots</url>
-    </repository>  
+    </repository>
     <repository>
       <id>terracotta-releases</id>
-      <url>http://www.terracotta.org/download/reflector/releases</url>     
+      <url>http://www.terracotta.org/download/reflector/releases</url>
     </repository>
     <repository>
       <id>jboss</id>
       <name>JBoss Repository</name>
-      <url>https://repository.jboss.org/nexus/content/repositories/public/</url>    
+      <url>https://repository.jboss.org/nexus/content/repositories/public/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
-    </repository> 
+    </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>terracotta-snapshots</id>
@@ -339,6 +320,6 @@
     <pluginRepository>
       <id>terracotta-releases</id>
       <url>http://www.terracotta.org/download/reflector/releases</url>
-    </pluginRepository>    
-  </pluginRepositories> 
+    </pluginRepository>
+  </pluginRepositories>
 </project>
