@@ -192,11 +192,11 @@ public class DefaultSizeOfEngine implements SizeOfEngine {
             size = sizeOf.deepSizeOf(maxDepth, abortWhenMaxDepthExceeded, key, value, container);
         } catch (MaxDepthExceededException e) {
             LOG.warn(e.getMessage());
-            LOG.warn("key type: " + key.getClass().getName());
-            LOG.warn("key: " + key);
-            LOG.warn("value type: " + value.getClass().getName());
-            LOG.warn("value: " + value);
-            LOG.warn("container: " + container);
+            LOG.warn("key type: {}", key.getClass().getName());
+            LOG.warn("key: {}", key);
+            LOG.warn("value type: {}", value.getClass().getName());
+            LOG.warn("value: {}", value);
+            LOG.warn("container: {}", container);
             size = new Size(e.getMeasuredSize(), false);
         }
 
