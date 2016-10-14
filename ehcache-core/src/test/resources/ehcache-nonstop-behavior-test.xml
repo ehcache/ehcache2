@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd">
+
+	<cache name="A2" maxEntriesLocalHeap="1111" cacheLoaderTimeoutMillis="30000">
+		<terracotta consistency="strong">
+			<nonstop timeoutMillis="20000">
+				<timeoutBehavior type="exception"/>
+			</nonstop>
+		</terracotta>
+	</cache>
+	<cache name="A1" maxEntriesLocalHeap="1111" cacheLoaderTimeoutMillis="30000">
+		<terracotta consistency="strong">
+			<nonstop/>
+		</terracotta>
+	</cache>
+
+</ehcache>
