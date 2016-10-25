@@ -18,6 +18,7 @@ import org.terracotta.toolkit.collections.ToolkitMap;
 import org.terracotta.toolkit.concurrent.locks.ToolkitLock;
 import org.terracotta.toolkit.internal.ToolkitInternal;
 import org.terracotta.toolkit.internal.collections.ToolkitListInternal;
+import org.terracotta.toolkit.rejoin.RejoinException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -535,15 +536,29 @@ public class AsyncCoordinatorImpl<E extends Serializable> implements AsyncCoordi
         Set<String> nodesFromMap = getAllNodes();
         Set<String> clusterNodes = getClusterNodes();
         nodesFromMap.removeAll(clusterNodes);
-        Iterator<String> itr = nodesFromMap.iterator();
-        while (itr.hasNext()) {
-          String deadNode = itr.next();
-          if (!tryLockNodeAlive(deadNode)) {
-            // if not able to grab the lock, means its not a deadNode so remove
-            itr.remove();
+        try {
+          Iterator<String> itr = nodesFromMap.iterator();
+          while (itr.hasNext()) {
+            String deadNode = itr.next();
+            if (!tryLockNodeAlive(deadNode)) {
+              // if not able to grab the lock, means its not a deadNode so remove
+              itr.remove();
+            }
+          }
+          addToDeadNodes(nodesFromMap);
+        } finally {
+          // Release locks acquired for dead nodes
+          for (String node : nodesFromMap) {
+            String aliveLockName = getAliveLockName(node);
+            try {
+              toolkit.getLock(aliveLockName).unlock();
+            } catch (RejoinException e) {
+              LOGGER.debug("Unable to release lock for dead " + node + " [" + aliveLockName + "]", e);
+            } catch (Exception e) {
+              LOGGER.warn("Unable to release lock for dead " + node + " [" + aliveLockName + "]", e);
+            }
           }
         }
-        addToDeadNodes(nodesFromMap);
       } finally {
         commonAsyncLock.unlock();
       }
