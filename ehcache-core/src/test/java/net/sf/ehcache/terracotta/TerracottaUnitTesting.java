@@ -17,6 +17,7 @@
 package net.sf.ehcache.terracotta;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.cluster.CacheCluster;
 import net.sf.ehcache.concurrent.CacheLockProvider;
@@ -29,9 +30,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 /**
@@ -65,15 +68,30 @@ public class TerracottaUnitTesting {
                 terracottaStore);
 
         TerracottaClusteredInstanceHelper mockHelper = Mockito.mock(TerracottaClusteredInstanceHelper.class);
-        when(mockHelper.newClusteredInstanceFactory((TerracottaClientConfiguration) any(), null))
+
+        final CacheManager mockCacheManager = Mockito.mock(CacheManager.class);
+        String name = CacheManager.TOOLKIT_CACHE_MANAGER_PREFIX + UUID.randomUUID();
+        when(mockCacheManager.getName()).thenReturn(name);
+        when(mockCacheManager.toString()).thenReturn(name);
+
+        when(mockHelper.newClusteredInstanceFactory((TerracottaClientConfiguration) any(), any(ClassLoader.class)))
                 .thenAnswer(new Answer<ClusteredInstanceFactory>() {
                     public ClusteredInstanceFactory answer(InvocationOnMock invocation) throws Throwable {
+                        CacheManager.ALL_CACHE_MANAGERS.add(mockCacheManager);
+
                         if (onNewClusteredInstanceFactory != null) {
                             onNewClusteredInstanceFactory.run();
                         }
                         return mockFactory;
                     }
                 });
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
+                CacheManager.ALL_CACHE_MANAGERS.remove(mockCacheManager);
+                return null;
+            }
+        }).when(mockFactory).shutdown();
         when(mockHelper.getTerracottaRuntimeTypeOrNull()).thenReturn(terracottaRuntimeType);
 
         Method method = TerracottaClient.class.getDeclaredMethod("setTestMode", TerracottaClusteredInstanceHelper.class);

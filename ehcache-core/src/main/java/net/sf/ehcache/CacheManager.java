@@ -143,6 +143,11 @@ public class CacheManager {
     private static volatile CacheManager singleton;
 
     /**
+     * Terracotta Client instance getting used for Management Queries.
+     */
+    static TerracottaClient mgmtTerracottaClient;
+
+    /**
      * The factory to use for creating MBeanRegistrationProvider's
      */
     private static final MBeanRegistrationProviderFactory MBEAN_REGISTRATION_PROVIDER_FACTORY = new MBeanRegistrationProviderFactoryImpl();
@@ -159,6 +164,8 @@ public class CacheManager {
     private static final long LOCAL_TX_RECOVERY_THREAD_JOIN_TIMEOUT = 1000L;
     
     static final String LOCAL_CACHE_NAME_PREFIX = "local_shadow_cache_for_";
+
+    public static final String TOOLKIT_CACHE_MANAGER_PREFIX = "toolkitDefaultCacheManager-";
 
     /**
      * Status of the Cache Manager
@@ -545,6 +552,16 @@ public class CacheManager {
             String clientUUID = clusteredInstanceFactory == null ? null : clusteredInstanceFactory.getUUID();
             ManagementServerLoader.register(this, clientUUID, managementRESTService);
             registeredMgmtSvrBind = managementRESTService.getBind();
+
+            /*
+             * If the management terracotta client is not already set, set the one corresponding to this CacheManager instance.
+             * As the MBean server with remote agent endpoint is created with this terracotta client uuid, so is the one used
+             * for jmx tunnelling. This code is only executed for <code>bind = ""</code> so mgmtTerracottaClient is always the
+             * one which creates the MBean Server.
+             */
+            if (CacheManager.mgmtTerracottaClient == null) {
+                CacheManager.mgmtTerracottaClient = this.terracottaClient;
+            }
         }
     }
 
@@ -1534,7 +1551,14 @@ public class CacheManager {
             if (this == singleton) {
                 singleton = null;
             }
-            terracottaClient.shutdown();
+
+            synchronized (CacheManager.class) {
+              // Shutdown the terracotta client if it's not the management terracotta client.
+              if (this.terracottaClient != CacheManager.mgmtTerracottaClient) {
+                terracottaClient.shutdown();
+              }
+            }
+
             transactionController = null;
             removeShutdownHook();
 
@@ -1558,6 +1582,21 @@ public class CacheManager {
             synchronized (CacheManager.class) {
                 final String name = CACHE_MANAGERS_REVERSE_MAP.remove(this);
                 CACHE_MANAGERS_MAP.remove(name);
+
+                /*
+                 * If all CacheManagers shut down, only remaining CacheManager would be of toolkit. In that case,
+                 * initiate the shutdown of mgmtTerracottaClient.
+                 *
+                 * With the shutdown of last CacheManager, MBean server will be shut down;hence shut down the
+                 * terracotta client used for jmx tunnelling as well. Newly created CacheManagers will create a new
+                 * MBean server and tunnel with the new terracotta client which will be used as mgmtTerracottaClient,
+                 * for which we're synchronising on CacheManager class.
+                 */
+
+                if (ALL_CACHE_MANAGERS.size() == 1 && ALL_CACHE_MANAGERS.get(0).getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
+                    CacheManager.mgmtTerracottaClient.shutdown();
+                    CacheManager.mgmtTerracottaClient = null;
+                }
             }
         }
     }

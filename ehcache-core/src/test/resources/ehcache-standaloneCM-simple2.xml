@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd" name="standaloneCacheManager2">
+
+    <cache 	name="secondCache"
+              maxElementsInMemory="10000"
+              memoryStoreEvictionPolicy="LFU"
+              eternal="false"
+              timeToIdleSeconds="300"
+              timeToLiveSeconds="600"
+              overflowToDisk="false"
+              diskExpiryThreadIntervalSeconds="120" />
+
+</ehcache>
