@@ -28,7 +28,6 @@ public class CacheManagerTerracottaManagementClientTest {
 
     CacheCluster mockCacheCluster = new MockCacheCluster();
     when(mockFactory.getTopology()).thenReturn(mockCacheCluster);
-    CacheManager.mgmtTerracottaClient = null;
   }
 
   /*
@@ -52,7 +51,12 @@ public class CacheManagerTerracottaManagementClientTest {
     // mgmtTerracottaClient should now be initialized to the new created clustered CacheManager
     assertSame(terracottaClient, CacheManager.mgmtTerracottaClient);
 
+    assertEquals(2, CacheManager.ALL_CACHE_MANAGERS.size());
+
     cacheManager.shutdown();
+
+    assertEquals(0, CacheManager.ALL_CACHE_MANAGERS.size());
+    assertNull(CacheManager.mgmtTerracottaClient);
   }
 
   @Test
@@ -66,11 +70,14 @@ public class CacheManagerTerracottaManagementClientTest {
     assertNull(CacheManager.mgmtTerracottaClient);
 
     CacheManager cacheManager2 = new CacheManager(ConfigurationFactory.parseConfiguration(new File(TEST_CONFIG_DIR + "ehcache-standaloneCM-simple2.xml")));
+    assertEquals(2, CacheManager.ALL_CACHE_MANAGERS.size());
 
     // mgmtTerracottaClient should still be null
     assertNull(CacheManager.mgmtTerracottaClient);
     cacheManager1.shutdown();
     cacheManager2.shutdown();
+    assertNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(0, CacheManager.ALL_CACHE_MANAGERS.size());
   }
 
   /*
@@ -99,10 +106,13 @@ public class CacheManagerTerracottaManagementClientTest {
 
     // mgmtTerracottaClient isn't created for standalone CacheManagers,and should be null
     assertNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(1, CacheManager.ALL_CACHE_MANAGERS.size());
+
     cacheManager.shutdown();
 
     // mgmtTerracottaClient should still be null
     assertNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(0, CacheManager.ALL_CACHE_MANAGERS.size());
   }
 
   @Test
@@ -140,5 +150,46 @@ public class CacheManagerTerracottaManagementClientTest {
 
     cacheManager1.shutdown();
     assertNull(CacheManager.mgmtTerracottaClient);
+  }
+
+  @Test
+  /* Create one standalone CM and one clustered CM (in that order) and check for mgmtTerracottaClient
+   */
+  public void createOneStandaloneAndOneClusteredTest() {
+    assertNull(CacheManager.mgmtTerracottaClient);
+    CacheManager cacheManager1 = new CacheManager(ConfigurationFactory.parseConfiguration(new File(TEST_CONFIG_DIR + "ehcache-standaloneCM-simple1.xml")));
+
+    assertNull(CacheManager.mgmtTerracottaClient);
+    CacheManager cacheManager2 = new CacheManager(ConfigurationFactory.parseConfiguration(new File(TEST_CONFIG_DIR + "ehcache-clusteredCM-simple1.xml")));
+
+    assertNotNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(3, CacheManager.ALL_CACHE_MANAGERS.size());
+
+    cacheManager2.shutdown();
+
+    cacheManager1.shutdown();
+    assertNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(0, CacheManager.ALL_CACHE_MANAGERS.size());
+  }
+
+  @Test
+  /* Create one clustered CM and one standalone CM (in that order) and check for mgmtTerracottaClient
+   */
+  public void createOneClusteredAndOneStandaloneTest() {
+    assertNull(CacheManager.mgmtTerracottaClient);
+    CacheManager cacheManager1 = new CacheManager(ConfigurationFactory.parseConfiguration(new File(TEST_CONFIG_DIR + "ehcache-clusteredCM-simple1.xml")));
+
+    // mgmtTerracottaClient should be initialized now
+    assertNotNull(CacheManager.mgmtTerracottaClient);
+    CacheManager cacheManager2 = new CacheManager(ConfigurationFactory.parseConfiguration(new File(TEST_CONFIG_DIR + "ehcache-standaloneCM-simple1.xml")));
+
+    assertEquals(3, CacheManager.ALL_CACHE_MANAGERS.size());
+    cacheManager1.shutdown();
+
+    cacheManager2.shutdown();
+
+    // mgmtTerracottaClient should be null now
+    assertNull(CacheManager.mgmtTerracottaClient);
+    assertEquals(0, CacheManager.ALL_CACHE_MANAGERS.size());
   }
 }

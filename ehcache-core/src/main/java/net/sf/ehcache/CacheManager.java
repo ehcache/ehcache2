@@ -118,7 +118,7 @@ public class CacheManager {
      * System property to enable creation of a shutdown hook for CacheManager.
      */
     public static final String ENABLE_SHUTDOWN_HOOK_PROPERTY = "net.sf.ehcache.enableShutdownHook";
-    
+
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheManager.class);
 
@@ -162,7 +162,7 @@ public class CacheManager {
     private static final Map<String, CacheManager> INITIALIZING_CACHE_MANAGERS_MAP = new ConcurrentHashMap<String, CacheManager>();
 
     private static final long LOCAL_TX_RECOVERY_THREAD_JOIN_TIMEOUT = 1000L;
-    
+
     static final String LOCAL_CACHE_NAME_PREFIX = "local_shadow_cache_for_";
 
     public static final String TOOLKIT_CACHE_MANAGER_PREFIX = "toolkitDefaultCacheManager-";
@@ -486,7 +486,7 @@ public class CacheManager {
         checkForUpdateIfNeeded(configuration.getUpdateCheck());
 
         mbeanRegistrationProvider = MBEAN_REGISTRATION_PROVIDER_FACTORY.createMBeanRegistrationProvider(configuration);
-        
+
         //Wait for the Orchestrator if required. This should be done before creating the caches
         if (configuration.getTerracottaConfiguration() != null) {
             if (configuration.getTerracottaConfiguration().isWanEnabledTSA()) {
@@ -1592,8 +1592,15 @@ public class CacheManager {
                  * MBean server and tunnel with the new terracotta client which will be used as mgmtTerracottaClient,
                  * for which we're synchronising on CacheManager class.
                  */
+                int toolkitDefaultCacheManagerCount = 0;
 
-                if (ALL_CACHE_MANAGERS.size() == 1 && ALL_CACHE_MANAGERS.get(0).getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
+                for (CacheManager cacheManager : ALL_CACHE_MANAGERS) {
+                    if (cacheManager.getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
+                      toolkitDefaultCacheManagerCount++;
+                    }
+                }
+
+                if (ALL_CACHE_MANAGERS.size() == toolkitDefaultCacheManagerCount && CacheManager.mgmtTerracottaClient != null) {
                     CacheManager.mgmtTerracottaClient.shutdown();
                     CacheManager.mgmtTerracottaClient = null;
                 }
@@ -2146,6 +2153,6 @@ public class CacheManager {
      */
     static CacheManager getInitializingCacheManager(String name) {
         return INITIALIZING_CACHE_MANAGERS_MAP.get(name);
-    }    
-    
+    }
+
 }
