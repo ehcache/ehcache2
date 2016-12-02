@@ -1593,8 +1593,8 @@ public class CacheManager {
                  * for which we're synchronising on CacheManager class.
                  */
                 int toolkitDefaultCacheManagerCount = 0;
-                for (int i = 0; i < ALL_CACHE_MANAGERS.size(); i++) {
-                    if (ALL_CACHE_MANAGERS.get(i).getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
+                for (CacheManager cacheManager : ALL_CACHE_MANAGERS) {
+                    if (cacheManager.getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
                         toolkitDefaultCacheManagerCount++;
                     }
                 }
