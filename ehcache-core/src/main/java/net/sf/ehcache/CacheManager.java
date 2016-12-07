@@ -165,8 +165,6 @@ public class CacheManager {
 
     static final String LOCAL_CACHE_NAME_PREFIX = "local_shadow_cache_for_";
 
-    public static final String TOOLKIT_CACHE_MANAGER_PREFIX = "toolkitDefaultCacheManager-";
-
     /**
      * Status of the Cache Manager
      */
@@ -1584,23 +1582,19 @@ public class CacheManager {
                 CACHE_MANAGERS_MAP.remove(name);
 
                 /*
-                 * If all CacheManagers shut down, only remaining CacheManager would be of toolkit. In that case,
-                 * initiate the shutdown of mgmtTerracottaClient.
-                 *
-                 * With the shutdown of last CacheManager, MBean server will be shut down;hence shut down the
-                 * terracotta client used for jmx tunnelling as well. Newly created CacheManagers will create a new
-                 * MBean server and tunnel with the new terracotta client which will be used as mgmtTerracottaClient,
+                 * With the shutdown of last clustered CacheManager, MBean server will be shut down;hence shut down the
+                 * terracotta client used for jmx tunnelling as well. Newly created clustered CacheManagers will create
+                 * a new MBean server and tunnel with the new terracotta client which will be used as mgmtTerracottaClient,
                  * for which we're synchronising on CacheManager class.
                  */
-                int toolkitDefaultCacheManagerCount = 0;
-
-                for (CacheManager cacheManager : ALL_CACHE_MANAGERS) {
-                    if (cacheManager.getName().startsWith(TOOLKIT_CACHE_MANAGER_PREFIX)) {
-                      toolkitDefaultCacheManagerCount++;
+                int clusteredCmCount = 0;
+                for (CacheManager cacheManager : CACHE_MANAGERS_MAP.values()) {
+                    if (cacheManager.runtimeCfg != null && cacheManager.runtimeCfg.getConfiguration().getTerracottaConfiguration() != null) {
+                        clusteredCmCount++;
                     }
                 }
 
-                if (ALL_CACHE_MANAGERS.size() == toolkitDefaultCacheManagerCount && CacheManager.mgmtTerracottaClient != null) {
+                if (clusteredCmCount == 0 && CacheManager.mgmtTerracottaClient != null) {
                     CacheManager.mgmtTerracottaClient.shutdown();
                     CacheManager.mgmtTerracottaClient = null;
                 }
