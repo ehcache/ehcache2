@@ -166,6 +166,7 @@ public class CacheManagerTerracottaManagementClientTest {
     assertEquals(3, CacheManager.ALL_CACHE_MANAGERS.size());
 
     cacheManager2.shutdown();
+    assertNull(CacheManager.mgmtTerracottaClient);
 
     cacheManager1.shutdown();
     assertNull(CacheManager.mgmtTerracottaClient);
@@ -185,6 +186,7 @@ public class CacheManagerTerracottaManagementClientTest {
 
     assertEquals(3, CacheManager.ALL_CACHE_MANAGERS.size());
     cacheManager1.shutdown();
+    assertNull(CacheManager.mgmtTerracottaClient);
 
     cacheManager2.shutdown();
 

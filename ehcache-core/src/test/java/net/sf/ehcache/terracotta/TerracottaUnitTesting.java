@@ -42,6 +42,8 @@ import static org.mockito.Mockito.when;
  */
 public class TerracottaUnitTesting {
 
+    public static final String TOOLKIT_CACHE_MANAGER_PREFIX = "toolkitDefaultCacheManager-";
+
     public static void setupTerracottaTesting(ClusteredInstanceFactory mockFactory) throws Exception {
         setupTerracottaTesting(mockFactory, null, TerracottaRuntimeType.EnterpriseExpress);
     }
@@ -70,7 +72,7 @@ public class TerracottaUnitTesting {
         TerracottaClusteredInstanceHelper mockHelper = Mockito.mock(TerracottaClusteredInstanceHelper.class);
 
         final CacheManager mockCacheManager = Mockito.mock(CacheManager.class);
-        String name = CacheManager.TOOLKIT_CACHE_MANAGER_PREFIX + UUID.randomUUID();
+        String name = TOOLKIT_CACHE_MANAGER_PREFIX + UUID.randomUUID();
         when(mockCacheManager.getName()).thenReturn(name);
         when(mockCacheManager.toString()).thenReturn(name);
 
