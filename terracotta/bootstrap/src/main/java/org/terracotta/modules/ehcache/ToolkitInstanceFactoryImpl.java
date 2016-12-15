@@ -704,8 +704,8 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
 
   @Override
   public void clusterRejoined() {
-    String cacheManagerName = entityNames.cacheManagerName;
     synchronized (entityNames) {
+      String cacheManagerName = entityNames.cacheManagerName;
       ClusteredCacheManager clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName,
                                                                                          ClusteredCacheManager.class);
       if (clusteredCacheManager == null) {
