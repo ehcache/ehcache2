@@ -66,6 +66,9 @@ public class EhcacheDecoratorAdapter implements InternalEhcache {
      * @param underlyingCache
      */
     public EhcacheDecoratorAdapter(Ehcache underlyingCache) {
+        if (underlyingCache == null) {
+            throw new NullPointerException("Underlying cache cannot be null");
+        }
         StatisticsManager.associate(this).withParent(underlyingCache);
         this.underlyingCache = underlyingCache;
     }
