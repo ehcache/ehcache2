@@ -18,7 +18,18 @@ public class ValueModeHandlerSerialization implements ValueModeHandler {
   @Override
   public Object getRealKeyObject(String portableKey) {
     try {
-      return SerializationHelper.deserializeFromString(portableKey);
+      return SerializationHelper.deserializeFromString(portableKey, null);
+    } catch (IOException e) {
+      return null;
+    } catch (ClassNotFoundException e) {
+      return null;
+    }
+  }
+
+  @Override
+  public Object getRealKeyObject(String portableKey, ClassLoader loader) {
+    try {
+      return SerializationHelper.deserializeFromString(portableKey, loader);
     } catch (IOException e) {
       return null;
     } catch (ClassNotFoundException e) {

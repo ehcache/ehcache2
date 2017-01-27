@@ -13,6 +13,8 @@ public interface ValueModeHandler {
 
   public Object getRealKeyObject(String portableKey);
 
+  public Object getRealKeyObject(String portableKey, ClassLoader classLoader);
+
   public String createPortableKey(Object key) throws IOException;
 
   public ElementData createElementData(Element element);

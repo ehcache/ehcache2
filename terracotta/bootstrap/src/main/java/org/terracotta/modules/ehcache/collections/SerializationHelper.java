@@ -5,13 +5,7 @@ package org.terracotta.modules.ehcache.collections;
 
 import net.sf.ehcache.util.FindBugsSuppressWarnings;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class SerializationHelper {
   /**
@@ -45,9 +39,21 @@ public class SerializationHelper {
     }
   }
 
-  public static Object deserializeFromString(String key) throws IOException, ClassNotFoundException {
+  public static Object deserializeFromString(String key, final ClassLoader loader) throws IOException, ClassNotFoundException {
     if (key.length() >= 1 && key.charAt(0) == MARKER) {
-      ObjectInputStream ois = new ObjectInputStream(new StringSerializedObjectInputStream(key));
+      ObjectInputStream ois = new ObjectInputStream(new StringSerializedObjectInputStream(key)){
+        @Override
+        protected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+          try {
+            return super.resolveClass(desc);
+          } catch (ClassNotFoundException e) {
+            if (loader != null) {
+              return loader.loadClass(desc.getName());
+            }
+            throw e;
+          }
+        }
+      };
       return ois.readObject();
     }
 

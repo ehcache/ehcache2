@@ -56,7 +56,7 @@ public class SerializedToolkitCache<K, V extends Serializable> implements Toolki
 
   private static Object deserializeFromString(String key) {
     try {
-      return SerializationHelper.deserializeFromString(key);
+      return SerializationHelper.deserializeFromString(key, null);
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (ClassNotFoundException e) {
