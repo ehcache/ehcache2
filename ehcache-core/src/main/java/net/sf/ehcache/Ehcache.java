@@ -290,8 +290,9 @@ public interface Ehcache extends Cloneable {
      * <p/>
      * The List returned is not live. It is a copy.
      * <p/>
-     * The time taken is O(n). On a single cpu 1.8Ghz P4, approximately 8ms is required
-     * for each 1000 entries.
+     * The time taken is O(n). For large caches - or caches with high-latency storage this method can take a very long time to complete,
+     * may cause timeouts if using features such NonStopCache or transactions, and is not guaranteed to give a consistent view of the
+     * cache entry set. Usage is highly discouraged.
      *
      * @return a list of {@link Object} keys
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
