@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-root</artifactId>
-    <version>2.10.4-SNAPSHOT</version>
+    <version>2.10.4.1.4</version>
   </parent>
 
   <groupId>net.sf.ehcache.internal</groupId>
