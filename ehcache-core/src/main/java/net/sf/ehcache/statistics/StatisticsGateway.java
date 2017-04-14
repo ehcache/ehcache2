@@ -427,7 +427,7 @@ public class StatisticsGateway implements FlatStatistics {
 
     @Override
     public long localHeapRemoveCount() {
-        return core.localOffHeapRemove().value(RemoveOutcome.SUCCESS);
+        return core.localHeapRemove().value(RemoveOutcome.SUCCESS);
     }
 
     @Override
