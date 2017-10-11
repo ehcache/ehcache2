@@ -788,6 +788,12 @@ public class LocalTransactionStore extends AbstractTransactionStore {
                         continue;
                     }
                 } else {
+                    if (!comparator.equals(element, oldElement)) {
+                        LOG.debug("removeElement: cache [{}] key [{}] was altered by a committed transaction, old element did not" +
+                            " match element to remove", cacheName, key);
+                        return null;
+                    }
+
                     SoftLockID softLockId = softLockManager.createSoftLockID(getCurrentTransactionContext().getTransactionId(), key,
                         null, oldElement);
                     SoftLock softLock = softLockManager.findSoftLockById(softLockId);
@@ -904,6 +910,12 @@ public class LocalTransactionStore extends AbstractTransactionStore {
                         continue;
                     }
                 } else {
+                    if (!comparator.equals(old, oldElement)) {
+                        LOG.debug("replace2: cache [{}] key [{}] was altered by a committed transaction, old element did not match" +
+                            " element to replace", cacheName, key);
+                        return false;
+                    }
+
                     SoftLockID softLockId = softLockManager.createSoftLockID(getCurrentTransactionContext().getTransactionId(), key,
                         element, oldElement);
                     SoftLock softLock = softLockManager.findSoftLockById(softLockId);
