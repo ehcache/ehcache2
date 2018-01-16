@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>3.0</version>
+    <version>3.24</version>
     <relativePath/>
   </parent>
 
@@ -25,6 +25,7 @@
   <description>Clustered Ehcache sample with Terracotta</description>
 
   <properties>
+    <java.build.version>1.8</java.build.version>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.5-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
@@ -100,7 +101,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.7</version>
+      <version>1.7.25</version>
     </dependency>
   </dependencies>
 
