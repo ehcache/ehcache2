@@ -125,7 +125,7 @@
             </resource> 
             <!-- clustered example -->                
             <resource>
-              
+              <runIf>{{ new File(project.properties['terracotta.kit.path']).isDirectory() }}</runIf>
               <targetPath>${root.dir}/samples</targetPath>
               <dependencies>
                 <dependency>
