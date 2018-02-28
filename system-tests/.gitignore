@@ -1,4 +1,6 @@
-/nb-configuration.xml
+/target
 /.classpath
 /.project
-/target
+/nb-configuration.xml
+/.settings
+/*.iml

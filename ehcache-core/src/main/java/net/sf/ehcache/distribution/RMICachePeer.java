@@ -82,7 +82,7 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
     public final String getUrl() {
         return new StringBuilder()
                 .append("//")
-                .append(hostname)
+                .append(hostname.contains(":") ? ("[" + hostname + "]") : hostname)
                 .append(":")
                 .append(rmiRegistryPort)
                 .append("/")
@@ -100,7 +100,7 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
     public final String getUrlBase() {
         return new StringBuilder()
                 .append("//")
-                .append(hostname)
+                .append(hostname.contains(":") ? ("[" + hostname + "]") : hostname)
                 .append(":")
                 .append(rmiRegistryPort)
                 .toString();

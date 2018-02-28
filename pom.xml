@@ -285,6 +285,9 @@
           <groupId>org.terracotta</groupId>
           <artifactId>maven-forge-plugin</artifactId>
           <version>${maven-forge-plugin.version}</version>
+          <configuration>
+            <argLine>-Djava.net.preferIPv4Stack=true</argLine>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

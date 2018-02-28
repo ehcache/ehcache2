@@ -78,6 +78,9 @@ public class TerracottaClientConfiguration implements Cloneable {
      * @return this configuration instance
      */
     public final TerracottaClientConfiguration url(String host, String port) {
+        if (host.contains(":")) {
+            host = "[" + host + "]";
+        }
         setUrl(host + ":" + port);
         return this;
     }
