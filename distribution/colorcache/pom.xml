@@ -1,35 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-  All content copyright (c) Terracotta, Inc.,
-  except as may otherwise be noted in a separate copyright notice.
-  All rights reserved.
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
     <version>4.0</version>
     <relativePath/>
   </parent>
-
   <groupId>net.sf.ehcache.examples</groupId>
   <artifactId>colorcache</artifactId>
-  <version>2.10.6-SNAPSHOT</version>
+  <version>2.10.6.0.8</version>
   <name>colorcache</name>
   <packaging>war</packaging>
   <description>Clustered Ehcache sample with Terracotta</description>
-
   <properties>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
-    <terracotta.version>4.3.6-SNAPSHOT</terracotta.version>
+    <terracotta.version>4.3.6.0.8</terracotta.version>
     <skipDeploy>true</skipDeploy>
   </properties>
-
   <build>
     <finalName>${project.name}</finalName>
     <plugins>
@@ -52,7 +39,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>8.1.15.v20140411</version>
@@ -62,7 +48,6 @@
           <stopKey>STOP</stopKey>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.terracotta.maven.plugins</groupId>
         <artifactId>tc-maven-plugin</artifactId>
@@ -77,33 +62,28 @@
       </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>terracotta-toolkit-runtime</artifactId>
       <version>${terracotta.version}</version>
     </dependency>
-
     <dependency>
       <groupId>gf-3122</groupId>
       <artifactId>gf.javax.servlet-api</artifactId>
       <version>3.0.1</version>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>1.7.25</version>
     </dependency>
   </dependencies>
-
   <profiles>
     <profile>
       <id>9081</id>
@@ -149,34 +129,32 @@
     </profile>
     <profile>
       <id>sag-deps</id>
-        <activation>
-          <property>
-            <name>sag-deps</name>
-            <value>true</value>
-          </property>
-        </activation>
-        <build>
-          <pluginManagement>
-            <plugins>
-              <plugin>
+      <activation>
+        <property>
+          <name>sag-deps</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
               <groupId>org.terracotta</groupId>
               <artifactId>maven-forge-plugin</artifactId>
               <dependencies>
                 <dependency>
                   <groupId>com.softwareag.ibit.tools.util</groupId>
                   <artifactId>finder</artifactId>
-                  <!-- Before bumping version - verify it still accepts exclusion files -->
                   <version>3.0</version>
                   <scope>compile</scope>
                 </dependency>
               </dependencies>
-              </plugin>
-            </plugins>
-          </pluginManagement>
-        </build>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
-
   <repositories>
     <repository>
       <id>terracotta-snapshots</id>
@@ -187,7 +165,6 @@
       <url>http://www.terracotta.org/download/reflector/releases</url>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>terracotta-snapshots</id>
