@@ -19,11 +19,11 @@ package net.sf.ehcache;
 import net.sf.ehcache.CacheOperationOutcomes.GetAllOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.GetOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.PutAllOutcome;
+import net.sf.ehcache.CacheOperationOutcomes.PutIfAbsentOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.PutOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.RemoveAllOutcome;
-import net.sf.ehcache.CacheOperationOutcomes.RemoveOutcome;
-import net.sf.ehcache.CacheOperationOutcomes.PutIfAbsentOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.RemoveElementOutcome;
+import net.sf.ehcache.CacheOperationOutcomes.RemoveOutcome;
 import net.sf.ehcache.CacheOperationOutcomes.SearchOutcome;
 import net.sf.ehcache.bootstrap.BootstrapCacheLoader;
 import net.sf.ehcache.bootstrap.BootstrapCacheLoaderFactory;
@@ -34,6 +34,7 @@ import net.sf.ehcache.concurrent.CacheLockProvider;
 import net.sf.ehcache.concurrent.LockType;
 import net.sf.ehcache.concurrent.StripedReadWriteLockSync;
 import net.sf.ehcache.concurrent.Sync;
+import net.sf.ehcache.config.AbstractCacheConfigurationListener;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheWriterConfiguration;
 import net.sf.ehcache.config.DiskStoreConfiguration;
@@ -45,7 +46,6 @@ import net.sf.ehcache.config.PinningConfiguration;
 import net.sf.ehcache.config.SearchAttribute;
 import net.sf.ehcache.config.TerracottaConfiguration;
 import net.sf.ehcache.config.TerracottaConfiguration.Consistency;
-import net.sf.ehcache.config.AbstractCacheConfigurationListener;
 import net.sf.ehcache.constructs.nonstop.concurrency.LockOperationTimedOutNonstopException;
 import net.sf.ehcache.event.CacheEventListener;
 import net.sf.ehcache.event.CacheEventListenerFactory;
@@ -2584,6 +2584,9 @@ public class Cache implements InternalEhcache, StoreListener {
             getCacheManager().getClusteredInstanceFactory().unlinkCache(getName());
         }
 
+        if (statistics != null) {
+            statistics.dispose();
+        }
         cacheStatus.changeState(Status.STATUS_SHUTDOWN);
     }
 

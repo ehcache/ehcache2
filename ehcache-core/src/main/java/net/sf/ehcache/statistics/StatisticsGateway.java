@@ -555,4 +555,7 @@ public class StatisticsGateway implements FlatStatistics {
         return extended.cacheHitRatio().value().doubleValue();
     }
 
+    public void dispose() {
+        extended.dispose();
+    }
 }

@@ -909,4 +909,11 @@ public class ExtendedStatisticsImpl implements ExtendedStatistics {
         return nonStopTimeoutRatio;
     }
 
+    @Override
+    public void dispose() {
+        ScheduledFuture p = disableStatus;
+        if (p != null) {
+            p.cancel(true);
+        }
+    }
 }

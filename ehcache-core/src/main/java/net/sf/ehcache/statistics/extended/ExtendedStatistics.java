@@ -302,6 +302,11 @@ public interface ExtendedStatistics {
     Set<Statistic<Number>> passthru(String name, Set<String> tags);
 
     /**
+     * Dispose of this gateway.
+     */
+    void dispose();
+
+    /**
      * The Interface Operation.
      *
      * @param <T> the generic type
