@@ -121,6 +121,13 @@ public class StatisticsGateway implements FlatStatistics {
     }
 
     /**
+     * Dispose of this statistics gateway.
+     */
+    public void dispose() {
+        extended.dispose();
+    }
+
+    /**
      * Gets the associated cache name.
      * 
      * @return the associated cache name

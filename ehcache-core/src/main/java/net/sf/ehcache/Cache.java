@@ -2596,6 +2596,9 @@ public class Cache implements InternalEhcache, StoreListener {
             getCacheManager().getClusteredInstanceFactory().unlinkCache(getName());
         }
 
+        if(statistics != null) {
+            statistics.dispose();
+        }
         cacheStatus.changeState(Status.STATUS_SHUTDOWN);
     }
 
