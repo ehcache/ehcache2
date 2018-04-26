@@ -43,16 +43,16 @@ import javax.management.ObjectName;
  * in Java EE environments, applications are often undeployed and then redeployed. A
  * servlet listener avdailable in the web module, <code>net.sf.ehcache.constructs.web.ShutdownListener</code>}
  * enables this to be detected and the CacheManager shutdown.
- * <p/>
+ * <p>
  * When a CacheManager is shut down we need to ensure there is no memory, resource or
  * thread leakage. An MBeanServer, particularly a platform MBeanServer, can be expected
  * to exist for the lifespan of the JVM. Accordingly, we need to deregister them when
  * needed without creating a leakage.
- * <p/>
+ * <p>
  * The second purpose of this class (and this package) is to keep management concerns away
  * from the core ehcache packages. That way, JMX is not a required dependency, but rather
  * an optional one.
- * <p/>
+ * <p>
  * This class is constructable as of 1.5 to support injection via IoC containers.
  *
  * @author Greg Luck
@@ -77,11 +77,11 @@ public class ManagementService implements CacheManagerEventListener {
 
     /**
      * A constructor for a management service for a range of possible MBeans.
-     * <p/>
+     * <p>
      * The {@link #init()} method needs to be called after construction which causes
      * the selected monitoring options to be be registered
      * with the provided MBeanServer for caches in the given CacheManager.
-     * <p/>
+     * <p>
      * While registering the CacheManager enables traversal to all of the other
      * items,
      * this requires programmatic traversal. The other options allow entry points closer
@@ -89,7 +89,7 @@ public class ManagementService implements CacheManagerEventListener {
      * Moreover CacheManager and Cache are not serializable, so remote monitoring is not possible
      * for CacheManager or Cache, while CacheStatistics and CacheConfiguration are. Finally
      * CacheManager and Cache enable management operations to be performed.
-     * <p/>
+     * <p>
      * Once monitoring is enabled caches will automatically added and removed from the MBeanServer
      * as they are added and disposed of from the CacheManager. When the CacheManager itself
      * shutsdown all registered MBeans will be unregistered.
@@ -123,11 +123,11 @@ public class ManagementService implements CacheManagerEventListener {
 
     /**
          * A constructor for a management service for a range of possible MBeans.
-         * <p/>
+         * <p>
          * The {@link #init()} method needs to be called after construction which causes
          * the selected monitoring options to be be registered
          * with the provided MBeanServer for caches in the given CacheManager.
-         * <p/>
+         * <p>
          * While registering the CacheManager enables traversal to all of the other
          * items,
          * this requires programmatic traversal. The other options allow entry points closer
@@ -135,7 +135,7 @@ public class ManagementService implements CacheManagerEventListener {
          * Moreover CacheManager and Cache are not serializable, so remote monitoring is not possible
          * for CacheManager or Cache, while CacheStatistics and CacheConfiguration are. Finally
          * CacheManager and Cache enable management operations to be performed.
-         * <p/>
+         * <p>
          * Once monitoring is enabled caches will automatically added and removed from the MBeanServer
          * as they are added and disposed of from the CacheManager. When the CacheManager itself
          * shutsdown all registered MBeans will be unregistered.
@@ -196,7 +196,7 @@ public class ManagementService implements CacheManagerEventListener {
     /**
      * A convenience static method which creates a ManagementService and initialises it with the
      * supplied parameters.
-     * <p/>
+     * <p>
      * This one is provided for backward compatibility
      *
      * @param cacheManager                the CacheManager to listen to
@@ -340,10 +340,10 @@ public class ManagementService implements CacheManagerEventListener {
 
     /**
      * Called immediately after a cache has been added and activated.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to
      * call a synchronized method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that activation will also cause a CacheEventListener status change notification
      * from {@link net.sf.ehcache.Status#STATUS_UNINITIALISED} to
      * {@link net.sf.ehcache.Status#STATUS_ALIVE}. Care should be taken on processing that
@@ -355,7 +355,7 @@ public class ManagementService implements CacheManagerEventListener {
      * will cause a deadlock.
      * </ul>
      * The calling method will block until this method returns.
-     * <p/>
+     * <p>
      *
      * @param cacheName the name of the <code>Cache</code> the operation relates to
      * @see net.sf.ehcache.event.CacheEventListener
@@ -378,10 +378,10 @@ public class ManagementService implements CacheManagerEventListener {
     /**
      * Called immediately after a cache has been disposed and removed. The calling method will
      * block until this method returns.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to
      * call a synchronized method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that a {@link net.sf.ehcache.event.CacheEventListener} status changed will also be triggered. Any
      * attempt from that notification to access CacheManager will also result in a deadlock.
      *

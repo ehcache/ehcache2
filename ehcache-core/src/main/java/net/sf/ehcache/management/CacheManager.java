@@ -81,7 +81,7 @@ public class CacheManager implements CacheManagerMBean {
 
     /**
      * Shuts down the CacheManager.
-    * <p/>
+    * <p>
     * If the shutdown occurs on the singleton, then the singleton is removed, so that if a singleton access method
     * is called, a new singleton will be created.
     */
@@ -92,7 +92,7 @@ public class CacheManager implements CacheManagerMBean {
     /**
      * Clears  the contents of all caches in the CacheManager, but without
      * removing any caches.
-     * <p/>
+     * <p>
      * This method is not synchronized. It only guarantees to clear those elements in a cache
      * at the time that the {@link net.sf.ehcache.Ehcache#removeAll()} mehod  on each cache is called.
      */

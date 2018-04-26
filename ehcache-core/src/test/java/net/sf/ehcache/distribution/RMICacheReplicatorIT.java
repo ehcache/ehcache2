@@ -61,9 +61,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Tests replication of Cache events
- * <p/>
+ * <p>
  * Note these tests need a live network interface running in multicast mode to work
- * <p/>
+ * <p>
  * If running involving RMIAsynchronousCacheReplicator individually the test will fail because
  * the VM will gobble up the SoftReferences rather than allocating more memory. Uncomment the
  * forceVMGrowth() method usage in setup.
@@ -437,7 +437,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and remove initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     public void putTest(Ehcache fromCache, Ehcache toCache, boolean asynchronous) throws CacheException, InterruptedException {
@@ -460,7 +460,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and remove initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     public void putTestWithThreadKiller(Ehcache fromCache, Ehcache toCache, boolean asynchronous)
@@ -488,7 +488,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Checks that a put received from a remote cache notifies any registered listeners.
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     @Test
@@ -613,7 +613,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and remove initiated from a cache to another cache in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     public void removeTest(Ehcache fromCache, Ehcache toCache, boolean asynchronous) throws CacheException, InterruptedException {
@@ -669,7 +669,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests removeAll initiated from a cache to another cache in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     public void removeAllTest(Ehcache fromCache, Ehcache toCache, boolean asynchronous) throws Exception {
@@ -743,7 +743,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and update through copy initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     public void updateViaCopyTest(Ehcache fromCache, Ehcache toCache, boolean asynchronous) throws Exception {
@@ -773,7 +773,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put through invalidation initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     @Test
@@ -797,7 +797,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and update through invalidation initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     @Test
@@ -822,7 +822,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
 
     /**
      * Tests put and update through invalidation initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     @Test
@@ -898,7 +898,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
      * of each distributed operation all at once.
      * It shows that no distributed deadlock exists for asynchronous replication. It is multi thread
      * and multi process safe.
-     * <p/>
+     * <p>
      * Carefully tailored to exercise:
      * <ol>
      * <li>overflow to disk. We put in 20 things and the memory size is 10
@@ -933,7 +933,7 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
      * It shows that no distributed deadlock exists for asynchronous replication. It is multi thread
      * and multi process safe.
      * It uses sampleCache2, which is configured to be asynchronous
-     * <p/>
+     * <p>
      * Carefully tailored to exercise:
      * <ol>
      * <li>overflow to disk. We put in 20 things and the memory size is 10

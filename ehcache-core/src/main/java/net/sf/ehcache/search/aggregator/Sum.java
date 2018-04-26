@@ -20,7 +20,7 @@ import net.sf.ehcache.search.Attribute;
 
 /**
  * Sums the results
- * <p/>
+ * <p>
  * Sum can be used with most numeric types
  *
  * @author Greg Luck
@@ -46,7 +46,7 @@ public class Sum implements AggregatorInstance<Long> {
     }
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: null inputs are ignored
      */
     public void accept(Object input) throws AggregatorException {
@@ -67,7 +67,7 @@ public class Sum implements AggregatorInstance<Long> {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: May return null if no input supplied
      */
     public Number aggregateResult() {

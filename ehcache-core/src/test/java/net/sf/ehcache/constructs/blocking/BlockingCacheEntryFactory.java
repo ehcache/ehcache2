@@ -18,7 +18,7 @@ package net.sf.ehcache.constructs.blocking;
 
 /**
  * A cache entry factory that blocks until signaled.
- * <p/>
+ * <p>
  * This is useful for writing tests.
  *
  * @author Greg Luck

@@ -41,7 +41,7 @@ public class LocalReadsAndExceptionOnWritesTimeoutStore implements TerracottaSto
     private final TerracottaStore writer = ExceptionOnTimeoutStore.getInstance();
 
     /**
-     * Constructor accepting the {@link NonstopActiveDelegateHolder}
+     * Constructor accepting the {@link TerracottaStore}
      */
     public LocalReadsAndExceptionOnWritesTimeoutStore(TerracottaStore delegate) {
         reader = new LocalReadsOnTimeoutStore(delegate);

@@ -23,7 +23,7 @@ import net.sf.ehcache.terracotta.ClusteredInstanceFactory;
  * the passed CacheManager.
  * This is in addition to the ManagementService and has nothing to do
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

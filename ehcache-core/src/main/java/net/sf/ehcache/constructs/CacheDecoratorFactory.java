@@ -35,7 +35,7 @@ public abstract class CacheDecoratorFactory {
 
     /**
      * Creates a decorated {@link Ehcache} using the properties specified for configuring the decorator.
-     * <p />
+     * <p>
      * If the returned decorated cache has the same name as the underlying cache, then the original cache will be replaced by this new
      * decorated cache in the CacheManager.
      * 
@@ -51,7 +51,7 @@ public abstract class CacheDecoratorFactory {
     /**
      * This method is called when the factory is specified for the defaultCache in the config.
      * Create the decorated {@link Ehcache} using the properties specified.
-     * <p />
+     * <p>
      * If the returned decorated cache has the same name as the underlying cache, then the original cache will be replaced by this new
      * decorated cache in the CacheManager.
      * 

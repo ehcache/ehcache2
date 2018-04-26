@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * An abstract factory for creating cache writers. Implementers should provide their own
  * concrete factory extending this factory.
- * <p/>
+ * <p>
  * Note that Ehcache API also allows the CacheWriter to be set programmatically.
  *
  * @author Greg Luck

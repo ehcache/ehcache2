@@ -27,7 +27,7 @@ public interface BootstrapCacheLoader {
 
     /**
      * Instructs the loader to load the given cache
-     * @param cache
+     * @param cache cache to load
      */
     void load(Ehcache cache) throws CacheException;
 
@@ -39,6 +39,9 @@ public interface BootstrapCacheLoader {
 
     /**
      * Clones the loader
+     *
+     * @return clone of this instance
+     * @throws CloneNotSupportedException if the object's class does not support the {@code Cloneable} interface.
      */
     Object clone() throws CloneNotSupportedException;
 

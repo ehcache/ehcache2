@@ -26,7 +26,7 @@ import org.junit.runners.Suite;
 /**
  * This test suite will run a bunch of tests that you specify
  * Good test to run if you want to do a quick smoke tests of ehcache
- * <p/>
+ * <p>
  * mvn test -Dtest=SmokeTests
  *
  * @author hhuynh

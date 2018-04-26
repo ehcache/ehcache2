@@ -34,16 +34,16 @@ import static org.junit.Assert.assertThat;
 
 /**
  * Test cases for the LruMemoryStore.
- * <p/>
+ * <p>
  * There are no tests of expiry because this is handled by {@link net.sf.ehcache.Cache#get}
- * <p/>
+ * <p>
  * <b>Performance:</b>
  * v1.38 of DiskStore
  * INFO: Time for benhmarkPutGetSurya: 7355
  * INFO: Time for Bulk Load: 13
  * INFO: Time for benhmarkPutGetRemove: 264
  * INFO: Time for benhmarkPutGet: 154
- * <p/>
+ * <p>
  * v 1.42 of DiskStore
  * INFO: Time for Bulk Load: 12
  * INFO: Time for benhmarkPutGetRemove: 256
@@ -199,7 +199,7 @@ public class LruMemoryStoreTest extends MemoryStoreTester {
 
     /**
      * Specifically to verify the sampling algorithm.
-     * <p/>
+     * <p>
      * This test demonstrates a memory leak if we let the store simply get bigger on an eviction sampling miss.
      * as is done in r960. e.g.
      * Jun 9, 2009 10:47:30 AM net.sf.ehcache.store.LruMemoryStoreTest testMemoryLeakPutGetRemove
@@ -220,7 +220,7 @@ public class LruMemoryStoreTest extends MemoryStoreTester {
      * INFO: Store size is: 19324
      * Jun 9, 2009 10:47:48 AM net.sf.ehcache.store.LruMemoryStoreTest testMemoryLeakPutGetRemove
      * INFO: Store size is: 20300
-     * <p/>
+     * <p>
      * Now fixed and this test consistently gives a size of 12000
      */
     @Test

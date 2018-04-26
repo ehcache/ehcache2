@@ -588,7 +588,7 @@ public class ClusteredStore implements TerracottaStore, StoreListener {
 
   /**
    * Expire all elements.
-   * <p/>
+   * <p>
    * This is a default implementation which does nothing. Expiration on demand is only implemented for disk stores.
    */
   @Override

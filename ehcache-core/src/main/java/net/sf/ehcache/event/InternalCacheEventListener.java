@@ -29,9 +29,9 @@ interface InternalCacheEventListener extends Cloneable {
 
     /**
      * Called immediately after an element removal.
-     * <p/>
+     * <p>
      * The method causing the remove will block until this method returns.
-     * <p/>
+     * <p>
      * This notification is not called for the following special case:
      * <ol>
      * <li>removeAll was called
@@ -44,9 +44,9 @@ interface InternalCacheEventListener extends Cloneable {
 
     /**
      * Called immediately after an element has been put into the cache.
-     * <p/>
+     * <p>
      * The method causing the put will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the
      * element is provided. Implementers should be careful not to modify the element. The
      * effect of any modifications is undefined.

@@ -51,7 +51,7 @@ import static net.sf.ehcache.distribution.AbstractRMITest.createRMICacheManagerC
 
 /**
  * Unit tests for the RMICacheManagerPeerListener
- * <p/>
+ * <p>
  * Note these tests need a live network interface running in multicast mode to work
  *
  * @author <a href="mailto:gluck@thoughtworks.com">Greg Luck</a>

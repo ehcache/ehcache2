@@ -30,6 +30,7 @@
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.2.3</quartz.version>
     <jetty.version>8.1.15.v20140411</jetty.version>
+    <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
   <modules>
@@ -100,7 +101,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>3.5.1-Final</version>
+        <version>${hibernate-core.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

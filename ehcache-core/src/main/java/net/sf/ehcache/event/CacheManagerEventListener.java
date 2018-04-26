@@ -71,10 +71,10 @@ public interface CacheManagerEventListener {
 
     /**
      * Called immediately after a cache has been added and activated.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to
      * call a synchronized method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that activation will also cause a CacheEventListener status change notification
      * from {@link net.sf.ehcache.Status#STATUS_UNINITIALISED} to
      * {@link net.sf.ehcache.Status#STATUS_ALIVE}. Care should be taken on processing that
@@ -86,7 +86,7 @@ public interface CacheManagerEventListener {
      * will cause a deadlock.
      * </ul>
      * The calling method will block until this method returns.
-     * <p/>
+     * <p>
      * @param cacheName the name of the <code>Cache</code> the operation relates to
      * @see CacheEventListener
      */
@@ -95,10 +95,10 @@ public interface CacheManagerEventListener {
     /**
      * Called immediately after a cache has been disposed and removed. The calling method will
      * block until this method returns.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to
      * call a synchronized method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that a {@link CacheEventListener} status changed will also be triggered. Any
      * attempt from that notification to access CacheManager will also result in a deadlock.
      * @param cacheName the name of the <code>Cache</code> the operation relates to

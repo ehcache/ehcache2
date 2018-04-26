@@ -45,7 +45,7 @@ public class Average implements AggregatorInstance<Double> {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: Null values are ignored and not included in the computation
      */
     public void accept(Object input) throws AggregatorException {
@@ -66,7 +66,7 @@ public class Average implements AggregatorInstance<Double> {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: null is returned if there was no input supplied to this function
      */
     public Number aggregateResult() {

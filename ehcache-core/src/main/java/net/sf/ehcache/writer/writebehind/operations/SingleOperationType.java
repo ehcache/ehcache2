@@ -17,7 +17,7 @@ package net.sf.ehcache.writer.writebehind.operations;
 
 /**
  * Enum class to provide distinct operation types for each single operation.
- * <p/>
+ * <p>
  * The order of the entries in the enum is important since it is used to determine the order of execution of
  * batched operations.
  *

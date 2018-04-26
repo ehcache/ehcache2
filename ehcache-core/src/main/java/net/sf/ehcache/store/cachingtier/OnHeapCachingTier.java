@@ -47,8 +47,9 @@ import org.terracotta.statistics.observer.OperationObserver;
 import static net.sf.ehcache.statistics.StatisticBuilder.operation;
 
 /**
- * An instance of this class will delegate the storage to the backing HeapCacheBackEnd.<br/>
- * <ul>Adding :
+ * An instance of this class will delegate the storage to the backing HeapCacheBackEnd.<br>
+ * Adding :
+ * <ul>
  * <li>making sure only a single thread populates the cache for a given key at a time</li>
  * <li>translate calls to the eviction listeners</li>
  * <li>Add all the crap about sizing and stuff</li>

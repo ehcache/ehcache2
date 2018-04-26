@@ -45,7 +45,7 @@ abstract class AbstractEhcacheProvider implements CacheProvider {
 
     /**
      * Builds a Cache.
-     * <p/>
+     * <p>
      * Even though this method provides properties, they are not used.
      * Properties for EHCache are specified in the ehcache.xml file.
      * Configuration will be read from ehcache.xml for a cache declaration

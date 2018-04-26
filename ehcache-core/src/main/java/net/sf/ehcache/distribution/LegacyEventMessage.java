@@ -24,9 +24,9 @@ import net.sf.ehcache.Element;
 
 /**
  * An Event Message, in respect of a particular cache.
- * <p/>
+ * <p>
  * The message is Serializable, so that it can be sent across the network.
- * <p/>
+ * <p>
  * The value of an Element is referenced with a SoftReference, so that a
  * value will fail to be delivered in preference to an OutOfMemory error.
  *

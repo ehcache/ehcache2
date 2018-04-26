@@ -49,9 +49,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * A controller class registering new {@link CacheManager}.
- * </p>
+ * <p>
  * An {@link EntityResourceFactory} implementation that interacts with the native Ehcache API.
- * </p>
+ * <p>
  * A {@link CacheService} implementation that interacts with the native Ehcache API to manipulate {@link Cache}
  * objects.
  *

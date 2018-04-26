@@ -22,7 +22,7 @@ import net.sf.ehcache.search.Query;
 /**
  * Main entry point from Ehcache into the query manager responsible
  * for parsing SQL-like statements and returning a net.sf.ehcache.search.Query object.
- * <p/>
+ * <p>
  * This interface obviates Ehcache's dependence on a specific dialect of SQL.
  * Implementations are free to decide which SQL-like language is supported by them.
  *

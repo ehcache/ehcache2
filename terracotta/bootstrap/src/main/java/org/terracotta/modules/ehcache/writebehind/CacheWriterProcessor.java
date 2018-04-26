@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * An implementation of {@code ItemProcessor} that delegates the processing to a {@code CacheWriter} instance
- * <p/>
+ * <p>
  * Instances of this class will be used when items are processed one by one. Note that {@code CacheWriter} instances
  * will not be shared across a Terracotta DSO cluster and are intended to be local on a node. They are tied to an
  * individual write behind queue. You're thus free to use local resources in an {@code CacheWriter}, like database
@@ -40,7 +40,6 @@ public class CacheWriterProcessor implements ItemProcessor<SingleAsyncOperation>
    * Creates a new item processor for a specific cache writer.
    * 
    * @param cacheWriter the cache writer for which the wrapper has to be created
-   * @param serializationStrategy the strategy that should be used to serialize and deserialize, if needed
    */
   public CacheWriterProcessor(CacheWriter cacheWriter) {
     this.cacheWriter = cacheWriter;

@@ -25,34 +25,34 @@ import java.util.Collection;
 
 /**
  * A CacheWriter is an interface used for write-through and write-behind caching to a underlying resource.
- * <p/>
+ * <p>
  * If configured for a cache, CacheWriter's methods will be called on a cache operation. A cache put will cause a CacheWriter write
  * and a cache remove will cause a writer delete.
- * <p/>
+ * <p>
  * Implementers should create an implementation which handles storing and deleting to an underlying resource.
- * <p/>
- * <h4>Write-Through</h4>
+ * <p>
+ * <h1>Write-Through</h1>
  * In write-through mode, the cache operation will occur and the writer operation will occur before CacheEventListeners are notified. If
  * the write operation fails an exception will be thrown. This can result in a cache which is inconsistent with the underlying resource.
  * To avoid this, the cache and the underlying resource should be configured to participate in a transaction. In the event of a failure
  * a rollback can return all components to a consistent state.
- * <p/>
- * <h4>Write-Behind</h4>
+ * <p>
+ * <h1>Write-Behind</h1>
  * In write-behind mode, writes are written to a write-behind queue. They are written by a separate execution thread in a configurable
  * way. When used with Terracotta Server Array, the queue is highly available. In addition any node in the cluster may perform the
  * write-behind operations.
- * <p/>
+ * <p>
  * It's important to note that the operations that are handled by the {@code CacheWriter} don't have any guaranteed ordering in write-behind mode.
  * The processing ordering can be different than the scheduling ordering, so your application needs to be written with this
  * in mind. More information in the CacheWriter chapter of the documentation.
- * <p/>
- * <h4>Creation and Configuration</h4>
+ * <p>
+ * <h1>Creation and Configuration</h1>
  * CacheWriters can be created using the CacheWriterFactory or explicitly by instantiating them through Java code, giving
  * you access to local resources.
- * <p/>
+ * <p>
  * The manner upon which a CacheWriter is actually called is determined by the {@link net.sf.ehcache.config.CacheWriterConfiguration} that is set up for cache
  * that is using the CacheWriter.
- * <p/>
+ * <p>
  * See the CacheWriter chapter in the documentation for more information on how to use writers.
  *
  * @author Greg Luck
@@ -64,7 +64,7 @@ public interface CacheWriter {
     /**
      * Creates a clone of this writer. This method will only be called by ehcache before a
      * cache is initialized.
-     * <p/>
+     * <p>
      * Implementations should throw CloneNotSupportedException if they do not support clone
      * but that will stop them from being used with defaultCache.
      *
@@ -76,12 +76,12 @@ public interface CacheWriter {
 
     /**
      * Notifies writer to initialise themselves.
-     * <p/>
+     * <p>
      * This method is called during the Cache's initialise method after it has changed it's
      * status to alive. Cache operations are legal in this method. If you register a cache writer
      * manually after a cache has been initialised already, this method will be called on the
      * cache writer as soon as it has been registered.
-     * <p/>
+     * <p>
      * Note that if you reuse cache writer instances or create a factory that returns the
      * same cache writer instance as a singleton, your <code>init</code> method should be able
      * to handle that situation. Unless you perform this multiple usage of a cache writer yourself,
@@ -95,7 +95,7 @@ public interface CacheWriter {
     /**
      * Providers may be doing all sorts of exotic things and need to be able to clean up on
      * dispose.
-     * <p/>
+     * <p>
      * Cache operations are illegal when this method is called. The cache itself is partly
      * disposed when this method is called.
      */

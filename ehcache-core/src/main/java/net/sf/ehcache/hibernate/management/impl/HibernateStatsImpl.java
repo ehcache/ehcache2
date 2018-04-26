@@ -33,7 +33,7 @@ import org.hibernate.stat.Statistics;
 /**
  * Implementation of {@link HibernateStats}
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

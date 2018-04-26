@@ -151,16 +151,16 @@ import static net.sf.ehcache.statistics.StatisticBuilder.operation;
  * Cache is the central class in ehcache. Caches have {@link Element}s and are managed
  * by the {@link CacheManager}. The Cache performs logical actions. It delegates physical
  * implementations to its {@link net.sf.ehcache.store.Store}s.
- * <p/>
+ * <p>
  * A reference to a Cache can be obtained through the {@link CacheManager}. A Cache thus obtained
  * is guaranteed to have status {@link Status#STATUS_ALIVE}. This status is checked for any method which
  * throws {@link IllegalStateException} and the same thrown if it is not alive. This would normally
  * happen if a call is made after {@link CacheManager#shutdown} is invoked.
- * <p/>
+ * <p>
  * Cache is threadsafe.
- * <p/>
+ * <p>
  * Statistics on cache usage are collected and made available through the {@link #getStatistics()} methods.
- * <p/>
+ * <p>
  * Various decorators are available for Cache, such as BlockingCache, SelfPopulatingCache and the dynamic proxy
  * ExceptionHandlingDynamicCacheProxy. See each class for details.
  *
@@ -178,9 +178,9 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * System Property based method of disabling ehcache. If disabled no elements will be added to a cache.
-     * <p/>
+     * <p>
      * Set the property "net.sf.ehcache.disabled=true" to disable ehcache.
-     * <p/>
+     * <p>
      * This can easily be done using <code>java -Dnet.sf.ehcache.disabled=true</code> in the command line.
      */
     public static final String NET_SF_EHCACHE_DISABLED = "net.sf.ehcache.disabled";
@@ -188,10 +188,10 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * System Property based method of selecting the LruMemoryStore in use up to ehcache 1.5. This is provided
      * for ease of migration.
-     * <p/>
+     * <p>
      * Set the property "net.sf.ehcache.use.classic.lru=true" to use the older LruMemoryStore implementation
      * when LRU is selected as the eviction policy.
-     * <p/>
+     * <p>
      * This can easily be done using <code>java -Dnet.sf.ehcache.use.classic.lru=true</code> in the command line.
      */
     public static final String NET_SF_EHCACHE_USE_CLASSIC_LRU = "net.sf.ehcache.use.classic.lru";
@@ -286,13 +286,13 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * A ThreadPoolExecutor which uses a thread pool to schedule loads in the order in which they are requested.
-     * <p/>
+     * <p>
      * Each cache can have its own executor service, if required. The keep alive time is 60 seconds, after which,
      * if the thread is not required it will be stopped and collected, as core threads are allowed to time out.
-     * <p/>
+     * <p>
      * The executorService is only used for cache loading, and is created lazily on demand to avoid unnecessary resource
      * usage.
-     * <p/>
+     * <p>
      * Use {@link #getExecutorService()} to ensure that it is initialised.
      */
     private volatile ExecutorService executorService;
@@ -313,12 +313,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 2.0 and higher Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param cacheConfiguration the configuration that should be used to create the cache with
@@ -329,14 +329,14 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 2.0 and higher Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory}
      * and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache}
      * object into {@link CacheManager#addCache} to specify parameters other
      * than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param cacheConfiguration the configuration that should be used to create the cache with
@@ -378,16 +378,16 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.0 Constructor.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
-     * <p/>
+     * <p>
      * This constructor creates disk stores, if specified, that do not persist between restarts.
-     * <p/>
+     * <p>
      * The default expiry thread interval of 120 seconds is used. This is the interval between runs
      * of the expiry thread, where it checks the disk store for expired elements. It is not the
      * the timeToLiveSeconds.
@@ -415,12 +415,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.1 Constructor.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -461,12 +461,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.2 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -513,12 +513,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.2.1 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -565,12 +565,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.2.4 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -620,12 +620,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.3 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -678,12 +678,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.6.0 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -739,12 +739,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * 1.7.0 Constructor
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Cache} object
      * into {@link CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param name                      the name of the cache. Note that "default" is a reserved name for the defaultCache.
@@ -1074,7 +1074,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Newly created caches do not have a {@link net.sf.ehcache.store.Store}.
-     * <p/>
+     * <p>
      * This method creates the store and makes the cache ready to accept elements
      */
     public void initialise() {
@@ -1403,7 +1403,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * The CacheWriterManager's initialisation can be deferred until an actual CacheWriter has been registered.
-     * <p/>
+     * <p>
      * This allows users to register a cache through XML in the cache manager and still specify the CacheWriter manually through Java code, possibly referencing local resources.
      *
      * @param imperative indicates whether it's imperative for the cache writer manager to be initialised before operations can continue
@@ -1484,24 +1484,23 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Put an element in the cache.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener that:
      * <ul>
      * <li>the element was put, but only if the Element was actually put.
      * <li>if the element exists in the cache, that an update has occurred, even if the element would be expired
      * if it was requested
      * </ul>
-     * <p/>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
      * @param element A cache Element. If Serializable it can fully participate in replication and the DiskStore. If it is
      *                <code>null</code> or the key is <code>null</code>, it is ignored as a NOOP.
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
-     * @throws CacheException
+     * @throws CacheException in case of error
      */
     public final void put(Element element) throws IllegalArgumentException, IllegalStateException,
             CacheException {
@@ -1518,10 +1517,10 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Put an element in the cache.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener that:
      * <ul>
      * <li>the element was put, but only if the Element was actually put.
@@ -1679,10 +1678,9 @@ public class Cache implements InternalEhcache, StoreListener {
      * Put an element in the cache, without updating statistics, or updating listeners. This is meant to be used
      * in conjunction with {@link #getQuiet}.
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
-     * <p/>
      *
      * @param element A cache Element. If Serializable it can fully participate in replication and the DiskStore. If it is
      *                <code>null</code> or the key is <code>null</code>, it is ignored as a NOOP.
@@ -1709,10 +1707,10 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Gets an element from the cache. Updates Element Statistics
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peak into the Element to see its last access time with get
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
      *
      * @param key a serializable value. Null keys are not stored so get(null) always returns null
@@ -1727,10 +1725,10 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Gets an element from the cache. Updates Element Statistics
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peak into the Element to see its last access time with get
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
      *
      * @param key an Object value
@@ -1816,10 +1814,10 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * This method will return, from the cache, the Element associated with the argument "key".
-     * <p/>
+     * <p>
      * If the Element is not in the cache, the associated cache loader will be called. That is either the CacheLoader passed in, or if null,
      * the one associated with the cache. If both are null, no load is performed and null is returned.
-     * <p/>
+     * <p>
      * Because this method may take a long time to complete, it is not synchronized. The underlying cache operations
      * are synchronized.
      *
@@ -1885,12 +1883,12 @@ public class Cache implements InternalEhcache, StoreListener {
      * If no "arg" value is provided a null will be passed to the load method. The storing of null values in the cache
      * is permitted, however, the get method will not distinguish returning a null stored in the cache and not finding
      * the object in the cache. In both cases a null is returned.
-     * <p/>
+     * <p>
      * The Ehcache native API provides similar functionality to loaders using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      *
      * @param key key whose associated value to be loaded using the associated CacheLoader if this cache doesn't contain it.
-     * @throws CacheException
+     *  @throws CacheException in case of error
      */
     public void load(final Object key) throws CacheException {
         if (registeredCacheLoaders.size() == 0) {
@@ -1917,20 +1915,19 @@ public class Cache implements InternalEhcache, StoreListener {
      * the object. If no "arg" value is provided a null will be passed to the loadAll method. The storing of null values in the cache
      * is permitted, however, the get method will not distinguish returning a null stored in the cache and not finding the object in
      * the cache. In both cases a null is returned.
-     * <p/>
-     * <p/>
+     * <p>
      * Note. If the getAll exceeds the maximum cache size, the returned map will necessarily be less than the number specified.
-     * <p/>
+     * <p>
      * Because this method may take a long time to complete, it is not synchronized. The underlying cache operations
      * are synchronized.
-     * <p/>
+     * <p>
      * The constructs package provides similar functionality using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      *
      * @param keys           a collection of keys to be returned/loaded
      * @param loaderArgument an argument to pass to the CacheLoader.
      * @return a Map populated from the Cache. If there are no elements, an empty Map is returned.
-     * @throws CacheException
+     * @throws CacheException in case of error
      */
     public Map getAllWithLoader(Collection keys, Object loaderArgument) throws CacheException {
         if (keys == null) {
@@ -2012,10 +2009,10 @@ public class Cache implements InternalEhcache, StoreListener {
      * retrieving or loading of the objects, an exception (to be defined) will be thrown. If the "arg" argument is set,
      * the arg object will be passed to the CacheLoader.loadAll method. The cache will not dereference the object.
      * If no "arg" value is provided a null will be passed to the loadAll method.
-     * <p/>
+     * <p>
      * keys - collection of the keys whose associated values to be loaded into this cache by using the associated
      * CacheLoader if this cache doesn't contain them.
-     * <p/>
+     * <p>
      * The Ehcache native API provides similar functionality to loaders using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      */
@@ -2035,7 +2032,6 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Gets an element from the cache, without updating Element statistics. Cache statistics are
      * still updated. Listeners are not called.
-     * <p/>
      *
      * @param key a serializable value
      * @return the element, or null, if it does not exist.
@@ -2049,7 +2045,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Gets an element from the cache, without updating Element statistics. Cache statistics are
      * not updated.
-     * <p/>
+     * <p>
      * Listeners are not called.
      *
      * @param key a serializable value
@@ -2073,12 +2069,12 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Returns a list of all element keys in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are unique and can almost be considered a set. See {@link net.sf.ehcache.store.CacheKeySet CacheKeySet} for
      * more details.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(n). For large caches - or caches with high-latency storage this method can take a very long time to complete,
      * may cause timeouts if using features such NonStopCache or transactions, and is not guaranteed to give a consistent view of the
      * cache entry set. Usage is highly discouraged.
@@ -2095,17 +2091,17 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Returns a list of all element keys in the cache. Only keys of non-expired
      * elements are returned.
-     * <p/>
+     * <p>
      * The returned keys are unique and can be considered a set.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(n), where n is the number of elements in the cache. On
      * a 1.8Ghz P4, the time taken is approximately 200ms per 1000 entries. This method
      * is not synchronized, because it relies on a non-live list returned from {@link #getKeys()}
      * , which is synchronised, and which takes 8ms per 1000 entries. This way
      * cache liveness is preserved, even if this method is very slow to return.
-     * <p/>
+     * <p>
      * Consider whether your usage requires checking for expired keys. Because
      * this method takes so long, depending on cache settings, the list could be
      * quite out of date by the time you get it.
@@ -2131,16 +2127,16 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Returns a list of all elements in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are not unique and may contain duplicates. If the cache is only
      * using the memory store, the list will be unique. If the disk store is being used
      * as well, it will likely contain duplicates, because of the internal store design.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(log n). On a single CPU 1.8Ghz P4, approximately 6ms is required
      * for 1000 entries and 36 for 50000.
-     * <p/>
+     * <p>
      * This is the fastest getKeys method
      *
      * @return a list of {@link Object} keys
@@ -2211,11 +2207,11 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
@@ -2230,15 +2226,14 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
-     * <p/>
      *
      * @param key the element key to operate on
      * @return true if the element was removed, false if it was not found in the cache
@@ -2252,14 +2247,13 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache and returns it. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element with the key actually existed.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails. This exception
      * should be caught in those circumstances.
-     * <p/>
      *
      * @param key the element key to operate on
      * @return element the removed element associated with the key, null if no mapping exists
@@ -2291,12 +2285,12 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
@@ -2313,10 +2307,10 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
      *
      * @param key                         the element key to operate on
@@ -2337,7 +2331,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache, without notifying listeners. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Listeners are not called.
      *
      * @param key the element key to operate on
@@ -2351,9 +2345,9 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes an {@link Element} from the Cache, without notifying listeners. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Listeners are not called.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails. This exception
      * should be caught in those circumstances.
      *
@@ -2381,15 +2375,15 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes or expires an {@link Element} from the Cache after an attempt to get it determined that it should be expired.
      * This also removes it from any stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element has expired.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * If a remove was called, listeners are notified, regardless of whether the element existed or not.
      * This allows distributed cache listeners to remove elements from a cluster regardless of whether they
      * existed locally.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
@@ -2461,14 +2455,14 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes or expires a collection of {@link Element}s from the Cache after an attempt to get it determined that it should be expired.
      * This also removes it from any stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element has expired.
-     * <p/>
+     * <p>
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * If a removeAll was called, listeners are notified, regardless of whether the element existed or not. This allows distributed cache
      * listeners to remove elements from a cluster regardless of whether they existed locally.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails. This exception
      * should be caught in those circumstances.
      *
@@ -2500,7 +2494,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes all cached items.
      * Terracotta clustered caches may require more time to execute this operation because cached items must also be removed from the Terracotta Server Array. Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
@@ -2514,7 +2508,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Removes all cached items.
      * Synchronization is handled within the method.
-     * <p/>
+     * <p>
      * Caches which use synchronous replication can throw RemoteCacheException here if the replication to the cluster fails.
      * This exception should be caught in those circumstances.
      *
@@ -2642,7 +2636,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Gets the cache configuration this cache was created with.
-     * <p/>
+     * <p>
      * Things like listeners that are added dynamically are excluded.
      */
     public CacheConfiguration getCacheConfiguration() {
@@ -2667,24 +2661,24 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Gets the size of the cache. This is a subtle concept. See below.
-     * <p/>
+     * <p>
      * This number is the actual number of elements, including expired elements
      * that have not been removed.
-     * <p/>
+     * <p>
      * Expired elements are removed from the the memory store when getting an
      * expired element, or when attempting to spool an expired element to disk.
-     * <p/>
+     * <p>
      * Expired elements are removed from the disk store when getting an expired
      * element, or when the expiry thread runs, which is once every five
      * minutes.
-     * <p/>
+     * <p>
      * To get an exact size, which would exclude expired elements, use
      * {@link #getKeysWithExpiryCheck()}.size(), although see that method for
      * the approximate time that would take.
-     * <p/>
+     * <p>
      * To get a very fast result, use {@link #getKeysNoDuplicateCheck()}.size().
      * If the disk store is being used, there will be some duplicates.
-     * <p/>
+     * <p>
      * Note:getSize() is a very expensive operation in off-heap, disk and Terracotta implementations.
      *
      * @return The size value
@@ -2704,14 +2698,13 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Gets the size of the memory store for this cache. This method relies on calculating
      * Serialized sizes. If the Element values are not Serializable they will show as zero.
-     * <p/>
+     * <p>
      * Warning: This method can be very expensive to run. Allow approximately 1 second
      * per 1MB of entries. Running this method could create liveness problems
      * because the object lock is held for a long period
-     * <p/>
      *
      * @return the approximate size of the memory store in bytes
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     @Deprecated public final long calculateInMemorySize() throws IllegalStateException, CacheException {
         checkStatus();
@@ -2730,7 +2723,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Gets the size of the off-heap store for this cache.
      *
      * @return the size of the off-heap store in bytes
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     @Deprecated public final long calculateOffHeapSize() throws IllegalStateException, CacheException {
         checkStatus();
@@ -2741,7 +2734,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Gets the size of the on-disk store for this cache
      *
      * @return the size of the on-disk store in bytes
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     @Deprecated public final long calculateOnDiskSize() throws IllegalStateException, CacheException {
         checkStatus();
@@ -2861,7 +2854,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Checks whether this cache element has expired.
-     * <p/>
+     * <p>
      * The element is expired if:
      * <ol>
      * <li> the idle time is non-zero and has elapsed, unless the cache is eternal; or
@@ -2884,12 +2877,11 @@ public class Cache implements InternalEhcache, StoreListener {
      * Clones a cache. This is only legal if the cache has not been
      * initialized. At that point only primitives have been set and no
      * stores have been created.
-     * <p/>
+     * <p>
      * A new, empty, RegisteredEventListeners is created on clone.
-     * <p/>
      *
      * @return an object of type {@link Cache}
-     * @throws CloneNotSupportedException
+     * @throws CloneNotSupportedException when it's not supported
      */
     @Override
     public final Cache clone() throws CloneNotSupportedException {
@@ -2909,6 +2901,8 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Get the optional store management bean for this cache.
+     *
+     * @return the store MBean
      */
     public final Object getStoreMBean() {
       return getStore().getMBean();
@@ -2956,6 +2950,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key key to look for
      * @return true if an element matching the key is found in off-heap
      * @since 2.3
      */
@@ -2970,6 +2965,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key key to look for
      * @return true if an element matching the key is found in the diskStore
      */
     public final boolean isElementOnDisk(Serializable key) {
@@ -2982,6 +2978,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key key to look for
      * @return true if an element matching the key is found in the diskStore
      * @since 1.2
      */
@@ -3021,7 +3018,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * An inexpensive check to see if the key exists in the cache.
-     * <p/>
+     * <p>
      * This method is not synchronized. It is possible that an element may exist in the cache and be removed
      * before the check gets to it, or vice versa.  Since no assertions are made about the state of the Element
      * it is possible that the Element is expired, but this method still returns true.
@@ -3040,7 +3037,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * An extremely expensive check to see if the value exists in the cache. This implementation is O(n). Ehcache
      * is not designed for efficient access in this manner.
-     * <p/>
+     * <p>
      * This method is not synchronized. It is possible that an element may exist in the cache and be removed
      * before the check gets to it, or vice versa. Because it is slow to execute the probability of that this will
      * have happened.
@@ -3069,7 +3066,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * Note, the {@link #getSize} method will have the same value as the size
      * reported by Statistics for the statistics accuracy of
      */
@@ -3114,7 +3111,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * An equals method which follows the contract of {@link Object#equals(Object)}
-     * <p/>
+     * <p>
      * An Cache is equal to another one if it implements Ehcache and has the same GUID.
      *
      * @param object the reference object with which to compare.
@@ -3139,7 +3136,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * Returns a hash code value for the object. This method is
      * supported for the benefit of hashtables such as those provided by
      * <code>java.util.Hashtable</code>.
-     * <p/>
+     * <p>
      * The general contract of <code>hashCode</code> is:
      * <ul>
      * <li>Whenever it is invoked on the same object more than once during
@@ -3158,14 +3155,14 @@ public class Cache implements InternalEhcache, StoreListener {
      * programmer should be aware that producing distinct integer results
      * for unequal objects may improve the performance of hashtables.
      * </ul>
-     * <p/>
+     * <p>
      * As much as is reasonably practical, the hashCode method defined by
      * class <tt>Object</tt> does return distinct integers for distinct
      * objects. (This is typically implemented by converting the internal
      * address of the object into an integer, but this implementation
      * technique is not required by the
      * Java(TM) programming language.)
-     * <p/>
+     * <p>
      * This implementation use the GUID of the cache.
      *
      * @return a hash code value for this object.
@@ -3188,7 +3185,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Register a {@link CacheExtension} with the cache. It will then be tied into the cache lifecycle.
-     * <p/>
+     * <p>
      * If the CacheExtension is not initialised, initialise it.
      */
     public void registerCacheExtension(CacheExtension cacheExtension) {
@@ -3213,7 +3210,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Sets an ExceptionHandler on the Cache. If one is already set, it is overwritten.
-     * <p/>
+     * <p>
      * The ExceptionHandler is only used if this Cache's methods are accessed using
      * {@link net.sf.ehcache.exceptionhandler.ExceptionHandlingDynamicCacheProxy}.
      *
@@ -3227,7 +3224,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * Gets the ExceptionHandler on this Cache, or null if there isn't one.
-     * <p/>
+     * <p>
      * The ExceptionHandler is only used if this Cache's methods are accessed using
      * {@link net.sf.ehcache.exceptionhandler.ExceptionHandlingDynamicCacheProxy}.
      *
@@ -3534,9 +3531,9 @@ public class Cache implements InternalEhcache, StoreListener {
      * <li>gets return null</li>
      * </ol>
      * In all other respects the cache continues as it is.
-     * <p/>
+     * <p>
      * You can disable and enable a cache programmatically through the {@link #setDisabled(boolean)} method.
-     * <p/>
+     * <p>
      * By default caches are enabled on creation, unless the <code>net.sf.ehcache.disabled</code> system
      * property is set.
      *
@@ -3550,7 +3547,6 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Disables or enables this cache. This call overrides the previous value of disabled, even if the
      * <code>net.sf.ehcache.disabled</code> system property is set
-     * <p/>
      *
      * @param disabled true if you wish to disable, false to enable
      * @see #isDisabled()
@@ -3677,7 +3673,7 @@ public class Cache implements InternalEhcache, StoreListener {
     // PropertyChangeSupport
 
     /**
-     * @param listener
+     * @param listener the {@link PropertyChangeListener} to add
      */
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
       if (listener != null && propertyChangeSupport != null) {
@@ -3687,7 +3683,7 @@ public class Cache implements InternalEhcache, StoreListener {
     }
 
     /**
-     * @param listener
+     * @param listener the {@link PropertyChangeListener} to remove
      */
     public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
       if (listener != null && propertyChangeSupport != null) {
@@ -3696,9 +3692,9 @@ public class Cache implements InternalEhcache, StoreListener {
     }
 
     /**
-     * @param propertyName
-     * @param oldValue
-     * @param newValue
+     * @param propertyName the name of the property that changed
+     * @param oldValue the old value of the property that changed
+     * @param newValue the new value of the property that changed
      */
     public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
       PropertyChangeSupport pcs;
@@ -3875,7 +3871,7 @@ public class Cache implements InternalEhcache, StoreListener {
 
     /**
      * @return set of all search attributes in effect at the time of calling this method 
-     * @throws CacheException
+     *  @throws CacheException in case of error
      */
     public Set<Attribute> getSearchAttributes() throws CacheException {
         checkStatus();
@@ -3946,7 +3942,7 @@ public class Cache implements InternalEhcache, StoreListener {
     /**
      * Gets the lock for a given key
      *
-     * @param key
+     * @param key the key we want the lock for
      * @return the lock object for the passed in key
      */
     protected Sync getLockForKey(final Object key) {
@@ -3989,7 +3985,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * @param key - The key that retrieves a value that you want to protect via locking
      * @param timeout - millis until giveup on getting the lock
      * @return whether the lock was awarded
-     * @throws InterruptedException
+     * @throws InterruptedException in case the thread was interrupted
      */
     public boolean tryReadLockOnKey(Object key, long timeout) throws InterruptedException {
         Sync s = getLockForKey(key);
@@ -4003,7 +3999,7 @@ public class Cache implements InternalEhcache, StoreListener {
      * @param key - The key that retrieves a value that you want to protect via locking
      * @param timeout - millis until giveup on getting the lock
      * @return whether the lock was awarded
-     * @throws InterruptedException
+     * @throws InterruptedException in case the thread was interrupted
      */
     public boolean tryWriteLockOnKey(Object key, long timeout) throws InterruptedException {
         Sync s = getLockForKey(key);

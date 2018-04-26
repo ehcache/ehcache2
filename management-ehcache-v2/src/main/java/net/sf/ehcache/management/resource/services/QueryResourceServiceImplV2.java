@@ -23,8 +23,6 @@ import org.terracotta.management.resource.exceptions.ResourceRuntimeException;
 import org.terracotta.management.resource.services.validator.RequestValidator;
 
 /**
- * <p>An implementation of {@link QueryResourceService}.</p>
- *
  * @author gkeim
  */
 @Path("/v2/agents/cacheManagers/query")

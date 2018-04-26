@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * A pre JDK1.5 compatible enum class to indicate the status of a {@link CacheManager} or {@link Cache}.
- * <p/>
+ * <p>
  * ehcache historically used int values for status. This is unsuitable for third party use thus this class.
  * Methods are provided to convert from the int status values to enum values and vice versa.
  *
@@ -62,7 +62,7 @@ public final class Status implements Serializable {
      * be a concise but informative representation that is easy for a
      * person to read.
      * It is recommended that all subclasses override this method.
-     * <p/>
+     * <p>
      * The <code>toString</code> method for class <code>Object</code>
      * returns a string consisting of the name of the class of which the
      * object is an instance, the at-sign character `<code>@</code>', and
@@ -102,7 +102,7 @@ public final class Status implements Serializable {
 
     /**
      * Indicates whether some other object is "equal to" this one.
-     * <p/>
+     * <p>
      * The <code>equals</code> method implements an equivalence relation
      * on non-null object references:
      * <ul>
@@ -127,14 +127,13 @@ public final class Status implements Serializable {
      * <li>For any non-null reference value <code>x</code>,
      * <code>x.equals(null)</code> should return <code>false</code>.
      * </ul>
-     * <p/>
      * The <tt>equals</tt> method for class <code>Object</code> implements
      * the most discriminating possible equivalence relation on objects;
      * that is, for any non-null reference values <code>x</code> and
      * <code>y</code>, this method returns <code>true</code> if and only
      * if <code>x</code> and <code>y</code> refer to the same object
      * (<code>x == y</code> has the value <code>true</code>).
-     * <p/>
+     * <p>
      * Note that it is generally necessary to override the <tt>hashCode</tt>
      * method whenever this method is overridden, so as to maintain the
      * general contract for the <tt>hashCode</tt> method, which states

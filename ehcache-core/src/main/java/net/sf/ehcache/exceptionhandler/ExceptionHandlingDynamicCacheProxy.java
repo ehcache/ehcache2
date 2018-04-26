@@ -28,23 +28,23 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A dynamic proxy which provides CacheException handling.
- * <p/>
+ * <p>
  * The ehcache configuration will create and register in the <code>CacheManager</code> {@link Ehcache}s decorated
  * with this dynamic proxy. See following for programmatic use.
- * <p/>
+ * <p>
  * The createProxy factory method may be used to simply create a proxy. Otherwise the calling client
  * will need code similar to:
  * <pre>
  * (Ehcache) Proxy.newProxyInstance(ehcache.getClass().getClassLoader(), new Class[]{ Ehcache.class },
  * new ExceptionHandlingDynamicCacheProxy(ehcache));</pre>
- * <p/>
+ * <p>
  * A common usage is to create a proxy and then register the proxy in <code>CacheManager</code> in place of the
  * underlying cache. To do that create a proxy and then call
  * <pre>
  * cacheManager.replaceCacheWithDecoratedCache(Ehcache cache, Ehcache decoratedCache);
  * </pre>
  * All clients accessing the cache through<code>cacheManager.getEhcache()</code> will then receive proxy references.
- * <p/>
+ * <p>
  * See CacheTest for a perf test.
  *
  * @author <a href="mailto:gluck@gregluck.com">Greg Luck</a>

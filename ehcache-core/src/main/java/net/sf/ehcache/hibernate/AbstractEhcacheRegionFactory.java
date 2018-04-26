@@ -55,16 +55,16 @@ abstract class AbstractEhcacheRegionFactory implements RegionFactory {
 
     /**
      * The Hibernate system property specifying the location of the ehcache configuration file name.
-     * <p/>
+     * <p>
      * If not set, ehcache.xml will be looked for in the root of the classpath.
-     * <p/>
+     * <p>
      * If set to say ehcache-1.xml, ehcache-1.xml will be looked for in the root of the classpath.
      */
     public static final String NET_SF_EHCACHE_CONFIGURATION_RESOURCE_NAME = "net.sf.ehcache.configurationResourceName";
 
     /**
      * The Hibernate system property specifying the name of the CacheManager being created.
-     * <p/>
+     * <p>
      * If not set, it will either use the ehcache.xml to name the CacheManager, or fallback to default CacheManager naming.
      */
     public static final String NET_SF_EHCACHE_CACHE_MANAGER_NAME = "net.sf.ehcache.cacheManagerName";

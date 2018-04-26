@@ -44,17 +44,17 @@ import static net.sf.ehcache.config.Configuration.getAllActiveCaches;
 
 /**
  * A value object used to represent cache configuration.
- * <h4>Construction Patterns</h4>
+ * <h1>Construction Patterns</h1>
  * The recommended way of creating a <code>Cache</code> in Ehcache 2.0 and above is to create a <code>CacheConfiguration</code> object
  * and pass it to the <code>Cache</code> constructor. See {@link net.sf.ehcache.Cache#Cache(CacheConfiguration)}.
- * <p/>
+ * <p>
  * This class supports setter injection and also the fluent builder pattern.
  * e.g.
  * <code>Cache cache = new Cache(new CacheConfiguration("test2", 1000).eternal(true).memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.FIFO));</code>
- * <p/>
+ * <p>
  * Rather than proliferation of new constructors as new versions of Ehcache come out, it intended to add the new configuration to this
  * class.
- * <p/>
+ * <p>
  * Another way to set configuration is declaratively in the <code>ehcache.xml</code> configuration file.
  * e.g.
  * <pre>{@code
@@ -69,8 +69,8 @@ import static net.sf.ehcache.config.Configuration.getAllActiveCaches;
  *   maxEntriesLocalDisk="10000"
  * />
  * }</pre>
- * <p/>
- * <h4>Dynamic Configuration</h4>
+ * <p>
+ * <h1>Dynamic Configuration</h1>
  * CacheConfiguration instances retrieved from Cache instances allow the dynamic
  * modification of certain configuration properties.  Currently the dynamic
  * properties are:
@@ -83,7 +83,7 @@ import static net.sf.ehcache.config.Configuration.getAllActiveCaches;
  * Dynamic changes are however not persistent across cache restarts.  On restart
  * the cache configuration will be reloaded from its original source, erasing any
  * changes made previously at runtime.
- * <p/>
+ * <p>
  * Users should also take care of synchronizing threads externally, if a CacheConfiguration instance is
  * going to be mutated by multiple threads concurrently. While CacheConfiguration instances will
  * make changes properly visible to all threads, logic within individual methods (e.g. validation) isn't
@@ -220,14 +220,14 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * the maximum objects to be held in the {@link net.sf.ehcache.store.MemoryStore}.
-     * <p/>
+     * <p>
      * <code>0</code> translates to no-limit.
      */
     protected volatile Integer maxEntriesLocalHeap;
 
     /**
      * the maximum objects to be held in the {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
+     * <p>
      * <code>0</code> translates to no-limit.
      */
     protected volatile int maxElementsOnDisk = DEFAULT_MAX_ELEMENTS_ON_DISK;
@@ -305,7 +305,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * The interval in seconds between runs of the disk expiry thread.
-     * <p/>
+     * <p>
      * 2 minutes is the default.
      * This is not the same thing as time to live or time to idle. When the thread runs it checks
      * these things. So this value is how often we check for expiry.
@@ -411,7 +411,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Default constructor.
-     * <p/>
+     * <p>
      * Note that an empty Cache is not valid and must have extra configuration added which can be done
      * through the fluent methods in this class. Call <code>validateConfiguration()</code> to check your configuration.
      *
@@ -423,7 +423,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Create a new cache configuration.
-     * <p/>
+     * <p>
      * Extra configuration can added after construction via the fluent methods in this class.
      * Call <code>validateConfiguration()</code> to check your configuration.
      *
@@ -521,7 +521,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the name of the cache.
-     * <P/>
+     * <p>
      * Cache names have constraints on the characters they can use:
      * <ul>
      *     <li>the '/' character is illegal,</li>
@@ -541,7 +541,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder to set the name of the cache.
-     * <P/>
+     * <p>
      * Cache names have constraints on the characters they can use:
      * <ul>
      *     <li>the '/' character is illegal,</li>
@@ -562,7 +562,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Enables or disables logging for the cache
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      * Only used when cache is clustered with Terracotta
      *
@@ -673,7 +673,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder to enable or disable logging for the cache
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      * Only used when cache is clustered with Terracotta
      *
@@ -688,7 +688,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum objects to be held in memory (0 = no limit).
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsInMemory The maximum number of elements in memory, before they are evicted (0 == no limit)
@@ -701,7 +701,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum objects to be held in local heap memory (0 = no limit).
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxEntriesLocalHeap The maximum number of elements in memory, before they are evicted (0 == no limit)
@@ -725,7 +725,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder that sets the maximum objects to be held in memory (0 = no limit).
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsInMemory The maximum number of elements in memory, before they are evicted (0 == no limit)
@@ -740,7 +740,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder that sets the maximum objects to be held in memory (0 = no limit).
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsInMemory The maximum number of elements in memory, before they are evicted (0 == no limit)
@@ -888,7 +888,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Sets the time to idle for an element before it expires. Is only used if the element is not eternal. This can be overidden in
      * {@link net.sf.ehcache.Element}
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param timeToIdleSeconds the default amount of time to live for an element from its last accessed or modified date
@@ -907,7 +907,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Builder which sets the time to idle for an element before it expires. Is only used if the element is not eternal.
      * This default can be overridden in {@link net.sf.ehcache.Element}
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param timeToIdleSeconds the default amount of time to live for an element from its last accessed or modified date
@@ -922,7 +922,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Sets the time to idle for an element before it expires. Is only used if the element is not eternal.
      * This default can be overridden in {@link net.sf.ehcache.Element}
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param timeToLiveSeconds the default amount of time to live for an element from its creation date
@@ -941,7 +941,7 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Builder which sets the time to idle for an element before it expires. Is only used if the element is not eternal.
      * This default can be overridden in {@link net.sf.ehcache.Element}
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param timeToLiveSeconds the default amount of time to live for an element from its creation date
@@ -1070,7 +1070,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum number elements on Disk. 0 means unlimited.
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsOnDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
@@ -1090,13 +1090,13 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum number of entries in the cache. Only applies to terracotta clustered caches.
-     * <p/>
+     * <p>
      * The values for maxEntriesInCache must be equal or superior to 0 and are interpreted as follows:
      * <ul>
      * <li>{@code maxEntriesInCache == 0} means no capacity based eviction, but resource based eviction can happen.</li>
      * <li>{@code maxEntriesInCache > 0} means both capacity based and resource based eviction can happen
      * </ul>
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxEntriesInCache maximum number of entries in cache
@@ -1120,7 +1120,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum number elements on Disk. 0 means unlimited.
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxEntriesLocalDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
@@ -1143,7 +1143,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the maximum number elements on Disk. 0 means unlimited.
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsOnDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
@@ -1158,7 +1158,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the maximum number entries in cache.
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxEntriesInCache the maximum number of entries to allow in the cache.
@@ -1172,7 +1172,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the maximum number elements on Disk. 0 means unlimited.
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxElementsOnDisk the maximum number of Elements to allow on the disk. 0 means unlimited.
@@ -1186,7 +1186,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the interval in seconds between runs of the disk expiry thread.
-     * <p/>
+     * <p>
      * 2 minutes is the default.
      * This is not the same thing as time to live or time to idle. When the thread runs it checks
      * these things. So this value is how often we check for expiry.
@@ -1202,7 +1202,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Builder which sets the interval in seconds between runs of the disk expiry thread.
-     * <p/>
+     * <p>
      * 2 minutes is the default.
      * This is not the same thing as time to live or time to idle. When the thread runs it checks
      * these things. So this value is how often we check for expiry.
@@ -1340,7 +1340,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Setter for maxBytesLocalHeap as a String. Value can have a one char unit suffix or be a percentage (ending in %)
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesHeap String representation of the size, can be relative (in %)
@@ -1357,7 +1357,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Setter for maxBytesLocalHeap in bytes
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesHeap max bytes in heap in bytes
@@ -1431,7 +1431,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Setter for maximum bytes off heap as a String. Value can have a one char unit suffix or be a percentage (ending in %)
-     * <p/>
+     * <p>
      * Changes to this property once the cache is operating will have no effect.
      *
      * @param maxBytesOffHeap String representation of the size, can be relative (in %)
@@ -1495,7 +1495,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum amount of bytes the cache being configured will use on the OffHeap tier
-     * <p/>
+     * <p>
      * Changes to this property once the cache is operating will have no effect.
      *
      * @param maxBytesOffHeap max bytes on disk in bytes
@@ -1511,7 +1511,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maxOffHeap tier size
-     * <p/>
+     * <p>
      * Changes to this property once the cache is operating will have no effect.
      *
      * @param amount the amount of unit
@@ -1541,7 +1541,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Setter for maxBytesOnDisk as a String. Value can have a one char unit suffix or be a percentage (ending in %)
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesDisk String representation of the size, can be relative (in %)
@@ -1559,7 +1559,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maximum amount of bytes the cache being configured will use on the OnDisk tier
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesDisk max bytes on disk in bytes
@@ -1585,7 +1585,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Sets the maxOnDisk size
-     * <p/>
+     * <p>
      * This property can be modified dynamically while the cache is operating.
      *
      * @param amount the amount of unit
@@ -2215,7 +2215,7 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Add the CacheExceptionHandlerFactory to the configuration.
-     * <p/>
+     * <p>
      * Note that this will not have any effect when creating a cache solely through its constructed. The exception
      * handler will only be taken into account when {@link ConfigurationHelper} is used, for example through
      * {@link net.sf.ehcache.CacheManager}.

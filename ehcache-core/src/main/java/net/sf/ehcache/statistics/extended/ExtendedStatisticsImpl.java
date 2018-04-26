@@ -772,7 +772,7 @@ public class ExtendedStatisticsImpl implements ExtendedStatistics {
      * @return the operation statistic
      */
     private static OperationStatistic findOperationStatistic(StatisticsManager manager, StandardOperationStatistic statistic) {
-        Set<OperationStatistic<? extends Enum>> results = findOperationStatistic(manager,
+        Set<? extends OperationStatistic<? extends Enum>> results = findOperationStatistic(manager,
             statistic.context(),
             statistic.type(),
             statistic.operationName(),

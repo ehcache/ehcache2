@@ -158,7 +158,7 @@ public abstract class AbstractCacheTest {
 
     /**
      * Runs a set of threads, for a fixed amount of time.
-     * <p/>
+     * <p>
      * Throws an exception if there are throwables during the run.
      */
     public static void runThreads(final List executables) throws Exception {
@@ -171,7 +171,7 @@ public abstract class AbstractCacheTest {
 
     /**
      * Runs a set of threads, for a fixed amount of time.
-     * <p/>
+     * <p>
      * Does not fail if throwables are thrown.
      *
      * @return the number of Throwables thrown while running
@@ -182,7 +182,7 @@ public abstract class AbstractCacheTest {
 
     /**
      * Runs a set of threads, for a fixed amount of time.
-     * <p/>
+     * <p>
      * Does not fail if throwables are thrown.
      *
      * @param executables the list of executables to execute

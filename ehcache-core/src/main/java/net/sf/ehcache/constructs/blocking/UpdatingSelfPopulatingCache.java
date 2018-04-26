@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A {@link net.sf.ehcache.Cache} backed cache that creates entries on demand.
- * <p/>
+ * <p>
  * Clients of the cache simply call it without needing knowledge of whether
  * the entry exists in the cache, or whether it needs updating before use.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Thread safety depends on the factory being used. The UpdatingCacheEntryFactory should be made
  * thread safe. In addition users of returned values should not modify their contents.
  *
@@ -55,10 +55,10 @@ public class UpdatingSelfPopulatingCache extends SelfPopulatingCache {
 
     /**
      * Looks up an object.
-     * <p/>
+     * <p>
      * If null, it creates it. If not null, it updates it. For performance this method should only be
      * used with {@link UpdatingCacheEntryFactory}'s
-     * <p/>
+     * <p>
      * It is expected that
      * gets, which update as part of the get, might take considerable time. Access to the cache cannot be blocked
      * while that is happening. This method is therefore not synchronized. Sync's are used for thread safety based on key

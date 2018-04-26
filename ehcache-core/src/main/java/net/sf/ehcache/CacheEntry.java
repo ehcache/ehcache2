@@ -18,7 +18,7 @@ package net.sf.ehcache;
 
 /**
  * Helper class to tie a key to an element.
- * <p/>
+ * <p>
  * This is used for operations that are identified by a key but that could benefit from additional information that's
  * available in an element when it can be found in the cache. If the element isn't available, it will be {@code null}.
  *

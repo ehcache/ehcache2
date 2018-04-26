@@ -44,7 +44,7 @@ public class Max<T> implements AggregatorInstance<T> {
     }
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: May return null if no input provided
      */
     public T aggregateResult() {
@@ -54,7 +54,7 @@ public class Max<T> implements AggregatorInstance<T> {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * NOTE: null input values are ignored
      */
     public void accept(Object input) throws AggregatorException {

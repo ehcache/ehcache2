@@ -33,7 +33,7 @@ import net.sf.ehcache.management.sampled.SampledCacheManager;
 /**
  * Implementation of {@link EhcacheStats}
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  *

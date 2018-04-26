@@ -25,7 +25,7 @@ import net.sf.ehcache.util.counter.sampled.SampledRateCounter;
 
 /**
  * An interface for exposing cache statistics.
- * Extends from both {@link LiveCacheStatistics} and {@link LegacyCacheStatistics}
+ * Extends from {@link LegacyCacheStatistics}
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @author <a href="mailto:byoukste@terracottatech.com">byoukste</a>
@@ -471,7 +471,7 @@ public interface CacheSampler extends LegacyCacheStatistics {
      * Get the declared search attributes and their type names.
      * Note: doesn't deal with DynamicAttributeExctractor.
      * 
-     * @return map of search attribute name -> type name
+     * @return map of search attribute name {@code -> } type name
      */
     @ManagementAttribute
     Map<String, String> getSearchAttributes();

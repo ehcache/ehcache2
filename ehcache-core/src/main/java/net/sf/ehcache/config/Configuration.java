@@ -204,7 +204,7 @@ public final class Configuration {
 
     /**
      * Empty constructor, which is used by {@link ConfigurationFactory}, and can be also used programmatically.
-     * <p/>
+     * <p>
      * If you are using it programmtically you need to call the relevant add and setter methods in this class to populate everything.
      */
     public Configuration() {
@@ -297,7 +297,7 @@ public final class Configuration {
 
     /**
      * Builder to set the cache manager name.
-     * <P/>
+     * <p>
      * Cache manager names have constraints on the characters they can use:
      * <ul>
      *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.
@@ -317,7 +317,7 @@ public final class Configuration {
 
     /**
      * Allows BeanHandler to set the CacheManager name.
-     * <P/>
+     * <p>
      * Cache manager names have constraints on the characters they can use:
      * <ul>
      *     <li>cache managers that are registered as MBeans must obey the {@link javax.management.ObjectName} rules for unquoted value.

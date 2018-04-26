@@ -6,7 +6,7 @@ import org.terracotta.management.resource.AbstractEntityV2;
 
 /**
  * <p>
- * A {@link VersionedEntity} representing query results.
+ * A {@link AbstractEntityV2} representing query results.
  * </p>
  * 
  * @author gkeim

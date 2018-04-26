@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * triggered refresh ahead case will be processed. As the maximum number of backlog entries is reached, refresh ahead requests will be
  * dropped silently.
  * <p>
- * Provided the Number of threads per node * Number of nodes < the maximum backlog, only one node in the cluster will refresha given key at
+ * Provided the {@code Number of threads per node * Number of nodes < the maximum backlog}, only one node in the cluster will refresh a given key at
  * a time.
  *
  * @author cschanck

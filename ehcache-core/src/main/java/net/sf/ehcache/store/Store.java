@@ -119,7 +119,7 @@ public interface Store {
 
     /**
      * Remove all of the elements from the store.
-     * <p/>
+     * <p>
      * If there are registered <code>CacheEventListener</code>s they are notified of the expiry or removal
      * of the <code>Element</code> as each is removed.
      */
@@ -207,7 +207,7 @@ public interface Store {
 
     /**
      * Gets the size of the in-memory portion of the store, in bytes.
-     * <p/>
+     * <p>
      * This method may be expensive to run, depending on implementation. Implementers may choose to return
      * an approximate size.
      *
@@ -332,7 +332,7 @@ public interface Store {
 
     /**
      * Returns true if the cache is in coherent mode cluster-wide. Returns false otherwise.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      *
      * @return true if the cache is in coherent mode cluster-wide, false otherwise
@@ -342,7 +342,7 @@ public interface Store {
 
     /**
      * Returns true if the cache is in coherent mode for the current node. Returns false otherwise.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      *
      * @return true if the cache is in coherent mode cluster-wide, false otherwise
@@ -354,7 +354,7 @@ public interface Store {
      * Sets the cache in coherent or incoherent mode for the current node depending on the parameter.
      * Calling {@code setNodeCoherent(true)} when the cache is already in coherent mode or
      * calling {@code setNodeCoherent(false)} when already in incoherent mode will be a no-op.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      *
      * @param coherent
@@ -367,7 +367,7 @@ public interface Store {
     /**
      * This method waits until the cache is in coherent mode in all the connected nodes. If the cache is already in coherent mode it returns
      * immediately
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      * @throws UnsupportedOperationException if this store does not support cache coherence, like RMI replication
      * @throws InterruptedException

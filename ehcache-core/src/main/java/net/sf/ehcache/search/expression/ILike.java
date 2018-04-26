@@ -40,7 +40,7 @@ import net.sf.ehcache.search.attribute.AttributeExtractor;
  * The supported wildcard characters can be escaped with a backslash '\', and a literal backslash can be included with '\\'<br>
  * <br>
  * WARN: Expressions starting with a leading wildcard character are potentially very expensive (ie. full scan) for indexed caches
- * <p/>
+ * <p>
  *
  * @author teck
  */

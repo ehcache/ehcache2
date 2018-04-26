@@ -28,13 +28,13 @@ import java.util.Iterator;
 
 /**
  * A selfpopulating decorator for {@link Ehcache} that creates entries on demand.
- * <p/>
+ * <p>
  * Clients of the cache simply call it without needing knowledge of whether
  * the entry exists in the cache.
- * <p/>
+ * <p>
  * The cache is designed to be refreshed. Refreshes operate on the backing cache, and do not
  * degrade performance of {@link #get(java.io.Serializable)} calls.
- * <p/>
+ * <p>
  * Thread safety depends on the factory being used. The UpdatingCacheEntryFactory should be made
  * thread safe. In addition users of returned values should not modify their contents.
  *
@@ -94,14 +94,14 @@ public class SelfPopulatingCache extends BlockingCache {
 
     /**
      * Refresh the elements of this cache.
-     * <p/>
+     * <p>
      * Refreshes bypass the {@link BlockingCache} and act directly on the backing {@link Ehcache}.
      * This way, {@link BlockingCache} gets can continue to return stale data while the refresh, which
      * might be expensive, takes place.
-     * <p/>
+     * <p>
      * Quiet methods are used, so that statistics are not affected.
      * Note that the refreshed elements will not be replicated to any cache peers.
-     * <p/>
+     * <p>
      * Configure ehcache.xml to stop elements from being refreshed forever:
      * <ul>
      * <li>use timeToIdle to discard elements unused for a period of time
@@ -116,14 +116,14 @@ public class SelfPopulatingCache extends BlockingCache {
 
     /**
      * Refresh the elements of this cache.
-     * <p/>
+     * <p>
      * Refreshes bypass the {@link BlockingCache} and act directly on the backing {@link Ehcache}.
      * This way, {@link BlockingCache} gets can continue to return stale data while the refresh, which
      * might be expensive, takes place.
-     * <p/>
+     * <p>
      * Quiet methods are used if argument 0 is true, so that statistics are not affected,
      * but note that replication will then not occur
-     * <p/>
+     * <p>
      * Configure ehcache.xml to stop elements from being refreshed forever:
      * <ul>
      * <li>use timeToIdle to discard elements unused for a period of time
@@ -176,13 +176,13 @@ public class SelfPopulatingCache extends BlockingCache {
 
     /**
      * Refresh a single element.
-     * <p/>
+     * <p>
      * Refreshes bypass the {@link BlockingCache} and act directly on the backing {@link Ehcache}.
      * This way, {@link BlockingCache} gets can continue to return stale data while the refresh, which
      * might be expensive, takes place.
-     * <p/>
+     * <p>
      * If the element is absent it is created
-     * <p/>
+     * <p>
      * Quiet methods are used, so that statistics are not affected.
      * Note that the refreshed element will not be replicated to any cache peers.
      *
@@ -197,13 +197,13 @@ public class SelfPopulatingCache extends BlockingCache {
 
     /**
      * Refresh a single element.
-     * <p/>
+     * <p>
      * Refreshes bypass the {@link BlockingCache} and act directly on the backing {@link Ehcache}.
      * This way, {@link BlockingCache} gets can continue to return stale data while the refresh, which
      * might be expensive, takes place.
-     * <p/>
+     * <p>
      * If the element is absent it is created
-     * <p/>
+     * <p>
      * Quiet methods are used if argument 1 is true, so that statistics are not affected,
      * but note that replication will then not occur
      *

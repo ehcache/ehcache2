@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Sends heartbeats to a multicast group containing a compressed list of URLs.
- * <p/>
+ * <p>
  * You can control how far the multicast packets propagate by setting the badly misnamed "TTL".
  * Using the multicast IP protocol, the TTL value indicates the scope or range in which a packet may be forwarded.
  * By convention:
@@ -172,7 +172,7 @@ public final class MulticastKeepaliveHeartbeatSender {
 
         /**
          * Creates a gzipped payload.
-         * <p/>
+         * <p>
          * The last gzipped payload is retained and only recalculated if the list of cache peers
          * has changed.
          *
@@ -198,12 +198,12 @@ public final class MulticastKeepaliveHeartbeatSender {
 
         /**
          * Interrupts this thread.
-         * <p/>
+         * <p>
          * <p> Unless the current thread is interrupting itself, which is
          * always permitted, the {@link #checkAccess() checkAccess} method
          * of this thread is invoked, which may cause a {@link
          * SecurityException} to be thrown.
-         * <p/>
+         * <p>
          * <p> If this thread is blocked in an invocation of the {@link
          * Object#wait() wait()}, {@link Object#wait(long) wait(long)}, or {@link
          * Object#wait(long,int) wait(long, int)} methods of the {@link Object}
@@ -211,19 +211,19 @@ public final class MulticastKeepaliveHeartbeatSender {
          * #join(long,int)}, {@link #sleep(long)}, or {@link #sleep(long,int)},
          * methods of this class, then its interrupt status will be cleared and it
          * will receive an {@link InterruptedException}.
-         * <p/>
+         * <p>
          * <p> If this thread is blocked in an I/O operation upon an {@link
          * java.nio.channels.InterruptibleChannel </code>interruptible
          * channel<code>} then the channel will be closed, the thread's interrupt
          * status will be set, and the thread will receive a {@link
          * java.nio.channels.ClosedByInterruptException}.
-         * <p/>
+         * <p>
          * <p> If this thread is blocked in a {@link java.nio.channels.Selector}
          * then the thread's interrupt status will be set and it will return
          * immediately from the selection operation, possibly with a non-zero
          * value, just as if the selector's {@link
          * java.nio.channels.Selector#wakeup wakeup} method were invoked.
-         * <p/>
+         * <p>
          * <p> If none of the previous conditions hold then this thread's interrupt
          * status will be set. </p>
          *

@@ -48,12 +48,12 @@ public class Cache implements CacheMBean, Serializable {
      * A constructor for JCache.
      *
      * JCache is an adaptor for an Ehcache, and therefore requires an Ehcace in its constructor.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.config.ConfigurationFactory} and clients can create these.
-     * <p/>
+     * <p>
      * A client can specify their own settings here and pass the {@link Ehcache} object
      * into {@link net.sf.ehcache.CacheManager#addCache} to specify parameters other than the defaults.
-     * <p/>
+     * <p>
      * Only the CacheManager can initialise them.
      *
      * @param cache An ehcache

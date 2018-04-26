@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * This also implements {@link CacheManagerEventListener} to add/remove/cleanup
  * MBeans for new caches added or removed
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

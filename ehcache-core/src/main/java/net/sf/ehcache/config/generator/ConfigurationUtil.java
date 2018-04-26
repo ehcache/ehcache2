@@ -31,7 +31,7 @@ import net.sf.ehcache.config.generator.model.elements.ConfigurationElement;
 /**
  * Utility class with static methods for generating configuration texts in different ways based on input
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  *

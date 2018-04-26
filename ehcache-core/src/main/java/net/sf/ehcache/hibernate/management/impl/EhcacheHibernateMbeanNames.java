@@ -22,7 +22,7 @@ import javax.management.ObjectName;
 /**
  * Utility class used for getting {@link ObjectName}'s for ehcache hibernate MBeans
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

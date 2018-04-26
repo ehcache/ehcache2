@@ -40,7 +40,7 @@ public class CachePerfTest {
     /**
      * Checks the expense of checking for duplicates
      * Typical Results Duplicate Check: 8ms versus 3ms for No Duplicate Check
-     * <p/>
+     * <p>
      * 66ms for 1000, 6ms for no duplicate/expiry
      * 187565 for 100000, where 500 is the in-memory size. 964ms without checking expiry. 134ms for getKeysNoDuplicateCheckTime
      * 18795 for 100000, where 50000 is in-memory size. 873ms without checking expiry. 158ms for getKeysNoDuplicateCheckTime
@@ -76,16 +76,16 @@ public class CachePerfTest {
 
     /**
      * Performance tests for a range of Memory Store - Disk Store combinations.
-     * <p/>
+     * <p>
      * This demonstrates that a memory only store is approximately an order of magnitude
      * faster than a disk only store.
-     * <p/>
+     * <p>
      * It also shows that double the performance of a Disk Only store can be obtained
      * with a maximum memory size of only 1. Accordingly a Cache created without a
      * maximum memory size of less than 1 will issue a warning.
-     * <p/>
+     * <p>
      * Threading changes were made in v1.41 of DiskStore. The before and after numbers are shown.
-     * <p/>
+     * <p>
      * This test also has a cache with a CacheExceptionHandler registered. The performance effect is not detectable.
      */
     @Test
@@ -227,7 +227,7 @@ public class CachePerfTest {
      * When flushing large MemoryStores, OutOfMemory issues can happen if we are
      * not careful to move each Element to the DiskStore, rather than copy them all
      * and then delete them from the MemoryStore.
-     * <p/>
+     * <p>
      * This test manipulates a MemoryStore right on the edge of what can fit into the 64MB standard VM size.
      * An inefficient spool will cause an OutOfMemoryException.
      *
@@ -286,29 +286,29 @@ public class CachePerfTest {
      * INFO: Average Remove Time: 0.43651128 ms
      * INFO: Average Remove All Time: 0.20818481 ms
      * INFO: Average keySet Time: 0.11898771 ms
-     * <p/>
+     * <p>
      * CLHM
      * INFO: Average Get Time for 3611277 observations: 0.0043137097 ms
      * INFO: Average Put Time for 554433 obervations: 0.011824693 ms
      * INFO: Average Remove Time for 802361 obervations: 0.008200797 ms
      * INFO: Average Remove All Time for 2887862 observations: 4.685127E-4 ms
      * INFO: Average keySet Time for 2659524 observations: 0.003155828 ms
-     * <p/>
+     * <p>
      * CHM with sampling
      * INFO: Average Get Time for 5424446 observations: 0.0046010227 ms
      * INFO: Average Put Time for 358907 obervations: 0.027190888 ms
      * INFO: Average Remove Time for 971741 obervations: 0.00924732 ms
      * INFO: Average keySet Time for 466812 observations: 0.15059596 ms
-     * <p/>
+     * <p>
      * After putting back synchronized:
-     * <p/>
+     * <p>
      * INFO: Average Get Time for 7184321 observations: 0.009596036 ms
      * INFO: Average Put Time for 15853 obervations: 0.117264874 ms
      * INFO: Average Remove Time for 385518 obervations: 0.017298803 ms
      * INFO: Average Remove All Time for 456174 observations: 0.10433519 ms
      * INFO: Average keySet Time for 4042893 observations: 0.0029669348 ms
      * INFO: Total loads: 123
-     * <p/>
+     * <p>
      * Ehcache 2.0: After turning off statistics.
      * Feb 3, 2010 1:50:32 PM net.sf.ehcache.CacheTest testConcurrentReadWriteRemove
      * INFO: Average Get Time for 7251897 observations: 0.006588345 ms
@@ -317,28 +317,28 @@ public class CachePerfTest {
      * INFO: Average Remove All Time for 5183786 observations: 0.0020039408 ms
      * INFO: Average keySet Time for 4973208 observations: 0.0020630546 ms
      * INFO: Total loadAlls: 189
-     * <p/>
+     * <p>
      * Aug 10, 2011 4:43:47 PM Ehcache 2.1 Revalidation on Mac OS X Lion and same machine
      * INFO: Average Get Time for 7474731 observations: 0.0066825147 ms
      * INFO: Average Put Time for 12918 obervations: 0.6070599 ms
      * INFO: Average Remove Time for 57024 obervations: 0.06649832 ms
      * INFO: Average Remove All Time for 5147782 observations: 0.0026411375 ms
      * INFO: Average keySet Time for 4717506 observations: 0.002453627 ms
-     * <p/>
+     * <p>
      * Aug 10, 2011 4:47:16 PM 2.5 beta
      * INFO: Average Get Time for 517885 observations: 0.16877685 ms
      * INFO: Average Put Time for 52501 obervations: 0.5059332 ms
      * INFO: Average Remove Time for 30177 obervations: 0.7006329 ms
      * INFO: Average Remove All Time for 107152 observations: 0.8572775 ms
      * INFO: Average keySet Time for 98991 observations: 0.92390215 ms
-     * <p/>
+     * <p>
      * Aug 12, 2011 11:24:40 AM Java 6 Agent sizeof with "value" value
      * INFO: Average Get Time for 1378042 observations: 0.18543556 ms
      * INFO: Average Put Time for 1056477 obervations: 0.092374 ms
      * INFO: Average Remove Time for 2013940 obervations: 0.032961756 ms
      * INFO: Average Remove All Time for 894820 observations: 0.10991708 ms
      * INFO: Average keySet Time for 114488 observations: 0.8662655 ms
-     * <p/>
+     * <p>
      * Aug 12, 2011 11:32:38 AM with Java 6 Agent sizeof with list of stacktraces value
      * INFO: Average Put Time for 753610 obervations: 0.119633496 ms
      */
@@ -386,7 +386,7 @@ public class CachePerfTest {
      * INFO: Average Remove Time for 20515 obervations: 0.1515964 ms
      * INFO: Average Remove All Time for 0 observations: NaN ms
      * INFO: Average keySet Time for 198 observations: 0.0 ms
-     * <p/>
+     * <p>
      * 9999 - using iterator
      * INFO: Average Get Time for 4305030 observations: 0.006000423 ms
      * INFO: Average Put Time for 3216 obervations: 0.92008704 ms
@@ -425,7 +425,7 @@ public class CachePerfTest {
      * INFO: Average Remove Time: 0.31298608 ms
      * INFO: Average Remove All Time: 0.21396147 ms
      * INFO: Average keySet Time: 0.11740683 ms
-     * <p/>
+     * <p>
      * CLHM
      * INFO: Average Get Time for 4567959 observations: 0.005231658 ms
      * INFO: Average Put Time for 437078 obervations: 0.01527645 ms

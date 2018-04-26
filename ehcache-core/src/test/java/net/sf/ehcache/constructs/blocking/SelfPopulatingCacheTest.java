@@ -320,7 +320,7 @@ public class SelfPopulatingCacheTest extends CacheTest {
      * generate the cache entry and all other threads wait on the lock.
      * Any and all threads which timeout while waiting for this lock should fail
      * to acquire the lock for that key and throw an exception.
-     * <p/>
+     * <p>
      * This thread tests for this by having several threads to a cache "get" for
      * the same key, allowing one to acquire the lock and the others to wait.  The
      * one that acquires the lock and attempts to generate the cache entry for the
@@ -330,7 +330,7 @@ public class SelfPopulatingCacheTest extends CacheTest {
      * the cache entry using the CacheEntryFactory.  It is expected that this
      * counter will only be "1" after all threads complete since all but the
      * first to acquire it should timeout and throw exceptions.
-     * <p/>
+     * <p>
      * We then test that a thread that comes along later increments the counter.
      */
     @Test

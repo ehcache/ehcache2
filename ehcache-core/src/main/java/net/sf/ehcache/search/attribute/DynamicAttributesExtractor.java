@@ -17,6 +17,7 @@ package net.sf.ehcache.search.attribute;
 
 import java.util.Map;
 
+import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 
 /**
@@ -26,7 +27,7 @@ import net.sf.ehcache.Element;
 public interface DynamicAttributesExtractor {
   /**
    * Given a particular cache element, returns a map from attribute names, to their respective values to use for indexing.
-   * This method will be called once for every {@link Ehcache#put(Element)} and {@link Ehcache#replace(Element)} call.
+   * This method will be called once for every {@link Ehcache#put(Element)} and {@code Ehcache#replace(Element)} call.
    * @param element
    * @return
    */

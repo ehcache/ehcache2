@@ -65,7 +65,7 @@ public interface CacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will call through to the load(key) method, rather than this method, where the argument is null.
      *
      * @param key      the key to load the object for
@@ -77,7 +77,7 @@ public interface CacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will use the loadAll(key) method where the argument is null.
      *
      * @param keys     the keys to load objects for
@@ -97,7 +97,7 @@ public interface CacheLoader {
     /**
      * Creates a clone of this extension. This method will only be called by ehcache before a
      * cache is initialized.
-     * <p/>
+     * <p>
      * Implementations should throw CloneNotSupportedException if they do not support clone
      * but that will stop them from being used with defaultCache.
      *
@@ -109,7 +109,7 @@ public interface CacheLoader {
 
     /**
      * Notifies providers to initialise themselves.
-     * <p/>
+     * <p>
      * This method is called during the Cache's initialise method after it has changed it's
      * status to alive. Cache operations are legal in this method.
      *
@@ -122,10 +122,10 @@ public interface CacheLoader {
      * CacheLoader instances may be doing all sorts of exotic things and need to be able to clean up
      * on dispose. This method will be invoked when {@link net.sf.ehcache.Cache#dispose() Cache.dispose()} is invoked
      * if this CacheLoader is registered with the cache at disposal time, allowing for any necessary cleanup.
-     * <p/>
+     * <p>
      * No operations may be performed on the cache this CacheLoader is registered with. The
      * cache itself is partly disposed when this method is called, and should not be accessed.
-     * <p/>
+     * <p>
      *
      * @throws net.sf.ehcache.CacheException
      */

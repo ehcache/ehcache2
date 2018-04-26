@@ -18,6 +18,7 @@ package net.sf.ehcache.terracotta;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.Status;
 
 /**
  * This is an extension of the Ehcache interface to allow addition of new methods to Cache without breaking the public contract.
@@ -34,7 +35,7 @@ public interface InternalEhcache extends Ehcache {
      *
      * @param key the key of the element to operate on
      * @return element the removed element associated with the key, null if no mapping exists
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     Element removeAndReturnElement(Object key) throws IllegalStateException;
 

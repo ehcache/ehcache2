@@ -46,7 +46,7 @@ import net.sf.ehcache.store.StoreOperationOutcomes.RemoveOutcome;
 
 /**
  * An implementation of a LruMemoryStore.
- * <p/>
+ * <p>
  * This uses {@link java.util.LinkedHashMap} as its backing map. It uses the {@link java.util.LinkedHashMap} LRU
  * feature. LRU for this implementation means least recently accessed.
  *
@@ -182,7 +182,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Gets an item from the cache.
-     * <p/>
+     * <p>
      * The last access time in {@link net.sf.ehcache.Element} is updated.
      *
      * @param key the cache key
@@ -291,7 +291,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Spools all elements to disk, in preparation for shutdown.
-     * <p/>
+     * <p>
      * This revised implementation is a little slower but avoids using increased memory during the method.
      */
     protected final void spoolAllToDisk() {
@@ -319,7 +319,7 @@ public class LruMemoryStore extends AbstractStore {
     /**
      * Puts the element in the DiskStore.
      * Should only be called if isOverflowToDisk is true
-     * <p/>
+     * <p>
      * Relies on being called from a synchronized method
      *
      * @param element The Element
@@ -340,7 +340,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Gets an Array of the keys for all elements in the memory cache.
-     * <p/>
+     * <p>
      * Does not check for expired entries
      *
      * @return An Object[]
@@ -382,7 +382,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Measures the size of the memory store by using the sizeof engine.
-     * <p/>
+     * <p>
      * Warning: This method can be very expensive to run. Allow approximately 1 second
      * per 1MB of entries. Running this method could create liveness problems
      * because the object lock is held for a long period
@@ -411,7 +411,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Evict the <code>Element</code>.
-     * <p/>
+     * <p>
      * Evict means that the <code>Element</code> is:
      * <ul>
      * <li>if, the store is diskPersistent, the <code>Element</code> is spooled to the DiskStore
@@ -457,7 +457,7 @@ public class LruMemoryStore extends AbstractStore {
 
     /**
      * Expire all elsments.
-     * <p/>
+     * <p>
      * This is a default implementation which does nothing. Expiry on demand is only
      * implemented for disk stores.
      */
@@ -490,7 +490,7 @@ public class LruMemoryStore extends AbstractStore {
     /**
      * An extension of LinkedHashMap which overrides {@link #removeEldestEntry}
      * to persist cache entries to the auxiliary cache before they are removed.
-     * <p/>
+     * <p>
      * This implementation also provides LRU by access order.
      */
     public final class SpoolingLinkedHashMap extends java.util.LinkedHashMap {
@@ -513,7 +513,7 @@ public class LruMemoryStore extends AbstractStore {
          * with the opportunity to remove the eldest entry each time a new one
          * is added.  This is useful if the map represents a cache: it allows
          * the map to reduce memory consumption by deleting stale entries.
-         * <p/>
+         * <p>
          * Will return true if:
          * <ol>
          * <li> the element has expired
@@ -530,7 +530,7 @@ public class LruMemoryStore extends AbstractStore {
          *               inserted; in other words, if the map contains a single
          *               entry, the eldest entry is also the newest.
          * @return true if the eldest entry should be removed
-         *         from the map; <tt>false</t> if it should be retained.
+         *         from the map; <tt>false</tt> if it should be retained.
          */
         @Override
         protected final boolean removeEldestEntry(Map.Entry eldest) {

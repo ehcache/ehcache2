@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * A concrete implementation of ehcache resource service {@link net.sf.ehcache.management.resource.services.validator.AbstractEhcacheRequestValidator} for the embedded agent.
- * <p/>
+ * <p>
  * {@inheritDoc}
  *
  * @author brandony

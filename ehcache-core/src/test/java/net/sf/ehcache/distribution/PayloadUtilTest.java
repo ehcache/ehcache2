@@ -73,7 +73,7 @@ public class PayloadUtilTest extends AbstractRMITest {
 
     /**
      * The maximum Ethernet MTU is 1500 bytes.
-     * <p/>
+     * <p>
      * We want to be able to work with 100 caches
      */
     @Test

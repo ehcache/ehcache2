@@ -146,7 +146,7 @@ public class TerracottaConfiguration implements Cloneable {
 
     /**
      * Indicates whether to cluster this cache with Terracotta.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_CLUSTERED}.
      *
      * @param clustered
@@ -258,7 +258,7 @@ public class TerracottaConfiguration implements Cloneable {
     /**
      * Sets whether this cache should use coherent reads (usually should be {@value #DEFAULT_COHERENT_READS} unless optimizing for
      * read-only).
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_COHERENT_READS}.
      *
      * @param coherentReads
@@ -291,10 +291,10 @@ public class TerracottaConfiguration implements Cloneable {
 
     /**
      * Sets whether this cache should perform orphan eviction (usually should be {@value #DEFAULT_ORPHAN_EVICTION}).
-     * <p/>
+     * <p>
      * Orphans are elements that are not present on any node in the cluster anymore and hence need additional routines to be detected since
      * they're not locally available anywhere.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_ORPHAN_EVICTION}.
      *
      * @param orphanEviction
@@ -322,7 +322,7 @@ public class TerracottaConfiguration implements Cloneable {
 
     /**
      * Set how often this cache should perform orphan eviction (measured in regular eviction periods).
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_ORPHAN_EVICTION_PERIOD}).
      *
      * @param orphanEvictionPeriod
@@ -351,7 +351,7 @@ public class TerracottaConfiguration implements Cloneable {
     /**
      * Sets whether this cache should use an unclustered local key cache (usually should be {@value #DEFAULT_LOCAL_KEY_CACHE} unless
      * optimizing for a small read-only cache)
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_LOCAL_KEY_CACHE}.
      *
      * @param localKeyCache
@@ -379,7 +379,7 @@ public class TerracottaConfiguration implements Cloneable {
 
     /**
      * Sets maximum size of the local key cache (usually the size of the key set of the cache or cache partition).
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_LOCAL_KEY_CACHE_SIZE}.
      *
      * @param localKeyCacheSize

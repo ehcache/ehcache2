@@ -72,36 +72,6 @@ public interface CacheStatisticsMBean {
     long getOnDiskMisses();
 
     /**
-     * Gets the number of elements stored in the cache. Caclulating this can be expensive. Accordingly,
-     * this method will return three different values, depending on the statistics accuracy setting.
-     * <h3>Best Effort Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link net.sf.ehcache.Statistics#STATISTICS_ACCURACY_BEST_EFFORT}.
-     * <p/>
-     * The size is the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.MemoryStore} plus
-     * the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
-     * This number is the actual number of elements, including expired elements that have
-     * not been removed. Any duplicates between stores are accounted for.
-     * <p/>
-     * Expired elements are removed from the the memory store when
-     * getting an expired element, or when attempting to spool an expired element to
-     * disk.
-     * <p/>
-     * Expired elements are removed from the disk store when getting an expired element,
-     * or when the expiry thread runs, which is once every five minutes.
-     * <p/>
-     * <h3>Guaranteed Accuracy Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link net.sf.ehcache.Statistics#STATISTICS_ACCURACY_GUARANTEED}.
-     * <p/>
-     * This method accounts for elements which might be expired or duplicated between stores. It take approximately
-     * 200ms per 1000 elements to execute.
-     * <h3>Fast but non-accurate Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link net.sf.ehcache.Statistics#STATISTICS_ACCURACY_NONE}.
-     * <p/>
-     * The number given may contain expired elements. In addition if the DiskStore is used it may contain some double
-     * counting of elements. It takes 6ms for 1000 elements to execute. Time to execute is O(log n). 50,000 elements take
-     * 36ms.
-     *
      * @return the number of elements in the ehcache, with a varying degree of accuracy, depending on accuracy setting.
      */
     long getObjectCount();

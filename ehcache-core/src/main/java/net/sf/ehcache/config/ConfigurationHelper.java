@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The configuration for ehcache.
- * <p/>
+ * <p>
  * This class can be populated through:
  * <ul>
  * <li>introspection by {@link ConfigurationFactory} or

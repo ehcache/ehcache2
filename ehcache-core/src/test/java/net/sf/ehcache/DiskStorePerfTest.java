@@ -137,7 +137,7 @@ public class DiskStorePerfTest {
      * </pre>
      * The reason that it is not infinite is because of a small amount of memory used (about 12 bytes) used for
      * the disk store index in this case.
-     * <p/>
+     * <p>
      * Slow tests
      */
     @Test
@@ -184,7 +184,7 @@ public class DiskStorePerfTest {
      * The change was to stop adding DiskStore retrievals into the MemoryStore. This made sense when the only
      * policy was LRU. In the new version an Element, once evicted from the MemoryStore, stays in the DiskStore
      * until expiry or removal. This avoids a lot of serialization overhead.
-     * <p/>
+     * <p>
      * Slow tests
      * 235 with get. 91 for 1.2.3. 169 with remove.
      *

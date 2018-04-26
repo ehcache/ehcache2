@@ -35,7 +35,7 @@ public class UpdatingSelfPopulatingCachePerfTest {
     /**
      * Thrashes a UpdatingSelfPopulatingCache and looks for liveness problems
      * Note. These timings are without logging. Turn logging off to run this test.
-     * <p/>
+     * <p>
      * To get this test to fail, add the synchronized keyword to {@link UpdatingSelfPopulatingCache#get(java.io.Serializable)}.
      */
     @Test

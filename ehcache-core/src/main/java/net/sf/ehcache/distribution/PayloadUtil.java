@@ -32,7 +32,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * This class provides utility methods for assembling and disassembling a heartbeat payload.
- * <p/>
+ * <p>
  * Care is taken to fit the payload into the MTU of ethernet, which is 1500 bytes. The algorithms in this class are capable of creating
  * payloads for CacheManagers containing approximately 500 cache peers to be replicated.
  *
@@ -44,7 +44,7 @@ final class PayloadUtil {
     /**
      * The maximum transmission unit. This varies by link layer. For ethernet, fast ethernet and
      * gigabit ethernet it is 1500 bytes, the value chosen.
-     * <p/>
+     * <p>
      * Payloads are limited to this so that there is no fragmentation and no necessity for a complex reassembly protocol.
      */
     public static final int MTU = 1500;

@@ -750,13 +750,13 @@ public class CacheManagerTest {
     /**
      * The expiry threads and spool threads share are now combined. This should
      * save some.
-     * <p/>
+     * <p>
      * ehcache-big.xml has 70 caches that overflow to disk. Check that the
      * DiskStore is not using more than 1 thread per DiskStore.
-     * <p/>
+     * <p>
      * ehcache-1.2.3 had 126 threads for this test. ehcache-1.2.4 has 71. 70 for
      * the DiskStore thread and one shutdown hook
-     * <p/>
+     * <p>
      * ehcache-1.7 has 1 additional thread per cache for
      * SampledCacheUsageStatistics. 70 Caches means 140 threads plus 1 for
      * shutdown totalling to 141. Plus Junit thread totals 142.
@@ -825,7 +825,7 @@ public class CacheManagerTest {
     /**
      * Tests programmatic creation of CacheManager with a programmatic
      * Configuration.
-     * <p/>
+     * <p>
      * Tests:
      * <ol>
      * <li>adding a cache by name, which will use default cache

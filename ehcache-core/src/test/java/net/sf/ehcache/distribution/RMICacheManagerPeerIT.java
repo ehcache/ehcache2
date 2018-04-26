@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for RMICachePeer
- * <p/>
+ * <p>
  * Note these tests need a live network interface running in multicast mode to work
  *
  * @author <a href="mailto:gluck@thoughtworks.com">Greg Luck</a>
@@ -156,7 +156,7 @@ public class RMICacheManagerPeerIT extends AbstractRMITest {
 
     /**
      * Test send.
-     * <p/>
+     * <p>
      * This is a unit test because it was throwing AbstractMethodError if a method has changed signature,
      * or NoSuchMethodError is a new one is added. The problem is that rmic needs
      * to recompile the stub after any changes are made to the CachePeer source, something done by ant

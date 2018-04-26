@@ -25,7 +25,7 @@ import java.util.Collection;
 
 /**
  * A convenience abstract base class that implements all {@code CacheWriter} methods.
- * <p/>
+ * <p>
  * The {@link #write}, {@link #writeAll}, {@link #delete} and {@link #deleteAll} methods throw
  * {@code UnsupportedOperationException} unless they're overridden by the class that is extending
  * {@code AbstractCacheWriter}. Classes that are extending this abstract base class should make sure that the

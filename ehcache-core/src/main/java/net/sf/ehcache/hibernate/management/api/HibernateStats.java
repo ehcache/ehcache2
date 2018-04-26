@@ -22,7 +22,7 @@ import javax.management.openmbean.TabularData;
 /**
  * Interface for hibernate related statistics of hibernate second level cache
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

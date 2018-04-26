@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * A bean used to wrap byte[] values to be placed in an Element so as to preserve MIME type information.
- * <p/>
+ * <p>
  * This class provides the means to bypass Java's serialization mechanism to as to store anything that can be turned
  * into bytes. It opens the way to non Java uses of ehcache.
  *

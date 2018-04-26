@@ -72,7 +72,7 @@ public class InCollection extends BaseCriteria {
     /**
      * Return values.
      *
-     * @return Collection<?> values
+     * @return {@code Collection<?>} values
      */
     public Collection<?> values() {
         return Collections.unmodifiableCollection(this.values);

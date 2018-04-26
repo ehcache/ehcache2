@@ -60,7 +60,6 @@ public class ResourceClassLoader extends ClassLoader {
      *
      * @param prefix
      * @param parent
-     * @throws IOException
      */
     public ResourceClassLoader(String prefix, ClassLoader parent) {
         super(parent);

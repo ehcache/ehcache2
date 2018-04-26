@@ -19,8 +19,8 @@ package net.sf.ehcache.management.sampled;
 /**
  * An MBean for Cache exposing cache statistics.
  * Extends from both {@link CacheSampler}
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  */
@@ -92,7 +92,7 @@ public interface SampledCacheMBean extends CacheSampler {
      * setMaxElementsInMemory
      *
      * @param maxElements
-     * @deprecated use {@link #setMaxEntriesLocalHeap()} instead
+     * @deprecated use {@link CacheSampler#setMaxEntriesLocalHeap(long maxElements)} instead
      */
     @Deprecated
     void setMaxElementsInMemory(int maxElements);

@@ -20,7 +20,7 @@ import net.sf.ehcache.config.Configuration;
 /**
  * Defult implementation of {@link MBeanRegistrationProvider}
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

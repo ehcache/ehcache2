@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * Counts listener notifications.
- * <p/>
+ * <p>
  * The methods also check that we hold the Cache lock.
  *
  * @author Greg Luck
@@ -91,7 +91,7 @@ public class CountingCacheEventListener implements CacheEventListener {
     /**
      * Called immediately after an element has been put into the cache. The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
      * will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
      * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
      *
@@ -106,10 +106,10 @@ public class CountingCacheEventListener implements CacheEventListener {
     /**
      * Called immediately after an element has been put into the cache and the element already
      * existed in the cache. This is thus an update.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
      * will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
      * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
      *
@@ -144,7 +144,7 @@ public class CountingCacheEventListener implements CacheEventListener {
 
     /**
      * Give the replicator a chance to cleanup and free resources when no longer needed
-     * <p/>
+     * <p>
      * Clean up static counters
      */
     public void dispose() {

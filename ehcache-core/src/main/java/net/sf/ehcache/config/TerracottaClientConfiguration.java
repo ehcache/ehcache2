@@ -101,8 +101,8 @@ public class TerracottaClientConfiguration implements Cloneable {
     }
 
     /**
-     * Tell the BeanHandler to extract the entire subtree xml as text at element <tc-config/>. Expects
-     * to receive the contents of the <tc-config/> tag and will wrap it in a proper tc-config header / footer.
+     * Tell the BeanHandler to extract the entire subtree xml as text at element{@code <tc-config/>}. Expects
+     * to receive the contents of the{@code <tc-config/>} tag and will wrap it in a proper tc-config header / footer.
      */
     public final void extractTcconfig(String text) {
         this.embeddedConfig = text;
@@ -110,7 +110,7 @@ public class TerracottaClientConfiguration implements Cloneable {
     }
 
     /**
-     * Get the embedded config read as <tc-config/>
+     * Get the embedded config read as {@code <tc-config/>}
      */
     public final String getEmbeddedConfig() {
         return TC_CONFIG_HEADER + embeddedConfig + TC_CONFIG_FOOTER;

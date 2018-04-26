@@ -35,7 +35,7 @@ public interface SingleOperation extends KeyBasedOperation {
 
     /**
      * Creates a batch operation that corresponds to the operation type of this single operation.
-     * <p/>
+     * <p>
      * This batch operation will not be stored in the queue anymore and is solely used for structuring.
      * The data from the single operation will already be processed in the final form that will be expected by the
      * {@code CacheWriter} that will be used to execute the batch operation.

@@ -22,11 +22,11 @@ import net.sf.ehcache.CacheException;
 /**
  * Indicates that a timeout has occured while attempting to obtain a lock using
  * {@link net.sf.ehcache.concurrent.ReadWriteLockSync#tryLock(net.sf.ehcache.concurrent.LockType, long)}
- * <p/>
+ * <p>
  * This is a normal runtime exception which should be handled by calling code.
  * It is possible that simply reattempting to obtain the lock may succeed.
  * Timeouts are often caused by overloaded resources.
- * <p/>
+ * <p>
  * The frequency of these Exceptions may be reduced by increasing the timeout
  * if appropriate.
  * @author Greg Luck

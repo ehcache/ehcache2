@@ -52,9 +52,9 @@ import org.junit.Test;
 
 /**
  * Tests replication of Cache events with large payloads exceeding MTU
- * <p/>
+ * <p>
  * Note these tests need a live network interface running in multicast mode to work
- * <p/>
+ * <p>
  *
  * @author Abhishek Sanoujam
  */
@@ -230,7 +230,7 @@ public class RMICacheReplicatorWithLargePayloadIT extends AbstractRMITest {
 
     /**
      * Tests put and remove initiated from cache1 in a cluster
-     * <p/>
+     * <p>
      * This test goes into an infinite loop if the chain of notifications is not somehow broken.
      */
     @Test

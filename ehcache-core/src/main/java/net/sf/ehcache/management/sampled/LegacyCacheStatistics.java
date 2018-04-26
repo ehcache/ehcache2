@@ -18,7 +18,7 @@ package net.sf.ehcache.management.sampled;
 /**
  * Interface for <strong>sampled</strong> usage statistics of a Cache
  * 
- * <p />.
+ * <p>.
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

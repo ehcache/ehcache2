@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An RMI based implementation of <code>CachePeer</code>.
- * <p/>
+ * <p>
  * This class features a customised RMIClientSocketFactory which enables socket timeouts to be configured.
  *
  * @author Greg Luck
@@ -74,7 +74,7 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * This implementation gives an URL which has meaning to the RMI remoting system.
      *
      * @return the URL, without the scheme, as a string e.g. //hostname:port/cacheName
@@ -92,7 +92,7 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * This implementation gives an URL which has meaning to the RMI remoting system.
      *
      * @return the URL, without the scheme, as a string e.g. //hostname:port
@@ -108,11 +108,11 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
 
     /**
      * Returns a list of all elements in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are unique and can be considered a set.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(n). On a single cpu 1.8Ghz P4, approximately 8ms is required
      * for each 1000 entries.
      *
@@ -140,9 +140,9 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
     /**
      * Gets a list of elements from the cache, for a list of keys, without updating Element statistics. Time to
      * idle lifetimes are therefore not affected.
-     * <p/>
+     * <p>
      * Cache statistics are still updated.
-     * <p/>
+     * <p>
      * Callers should ideally first call this method with a small list of keys to gauge the size of a typical Element.
      * Then a calculation can be made of the right number to request each time so as to optimise network performance and
      * not cause an OutOfMemory error on this Cache.
@@ -211,7 +211,7 @@ public class RMICachePeer extends UnicastRemoteObject implements CachePeer, Remo
 
     /**
      * Send the cache peer with an ordered list of {@link EventMessage}s
-     * <p/>
+     * <p>
      * This enables multiple messages to be delivered in one network invocation.
      */
     public void send(List eventMessages) throws RemoteException {

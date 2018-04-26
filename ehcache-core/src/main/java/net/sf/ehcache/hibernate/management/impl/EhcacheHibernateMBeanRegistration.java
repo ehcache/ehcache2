@@ -25,7 +25,7 @@ import org.hibernate.SessionFactory;
 /**
  * Interface for helping registering mbeans for ehcache backed hibernate second-level cache
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 
@@ -34,7 +34,7 @@ public interface EhcacheHibernateMBeanRegistration {
 
     /**
      * Registers MBean for the input manager and session factory properties.
-     * <p />
+     * <p>
      * MBeans will be registered based on the input session factory name. If the input name is null or blank, the name of the cache-manager
      * is used
      * 

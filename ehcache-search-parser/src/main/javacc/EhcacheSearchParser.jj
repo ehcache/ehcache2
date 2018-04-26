@@ -683,7 +683,7 @@ MCriteria PCriteria() :
 }
 
 /**
- * A 'simple' criteria production, i.e., =,<. etc, like, ilike, in, or between.
+ * A 'simple' criteria production, i.e. {@code , =,<. etc, like, ilike, in, or between}.
  */
 MCriteria SimpleCriteria() :
 {

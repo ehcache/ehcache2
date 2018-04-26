@@ -44,7 +44,7 @@ public final class CacheManagerConfigsResourceServiceImplV2 {
    * information provided by the associated monitorable entity's agent given the request path.
    *
    *
-   * @param {@link UriInfo} for this resource request
+   * @param info {@link UriInfo} for this resource request
    * @return a collection of {@link CacheManagerConfigEntityV2} objects
    */
   @GET

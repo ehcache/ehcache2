@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * <p>An implementation of {@link CacheManagersResourceService}.</p>
- *
  * @author brandony
  */
 @Path("/agents/cacheManagers")
@@ -57,7 +55,7 @@ public final class CacheManagersResourceServiceImpl {
    * by the associated monitorable entity's agent given the request path.
    * </p>
    * 
-   * @param {@link UriInfo} for this resource request
+   * @param info {@link UriInfo} for this resource request
    * @return a collection of {@link CacheManagerEntity} objects when successful.
    */
   @GET

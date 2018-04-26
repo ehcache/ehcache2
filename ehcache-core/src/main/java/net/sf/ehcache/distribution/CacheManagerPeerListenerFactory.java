@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * An abstract factory for creating cache manager peer listeners. Implementers should provide their own
  * concrete factory extending this factory. It can then be configured in ehcache.xml
- * <p/>
+ * <p>
  * This enables listener plugins.
  * @author Greg Luck
  * @version $Id$

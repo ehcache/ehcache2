@@ -24,7 +24,7 @@ import net.sf.ehcache.hibernate.management.impl.EhcacheHibernateMbeanNames;
 /**
  * Utility class used for getting {@link ObjectName}'s for sampled MBeans
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

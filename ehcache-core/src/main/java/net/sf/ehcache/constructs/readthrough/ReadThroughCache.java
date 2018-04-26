@@ -18,6 +18,7 @@ package net.sf.ehcache.constructs.readthrough;
 
 import java.io.Serializable;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -27,7 +28,7 @@ import net.sf.ehcache.constructs.EhcacheDecoratorAdapter;
  * This class implements the simplest of all possible read through cache
  * behaviors, where a call the get() will delegate to a call to getWithLoader().
  * This means that a get() call can take a long time; beware. It also does no more
- * locking than {@link Cache.java} implements; each separate cache may try to load
+ * locking than {@link Cache} implements; each separate cache may try to load
  * a key at the same time.
  *
  * @author cschanck

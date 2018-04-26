@@ -306,7 +306,7 @@ public class LegacyStoreWrapper extends AbstractStore {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * The size is the number of {@link Element}s in the memory store
      * plus the number of {@link Element}s in the disk store.
      */

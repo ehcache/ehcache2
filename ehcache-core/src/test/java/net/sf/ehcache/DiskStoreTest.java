@@ -77,7 +77,7 @@ import static org.junit.Assert.assertTrue;
  * @author <a href="mailto:amurdoch@thoughtworks.com">Adam Murdoch</a>
  * @author <a href="mailto:gluck@thoughtworks.com">Greg Luck</a>
  * @version $Id$
- *          <p/>
+ *          <p>
  *          total time 149 old i/o
  *          total time 133, 131, 130 nio
  */
@@ -991,7 +991,7 @@ public class DiskStoreTest {
      * that cannot be used because of fragmentation. Question? Should an effort be made to coalesce
      * fragmented space? Unlikely in production to get contiguous fragments as in the first form
      * of this test.
-     * <p/>
+     * <p>
      * Using a key of Integer.valueOf(i * outer) the size stays constant at 140800.
      *
      * @throws InterruptedException
@@ -1127,7 +1127,7 @@ public class DiskStoreTest {
 
     /**
      * Tests how data is written to a random access file.
-     * <p/>
+     * <p>
      * It makes sure that bytes are immediately written to disk after a write.
      */
     @Test

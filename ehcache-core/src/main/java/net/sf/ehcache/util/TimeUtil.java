@@ -52,7 +52,7 @@ public class TimeUtil {
      * Converts a long seconds value to an int seconds value and takes into account overflow
      * from the downcast by switching to Integer.MAX_VALUE.
      * @param seconds Long value
-     * @return Same int value unless long > Integer.MAX_VALUE in which case MAX_VALUE is returned
+     * @return Same int value unless long {@code >} Integer.MAX_VALUE in which case MAX_VALUE is returned
      */
     public static int convertTimeToInt(long seconds) {
         if (seconds > Integer.MAX_VALUE) {

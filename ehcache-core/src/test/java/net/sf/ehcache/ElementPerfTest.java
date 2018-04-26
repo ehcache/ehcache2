@@ -23,10 +23,10 @@ public class ElementPerfTest {
 
     /**
      * Checks serialization performance.
-     * <p/>
+     * <p>
      * {@link Element#getSerializedSize()} measures size by serializing, so this
      * can be used to measure JVM serialization speed.
-     * <p/>
+     * <p>
      * For 310232 bytes the average serialization time is 7 ms
      */
     @Test
@@ -105,13 +105,13 @@ public class ElementPerfTest {
 
     /**
      * Checks serialization performance.
-     * <p/>
+     * <p>
      * {@link Element#getSerializedSize()} measures size by serializing, so this
      * can be used to measure JVM serialization speed.
-     * <p/>
+     * <p>
      * For 310232 bytes the average clone time is 50 ms, but on Mac JDK 1.5 i seems to have blown out to 116ms. It looks
      * like a performance regression.
-     * <p/>
+     * <p>
      */
     @Test
     public void testClonePerformanceByteArray() throws CacheException, CloneNotSupportedException {

@@ -57,7 +57,7 @@ public class CacheClassicLruMemoryStoreTest extends CacheTest {
 
     /**
      * Tests flushing the cache, with the default, which is to clear
-     * <p/>
+     * <p>
      * Has different numbers because LRU works slightly differently
      *
      * @throws Exception
@@ -178,7 +178,7 @@ public class CacheClassicLruMemoryStoreTest extends CacheTest {
 
     /**
      * Tests disk store and memory store size
-     * <p/>
+     * <p>
      * This is overridden because the classic LRU store uses different classes
      */
     @Test

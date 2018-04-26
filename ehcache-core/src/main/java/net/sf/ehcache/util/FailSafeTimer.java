@@ -26,7 +26,7 @@ import java.util.TimerTask;
  * scheduled will run at least once (inline when they are scheduled) if creating
  * threads is not allowed.
  * For example, Google App Engine does not allow creation of new threads.
- * <p/>
+ * <p>
  * Clients should not use this as a general purpose timing service. To do so could
  * interfere with the running of the Cache.
  * 

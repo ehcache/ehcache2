@@ -20,7 +20,7 @@ import net.sf.ehcache.config.Configuration;
 /**
  * Factory interface to create {@link MBeanRegistrationProvider}
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

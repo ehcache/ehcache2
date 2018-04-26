@@ -42,16 +42,16 @@ import net.sf.ehcache.writer.CacheWriterManager;
 
 /**
  * An interface for Ehcache.
- * <p/>
+ * <p>
  * Ehcache is the central interface. Caches have {@link Element}s and are managed
  * by the {@link CacheManager}. The Cache performs logical actions. It delegates physical
  * implementations to its {@link net.sf.ehcache.store.Store}s.
- * <p/>
+ * <p>
  * A reference to an EhCache can be obtained through the {@link CacheManager}. An Ehcache thus obtained
  * is guaranteed to have status {@link Status#STATUS_ALIVE}. This status is checked for any method which
  * throws {@link IllegalStateException} and the same thrown if it is not alive. This would normally
  * happen if a call is made after {@link CacheManager#shutdown} is invoked.
- * <p/>
+ * <p>
  * Statistics on cache usage are collected and made available through public methods.
  *
  * @author Greg Luck
@@ -61,10 +61,10 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Put an element in the cache.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener that:
      * <ul>
      * <li>the element was put, but only if the Element was actually put.
@@ -75,7 +75,7 @@ public interface Ehcache extends Cloneable {
      * @param element An object. If Serializable it can fully participate in replication and the DiskStore.
      * @throws IllegalStateException    if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws IllegalArgumentException if the element is null
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     void put(Element element) throws IllegalArgumentException, IllegalStateException,
             CacheException;
@@ -93,17 +93,17 @@ public interface Ehcache extends Cloneable {
      *
      * @param elements the collection of elements to be put in the cache.
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     void putAll(Collection<Element> elements) throws IllegalArgumentException, IllegalStateException,
             CacheException;
 
     /**
      * Put an element in the cache.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener that:
      * <ul>
      * <li>the element was put, but only if the Element was actually put.
@@ -135,10 +135,10 @@ public interface Ehcache extends Cloneable {
     /**
      * Put an element in the cache writing through a CacheWriter. If no CacheWriter has been registered for the cache,
      * then this method throws an exception.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener, if the writer operation succeeds, that:
      * <ul>
      * <li>the element was put, but only if the Element was actually put.
@@ -217,7 +217,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets an element from the cache. Updates Element Statistics
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peak into the Element to see its last access time with get
      *
@@ -230,7 +230,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets an element from the cache. Updates Element Statistics
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peek into the Element to see its last access time with get
      *
@@ -245,7 +245,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Gets all the elements from the cache for the keys provided. Updates Element Statistics
      * Throws a NullPointerException if any key in the collection is null
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peek into the Element to see its last access time with get
      *
@@ -260,7 +260,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Gets an element from the cache, without updating Element statistics. Cache statistics are
      * still updated.
-     * <p/>
+     * <p>
      *
      * @param key a serializable value
      * @return the element, or null, if it does not exist.
@@ -273,7 +273,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Gets an element from the cache, without updating Element statistics. Cache statistics are
      * also not updated.
-     * <p/>
+     * <p>
      *
      * @param key a serializable value
      * @return the element, or null, if it does not exist.
@@ -285,11 +285,11 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns a list of all elements in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are unique and can be considered a set.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(n). For large caches - or caches with high-latency storage this method can take a very long time to complete,
      * may cause timeouts if using features such NonStopCache or transactions, and is not guaranteed to give a consistent view of the
      * cache entry set. Usage is highly discouraged.
@@ -302,11 +302,11 @@ public interface Ehcache extends Cloneable {
     /**
      * Returns a list of all elements in the cache. Only keys of non-expired
      * elements are returned.
-     * <p/>
+     * <p>
      * The returned keys are unique and can be considered a set.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * For large caches - or caches with high-latency storage this method can take
      * a <em>very</em> long time to complete.  You should seriously consider whether
      * your usage requires checking for expired keys before choosing to call this method.
@@ -320,16 +320,16 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns a list of all elements in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are not unique and may contain duplicates. If the cache is only
      * using the memory store, the list will be unique. If the disk store is being used
      * as well, it will likely contain duplicates, because of the internal store design.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(log n). On a single cpu 1.8Ghz P4, approximately 6ms is required
      * for 1000 entries and 36 for 50000.
-     * <p/>
+     * <p>
      * This is the fastest getKeys method
      *
      * @return a list of {@link Object} keys
@@ -342,10 +342,10 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed.
      *
-     * @param key
+     * @param key the key of the element to remove
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      */
@@ -354,11 +354,11 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
      *
-     * @param key
+     * @param key the key of the element to remove
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @since 1.2
@@ -368,7 +368,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes given set of {@link net.sf.ehcache.Element} from the Cache. This also removes them from any
      * stores it may be in. Throws a NullPointerException if any key in the collection is null
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the elements were removed.
      * Notification is sent for every key irrespective of whether the key was present in the cache or not
      * This operation is partially completed if any element or any key is null
@@ -380,10 +380,11 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Removes all cached items.
-     * <p />
+     * <p>
      * When using Terracotta clustered caches with nonstop enabled, the timeout used by this method is
      * {@link NonstopConfiguration#getBulkOpsTimeoutMultiplyFactor()} times the timeout value in the nonstop config.
      *
+     * @param keys                   a collection of keys to operate on
      * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer,
      *                                    in which case this put should not initiate a further notification to doNotNotifyCacheReplicators cache peers
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
@@ -393,11 +394,11 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
      *
-     * @param key
+     * @param key the key of the element to remove
      * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
@@ -408,11 +409,11 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
      *
-     * @param key
+     * @param key of the element to remove
      * @param doNotNotifyCacheReplicators whether the put is coming from a doNotNotifyCacheReplicators cache peer, in which case this put should not initiate a
      *                                    further notification to doNotNotifyCacheReplicators cache peers
      * @return true if the element was removed, false if it was not found in the cache
@@ -423,9 +424,9 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache, without notifying listeners. This also removes it from any
      * stores it may be in.
-     * <p/>
+     * <p>
      *
-     * @param key
+     * @param key of the element to remove
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      */
@@ -434,9 +435,8 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache, without notifying listeners. This also removes it from any
      * stores it may be in.
-     * <p/>
      *
-     * @param key
+     * @param key of the element to remove
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @since 1.2
@@ -446,11 +446,11 @@ public interface Ehcache extends Cloneable {
     /**
      * Removes an {@link net.sf.ehcache.Element} from the Cache and any stores it might be in. This also removes through
      * to a CacheWriter. If no CacheWriter has been registered for the cache, then this method throws an exception.
-     * <p/>
+     * <p>
      * Also notifies the CacheEventListener after the element was removed, but only if an Element
      * with the key actually existed.
      *
-     * @param key
+     * @param key of the element to remove
      * @return true if the element was removed, false if it was not found in the cache
      * @throws IllegalStateException if the cache is not {@link net.sf.ehcache.Status#STATUS_ALIVE}
      * @throws CacheException if no CacheWriter was registered
@@ -460,7 +460,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Removes all cached items.
-     * <p />
+     * <p>
      * When using Terracotta clustered caches with nonstop enabled, the timeout used by this method is
      * {@link NonstopConfiguration#getBulkOpsTimeoutMultiplyFactor()} times the timeout value in the nonstop config.
      *
@@ -470,7 +470,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Removes all cached items.
-     * <p />
+     * <p>
      * When using Terracotta clustered caches with nonstop enabled, the timeout used by this method is
      * {@link NonstopConfiguration#getBulkOpsTimeoutMultiplyFactor()} times the timeout value in the nonstop config.
      *
@@ -489,26 +489,26 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets the size of the cache. This is a subtle concept. See below.
-     * <p/>
+     * <p>
      * The size is the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.MemoryStore} plus
      * the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
+     * <p>
      * This number is the actual number of elements, including expired elements that have
      * not been removed.
-     * <p/>
+     * <p>
      * Expired elements are removed from the the memory store when
      * getting an expired element, or when attempting to spool an expired element to
      * disk.
-     * <p/>
+     * <p>
      * Expired elements are removed from the disk store when getting an expired element,
      * or when the expiry thread runs, which is once every five minutes.
-     * <p/>
+     * <p>
      * To get an exact size, which would exclude expired elements, use {@link #getKeysWithExpiryCheck()}.size(),
      * although see that method for the approximate time that would take.
-     * <p/>
+     * <p>
      * To get a very fast result, use {@link #getKeysNoDuplicateCheck()}.size(). If the disk store
      * is being used, there will be some duplicates.
-     * <p/>
+     * <p>
      * Note:getSize() is a very expensive operation in off-heap, disk and Terracotta implementations.
      *
      * @return The size value
@@ -518,14 +518,12 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets the size of the memory store for this cache
-     * <p/>
+     * <p>
      * Warning: This method can be very expensive to run. Allow approximately 1 second
      * per 1MB of entries. Running this method could create liveness problems
      * because the object lock is held for a long period
-     * <p/>
      *
      * @return the approximate size of the memory store in bytes
-     * @throws IllegalStateException
      */
     @Deprecated long calculateInMemorySize() throws IllegalStateException, CacheException;
 
@@ -533,7 +531,6 @@ public interface Ehcache extends Cloneable {
      * Gets the size of the off-heap store for this cache
      *
      * @return the size of the off-heap store in bytes
-     * @throws IllegalStateException
      */
     @Deprecated long calculateOffHeapSize() throws IllegalStateException, CacheException;
 
@@ -541,7 +538,6 @@ public interface Ehcache extends Cloneable {
      * Gets the size of the on-disk store for this cache
      *
      * @return the size of the on-disk store in bytes
-     * @throws IllegalStateException
      */
     @Deprecated long calculateOnDiskSize() throws IllegalStateException, CacheException;
 
@@ -585,6 +581,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets the cache name.
+     * @return the name
      */
     String getName();
 
@@ -602,7 +599,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Checks whether this cache element has expired.
-     * <p/>
+     * <p>
      * The element is expired if:
      * <ol>
      * <li> the idle time is non-zero and has elapsed, unless the cache is eternal; or
@@ -621,12 +618,11 @@ public interface Ehcache extends Cloneable {
      * Clones a cache. This is only legal if the cache has not been
      * initialized. At that point only primitives have been set and no
      * {@link net.sf.ehcache.store.MemoryStore} or {@link net.sf.ehcache.store.disk.DiskStore} has been created.
-     * <p/>
+     * <p>
      * A new, empty, RegisteredEventListeners is created on clone.
-     * <p/>
      *
      * @return an object of type {@link net.sf.ehcache.Cache}
-     * @throws CloneNotSupportedException
+     * @throws CloneNotSupportedException if it's not supported
      */
     Object clone() throws CloneNotSupportedException;
 
@@ -644,6 +640,7 @@ public interface Ehcache extends Cloneable {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key the key of the element to remove
      * @return true if an element matching the key is found in memory
      */
     boolean isElementInMemory(Serializable key);
@@ -654,6 +651,7 @@ public interface Ehcache extends Cloneable {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key the key of the element to remove
      * @return true if an element matching the key is found in memory
      * @since 1.2
      */
@@ -665,6 +663,7 @@ public interface Ehcache extends Cloneable {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key the key of the element to remove
      * @return true if an element matching the key is found in the diskStore
      */
     boolean isElementOnDisk(Serializable key);
@@ -675,6 +674,7 @@ public interface Ehcache extends Cloneable {
      * Since no assertions are made about the state of the Element it is possible that the
      * Element is expired, but this method still returns true.
      *
+     * @param key the key of the element to remove
      * @return true if an element matching the key is found in the diskStore
      * @since 1.2
      */
@@ -728,37 +728,9 @@ public interface Ehcache extends Cloneable {
     boolean isValueInCache(Object value);
 
     /**
-     * Gets an immutable Statistics object representing the Cache statistics at the time. How the statistics are calculated
-     * depends on the statistics accuracy setting. The only aspect of statistics sensitive to the accuracy setting is
-     * object size. How that is calculated is discussed below.
-     * <h3>Best Effort Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link Statistics#STATISTICS_ACCURACY_BEST_EFFORT}.
-     * <p/>
-     * The size is the number of {@link Element}s in the {@link net.sf.ehcache.store.MemoryStore} plus
-     * the number of {@link Element}s in the {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
-     * This number is the actual number of elements, including expired elements that have
-     * not been removed. Any duplicates between stores are accounted for.
-     * <p/>
-     * Expired elements are removed from the the memory store when
-     * getting an expired element, or when attempting to spool an expired element to
-     * disk.
-     * <p/>
-     * Expired elements are removed from the disk store when getting an expired element,
-     * or when the expiry thread runs, which is once every five minutes.
-     * <p/>
-     * <h3>Guaranteed Accuracy Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link Statistics#STATISTICS_ACCURACY_GUARANTEED}.
-     * <p/>
-     * This method accounts for elements which might be expired or duplicated between stores. It take approximately
-     * 200ms per 1000 elements to execute.
-     * <h3>Fast but non-accurate Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link Statistics#STATISTICS_ACCURACY_NONE}.
-     * <p/>
-     * The number given may contain expired elements. In addition if the DiskStore is used it may contain some double
-     * counting of elements. It takes 6ms for 1000 elements to execute. Time to execute is O(log n). 50,000 elements take
-     * 36ms.
-     * @return the number of elements in the ehcache, with a varying degree of accuracy, depending on accuracy setting.
+     * Gets an immutable Statistics object representing the Cache statistics at the time.
+     *
+     * @return the statistics gateway
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
      */
     StatisticsGateway getStatistics() throws IllegalStateException;
@@ -789,9 +761,9 @@ public interface Ehcache extends Cloneable {
     /**
      * Newly created caches do not have a {@link net.sf.ehcache.store.MemoryStore} or
      * a {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
+     * <p>
      * This method creates those and makes the cache ready to accept elements
-     * <p/>
+     * <p>
      * This method is not intended to be called explicitly, but rather is called implicitly
      * by the cache's {@link net.sf.ehcache.CacheManager} instance during the cache
      * initialization. Invoking this method directly will likely lead to breaking.
@@ -802,7 +774,7 @@ public interface Ehcache extends Cloneable {
      * Bootstrap command. This must be called after the Cache is intialised, during
      * CacheManager initialisation. If loads are synchronous, they will complete before the CacheManager
      * initialise completes, otherwise they will happen in the background.
-     * <p/>
+     * <p>
      * This method is not intended to be called explicitly, but rather is called implicitly
      * by the cache's {@link net.sf.ehcache.CacheManager} instance during the cache
      * initialization. Invoking this method directly will likely lead to breaking.
@@ -811,7 +783,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Flushes all cache items from memory to auxilliary caches and close the auxilliary caches.
-     * <p/>
+     * <p>
      * Should be invoked only by CacheManager.
      *
      * @throws IllegalStateException if the cache is not {@link Status#STATUS_ALIVE}
@@ -820,20 +792,23 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Gets the cache configuration this cache was created with.
-     * <p/>
+     * <p>
      * Things like listeners that are added dynamically are excluded.
+     * @return CacheConfiguration the cache configuration
      */
     CacheConfiguration getCacheConfiguration();
 
     /**
      * Register a {@link CacheExtension} with the cache. It will then be tied into the cache lifecycle.
-     * <p/>
+     * <p>
      * If the CacheExtension is not initialised, initialise it.
+     * @param cacheExtension the cache extension
      */
     public void registerCacheExtension(CacheExtension cacheExtension);
 
     /**
      * Unregister a {@link CacheExtension} with the cache. It will then be detached from the cache lifecycle.
+     * @param cacheExtension the cache extension
      */
     public void unregisterCacheExtension(CacheExtension cacheExtension);
 
@@ -845,17 +820,18 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Sets an ExceptionHandler on the Cache. If one is already set, it is overwritten.
+     * @param cacheExceptionHandler the cache exception handler
      */
     public void setCacheExceptionHandler(CacheExceptionHandler cacheExceptionHandler);
 
     /**
-     * Sets an ExceptionHandler on the Cache. If one is already set, it is overwritten.
+     * @return an ExceptionHandler on the Cache
      */
     public CacheExceptionHandler getCacheExceptionHandler();
 
     /**
      * Register a {@link CacheLoader} with the cache. It will then be tied into the cache lifecycle.
-     * <p/>
+     * <p>
      * The CacheLoader instance will be initialized when the cache itself is being initialized.
      * Should the cache already be initialized, {@link net.sf.ehcache.loader.CacheLoader#init CacheLoader.init()} will not be invoked.
      * If the loader requires initialization, the user will have to call it manually before registering it with a Cache instance
@@ -884,13 +860,13 @@ public interface Ehcache extends Cloneable {
      * as indicated by its configuration. Calling this method on such a cache is optional, but doing so more than once
      * replaces previously registered extractor with the given one; i.e., there can be at most one extractor instance
      * configured for each such cache. If the cache was not configured for dynamic indexing, an exception will be thrown
-     * @param extractor
+     * @param extractor the dynamic attribute extractor
      */
     public void registerDynamicAttributesExtractor(DynamicAttributesExtractor extractor);
 
     /**
      * Register the {@link CacheWriter} for this cache. It will then be tied into the cache lifecycle.
-     * <p/>
+     * <p>
      * If the {@code CacheWriter} is not initialised, initialise it.
      *
      * @param cacheWriter A CacheWriter to register
@@ -899,7 +875,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Unregister the {@link CacheWriter} from the cache. It will then be detached from the cache lifecycle.
-     * <p/>
+     * <p>
      * If not {@code CacheWriter} was registered beforehand this operation has no effect.
      */
     public void unregisterCacheWriter();
@@ -914,11 +890,11 @@ public interface Ehcache extends Cloneable {
     /**
      * This method will return, from the cache, the object associated with
      * the argument "key".
-     * <p/>
+     * <p>
      * If the object is not in the cache, the associated
      * cache loader will be called. That is either the CacheLoader passed in, or if null, the one associated with the cache.
      * If both are null, no load is performed and null is returned.
-     * <p/>
+     * <p>
      * Because this method may take a long time to complete, it is not synchronized. The underlying cache operations
      * are synchronized.
      *
@@ -926,7 +902,7 @@ public interface Ehcache extends Cloneable {
      * @param loader the override loader to use. If null, the cache's default loader will be used
      * @param loaderArgument an argument to pass to the CacheLoader.
      * @return an element if it existed or could be loaded, otherwise null
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     public Element getWithLoader(Object key, CacheLoader loader, Object loaderArgument) throws CacheException;
 
@@ -938,19 +914,18 @@ public interface Ehcache extends Cloneable {
      * the object. If no "arg" value is provided a null will be passed to the loadAll method. The storing of null values in the cache
      * is permitted, however, the get method will not distinguish returning a null stored in the cache and not finding the object in
      * the cache. In both cases a null is returned.
-     * <p/>
-     * <p/>
+     * <p>
      * Note. If the getAll exceeds the maximum cache size, the returned map will necessarily be less than the number specified.
-     * <p/>
+     * <p>
      * Because this method may take a long time to complete, it is not synchronized. The underlying cache operations
      * are synchronized.
-     * <p/>
+     * <p>
      * The constructs package provides similar functionality using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      * @param keys a collection of keys to be returned/loaded
      * @param loaderArgument an argument to pass to the CacheLoader.
      * @return a Map populated from the Cache. If there are no elements, an empty Map is returned.
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     public Map getAllWithLoader(Collection keys, Object loaderArgument) throws CacheException;
 
@@ -964,12 +939,12 @@ public interface Ehcache extends Cloneable {
      * If no "arg" value is provided a null will be passed to the load method. The storing of null values in the cache
      * is permitted, however, the get method will not distinguish returning a null stored in the cache and not finding
      * the object in the cache. In both cases a null is returned.
-     * <p/>
+     * <p>
      * The Ehcache native API provides similar functionality to loaders using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      *
      * @param key key whose associated value to be loaded using the associated cacheloader if this cache doesn't contain it.
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     public void load(final Object key) throws CacheException;
 
@@ -985,10 +960,11 @@ public interface Ehcache extends Cloneable {
      * retrieving or loading of the objects, an exception (to be defined) will be thrown. If the "arg" argument is set,
      * the arg object will be passed to the CacheLoader.loadAll method. The cache will not dereference the object.
      * If no "arg" value is provided a null will be passed to the loadAll method.
-     * <p/>
-     * keys - collection of the keys whose associated values to be loaded into this cache by using the associated
+     * <p>
+     * @param keys - collection of the keys whose associated values to be loaded into this cache by using the associated
      * cacheloader if this cache doesn't contain them.
-     * <p/>
+     * @param argument can be anything that makes sense to the loader
+     * <p>
      * The Ehcache native API provides similar functionality to loaders using the
      * decorator {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      */
@@ -1004,16 +980,16 @@ public interface Ehcache extends Cloneable {
      * <li>putQuites are discarded
      * </ol>
      * In all other respects the cache continues as it is.
-     * <p/>
+     * <p>
      * You can disable and enable a cache programmatically through the {@link #setDisabled(boolean)} method.
-     * <p/>
+     *
      * @return true if the cache is disabled.
      */
     public boolean isDisabled();
 
     /**
      * Disables or enables this cache. This call overrides the previous value of disabled.
-     * <p/>
+     *
      * @param disabled true if you wish to disable, false to enable
      * @see #isDisabled()
      */
@@ -1021,7 +997,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * This should not be used
-     * return some internal context (generally will be null)
+     * @return some internal context (generally will be null)
      */
     Object getInternalContext();
 
@@ -1042,7 +1018,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns true if the cache is in coherent mode cluster-wide. Returns false otherwise.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      *
      * @return true if the cache is in coherent mode cluster-wide, false otherwise
@@ -1053,7 +1029,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns true if the cache is in coherent mode for the current node. Returns false otherwise.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      *
      * @return true if the cache is in coherent mode cluster-wide, false otherwise
@@ -1066,9 +1042,9 @@ public interface Ehcache extends Cloneable {
      * Sets the cache in coherent or incoherent mode depending on the parameter on this node.
      * Calling {@code setNodeCoherent(true)} when the cache is already in coherent mode or
      * calling {@code setNodeCoherent(false)} when already in incoherent mode will be a no-op.
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
-     * <p />
+     * <p>
      * When using Terracotta clustered caches with nonstop enabled, the timeout used by this method is
      * {@link NonstopConfiguration#getBulkOpsTimeoutMultiplyFactor()} times the timeout value in the config.
      *
@@ -1083,7 +1059,7 @@ public interface Ehcache extends Cloneable {
     /**
      * This method waits until the cache is in coherent mode in all the connected nodes.
      * If the cache is already in coherent mode it returns immediately
-     * <p />
+     * <p>
      * It applies to coherent clustering mechanisms only e.g. Terracotta
      * @throws UnsupportedOperationException if this cache does not support coherence, like RMI replication
      * @deprecated Use {@link #waitUntilClusterBulkLoadComplete()} instead
@@ -1093,21 +1069,21 @@ public interface Ehcache extends Cloneable {
 
     /**
      * This class is used to access the transaction manager used during XA.
-     * @param transactionManagerLookup
+     * @param transactionManagerLookup the transactionManagerLookup
      */
     public void setTransactionManagerLookup(TransactionManagerLookup transactionManagerLookup);
 
     /**
      * Add a PropertyChangeListener.
      *
-     * @param listener
+     * @param listener the listener to add
      */
     public void addPropertyChangeListener(PropertyChangeListener listener);
 
     /**
      * Remove a PropertyChangeListener.
      *
-     * @param listener
+     * @param listener the listener to remove
      */
     public void removePropertyChangeListener(PropertyChangeListener listener);
 
@@ -1126,7 +1102,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * @return set of all search attributes in effect at the time of calling this method 
-     * @throws CacheException
+     * @throws CacheException a runtime cache exception
      */
     public Set<Attribute> getSearchAttributes() throws CacheException;
     
@@ -1165,7 +1141,7 @@ public interface Ehcache extends Cloneable {
      * @param key - The key that retrieves a value that you want to protect via locking
      * @param timeout - millis until giveup on getting the lock
      * @return whether the lock was awarded
-     * @throws InterruptedException
+     * @throws InterruptedException if the thread was interrupted
      */
     public boolean tryReadLockOnKey(Object key, long timeout) throws InterruptedException;
 
@@ -1176,7 +1152,7 @@ public interface Ehcache extends Cloneable {
      * @param key - The key that retrieves a value that you want to protect via locking
      * @param timeout - millis until giveup on getting the lock
      * @return whether the lock was awarded
-     * @throws InterruptedException
+     * @throws InterruptedException if the thread was interrupted
      */
     public boolean tryWriteLockOnKey(Object key, long timeout) throws InterruptedException;
 
@@ -1197,7 +1173,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Returns true if a read lock for the key is held by the current thread
      *
-     * @param key
+     * @param key the key
      * @return true if a read lock for the key is held by the current thread
      * @throws UnsupportedOperationException if querying the read lock state is not supported
      */
@@ -1206,7 +1182,7 @@ public interface Ehcache extends Cloneable {
     /**
      * Returns true if a write lock for the key is held by the current thread
      *
-     * @param key
+     * @param key the key
      * @return true if a write lock for the key is held by the current thread
      * @throws UnsupportedOperationException if querying the write lock state is not supported
      */
@@ -1214,7 +1190,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns true if at least one node in the cluster is in bulk-load mode. Returns false otherwise.
-     * <p />
+     * <p>
      * NOTE: if {@link #isNodeBulkLoadEnabled()} returns true, this method will always return true.
      * Applies to caches clustered with Terracotta only.
      *
@@ -1225,7 +1201,7 @@ public interface Ehcache extends Cloneable {
 
     /**
      * Returns true if the current node is in bulk-load mode. Returns false otherwise.
-     * <p />
+     * <p>
      * NOTE: if this method returns true, {@link #isClusterBulkLoadEnabled()} method will always return true.
      * Applies to caches clustered with Terracotta only.
      *
@@ -1238,9 +1214,9 @@ public interface Ehcache extends Cloneable {
      * Enable/disable bulk-load mode in this node for this cache.
      * Calling {@code setBulkLoadEnabled(true)} when the cache is already in bulk-load mode or
      * calling {@code setBulkLoadEnabled(false)} when already NOT in bulk-load mode will be a no-op.
-     * <p />
+     * <p>
      * Applies to caches clustered with Terracotta only.
-     * <p />
+     * <p>
      * When using Terracotta clustered caches with nonstop enabled, the timeout used by this method is
      * {@link NonstopConfiguration#getBulkOpsTimeoutMultiplyFactor()} times the timeout value in the nonstop config.
      *
@@ -1254,7 +1230,7 @@ public interface Ehcache extends Cloneable {
      * This method waits until all the connected nodes have disabled bulk-load. Or in other words, calling this method
      * will block until all connected nodes in the cluster disables bulk-load. If none of the nodes did not enable bulk-load
      * this method will return immediately
-     * <p />
+     * <p>
      * Applies to caches clustered with Terracotta only.
      * @throws UnsupportedOperationException if the cache is not clustered with Terracotta
      */

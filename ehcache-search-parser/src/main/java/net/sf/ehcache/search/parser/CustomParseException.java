@@ -43,7 +43,6 @@ public class CustomParseException extends ParseException {
     /**
      * Instantiates a new custom parse exception.
      *
-     * @param tokenMgr the token mgr
      * @param tok      the tok
      * @param message  the message
      */
@@ -55,7 +54,6 @@ public class CustomParseException extends ParseException {
     /**
      * Instantiates a new custom parse exception.
      *
-     * @param tokenMgr the token mgr
      * @param tok      the tok
      * @param t        the t
      */
@@ -73,7 +71,6 @@ public class CustomParseException extends ParseException {
     /**
      * Make message.
      *
-     * @param tokenMgr the token mgr
      * @param tok      the tok
      * @param message  the message
      * @return the string

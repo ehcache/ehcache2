@@ -329,7 +329,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
 
     /**
      * Gets an item from the cache.
-     * <p/>
+     * <p>
      * The last access time in {@link net.sf.ehcache.Element} is updated.
      *
      * @param key the key of the Element
@@ -415,7 +415,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
 
     /**
      * Expire all elements.
-     * <p/>
+     * <p>
      * This is a default implementation which does nothing. Expiration on demand is only implemented for disk stores.
      */
     public void expireElements() {
@@ -491,7 +491,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
 
     /**
      * Gets an Array of the keys for all elements in the memory cache.
-     * <p/>
+     * <p>
      * Does not check for expired entries
      *
      * @return An List
@@ -642,7 +642,7 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
 
     /**
      * Uses random numbers to sample the entire map.
-     * <p/>
+     * <p>
      * This implemenation uses a key array.
      *
      * @param keyHint a key used as a hint indicating where the just added element is

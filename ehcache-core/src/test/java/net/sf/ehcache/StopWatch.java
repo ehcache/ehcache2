@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A timer service used to check performance of tests.
- * <p/>
+ * <p>
  * To enable this to work for different machines the following is done:
  * <ul>
  * <li>SimpleLog is used for logging with a known logging level controlled by <code>simplelog.properties</code>
@@ -145,7 +145,7 @@ public class StopWatch {
     /**
      * Gets the time elapsed between now and for the first time, the creation
      * time of the class, and after that, between each call to this method
-     * <p/>
+     * <p>
      * Note this method returns notional time elapsed. See class description
      */
     public long getElapsedTime() {

@@ -29,16 +29,16 @@ import java.io.Serializable;
 
 /**
  * A JMX CacheStatistics decorator for an ehcache Statistics class.
- * <p/>
+ * <p>
  * An immutable Cache statistics implementation}
- * <p/>
+ * <p>
  * This is like a value object, with the added ability to clear cache statistics on the cache.
  * That ability does not survive any Serialization of this class. On deserialization the cache
  * can be considered disconnected.
- * <p/>
+ * <p>
  * The accuracy of these statistics are determined by the value of {#getStatisticsAccuracy()}
- * at the time the statistic was computed. This can be changed by setting {@link net.sf.ehcache.Cache#setStatisticsAccuracy}.
- * <p/>
+ * at the time the statistic was computed.
+ * <p>
  * Because this class maintains a reference to an Ehcache, any references held to this class will precent the Ehcache
  * from getting garbage collected.
  *
@@ -145,36 +145,6 @@ public class CacheStatistics implements CacheStatisticsMBean, Serializable {
     }
 
     /**
-     * Gets the number of elements stored in the cache. Caclulating this can be expensive. Accordingly,
-     * this method will return three different values, depending on the statistics accuracy setting.
-     * <h3>Best Effort Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link net.sf.ehcache.Statistics#STATISTICS_ACCURACY_BEST_EFFORT}.
-     * <p/>
-     * The size is the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.MemoryStore} plus
-     * the number of {@link net.sf.ehcache.Element}s in the {@link net.sf.ehcache.store.disk.DiskStore}.
-     * <p/>
-     * This number is the actual number of elements, including expired elements that have
-     * not been removed. Any duplicates between stores are accounted for.
-     * <p/>
-     * Expired elements are removed from the the memory store when
-     * getting an expired element, or when attempting to spool an expired element to
-     * disk.
-     * <p/>
-     * Expired elements are removed from the disk store when getting an expired element,
-     * or when the expiry thread runs, which is once every five minutes.
-     * <p/>
-     * <h3>Guaranteed Accuracy Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link net.sf.ehcache.Statistics#STATISTICS_ACCURACY_GUARANTEED}.
-     * <p/>
-     * This method accounts for elements which might be expired or duplicated between stores. It take approximately
-     * 200ms per 1000 elements to execute.
-     * <h3>Fast but non-accurate Size</h3>
-     * This result is returned when the statistics accuracy setting is {@link Statistics#STATISTICS_ACCURACY_NONE}.
-     * <p/>
-     * The number given may contain expired elements. In addition if the DiskStore is used it may contain some double
-     * counting of elements. It takes 6ms for 1000 elements to execute. Time to execute is O(log n). 50,000 elements take
-     * 36ms.
-     *
      * @return the number of elements in the ehcache, with a varying degree of accuracy, depending on accuracy setting.
      */
     public long getObjectCount() {

@@ -30,10 +30,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A provider of Peer RMI addresses based off manual configuration.
- * <p/>
+ * <p>
  * Because there is no monitoring of whether a peer is actually there, the list of peers is dynamically
  * looked up and verified each time a lookup request is made.
- * <p/>
+ * <p>
  *
  * @author Greg Luck
  * @version $Id$
@@ -119,7 +119,7 @@ public final class ManualRMICacheManagerPeerProvider extends RMICacheManagerPeer
 
     /**
      * Whether the entry should be considered stale.
-     * <p/>
+     * <p>
      * Manual RMICacheManagerProviders use a static list of urls and are therefore never stale.
      *
      * @param date the date the entry was created

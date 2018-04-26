@@ -23,7 +23,7 @@ import java.io.Serializable;
  * A replacement serialized form for transaction IDs. It can be used by transaction ID factories
  * to create IDs that serialize to this form (using writeReplace()) if they don't want or cannot
  * provide directly serializable IDs.
- * <p/>
+ * <p>
  * During deserialization, objects of this class will be replaced by the result of the
  * CacheManager.restoreTransactionID() call.
  *

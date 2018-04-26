@@ -130,23 +130,23 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Performance and capacity tests.
-     * <p/>
+     * <p>
      * The numbers given are for the remote peer tester (java -jar ehcache-1.x-remote-debugger.jar ehcache-distributed1.xml)
      * running on a 10Mbit ethernet network and are measured from the time the peer starts receiving to when
      * it has fully received.
-     * <p/>
+     * <p>
      * r37 and earlier - initial implementation
      * 38 seconds to get all notifications with 6 peers, 2000 Elements and 400 byte payload
      * 18 seconds to get all notifications with 2 peers, 2000 Elements and 400 byte payload
      * 40 seconds to get all notifications with 2 peers, 2000 Elements and 10k payload
      * 22 seconds to get all notifications with 2 peers, 2000 Elements and 1k payload
      * 26 seconds to get all notifications with 2 peers, 200 Elements and 100k payload
-     * <p/>
+     * <p>
      * r38 - RMI stub lookup on registration rather than at each lookup. Saves quite a few lookups. Also change to 5 second heartbeat
      * 38 seconds to get 2000 notifications with 6 peers, Elements with 400 byte payload (1 second heartbeat)
      * 16 seconds to get 2000 notifications with 6 peers, Elements with 400 byte payload (5 second heartbeat)
      * 13 seconds to get 2000 notifications with 2 peers, Elements with 400 byte payload
-     * <p/>
+     * <p>
      * r39 - Batching asyn replicator. Send all queued messages in one RMI call once per second.
      * 2 seconds to get 2000 notifications with 6 peers, Elements with 400 byte payload (5 second heartbeat)
      */
@@ -186,7 +186,7 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Performance and capacity tests.
-     * <p/>
+     * <p>
      */
 
     @Test
@@ -305,11 +305,11 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Performance and capacity tests.
-     * <p/>
+     * <p>
      * The numbers given are for the remote peer tester (java -jar ehcache-1.x-remote-debugger.jar ehcache-distributed1.xml)
      * running on a 10Mbit ethernet network and are measured from the time the peer starts receiving to when
      * it has fully received.
-     * <p/>
+     * <p>
      * 4 seconds to get all remove notifications with 6 peers, 5000 Elements and 400 byte payload
      */
     @Test
@@ -385,7 +385,7 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Performance and capacity tests.
-     * <p/>
+     * <p>
      * 5 seconds to send all notifications synchronously with 5 peers, 2000 Elements and 400 byte payload
      * The numbers given below are for the remote peer tester (java -jar ehcache-1.x-remote-debugger.jar ehcache-distributed1.xml)
      * running on a 10Mbit ethernet network and are measured from the time the peer starts receiving to when
@@ -424,7 +424,7 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Enables long stabilty runs using replication to be done.
-     * <p/>
+     * <p>
      * This test has been run in a profile for 15 hours without any observed issues.
      *
      * @throws InterruptedException
@@ -468,9 +468,9 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
 
     /**
      * Shows result of perf problem and fix in flushReplicationQueue
-     * <p/>
+     * <p>
      * Behaviour before change:
-     * <p/>
+     * <p>
      * INFO: Items written: 10381
      * Oct 29, 2007 11:40:04 AM net.sf.ehcache.distribution.RMICacheReplicatorTest testReplicatePerf
      * INFO: Items written: 29712
@@ -482,7 +482,7 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
      * INFO: Items written: 322
      * Oct 29, 2007 11:42:35 AM net.sf.ehcache.distribution.RMICacheReplicatorTest testReplicatePerf
      * INFO: Items written: 41909
-     * <p/>
+     * <p>
      * Behaviour after change:
      * INFO: Items written: 26356
      * Oct 29, 2007 11:44:39 AM net.sf.ehcache.distribution.RMICacheReplicatorTest testReplicatePerf
@@ -509,7 +509,7 @@ public class RMICacheReplicatorPerfTest extends AbstractRMITest {
      * INFO: Items written: 5492
      * Oct 29, 2007 11:44:52 AM net.sf.ehcache.distribution.RMICacheReplicatorTest testReplicatePerf
      * INFO: Items written: 10188
-     * <p/>
+     * <p>
      * Also no pauses noted.
      */
     @Test

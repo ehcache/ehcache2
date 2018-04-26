@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * <p>
- * A {@link VersionedEntity} representing a cache manager resource from the management API.
+ * A {@link AbstractEntityV2} representing a cache manager resource from the management API.
  * </p>
  * 
  * @author brandony

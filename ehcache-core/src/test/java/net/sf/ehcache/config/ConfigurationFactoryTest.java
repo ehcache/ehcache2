@@ -82,7 +82,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Tests for Store Configuration
- * <p/>
+ * <p>
  * Make sure ant compile has been executed before running these tests, as they rely on the test ehcache.xml being
  * in the classpath.
  *
@@ -109,7 +109,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
      * Tests that the loader successfully loads from ehcache.xml.
      * ehcache.xml should be found in the classpath. In our ant configuration
      * this should be from build/test-classes/ehcache.xml
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
@@ -219,7 +219,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache.xml
      * given as a {@link File}
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
@@ -309,7 +309,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache-1.1.xml
      * given as a {@link File}. This is a backward compatibility test.
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
@@ -523,7 +523,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache-nodefault.xml
      * given as a {@link File}
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
@@ -581,11 +581,11 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache-nodefault.xml
      * given as a {@link File}
-     * <p/>
+     * <p>
      * /**
      * Tests that the loader successfully loads from ehcache-nodefault.xml
      * given as a {@link File}
-     * <p/>
+     * <p>
      * <cache name="sampleCacheNoOptionalAttributes"
      * maxElementsInMemory="1000"
      * eternal="true"
@@ -614,14 +614,14 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache-nodisk.xml
      * given as a {@link File}
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
      * timeToIdleSeconds="120"
      * timeToLiveSeconds="120"
      * overflowToDisk="false"
-     * <p/>
+     * <p>
      */
     @Test
     public void testLoadConfigurationFromFileNoDisk() throws Exception {
@@ -663,14 +663,14 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
 
     /**
      * Tests the default values for optional attributes
-     * <p/>
+     * <p>
      * <!-- Sample cache. Optional attributes are removed -->
      * <cache name="sampleRequiredAttributesOnly"
      * maxElementsInMemory="1000"
      * eternal="true"
      * overflowToDisk="false"
      * />
-     * <p/>
+     * <p>
      * No disk store path specified as disk store not being used
      * />
      */
@@ -718,9 +718,9 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache.xml
      * given as an {@link URL}.
-     * <p/>
+     * <p>
      * is found first
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10"
      * eternal="false"
@@ -852,7 +852,7 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
     /**
      * Tests that the loader successfully loads from ehcache.xml
      * given as a {@link InputStream}
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"
@@ -909,10 +909,10 @@ public class ConfigurationFactoryTest extends AbstractCacheTest {
      * found in the classpath.
      * ehcache.xml should be found in the classpath. In our ant configuration
      * this should be from build/classes/ehcache-failsafe.xml
-     * <p/>
+     * <p>
      * We delete ehcache.xml from build/test-classes/ first, as failsafe only
      * kicks in when ehcache.xml is not in the classpath.
-     * <p/>
+     * <p>
      * <defaultCache
      * maxElementsInMemory="10000"
      * eternal="false"

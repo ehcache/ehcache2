@@ -111,7 +111,7 @@ public abstract class RMICacheManagerPeerProvider implements CacheManagerPeerPro
 
     /**
      * Whether the entry should be considered stale. This will depend on the type of RMICacheManagerPeerProvider.
-     * <p/>
+     * <p>
      * @param date the date the entry was created
      * @return true if stale
      */
@@ -149,7 +149,7 @@ public abstract class RMICacheManagerPeerProvider implements CacheManagerPeerPro
      * the scheme for replication and bootstrap purposes. Each <code>CacheReplicator</code> should lookup
      * the provider for its scheme type during replication. Similarly a <code>BootstrapCacheLoader</code>
      * should also look up the provider for its scheme.
-     * <p/>
+     * <p>
      * @since 1.6 introduced to permit multiple distribution schemes to be used in the same CacheManager
      * @return the well-known scheme name, which is determined by the replication provider author.
      */

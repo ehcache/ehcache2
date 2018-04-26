@@ -22,7 +22,7 @@ import net.sf.ehcache.Element;
 
 /**
  * A {@code CacheWriterManager} coordinates how element are written to a back-end store.
- * <p/>
+ * <p>
  * The {@code CacheWriterManager} will in its turn call the {@code CacheWriter} that belongs to the relevant cache to perform
  * the actual write logic as it's implemented by the user.
  *

@@ -119,7 +119,7 @@ public class RMIBootstrapCacheLoader implements BootstrapCacheLoader, Cloneable 
     /**
      * Bootstraps the cache from a random CachePeer. Requests are done in chunks estimated at 5MB Serializable
      * size. This balances memory use on each end and network performance.
-     * <p/>
+     * <p>
      * Bootstrapping requires the establishment of a cluster. This can be instantaneous for manually configued
      * clusters or may take a number of seconds for multicast ones. This method waits up to 11 seconds for a cluster
      * to form.

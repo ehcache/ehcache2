@@ -33,7 +33,7 @@ public interface TerracottaStore extends Store {
     /**
      * Returns the local value associated with the key. Local value means that the object mapped to the key is present in the VM locally. In
      * case its not, will return null. Note that even when returning null, the value may be present in the Terracotta server array.
-     * <p/>
+     * <p>
      * This operation does not acquire any locks when doing the operation and may return stale values.
      * This Operation does not update last usage statistics
      *

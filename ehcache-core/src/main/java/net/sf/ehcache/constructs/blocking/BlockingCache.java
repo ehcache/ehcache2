@@ -38,31 +38,31 @@ import org.terracotta.statistics.observer.OperationObserver;
 
 /**
  * A blocking decorator for an Ehcache, backed by a {@link Ehcache}.
- * <p/>
+ * <p>
  * It allows concurrent read access to elements already in the cache. If the element is null, other
  * reads will block until an element with the same key is put into the cache.
- * <p/>
+ * <p>
  * This is useful for constructing read-through or self-populating caches.
- * <p/>
+ * <p>
  * This implementation uses the {@link net.sf.ehcache.concurrent.ReadWriteLockSync} class. If you wish to use
  * this class, you will need the concurrent package in your class path.
- * <p/>
+ * <p>
  * It features:
  * <ul>
  * <li>Excellent liveness.
  * <li>Fine-grained locking on each element, rather than the cache as a whole.
  * <li>Scalability to a large number of threads.
  * </ul>
- * <p/>
+ * <p>
  * "Hashtable / synchronizedMap uses the "one big fat lock" approach to guard the mutable state of the map.
  * That works, but is a big concurrency bottleneck, as you've observed.  You went to the opposite extreme, one lock per key.
  * That works (as long as you've got sufficient synchronization in the cache itself to protect its own data structures.)
- * <p/>
+ * <p>
  * Lock striping is a middle ground, partitioning keys into a fixed number of subsets, like the trick used at large
  * theaters for will-call ticket pickup -- there are separate lines for "A-F, G-M, N-R, and S-Z".
  * This way, there are a fixed number of locks, each guarding (hopefully) 1/Nth of the keys."
  * - Brian Goetz
- * <p/>
+ * <p>
  * Further improvements to hashing suggested by Joe Bowbeer.
  *
  * @author Greg Luck
@@ -136,13 +136,13 @@ public class BlockingCache extends EhcacheDecoratorAdapter {
     /**
      * Looks up an entry.  Blocks if the entry is null until a call to {@link #put} is done
      * to put an Element in.
-     * <p/>
+     * <p>
      * If a put is not done, the lock is never released.
-     * <p/>
+     * <p>
      * If this method throws an exception, it is the responsibility of the caller to catch that exception and call
      * <code>put(new Element(key, null));</code> to release the lock acquired. See {@link net.sf.ehcache.constructs.blocking.SelfPopulatingCache}
      * for an example.
-     * <p/>
+     * <p>
      * Note. If a LockTimeoutException is thrown while doing a <code>get</code> it means the lock was never acquired,
      * therefore it is a threading error to call {@link #put}
      *
@@ -304,7 +304,7 @@ public class BlockingCache extends EhcacheDecoratorAdapter {
 
     /**
      * Gets an element from the cache. Updates Element Statistics
-     * <p/>
+     * <p>
      * Note that the Element's lastAccessTime is always the time of this get.
      * Use {@link #getQuiet(Object)} to peak into the Element to see its last access time with get
      *
@@ -320,7 +320,7 @@ public class BlockingCache extends EhcacheDecoratorAdapter {
 
     /**
      * Synchronized version of getName to test liveness of the object lock.
-     * <p/>
+     * <p>
      * The time taken for this method to return is a useful measure of runtime contention on the cache.
      *
      * @return the name of the cache.
@@ -331,7 +331,7 @@ public class BlockingCache extends EhcacheDecoratorAdapter {
 
     /**
      * Sets the time to wait to acquire a lock. This may be modified at any time.
-     * <p/>
+     * <p>
      * The consequences of setting a timeout are:
      * <ol>
      * <li>if a lock cannot be acquired in the given time a LockTimeoutException is thrown.
@@ -371,7 +371,7 @@ public class BlockingCache extends EhcacheDecoratorAdapter {
 
     /**
      * Register a {@link CacheLoader} with the cache. It will then be tied into the cache lifecycle.
-     * <p/>
+     * <p>
      * If the CacheLoader is not initialised, initialise it.
      *
      * @param cacheLoader A Cache Loader to register

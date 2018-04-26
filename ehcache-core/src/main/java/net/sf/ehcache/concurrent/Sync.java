@@ -20,7 +20,7 @@ package net.sf.ehcache.concurrent;
  * @version $Id$
  * @author Doug Lea
  * Main interface for locks, gates, and conditions.
- * <p/>
+ * <p>
  * Sync objects isolate waiting and notification for particular
  * logical states, resource availability, events, and the like that are
  * shared across multiple threads. Use of Syncs sometimes
@@ -28,15 +28,14 @@ package net.sf.ehcache.concurrent;
  * compared to the use of plain java monitor methods
  * and locking, and are sometimes (but by no means always)
  * simpler to program with.
- * <p/>
- * <p/>
+ * <p>
  * Most Syncs are intended to be used primarily (although
  * not exclusively) in  before/after constructions such as:
- * <pre>
+ * <pre>{@code
  * class X {
  *   Sync gate;
  *   // ...
- * <p/>
+ *
  *   public void m() {
  *     try {
  *       gate.acquire();  // block until condition holds
@@ -51,7 +50,7 @@ package net.sf.ehcache.concurrent;
  *       // ... evasive action
  *     }
  *   }
- * <p/>
+ *
  *   public void m2(Sync cond) { // use supplied condition
  *     try {
  *       if (cond.attempt(10)) {         // try the condition for 10 ms
@@ -68,15 +67,15 @@ package net.sf.ehcache.concurrent;
  *     }
  *   }
  * }
- * </pre>
+ * }</pre>
  * Syncs may be used in somewhat tedious but more flexible replacements
  * for built-in Java synchronized blocks. For example:
- * <pre>
+ * <pre>{@code
  * class HandSynched {
  *   private double state_ = 0.0;
  *   private final Sync lock;  // use lock type supplied in constructor
  *   public HandSynched(Sync l) { lock = l; }
- * <p/>
+ *
  *   public void changeState(double d) {
  *     try {
  *       lock.acquire();
@@ -85,7 +84,7 @@ package net.sf.ehcache.concurrent;
  *     }
  *     catch(InterruptedException ex) { }
  *   }
- * <p/>
+ *
  *   public double getState() {
  *     double d = 0.0;
  *     try {
@@ -99,17 +98,17 @@ package net.sf.ehcache.concurrent;
  *   private double updateFunction(double d) { ... }
  *   private double accessFunction(double d) { ... }
  * }
- * </pre>
+ * }</pre>
  * If you have a lot of such methods, and they take a common
  * form, you can standardize this using wrappers. Some of these
  * wrappers are standardized in LockedExecutor, but you can make others.
  * For example:
- * <pre>
+ * <pre>{@code
  * class HandSynchedV2 {
  *   private double state_ = 0.0;
  *   private final Sync lock;  // use lock type supplied in constructor
  *   public HandSynchedV2(Sync l) { lock = l; }
- * <p/>
+ *
  *   protected void runSafely(Runnable r) {
  *     try {
  *       lock.acquire();
@@ -120,7 +119,7 @@ package net.sf.ehcache.concurrent;
  *       Thread.currentThread().interrupt();
  *     }
  *   }
- * <p/>
+ *
  *   public void changeState(double d) {
  *     runSafely(new Runnable() {
  *       public void run() { state_ = updateFunction(d); }
@@ -128,14 +127,14 @@ package net.sf.ehcache.concurrent;
  *   }
  *   // ...
  * }
- * </pre>
- * <p/>
+ * }</pre>
+ *
  * One reason to bother with such constructions is to use deadlock-
  * avoiding back-offs when dealing with locks involving multiple objects.
  * For example, here is a Cell class that uses attempt to back-off
  * and retry if two Cells are trying to swap values with each other
  * at the same time.
- * <pre>
+ * <pre>{@code
  * class Cell {
  *   long value;
  *   Sync lock = ... // some sync implementation class
@@ -160,11 +159,11 @@ package net.sf.ehcache.concurrent;
  *     }
  *   }
  * }
- * </pre>
- * <p/>
+ * }</pre>
+ *
  * Here is an even fancier version, that uses lock re-ordering
  * upon conflict:
- * <pre>
+ * <pre>{@code
  * class Cell {
  *   long value;
  *   Sync lock = ...;
@@ -184,7 +183,7 @@ package net.sf.ehcache.concurrent;
  *     finally { lock.release(); }
  *     return false;
  *   }
- * <p/>
+ *
  *  void swapValue(Cell other) {
  *    try {
  *      while (!trySwap(this, other) &&
@@ -194,40 +193,39 @@ package net.sf.ehcache.concurrent;
  *    catch (InterruptedException ex) { return; }
  *  }
  * }
- * </pre>
- * <p/>
+ * }</pre>
+ *
  * Interruptions are in general handled as early as possible.
  * Normally, InterruptionExceptions are thrown
  * in acquire and attempt(msec) if interruption
  * is detected upon entry to the method, as well as in any
  * later context surrounding waits.
  * However, interruption status is ignored in release();
- * <p/>
+ * <p>
  * Timed versions of attempt report failure via return value.
  * If so desired, you can transform such constructions to use exception
  * throws via
  * <pre>
  *   if (!c.attempt(timeval)) throw new TimeoutException(timeval);
  * </pre>
- * <p/>
  * The TimoutSync wrapper class can be used to automate such usages.
- * <p/>
+ * <p>
  * All time values are expressed in milliseconds as longs, which have a maximum
  * value of Long.MAX_VALUE, or almost 300,000 centuries. It is not
  * known whether JVMs actually deal correctly with such extreme values.
  * For convenience, some useful time values are defined as static constants.
- * <p/>
+ * <p>
  * All implementations of the three Sync methods guarantee to
  * somehow employ Java <code>synchronized</code> methods or blocks,
  * and so entail the memory operations described in JLS
  * chapter 17 which ensure that variables are loaded and flushed
  * within before/after constructions.
- * <p/>
+ * <p>
  * Syncs may also be used in spinlock constructions. Although
  * it is normally best to just use acquire(), various forms
  * of busy waits can be implemented. For a simple example
  * (but one that would probably never be preferable to using acquire()):
- * <pre>
+ * <pre>{@code
  * class X {
  *   Sync lock = ...
  *   void spinUntilAcquired() throws InterruptedException {
@@ -248,16 +246,14 @@ package net.sf.ehcache.concurrent;
  *     }
  *   }
  * }
- * </pre>
- * <p/>
+ * }</pre>
  * In addition pure synchronization control, Syncs
  * may be useful in any context requiring before/after methods.
  * For example, you can use an ObservableSync
  * (perhaps as part of a LayeredSync) in order to obtain callbacks
  * before and after each method invocation for a given class.
- * <p/>
- * <p/>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  */
 public interface Sync {
     /**

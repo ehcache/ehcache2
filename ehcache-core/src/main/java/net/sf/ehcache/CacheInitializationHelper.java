@@ -29,7 +29,7 @@ public class CacheInitializationHelper {
     /**
      * Create a cache initializer with the given {@link CacheManager}
      *
-     * @param cacheManager
+     * @param cacheManager cache manager that will be used to initialize the caches
      */
     public CacheInitializationHelper(final CacheManager cacheManager) {
         this.cacheManager = cacheManager;
@@ -38,7 +38,7 @@ public class CacheInitializationHelper {
     /**
      * Initialize the {@link Ehcache}.
      *
-     * @param cache
+     * @param cache cache to initialize
      */
     public void initializeEhcache(final Ehcache cache) {
         this.cacheManager.initializeEhcache(cache, false);
@@ -47,8 +47,8 @@ public class CacheInitializationHelper {
     /**
      * Initialize the given {@link Ehcache} using the given {@link CacheManager}
      *
-     * @param cacheManager
-     * @param cache
+     * @param cacheManager cache manager used to initialize the cache
+     * @param cache cache to initialize
      */
     public static void initializeEhcache(final CacheManager cacheManager, final Ehcache cache) {
         cacheManager.initializeEhcache(cache, false);

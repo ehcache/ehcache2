@@ -22,26 +22,26 @@ import net.sf.ehcache.search.expression.Criteria;
 
 /**
  * Creates queries for performing cache searches.
- * <p/>
+ * <p>
  * Queries are created using our search DSL implemented using Java.
- * <p/>
+ * <p>
  * A fluent interface provides a compact and yet easy-to-read representation. Fluent interfaces are implemented using method chaining.
  * Static factory methods and imports are a great aid in creating a compact, yet readable DSL.
- * <p/>
+ * <p>
  * Out API has the following features:
- * <p/>
+ * <p>
  * Method Chaining - we return <code>this</code>.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * See http://www.infoq.com/articles/internal-dsls-java for a description of these conventions.
- * <p/>
+ * <p>
  * A query can be executed and then modified and re-executed. If {@link #end} is called the query is made immutable.
- * <p/>
+ * <p>
  * Both Element keys and attributes of Element can be queried. Attributes must be pre-defined for a cache. They are populated by extraction
  * from an Element's value using an {@link net.sf.ehcache.search.attribute.AttributeExtractor} .
- * <p/>
+ * <p>
  * Search results can either be Element keys (the default), values, or the result of an {@link Aggregator} function.
- * <p/>
+ * <p>
  * A {@link Query} instance can be used by multiple threads
  *
  * @author teck
@@ -81,7 +81,7 @@ public interface Query {
      * Request that the given attribute(s) should be present in the result for
      * this query. This call can be made multiple times to add to the set of
      * selected attributes.
-     * <p/>
+     * <p>
      * Note that in a distributed cache attributes may need to come over the network. To prevent very large network transfers, consider
      * limiting the results size with {@link #maxResults(int)} or by using {@link Results#range} rathern than {@link Results#all()}
      *
@@ -92,7 +92,7 @@ public interface Query {
 
     /**
      * Request this query to aggregate the results by the given Aggregator(s)
-     * <p/>
+     * <p>
      * This method may be called multiple times to request multiple aggregations
      *
      * @param aggregators
@@ -124,10 +124,10 @@ public interface Query {
 
     /**
      * Restrict the number of results returned from the search.
-     * <p/>
+     * <p>
      * By default an unlimited number of results can be returned. This could cause an OutOfMemoryError to be thrown. It is therefore
      * recommended to add an <code>maxResults</code> clause to your query to limit the size.
-     * <p/>
+     * <p>
      * Negative values are ignored and result in the default behaviour: unlimited number of results.
      *
      * @param maxResults the maximum number of results to return
@@ -143,7 +143,7 @@ public interface Query {
     /**
      * Execute this query. Every call to this method will re-execute the query
      * and return a distinct results object.
-     * <p/>
+     * <p>
      * An empty results object will be returned (on timeout) for non-stop enabled caches with {@link net.sf.ehcache.config.TimeoutBehaviorConfiguration.TimeoutBehaviorType#NOOP} and
      * {@link net.sf.ehcache.config.TimeoutBehaviorConfiguration.TimeoutBehaviorType#LOCAL_READS} behavior
      *

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A class to represent DiskStore configuration
- * e.g. <diskStore path="${java.io.tmpdir}" />
+ * e.g. {@code <diskStore path="${java.io.tmpdir}" />}
  *
  * @author <a href="mailto:gluck@thoughtworks.com">Greg Luck</a>
  * @version $Id$

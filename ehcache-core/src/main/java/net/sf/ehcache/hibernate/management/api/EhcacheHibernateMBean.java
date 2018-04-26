@@ -19,7 +19,7 @@ package net.sf.ehcache.hibernate.management.api;
 /**
  * MBean interface for hibernate statistics of session-factories
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 
@@ -27,7 +27,7 @@ package net.sf.ehcache.hibernate.management.api;
 public interface EhcacheHibernateMBean extends EhcacheStats, HibernateStats {
     /**
      * Returns true if hibernate statistics is supported.
-     * <p />
+     * <p>
      * It depends on whether the property <tt>hibernate.session_factory_name</tt> has been specified in the hibernate configuration for the
      * hibernate statistics to be enabled
      * 

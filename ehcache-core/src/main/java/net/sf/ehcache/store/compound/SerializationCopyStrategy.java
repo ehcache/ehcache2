@@ -31,14 +31,20 @@ public class SerializationCopyStrategy implements ReadWriteCopyStrategy<Element>
     private final ReadWriteSerializationCopyStrategy copyStrategy = new ReadWriteSerializationCopyStrategy();
 
     /**
-     * @inheritDoc
+     * Deep copies some object and returns an internal storage-ready copy
+     *
+     * @param value the value to copy
+     * @return the storage-ready copy
      */
     public Element copyForWrite(Element value, ClassLoader loader) {
         return copyStrategy.copyForRead(copyStrategy.copyForWrite(value, loader), loader);
     }
 
     /**
-     * @inheritDoc
+     * Reconstruct an object from its storage-ready copy.
+     *
+     * @param storedValue the storage-ready copy
+     * @return the original object
      */
     public Element copyForRead(Element storedValue, ClassLoader loader) {
         return copyStrategy.copyForRead(copyStrategy.copyForWrite(storedValue, loader), loader);

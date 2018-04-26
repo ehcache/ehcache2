@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * StronglyConsistentCacheAccessor is a decorator that accepts distributed caches configured with eventual consistency.
- * <p/>
+ * <p>
  * The accessor will then lock for all operations:
  * <ul>
  *   <li>using a read lock for read operations</li>

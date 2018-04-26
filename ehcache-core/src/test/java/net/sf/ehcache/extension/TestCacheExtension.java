@@ -109,7 +109,7 @@ public class TestCacheExtension implements CacheExtension {
     /**
      * Creates a clone of this extension. This method will only be called by ehcache before a
      * cache is initialized.
-     * <p/>
+     * <p>
      * Implementations should throw CloneNotSupportedException if they do not support clone but that
      * will stop them from being used with defaultCache.
      *

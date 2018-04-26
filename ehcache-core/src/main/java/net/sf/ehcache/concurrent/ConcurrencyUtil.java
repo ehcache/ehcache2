@@ -45,7 +45,7 @@ public final class ConcurrencyUtil {
 
     /**
      * Returns a hash code for non-null Object x.
-     * <p/>
+     * <p>
      * This function ensures that hashCodes that differ only by
      * constant multiples at each bit position have a bounded
      * number of collisions. (Doug Lea)

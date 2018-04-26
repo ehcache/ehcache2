@@ -357,7 +357,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         /**
          * Called immediately after an element has been put into the cache. The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
          * will block until this method returns.
-         * <p/>
+         * <p>
          * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
          * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
          *
@@ -371,10 +371,10 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         /**
          * Called immediately after an element has been put into the cache and the element already
          * existed in the cache. This is thus an update.
-         * <p/>
+         * <p>
          * The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
          * will block until this method returns.
-         * <p/>
+         * <p>
          * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
          * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
          *
@@ -388,9 +388,9 @@ public class CacheEventListenerTest extends AbstractCacheTest {
         /**
          * Called immediately after an element is <i>found</i> to be expired. The
          * {@link net.sf.ehcache.Cache#remove(Object)} method will block until this method returns.
-         * <p/>
+         * <p>
          * As the {@link net.sf.ehcache.Element} has been expired, only what was the key of the element is known.
-         * <p/>
+         * <p>
          * Elements are checked for expiry in ehcache at the following times:
          * <ul>
          * <li>When a get request is made
@@ -402,7 +402,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
          *
          * @param cache   the cache emitting the notification
          * @param element the element that has just expired
-         *                <p/>
+         *                <p>
          *                Deadlock Warning: expiry will often come from the <code>DiskStore</code> expiry thread. It holds a lock to the
          *                DiskStorea the time the notification is sent. If the implementation of this method calls into a
          *                synchronized <code>Cache</code> method and that subsequently calls into DiskStore a deadlock will result.
@@ -452,12 +452,12 @@ public class CacheEventListenerTest extends AbstractCacheTest {
          * <pre>
          * x.clone().equals(x)</pre></blockquote>
          * will be <tt>true</tt>, this is not an absolute requirement.
-         * <p/>
+         * <p>
          * By convention, the returned object should be obtained by calling
          * <tt>super.clone</tt>.  If a class and all of its superclasses (except
          * <tt>Object</tt>) obey this convention, it will be the case that
          * <tt>x.clone().getClass() == x.getClass()</tt>.
-         * <p/>
+         * <p>
          * By convention, the object returned by this method should be independent
          * of this object (which is being cloned).  To achieve this independence,
          * it may be necessary to modify one or more fields of the object returned
@@ -468,7 +468,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
          * primitive fields or references to immutable objects, then it is usually
          * the case that no fields in the object returned by <tt>super.clone</tt>
          * need to be modified.
-         * <p/>
+         * <p>
          * The method <tt>clone</tt> for class <tt>Object</tt> performs a
          * specific cloning operation. First, if the class of this object does
          * not implement the interface <tt>Cloneable</tt>, then a
@@ -479,7 +479,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
          * the corresponding fields of this object, as if by assignment; the
          * contents of the fields are not themselves cloned. Thus, this method
          * performs a "shallow copy" of this object, not a "deep copy" operation.
-         * <p/>
+         * <p>
          * The class <tt>Object</tt> does not itself implement the interface
          * <tt>Cloneable</tt>, so calling the <tt>clone</tt> method on an object
          * whose class is <tt>Object</tt> will result in throwing an
@@ -550,7 +550,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
      * When the <code>MemoryStore</code> overflows, and there is no disk
      * store, then the element gets automatically removed. This should
      * trigger a remove notification.
-     * <p/>
+     * <p>
      * If the element has expired, it should instead trigger an expiry notification.
      */
     @Test
@@ -595,7 +595,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
      * When the <code>MemoryStore</code> overflows, and there is no disk
      * store, then the element gets automatically evicted. This should
      * trigger a notification.
-     * <p/>
+     * <p>
      * If the element has expired, it should instead trigger an expiry notification.
      */
     @Test
@@ -640,7 +640,7 @@ public class CacheEventListenerTest extends AbstractCacheTest {
      * When the <code>MemoryStore</code> overflows, and there is no disk
      * store, then the element gets automatically removed. This should
      * trigger a notification.
-     * <p/>
+     * <p>
      * If the element has expired, it should instead trigger an expiry notification.
      */
     @Test

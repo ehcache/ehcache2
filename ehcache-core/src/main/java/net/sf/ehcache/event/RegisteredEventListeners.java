@@ -39,7 +39,7 @@ import static net.sf.ehcache.statistics.StatisticBuilder.operation;
 
 /**
  * Registered listeners for registering and unregistering CacheEventListeners and multicasting notifications to registrants.
- * <p/>
+ * <p>
  * There is one of these per Cache.
  *
  * @author Greg Luck
@@ -372,7 +372,7 @@ public class RegisteredEventListeners {
     /**
      * Adds a listener to the notification service. No guarantee is made that listeners will be
      * notified in the order they were added.
-     * <p/>
+     * <p>
      * If a cache is configured in a cluster, listeners in each node will get triggered by an event
      * depending on the value of the <pre>listenFor</pre> parameter.
      *
@@ -398,7 +398,7 @@ public class RegisteredEventListeners {
     /**
      * Adds a listener to the notification service. No guarantee is made that listeners will be
      * notified in the order they were added.
-     * <p/>
+     * <p>
      *
      * @param cacheEventListener The listener to add
      * @return true if the listener is being added and was not already added

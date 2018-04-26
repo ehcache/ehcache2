@@ -46,7 +46,7 @@ import static net.sf.ehcache.distribution.AbstractRMITest.createRMICacheManagerC
 
 /**
  * Multicast tests. These require special machine configuration.
- * <p/>
+ * <p>
  * Running on a single machine, as these tests do, you need to add a route command so that two multiCast sockets
  * can be added at the same time.
  * <ol>

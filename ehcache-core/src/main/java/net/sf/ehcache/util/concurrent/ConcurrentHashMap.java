@@ -105,9 +105,9 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * <p>Like {@link Hashtable} but unlike {@link HashMap}, this class
  * does <em>not</em> allow {@code null} to be used as a key or value.
  *
- * <p>ConcurrentHashMaps support parallel operations using the {@link
- * ForkJoinPool#commonPool}. (Tasks that may be used in other contexts
- * are available in class {@link ForkJoinTasks}). These operations are
+ * <p>ConcurrentHashMaps support parallel operations using the
+ * ForkJoinPool#commonPool. (Tasks that may be used in other contexts
+ * are available in class ForkJoinTasks). These operations are
  * designed to be safely, and often sensibly, applied even with maps
  * that are being concurrently updated by other threads; for example,
  * when computing a snapshot summary of the values in a shared
@@ -148,8 +148,8 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * <li> Reductions to scalar doubles, longs, and ints, using a
  * given basis value.</li>
  *
- * </li>
  * </ul>
+ * </li>
  * </ul>
  *
  * <p>The concurrency properties of bulk operations follow
@@ -731,7 +731,7 @@ public class ConcurrentHashMap<K, V>
      * related operations (which is the main reason we cannot use
      * existing collections such as TreeMaps). TreeBins contain
      * Comparable elements, but may contain others, as well as
-     * elements that are Comparable but not necessarily Comparable<T>
+     * elements that are {@code Comparable} but not necessarily {@code Comparable<T>}
      * for the same T, so we cannot invoke compareTo among them. To
      * handle this, the tree is ordered primarily by hash value, then
      * by getClass().getName() order, and then by Comparator order

@@ -5,7 +5,7 @@ import net.sf.ehcache.management.resource.CacheEntityV2;
 import org.terracotta.management.ServiceExecutionException;
 
 /**
- * An interface for service implementations providing operations on {@link Cache} objects.
+ * An interface for service implementations providing operations on Cache objects.
  *
  * @author brandony
  */
@@ -14,8 +14,8 @@ public interface CacheServiceV2 {
   /**
    * Create or update a cache represented by the submitted entity.
    *
-   * @param cacheManagerName the name of the {@link CacheManager} managing the {@link Cache} to be updated
-   * @param cacheName        the name of the {@link Cache} to be updated
+   * @param cacheManagerName the name of the CacheManager managing the Cache to be updated
+   * @param cacheName        the name of the Cache to be updated
    * @param resource         the representation of the resource informing this update
    * @throws ServiceExecutionException if the update fails
    */
@@ -26,8 +26,8 @@ public interface CacheServiceV2 {
   /**
    * Clears all the elements in the cache.
    *
-   * @param cacheManagerName the name of the {@link CacheManager} managing the {@link Cache} to be cleared
-   * @param cacheName        the name of the {@link Cache} to be cleared
+   * @param cacheManagerName the name of the CacheManager managing the Cache to be cleared
+   * @param cacheName        the name of the Cache to be cleared
    */
   void clearCache(String cacheManagerName,
                   String cacheName) throws ServiceExecutionException;

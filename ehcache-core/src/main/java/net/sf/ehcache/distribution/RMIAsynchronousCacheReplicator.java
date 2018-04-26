@@ -35,16 +35,16 @@ import org.slf4j.Logger;
 /**
  * Listens to {@link net.sf.ehcache.CacheManager} and {@link net.sf.ehcache.Cache} events and propagates those to
  * {@link CachePeer} peers of the Cache asynchronously.
- * <p/>
+ * <p>
  * Updates are guaranteed to be replicated in the order in which they are received.
- * <p/>
+ * <p>
  * While much faster in operation than {@link RMISynchronousCacheReplicator}, it does suffer from a number
  * of problems. Elements, which may be being spooled to DiskStore may stay around in memory because references
  * are being held to them from {@link EventMessage}s which are queued up. The replication thread runs once
  * per second, limiting the build up. However a lot of elements can be put into a cache in that time. We do not want
  * to get an {@link OutOfMemoryError} using distribution in circumstances when it would not happen if we were
  * just using the DiskStore.
- * <p/>
+ * <p>
  * Accordingly, the Element values in {@link EventMessage}s are held by {@link java.lang.ref.SoftReference} in the queue,
  * so that they can be discarded if required by the GC to avoid an {@link OutOfMemoryError}. A log message
  * will be issued on each flush of the queue if there were any forced discards. One problem with GC collection
@@ -106,7 +106,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * RemoteDebugger method for the replicationQueue thread.
-     * <p/>
+     * <p>
      * Note that the replicationQueue thread locks the cache for the entire time it is writing elements to the disk.
      */
     private void replicationThreadMain() {
@@ -134,7 +134,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * This implementation queues the put notification for in-order replication to peers.
      *
      * @param cache   the cache emitting the notification
@@ -173,10 +173,10 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
     /**
      * Called immediately after an element has been put into the cache and the element already
      * existed in the cache. This is thus an update.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
      * will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
      * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
      *
@@ -214,11 +214,11 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
     /**
      * Called immediately after an attempt to remove an element. The remove method will block until
      * this method returns.
-     * <p/>
+     * <p>
      * This notification is received regardless of whether the cache had an element matching
      * the removal key or not. If an element was removed, the element is passed to this method,
      * otherwise a synthetic element, with only the key set is passed in.
-     * <p/>
+     * <p>
      *
      * @param cache   the cache emitting the notification
      * @param element the element just deleted, or a synthetic element with just the key set if
@@ -248,7 +248,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
      * elements have been removed from the cache in a bulk operation. The usual
      * {@link #notifyElementRemoved(net.sf.ehcache.Ehcache,net.sf.ehcache.Element)}
      * is not called.
-     * <p/>
+     * <p>
      * This notification exists because clearing a cache is a special case. It is often
      * not practical to serially process notifications where potentially millions of elements
      * have been bulk deleted.
@@ -270,11 +270,11 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * Adds a message to the queue.
-     * <p/>
+     * <p>
      * This method checks the state of the replication thread and warns
      * if it has stopped and then discards the message.
      *
-     * @param cacheEventMessage
+     * @param eventMessage
      */
     protected void addToReplicationQueue(RmiEventMessage eventMessage) {
         if (!replicationThread.isAlive()) {
@@ -294,15 +294,15 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * Gets called once per {@link #replicationInterval}.
-     * <p/>
+     * <p>
      * Sends accumulated messages in bulk to each peer. i.e. if ther are 100 messages and 1 peer,
      * 1 RMI invocation results, not 100. Also, if a peer is unavailable this is discovered in only 1 try.
-     * <p/>
+     * <p>
      * Makes a copy of the queue so as not to hold up the enqueue operations.
-     * <p/>
+     * <p>
      * Any exceptions are caught so that the replication thread does not die, and because errors are expected,
      * due to peers becoming unavailable.
-     * <p/>
+     * <p>
      * This method issues warnings for problems that can be fixed with configuration changes.
      */
     private void writeReplicationQueue() {
@@ -336,7 +336,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * Extracts CacheEventMessages and attempts to get a hard reference to the underlying EventMessage
-     * <p/>
+     * <p>
      * If an EventMessage has been invalidated due to SoftReference collection of the Element, it is not
      * propagated. This only affects puts and updates via copy.
      *
@@ -401,7 +401,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
 
     /**
      * Creates a clone of this listener. This method will only be called by ehcache before a cache is initialized.
-     * <p/>
+     * <p>
      * This may not be possible for listeners after they have been initialized. Implementations should throw
      * CloneNotSupportedException if they do not support clone.
      *

@@ -105,7 +105,7 @@ public class BaseComponentLoader extends CacheLoaderFactory implements CacheLoad
     /**
      * Creates a clone of this extension. This method will only be called by ehcache before a
      * cache is initialized.
-     * <p/>
+     * <p>
      * Implementations should throw CloneNotSupportedException if they do not support clone
      * but that will stop them from being used with defaultCache.
      *
@@ -118,7 +118,7 @@ public class BaseComponentLoader extends CacheLoaderFactory implements CacheLoad
 
     /**
      * Notifies providers to initialise themselves.
-     * <p/>
+     * <p>
      * This method is called during the Cache's initialise method after it has changed it's
      * status to alive. Cache operations are legal in this method.
      *
@@ -131,7 +131,7 @@ public class BaseComponentLoader extends CacheLoaderFactory implements CacheLoad
     /**
      * Providers may be doing all sorts of exotic things and need to be able to clean up on
      * dispose.
-     * <p/>
+     * <p>
      * Cache operations are illegal when this method is called. The cache itself is partly
      * disposed when this method is called.
      *

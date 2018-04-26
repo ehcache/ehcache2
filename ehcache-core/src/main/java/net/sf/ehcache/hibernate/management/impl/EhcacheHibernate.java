@@ -34,7 +34,7 @@ import org.hibernate.SessionFactory;
 /**
  * Implementation of the {@link EhcacheHibernateMBean}
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

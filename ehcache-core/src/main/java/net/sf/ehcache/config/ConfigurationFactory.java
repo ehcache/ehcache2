@@ -180,7 +180,7 @@ public final class ConfigurationFactory {
 
     /**
      * Translates system properties which can be added as tokens to the config file using ${token} syntax.
-     * <p/>
+     * <p>
      * So, if the config file contains a character sequence "multicastGroupAddress=${multicastAddress}", and there is a system property
      * multicastAddress=230.0.0.12 then the translated sequence becomes "multicastGroupAddress=230.0.0.12"
      *

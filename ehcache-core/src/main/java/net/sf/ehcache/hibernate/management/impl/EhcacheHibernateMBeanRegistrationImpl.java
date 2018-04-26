@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * Implementation of {@link EhcacheHibernateMBeanRegistration}.
  * Also implements {@link CacheManagerEventListener}. Deregisters mbeans when the associated cachemanager is shutdown.
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

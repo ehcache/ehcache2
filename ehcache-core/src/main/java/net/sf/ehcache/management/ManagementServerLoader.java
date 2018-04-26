@@ -34,7 +34,7 @@ import java.util.ServiceLoader;
  * ManagementServerLoader is a facility class to access the rest management interface
  * One would use it from EhCache or QuartzScheduler to start or stop a new rest management interface
  * or to simply register a cache or a scheduler to an already started management interface.
- * <p/>
+ * <p>
  * It uses internally a ResourceClassLoader to load classes from a rest agent jar.
  *
  * @author Anthony Dahanne

@@ -70,7 +70,7 @@ public final class TransactionController {
     }
 
     /**
-     * Set the default transaction timeout in seconds, it must be > 0
+     * Set the default transaction timeout in seconds, it must be &gt; 0
      * @param defaultTransactionTimeoutSeconds the default transaction timeout
      */
     public void setDefaultTransactionTimeout(int defaultTransactionTimeoutSeconds) {

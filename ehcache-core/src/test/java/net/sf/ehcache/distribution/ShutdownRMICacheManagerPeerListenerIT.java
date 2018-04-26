@@ -15,7 +15,7 @@ public class ShutdownRMICacheManagerPeerListenerIT {
 
     /**
      * Does the RMI listener stop?
-     * <p/>
+     * <p>
      * This test does not actually do test the shutdown hook automatically. But you should be able to
      * see "VM shutting down with the RMICacheManagerPeerListener for localhost still active. Calling dispose..."
      * in the log with FINE level when this test is run individually or as the last test in the run. i.e. on VM shutdown.

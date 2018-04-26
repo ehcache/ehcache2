@@ -31,7 +31,7 @@ import java.io.IOException;
 
 /**
  * Test class for FifoMemoryStore
- * <p/>
+ * <p>
  *
  * @author <a href="ssuravarapu@users.sourceforge.net">Surya Suravarapu</a>
  * @author Greg Luck

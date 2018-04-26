@@ -25,7 +25,7 @@ import net.sf.ehcache.terracotta.ClusteredInstanceFactory;
 
 /**
  * Implementation of {@link MBeanRegistrationProvider}
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7.1

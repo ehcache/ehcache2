@@ -116,7 +116,7 @@ public class ParserSupport {
      *
      * @param s the s
      * @return the date
-     * @throws ParseException the parse exception
+     * @throws net.sf.ehcache.search.parser.ParseException the parse exception
      */
     public static Date variantDateParse(String s) throws net.sf.ehcache.search.parser.ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat();

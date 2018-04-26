@@ -25,7 +25,7 @@ import java.rmi.server.RMISocketFactory;
 /**
  * Default socket timeouts are unlikely to be suitable for cache replication. Sockets should
  * fail fast.
- * <p/>
+ * <p>
  * This class decorates the RMIClientSocketFactory so as to enable customisations to be placed
  * on newly created sockets.
  *
@@ -56,7 +56,7 @@ public final class ConfigurableRMIClientSocketFactory implements Serializable, R
 
     /**
      * Create a client socket connected to the specified host and port.
-     * <p/>
+     * <p>
      * If necessary this implementation can be changed to specify the outbound address to use
      * e.g. <code>Socket socket = new Socket(host, port, localInterface , 0);</code>
      *

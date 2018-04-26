@@ -23,7 +23,7 @@ import javax.management.NotificationEmitter;
 /**
  * Interface for ehcache related statistics of hibernate second level cache
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

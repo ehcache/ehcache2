@@ -8,7 +8,7 @@ import java.io.Serializable;
 public interface AsyncConfig extends Serializable {
   /**
    * Returns the minimum amount of time to wait between individual work cycles.
-   * <p/>
+   * <p>
    * This allows work to accumulate in the write behind queue and be processed more efficiently.
    * 
    * @return the work delay that should be used, in milliseconds
@@ -32,7 +32,7 @@ public interface AsyncConfig extends Serializable {
 
   /**
    * Indicates whether to batch items. If set to {@code true}, {@link ItemProcessor#process(java.util.Collection)} will
-   * be called rather than {@link ItemProcessor#process(Object)} being called for individual item. Resources such as
+   * be called rather than {@link ItemProcessor#process(Serializable)} being called for individual item. Resources such as
    * databases can perform more efficiently if updates are batched, thus reducing load.
    * 
    * @return {@code true} if items should be batched; {@code false} otherwise

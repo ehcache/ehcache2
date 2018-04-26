@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 /**
  * A cache loader that counts the number of things it has loaded, useful for testing.
  * This one returns null to all load methods.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Each load has a random delay to introduce some nice threading entropy.
  *
  * @author Greg Luck
@@ -51,7 +51,7 @@ public class NullCountingCacheLoader implements CacheLoader {
      * loads an object. Application writers should implement this
      * method to customize the loading of cache object. This method is called
      * by the caching service when the requested object is not in the cache.
-     * <p/>
+     * <p>
      *
      * @param key the key identifying the object being loaded
      * @return The object that is to be stored in the cache.
@@ -70,7 +70,7 @@ public class NullCountingCacheLoader implements CacheLoader {
      * loads multiple object. Application writers should implement this
      * method to customize the loading of cache object. This method is called
      * by the caching service when the requested object is not in the cache.
-     * <p/>
+     * <p>
      *
      * @param keys a Collection of keys identifying the objects to be loaded
      * @return A Map of objects that are to be stored in the cache.
@@ -98,7 +98,7 @@ public class NullCountingCacheLoader implements CacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will use the load(key) method where the argument is null.
      *
      * @param key
@@ -116,7 +116,7 @@ public class NullCountingCacheLoader implements CacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will use the loadAll(key) method where the argument is null.
      *
      * @param keys
@@ -139,7 +139,7 @@ public class NullCountingCacheLoader implements CacheLoader {
     /**
      * Creates a clone of this extension. This method will only be called by ehcache before a
      * cache is initialized.
-     * <p/>
+     * <p>
      * Implementations should throw CloneNotSupportedException if they do not support clone
      * but that will stop them from being used with defaultCache.
      *
@@ -152,7 +152,7 @@ public class NullCountingCacheLoader implements CacheLoader {
 
     /**
      * Notifies providers to initialise themselves.
-     * <p/>
+     * <p>
      * This method is called during the Cache's initialise method after it has changed it's
      * status to alive. Cache operations are legal in this method.
      *
@@ -165,7 +165,7 @@ public class NullCountingCacheLoader implements CacheLoader {
     /**
      * Providers may be doing all sorts of exotic things and need to be able to clean up on
      * dispose.
-     * <p/>
+     * <p>
      * Cache operations are illegal when this method is called. The cache itself is partly
      * disposed when this method is called.
      *

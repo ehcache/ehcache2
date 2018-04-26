@@ -20,7 +20,7 @@ import net.sf.ehcache.terracotta.ClusteredInstanceFactory;
 
 /**
  * A Null implementation of {@link MBeanRegistrationProvider} which does nothing
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

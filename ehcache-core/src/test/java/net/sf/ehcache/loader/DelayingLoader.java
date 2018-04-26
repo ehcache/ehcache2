@@ -48,7 +48,7 @@ public class DelayingLoader extends CountingCacheLoader {
      * loads an object. Application writers should implement this
      * method to customize the loading of cache object. This method is called
      * by the caching service when the requested object is not in the cache.
-     * <p/>
+     * <p>
      *
      * @param key the key identifying the object being loaded
      * @return The object that is to be stored in the cache.
@@ -66,7 +66,7 @@ public class DelayingLoader extends CountingCacheLoader {
      * loads multiple object. Application writers should implement this
      * method to customize the loading of cache object. This method is called
      * by the caching service when the requested object is not in the cache.
-     * <p/>
+     * <p>
      *
      * @param keys a Collection of keys identifying the objects to be loaded
      * @return A Map of objects that are to be stored in the cache.
@@ -84,7 +84,7 @@ public class DelayingLoader extends CountingCacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will use the load(key) method where the argument is null.
      */
     public Object load(Object key, Object argument) throws CacheException {
@@ -98,7 +98,7 @@ public class DelayingLoader extends CountingCacheLoader {
 
     /**
      * Load using both a key and an argument.
-     * <p/>
+     * <p>
      * JCache will use the loadAll(key) method where the argument is null.
      */
     public Map loadAll(Collection keys, Object argument) throws CacheException {

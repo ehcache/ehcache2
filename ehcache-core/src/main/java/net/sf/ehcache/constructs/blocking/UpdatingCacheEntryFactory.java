@@ -34,7 +34,7 @@ public interface UpdatingCacheEntryFactory extends CacheEntryFactory {
      * Perform an incremental update of data within a CacheEntry.
      * Based on identification of dirty values within a CacheEntry
      * Insert Update or Delete those entries based on the existing value.
-     * <p/>
+     * <p>
      * This method does not return a modified value, because it modifies the value passed into it, relying
      * on the pass by reference feature of Java.
      *

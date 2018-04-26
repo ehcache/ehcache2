@@ -22,24 +22,25 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * Allows you to transform the type of your custom annotation to a reference annotation type.
+ * <p>
+ * Allows you to transform the type of your custom annotation to a reference annotation type.<br>
  * It can come handy when you want to allow the consumers of your library not to depend on your API because of the annotations, still allowing them to use the original annotation methods.
- *
+ *<p>
  * Example :
- *
- *  //getting a custom annotation from a class
- *  my.Annotation customAnnotation = klazz.getAnnotation(my.Annotation.class);
- *  //if this annotation is "similar" (duck-typing, same methods) to the reference one, I can get a proxy to it, whose type is the reference annotation
- *  ehcache.Annotation annotation = AnnotationProxyFactory.getAnnotationProxy(customAnnotation, ehcache.Annotation.class);
- *
- *  //so my library can apply the behavior when the default annotation is used
- *  @ehcache.Annotation(action="true")
- *  public class UserClass {}
- *
- *  //or when a custom one is used, since all calls to action() will be caught and redirected to the custom annotation action method, if it exists,
- *  //or fall back to the reference action method
- *  @my.Annotation(action="true")
- *  public class UserClass {}
+ *<p>
+ *  getting a custom annotation from a class<br>
+ *  {@code my.Annotation customAnnotation = klazz.getAnnotation(my.Annotation.class);}<br>
+ *  if this annotation is "similar" (duck-typing, same methods) to the reference one, I can get a proxy to it, whose type is the reference annotation<br>
+ *  {@code ehcache.Annotation annotation = AnnotationProxyFactory.getAnnotationProxy(customAnnotation, ehcache.Annotation.class);}
+ *<p>
+ *  so my library can apply the behavior when the default annotation is used<br>
+ *  {@code @ehcache.Annotation(action="true")
+ *  public class UserClass {}}
+ *<p>
+ *  or when a custom one is used, since all calls to action() will be caught and redirected to the custom annotation action method, if it exists,
+ *  or fall back to the reference action method<br>
+ *  {@code @my.Annotation(action="true")
+ *  public class UserClass {}}
  *
  *
  * @author Anthony Dahanne

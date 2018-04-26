@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * An abstract factory for creating cache loaders. Implementers should provide their own
  * concrete factory extending this factory.
- * <p/>
+ * <p>
  * Note that Ehcache API also allows the CacheLoader to be set programmatically.
  * @author Greg Luck
  * @version $Id$

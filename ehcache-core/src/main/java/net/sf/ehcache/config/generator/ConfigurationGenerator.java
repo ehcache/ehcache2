@@ -24,11 +24,11 @@ import net.sf.ehcache.config.Configuration;
 /**
  * Utility class for generating configuration texts.
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @deprecated Use {@link ConfigurationUtil#generateCacheManagerConfigurationText(Configuration)} or
- *             {@link ConfigurationUtil#generateCacheConfigurationText(CacheConfiguration)} instead
+ *             {@link ConfigurationUtil#generateCacheConfigurationText(Configuration, CacheConfiguration)} instead
  */
 @Deprecated
 public class ConfigurationGenerator {

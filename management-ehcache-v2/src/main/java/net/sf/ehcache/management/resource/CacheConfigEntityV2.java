@@ -6,7 +6,7 @@ import org.terracotta.management.resource.AbstractEntityV2;
 
 /**
  * <p>
- * A {@link VersionedEntity} representing a cache configuration resource from the management API.
+ * A {@link AbstractEntityV2} representing a cache configuration resource from the management API.
  * </p>
  * 
  * @author brandony

@@ -67,7 +67,7 @@ public interface StoreQuery {
      * <p>
      * Meanwhile, this is used to keep the ordering on BMQL created Queries. Yet, {@link net.sf.ehcache.search.query.QueryManagerBuilder
      * QueryManagerBuilder}, which creates the {@link net.sf.ehcache.search.query.QueryManager QueryManager}, doesn't let us qualify the
-     * {@link net.sf.ehcache.search.Query Query} type further to add this "ordering" concept of "targets" to it.<br />
+     * {@link net.sf.ehcache.search.Query Query} type further to add this "ordering" concept of "targets" to it.<br>
      * And this "ordering" shouldn't become part of the QueryManager API neither as each implementation might require something different.
      *
      * @return select target names, searchAttribute or aggregator

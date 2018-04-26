@@ -72,7 +72,7 @@ import static org.mockito.Mockito.when;
  * These tests use the JDK1.5 platform mbean server
  * To interactively examine behaviour, add a Thread.sleep(...) and add -Dcom.sun.management.jmxremote to the java
  * invocation.
- * <p/>
+ * <p>
  * To see ehcache specific types in the JMX client add the ehcache.jar to the classpath.
  * e.g. to avoid the "Unavailable" message in jconsole caused by ClassNotFound add:
  * jconsole -J-Djava.class.path=core/target/classes
@@ -317,7 +317,7 @@ public class ManagementServiceTest extends AbstractCacheTest {
     /**
      * Creates an RMI JMXConnectorServer, connects to it and demonstrates what attributes are traversable.
      * The answer is not all.
-     * <p/>
+     * <p>
      * Note that this test creates a Registry which will keep running until the JVM Exists. There
      * is no way to stop it but it should do no harm.
      */

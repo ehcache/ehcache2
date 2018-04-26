@@ -17,7 +17,7 @@ public class CacheManagerPerfTest {
     /**
      * Tests that we can run 69 caches, most with disk stores, with no ill
      * effects
-     * <p/>
+     * <p>
      * Check that this is fast.
      */
     @Test

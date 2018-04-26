@@ -93,7 +93,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Tests for a Cache
- * <p/>
+ * <p>
  * Since expiration is rounded on seconds, we need to at least go up to the last
  * millisecond before the next second in many of the tests
  *
@@ -604,7 +604,7 @@ public class CacheTest extends AbstractCacheTest {
      * timeToLiveSeconds="5"
      * overflowToDisk="false"
      * />
-     * <p/>
+     * <p>
      * where an Elment override is set on TTL
      */
     @Test
@@ -640,7 +640,7 @@ public class CacheTest extends AbstractCacheTest {
      * timeToLiveSeconds="5"
      * overflowToDisk="false"
      * />
-     * <p/>
+     * <p>
      * where an Element override is set on TTL
      */
     @Test
@@ -674,7 +674,7 @@ public class CacheTest extends AbstractCacheTest {
      * timeToLiveSeconds="5"
      * overflowToDisk="false"
      * />
-     * <p/>
+     * <p>
      * where an Elment override is set on TTL
      */
     @Test
@@ -840,7 +840,7 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Test expiry based on time to live.
-     * <p/>
+     * <p>
      * Elements are put quietly back into the cache after being cloned.
      * The elements should expire as if the putQuiet had not happened.
      */
@@ -1073,7 +1073,7 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Test size with put and remove.
-     * <p/>
+     * <p>
      * It checks that size makes sense, and also that getKeys.size() matches getSize()
      */
     @Test
@@ -1128,7 +1128,7 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Test removeAndReturnElement method
-     * <p/>
+     * <p>
      * It makes sure that the method removes and returns the correct element
      */
     @Test
@@ -1156,7 +1156,7 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Test getKeys after expiry
-     * <p/>
+     * <p>
      * Makes sure that if an element is expired, its key should also be expired
      */
     @Test
@@ -1425,7 +1425,7 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Tests flushing the cache, with the default, which is to clear
-     * <p/>
+     * <p>
      * Note: Which element gets evicted is probabilistic. 1.5 and earlier were deterministic. Thus
      * the variation in what gets into the DiskStore.
      *
@@ -1700,7 +1700,7 @@ public class CacheTest extends AbstractCacheTest {
     /**
      * Tests what happens when an Element throws an Error on serialization. This mimics
      * what a nasty error like OutOfMemoryError could do.
-     * <p/>
+     * <p>
      * Before a change to the SpoolAndExpiryThread to handle this situation this test failed and generated the following log message.
      * Jun 28, 2006 7:17:16 PM net.sf.ehcache.store.DiskStore put
      * SEVERE: testThreadKillerCache: Elements cannot be written to disk store because the spool thread has died.
@@ -2304,13 +2304,13 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * Shows a consistency problem as reported against 1.6.0.
-     * <p/>
+     * <p>
      * Does not happen when not using DiskStore
      * Putting synchronized on put/get on cache fixes it
      * Only happens when the Element is retrieved from the DiskStore. Debugging shows
      * that the problem is caused by puts not getting through or coming in the wrong order
      * Putting synchronized on MemoryStore.put() fixes the issue. That is the applied fix.
-     * <p/>
+     * <p>
      * The exact cause is unknown but the behaviour of ConcurrentHashMap is suspected.
      */
     @Test
@@ -2564,7 +2564,7 @@ public class CacheTest extends AbstractCacheTest {
     /**
      * Versioning is broken when updates are done. If an Element constructor specifying a version is used, it should
      * be preserved.
-     * <p/>
+     * <p>
      * See EHC-666
      */
     @Test

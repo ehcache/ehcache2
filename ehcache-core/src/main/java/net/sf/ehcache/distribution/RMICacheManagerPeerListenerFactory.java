@@ -25,9 +25,9 @@ import java.util.Properties;
 
 /**
  * Builds a listener based on RMI.
- * <p/>
+ * <p>
  * Expected configuration line:
- * <p/>
+ * <p>
  * <code>
  * &lt;cachePeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
  * properties="hostName=localhost, port=5000" /&gt;

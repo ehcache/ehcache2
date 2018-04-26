@@ -28,7 +28,10 @@ public class ImmutableValueElementCopyStrategy implements ReadWriteCopyStrategy<
     private final ReadWriteSerializationCopyStrategy copyStrategy = new ReadWriteSerializationCopyStrategy();
 
     /**
-     * @inheritDoc
+     * Deep copies some object and returns an internal storage-ready copy
+     *
+     * @param value the value to copy
+     * @return the storage-ready copy
      */
     public Element copyForWrite(Element value, ClassLoader loader) {
         if (value == null) {
@@ -38,7 +41,10 @@ public class ImmutableValueElementCopyStrategy implements ReadWriteCopyStrategy<
     }
 
     /**
-     * @inheritDoc
+     * Reconstruct an object from its storage-ready copy.
+     *
+     * @param storedValue the storage-ready copy
+     * @return the original object
      */
     public Element copyForRead(Element storedValue, ClassLoader loader) {
         if (storedValue == null) {

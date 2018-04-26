@@ -58,11 +58,11 @@ public class LfuMemoryStorePerfTest extends MemoryStorePerfTester {
      * HashMap
      * INFO: done putting: 128ms
      * INFO: 15ms
-     * <p/>
+     * <p>
      * ConcurrentHashMap
      * INFO: done putting: 200ms
      * INFO: 117ms
-     * <p/>
+     * <p>
      * ConcurrentHashMap
      */
 //    @Test
@@ -85,9 +85,9 @@ public class LfuMemoryStorePerfTest extends MemoryStorePerfTester {
         /**
      * Check we get reasonable results for 2000 entries where entry 0 is accessed once increasing to entry 1999 accessed
      * 2000 times.
-     * <p/>
+     * <p>
      * 1 to 5000 population, with hit counts ranging from 1 to 500, not selecting lowest half. 5000 tests
-     * <p/>
+     * <p>
      * Samples  Cost    No
      * 7        38      99.24% confidence
      * 8        27      99.46% confidence
@@ -95,21 +95,21 @@ public class LfuMemoryStorePerfTest extends MemoryStorePerfTester {
      * 10       11300 4       99.92% confidence
      * 12       2
      * 20 11428 0  99.99% confidence
-     * <p/>
+     * <p>
      * 1 to 5000 population, with hit counts ranging from 1 to 500, not selecting lowest quarter. 5000 tests
      * S        No
      * 10       291 94.18% confidence
      * 20       15
      * 30       11536 1 99.99% confidence
-     * <p/>
+     * <p>
      * For those with a statistical background the branch of stats which deals with this is hypothesis testing and
      * the Student's T distribution. The higher your sample the greater confidence you can have in a hypothesis, in
      * this case whether or not the "lowest" value lies in the bottom half or quarter of the distribution. Adding
      * samples rapidly increases confidence but the return from extra sampling rapidly diminishes.
-     * <p/>
+     * <p>
      * Cost is not affected much by sample size. Profiling shows that it is the iteration that is causing most of the
      * time. If we had access to the array backing Map, all would work very fast. Still, it is fast enough.
-     * <p/>
+     * <p>
      * A 99.99% confidence interval can be achieved that the "lowest" element is actually in the bottom quarter of the
      * hit count distribution.
      *

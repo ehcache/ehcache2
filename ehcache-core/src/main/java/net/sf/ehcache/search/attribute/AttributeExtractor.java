@@ -47,7 +47,7 @@ public interface AttributeExtractor extends Serializable {
      * <li>java.sql.Date
      * <li>java.lang.Enum
      * </ul>
-     * <p/>
+     * <p>
      * NOTE: null is a legal return here as well indicating that this attribute will not be available for the given element
      *
      * @param element the cache element to inspect

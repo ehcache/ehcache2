@@ -72,7 +72,7 @@ public final class DiskStorePathManager {
     /**
      * Create a diskstore path manager with provided initial path.
      *
-     * @param path
+     * @param initialPath diskstore path on disk
      */
     public DiskStorePathManager(String initialPath) {
         this.initialPath = new File(initialPath);

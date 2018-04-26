@@ -20,7 +20,7 @@ import net.sf.ehcache.Element;
 
 /**
  * An eviction policy.
- * <p/>
+ * <p>
  * The Cache will use a policy at startup. There are three policy implementations provided in ehcache:
  * LRU, LFU and FIFO. However many other policies are possible. That the policy
  * has access to the whole element enables policies based on the key, value, metadata, statistics, or a combination of

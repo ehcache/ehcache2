@@ -27,7 +27,7 @@ import net.sf.ehcache.hibernate.management.api.HibernateStats;
 /**
  * Implementation of {@link HibernateStats} that does nothing
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * 

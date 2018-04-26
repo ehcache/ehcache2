@@ -51,11 +51,11 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * Whether a put should replicated by copy or by invalidation, (a remove).
-     * <p/>
+     * <p>
      * By copy is best when the entry is expensive to produce. By invalidation is best when
      * we are really trying to force other caches to sync back to a canonical source like a database.
      * An example of a latter usage would be a read/write cache being used in Hibernate.
-     * <p/>
+     * <p>
      * This setting only has effect if <code>#replicateUpdates</code> is true.
      */
     protected boolean replicatePutsViaCopy;
@@ -67,11 +67,11 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * Whether an update (a put) should be by copy or by invalidation, (a remove).
-     * <p/>
+     * <p>
      * By copy is best when the entry is expensive to produce. By invalidation is best when
      * we are really trying to force other caches to sync back to a canonical source like a database.
      * An example of a latter usage would be a read/write cache being used in Hibernate.
-     * <p/>
+     * <p>
      * This setting only has effect if <code>#replicateUpdates</code> is true.
      */
     protected final boolean replicateUpdatesViaCopy;
@@ -105,7 +105,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
     /**
      * Called immediately after an element has been put into the cache. The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
      * will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
      * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
      *
@@ -137,7 +137,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * Does the actual RMI remote call.
-     * <p/>
+     * <p>
      * If a Throwable occurs a SEVERE log message will be logged, but attempts to replicate to the other
      * peers will continue.
      */
@@ -157,10 +157,10 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
     /**
      * Called immediately after an element has been put into the cache and the element already
      * existed in the cache. This is thus an update.
-     * <p/>
+     * <p>
      * The {@link net.sf.ehcache.Cache#put(net.sf.ehcache.Element)} method
      * will block until this method returns.
-     * <p/>
+     * <p>
      * Implementers may wish to have access to the Element's fields, including value, so the element is provided.
      * Implementers should be careful not to modify the element. The effect of any modifications is undefined.
      *
@@ -200,11 +200,11 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
     /**
      * Called immediately after an attempt to remove an element. The remove method will block until
      * this method returns.
-     * <p/>
+     * <p>
      * This notification is received regardless of whether the cache had an element matching
      * the removal key or not. If an element was removed, the element is passed to this method,
      * otherwise a synthetic element, with only the key set is passed in.
-     * <p/>
+     * <p>
      *
      * @param cache   the cache emitting the notification
      * @param element the element just deleted, or a synthetic element with just the key set if
@@ -231,7 +231,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * Does the actual RMI remote call.
-     * <p/>
+     * <p>
      * If a Throwable occurs a SEVERE log message will be logged, but attempts to replicate to the other
      * peers will continue.
      */
@@ -250,7 +250,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * This implementation does not propagate expiries. It does not need to do anything because the element will
      * expire in the remote cache at the same time. If the remote peer is not configured the same way they should
      * not be in an cache cluster.
@@ -265,10 +265,10 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
      * Called immediately after an element is evicted from the cache. Evicted in this sense
      * means evicted from one store and not moved to another, so that it exists nowhere in the
      * local cache.
-     * <p/>
+     * <p>
      * In a sense the Element has been <i>removed</i> from the cache, but it is different,
      * thus the separate notification.
-     * <p/>
+     * <p>
      * This replicator does not propagate these events
      *
      * @param cache   the cache emitting the notification
@@ -286,7 +286,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
      * elements have been removed from the cache in a bulk operation. The usual
      * {@link #notifyElementRemoved(net.sf.ehcache.Ehcache,net.sf.ehcache.Element)}
      * is not called.
-     * <p/>
+     * <p>
      * This notification exists because clearing a cache is a special case. It is often
      * not practical to serially process notifications where potentially millions of elements
      * have been bulk deleted.
@@ -372,7 +372,7 @@ public class RMISynchronousCacheReplicator implements CacheReplicator {
 
     /**
      * Creates a clone of this listener. This method will only be called by ehcache before a cache is initialized.
-     * <p/>
+     * <p>
      * This may not be possible for listeners after they have been initialized. Implementations should throw
      * CloneNotSupportedException if they do not support clone.
      *

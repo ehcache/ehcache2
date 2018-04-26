@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Receives heartbeats from any {@link MulticastKeepaliveHeartbeatSender}s out there.
- * <p/>
+ * <p>
  * Our own multicast heartbeats are ignored.
  *
  * @author Greg Luck
@@ -152,7 +152,7 @@ public final class MulticastKeepaliveHeartbeatReceiver {
         /**
          * This method forks a new executor to process the received heartbeat in a thread pool.
          * That way each remote cache manager cannot interfere with others.
-         * <p/>
+         * <p>
          * In the worst case, we have as many concurrent threads as remote cache managers.
          *
          * @param rmiUrls

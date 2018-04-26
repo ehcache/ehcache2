@@ -90,10 +90,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A container for {@link Ehcache}s that maintain all aspects of their lifecycle.
- * <p/>
+ * <p>
  * CacheManager may be either be a singleton if created with factory methods, or multiple instances may exist, in which case resources
  * required by each must be unique.
- * <p/>
+ * <p>
  * A CacheManager holds references to Caches and Ehcaches and manages their creation and lifecycle.
  *
  * @author Greg Luck
@@ -186,9 +186,9 @@ public class CacheManager {
     /**
      * The shutdown hook thread for CacheManager. This ensures that the CacheManager and Caches are left in a
      * consistent state on a CTRL-C or kill.
-     * <p/>
+     * <p>
      * This thread must be unregistered as a shutdown hook, when the CacheManager is disposed. Otherwise the CacheManager is not GC-able.
-     * <p/>
+     * <p>
      * Of course kill -9 or abrupt termination will not run the shutdown hook. In this case, various sanity checks are made at start up.
      */
     protected Thread shutdownHook;
@@ -247,12 +247,12 @@ public class CacheManager {
    /**
      * An constructor for CacheManager, which takes a configuration object, rather than one created by parsing
      * an ehcache.xml file. This constructor gives complete control over the creation of the CacheManager.
-     * <p/>
+     * <p>
      * Care should be taken to ensure that, if multiple CacheManages are created, they do now overwrite each others disk store files, as
      * would happend if two were created which used the same diskStore path.
-     * <p/>
+     * <p>
      * This method does not act as a singleton. Callers must maintain their own reference to it.
-     * <p/>
+     * <p>
      * Note that if one of the {@link #create()} methods are called, a new singleton instance will be created, separate from any instances
      * created in this method.
      *
@@ -308,7 +308,7 @@ public class CacheManager {
      * instance
      * of CacheManager for same names (or unnamed). Shutting down the CacheManager will deregister it and new ones can be created again.
      *
-     * <p/>
+     * <p>
      * This method can be used to specify a configuration resource in the classpath other than the default of \"/ehcache.xml\":
      *
      * <pre>
@@ -317,7 +317,7 @@ public class CacheManager {
      *
      * Note that {@link Class#getResource(String)} will look for resources in the same package unless a leading "/" is used, in which case
      * it will look in the root of the classpath.
-     * <p/>
+     * <p>
      * You can also load a resource using other class loaders. e.g. {@link Thread#getContextClassLoader()}
      *
      * @param configurationURL
@@ -376,6 +376,10 @@ public class CacheManager {
 
     /**
      * initialises the CacheManager
+     * @param initialConfiguration  the initial configuration
+     * @param configurationFileName the name of the configuration file
+     * @param configurationInputStream the configuration input stream
+     * @param configurationURL  the configuration URL
      */
     protected synchronized void init(Configuration initialConfiguration, String configurationFileName, URL configurationURL,
             InputStream configurationInputStream) {
@@ -539,6 +543,7 @@ public class CacheManager {
         localTransactionsRecoveryThread.setDaemon(true);
         localTransactionsRecoveryThread.start();
     }
+
 
     private void initializeManagementService(ManagementRESTServiceConfiguration managementRESTService) {
         /**
@@ -716,7 +721,7 @@ public class CacheManager {
     /**
      * Loads configuration, either from the supplied {@link ConfigurationHelper} or by creating a new Configuration instance
      * from the configuration file referred to by file, inputstream or URL.
-     * <p/>
+     * <p>
      * Should only be called once.
      *
      * @param configurationFileName
@@ -842,7 +847,7 @@ public class CacheManager {
 
     /**
      * A factory method to create a singleton CacheManager with default config, or return it if it exists.
-     * <p/>
+     * <p>
      * The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is no longer
      * required, call shutdown to free resources.
      *
@@ -867,7 +872,7 @@ public class CacheManager {
 
     /**
      * A factory method to create a CacheManager with default config, or return it if it exists.
-     * <p/>
+     * <p>
      * The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is no longer
      * required, call shutdown to free resources.
      *
@@ -881,9 +886,9 @@ public class CacheManager {
 
     /**
      * A factory method to create a singleton CacheManager with default config, or return it if it exists.
-     * <p/>
+     * <p>
      * This has the same effect as {@link CacheManager#create}
-     * <p/>
+     * <p>
      * Same as {@link #create()}
      *
      * @return the singleton CacheManager
@@ -899,7 +904,7 @@ public class CacheManager {
      *
      * @param configurationFileName
      *            an xml file compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -926,7 +931,7 @@ public class CacheManager {
      *
      * @param configurationFileName
      *            an xml file compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -937,7 +942,7 @@ public class CacheManager {
 
     /**
      * A factory method to create a singleton CacheManager from an URL.
-     * <p/>
+     * <p>
      * This method can be used to specify a configuration resource in the classpath other than the default of \"/ehcache.xml\": This method
      * can be used to specify a configuration resource in the classpath other than the default of \"/ehcache.xml\":
      *
@@ -947,12 +952,12 @@ public class CacheManager {
      *
      * Note that {@link Class#getResource(String)} will look for resources in the same package unless a leading "/" is used, in which case
      * it will look in the root of the classpath.
-     * <p/>
+     * <p>
      * You can also load a resource using other class loaders. e.g. {@link Thread#getContextClassLoader()}
      *
      * @param configurationFileURL
      *            an URL to an xml file compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -973,7 +978,7 @@ public class CacheManager {
 
     /**
      * A factory method to create a CacheManager from an URL.
-     * <p/>
+     * <p>
      * This method can be used to specify a configuration resource in the classpath other than the default of \"/ehcache.xml\": This method
      * can be used to specify a configuration resource in the classpath other than the default of \"/ehcache.xml\":
      *
@@ -983,7 +988,7 @@ public class CacheManager {
      *
      * Note that {@link Class#getResource(String)} will look for resources in the same package unless a leading "/" is used, in which case
      * it will look in the root of the classpath.
-     * <p/>
+     * <p>
      * You can also load a resource using other class loaders. e.g. {@link Thread#getContextClassLoader()}
      *
      * If the specified configuration has different names for the CacheManager, it will return a new one for each unique name or return
@@ -991,7 +996,7 @@ public class CacheManager {
      *
      * @param configurationFileURL
      *            an URL to an xml file compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -1002,13 +1007,13 @@ public class CacheManager {
 
     /**
      * A factory method to create a singleton CacheManager from a java.io.InputStream.
-     * <p/>
+     * <p>
      * This method makes it possible to use an inputstream for configuration. Note: it is the clients responsibility to close the
      * inputstream.
      *
      * @param inputStream
      *            InputStream of xml compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -1029,17 +1034,17 @@ public class CacheManager {
 
     /**
      * A factory method to create a CacheManager from a java.io.InputStream.
-     * <p/>
+     * <p>
      * This method makes it possible to use an inputstream for configuration. Note: it is the clients responsibility to close the
      * inputstream.
-     * <p/>
+     * <p>
      *
      * If the specified configuration has different names for the CacheManager, it will return a new one for each unique name or return
      * already created one.
      *
      * @param inputStream
      *            InputStream of xml compliant with the ehcache.xsd schema
-     *            <p/>
+     *            <p>
      *            The configuration will be read, {@link Ehcache}s created and required stores initialized. When the {@link CacheManager} is
      *            no longer required, call shutdown to free resources.
      */
@@ -1069,7 +1074,7 @@ public class CacheManager {
 
     /**
      * A factory method to create a CacheManager from a net.sf.ehcache.config.Configuration.
-     * <p/>
+     * <p>
      * If the specified configuration has different names for the CacheManager, it will return a new one for each unique name or return
      * already created one.
      *
@@ -1126,7 +1131,7 @@ public class CacheManager {
     /**
      * Returns a concrete implementation of Cache, it it is available in the CacheManager.
      * Consider using getEhcache(String name) instead, which will return decorated caches that are registered.
-     * <p/>
+     * <p>
      * If a decorated ehcache is registered in CacheManager, an undecorated Cache with the same name may also exist.
      *
      * Since version ehcache-core-2.1.0, when an {@link Ehcache} decorator is present in the CacheManager, its not necessary that a
@@ -1146,7 +1151,7 @@ public class CacheManager {
 
     /**
      * Gets an Ehcache
-     * <p/>
+     * <p>
      *
      * @return a Cache, if an object of type Cache exists by that name, else null
      * @throws IllegalStateException
@@ -1211,11 +1216,11 @@ public class CacheManager {
 
     /**
      * Adds a {@link Ehcache} based on the defaultCache with the given name.
-     * <p/>
+     * <p>
      * Memory and Disk stores will be configured for it and it will be added to the map of caches.
-     * <p/>
+     * <p>
      * Also notifies the CacheManagerEventListener after the cache was initialised and added.
-     * <p/>
+     * <p>
      * It will be created with the defaultCache attributes specified in ehcache.xml
      *
      * @param cacheName
@@ -1248,7 +1253,7 @@ public class CacheManager {
 
     /**
      * Adds a {@link Cache} to the CacheManager.
-     * <p/>
+     * <p>
      * Memory and Disk stores will be configured for it and it will be added to the map of caches. Also notifies the
      * CacheManagerEventListener after the cache was initialised and added.
      *
@@ -1270,7 +1275,7 @@ public class CacheManager {
 
     /**
      * Adds an {@link Ehcache} to the CacheManager.
-     * <p/>
+     * <p>
      * Memory and Disk stores will be configured for it and it will be added to the map of caches. Also notifies the
      * CacheManagerEventListener after the cache was initialised and added.
      *
@@ -1303,14 +1308,14 @@ public class CacheManager {
      * Adds a decorated {@link Ehcache} to the CacheManager. This method neither creates the memory/disk store
      * nor initializes the cache. It only adds the cache reference to the map of caches held by this
      * cacheManager.
-     * <p/>
+     * <p>
      * It is generally required that a decorated cache, once constructed, is made available to other execution threads. The simplest way of
      * doing this is to either add it to the cacheManager with a different name or substitute the original cache with the decorated one.
-     * <p/>
+     * <p>
      * This method adds the decorated cache assuming it has a different name. If another cache (decorated or not) with the same name already
      * exists, it will throw {@link ObjectExistsException}. For replacing existing cache with another decorated cache having same name,
      * please use {@link #replaceCacheWithDecoratedCache(Ehcache, Ehcache)}
-     * <p/>
+     * <p>
      * Note that any overridden Ehcache methods by the decorator will take on new behaviours without casting. Casting is only required for
      * new methods that the decorator introduces. For more information see the well known Gang of Four Decorator pattern.
      *
@@ -1440,7 +1445,6 @@ public class CacheManager {
 
     /**
      * Checks whether a cache of type ehcache exists.
-     * <p/>
      *
      * @param cacheName
      *            the cache name to check for
@@ -1497,12 +1501,12 @@ public class CacheManager {
 
     /**
      * Shuts down the CacheManager.
-     * <p/>
+     * <p>
      * If the shutdown occurs on the singleton, then the singleton is removed, so that if a singleton access method is called, a new
      * singleton will be created.
-     * <p/>
+     * <p>
      * By default there is no shutdown hook (ehcache-1.3-beta2 and higher).
-     * <p/>
+     * <p>
      * Set the system property net.sf.ehcache.enableShutdownHook=true to turn it on.
      */
     public void shutdown() {
@@ -1624,7 +1628,7 @@ public class CacheManager {
     /**
      * Clears the contents of all caches in the CacheManager, but without
      * removing any caches.
-     * <p/>
+     * <p>
      * This method is not synchronized. It only guarantees to clear those elements in a cache at the time that the
      * {@link Ehcache#removeAll()} mehod on each cache is called.
      */
@@ -1641,7 +1645,7 @@ public class CacheManager {
     /**
      * Clears the contents of all caches in the CacheManager with a name starting with the prefix,
      * but without removing them.
-     * <p/>
+     * <p>
      * This method is not synchronized. It only guarantees to clear those elements in a cache at the time that the
      * {@link Ehcache#removeAll()} method on each cache is called.
      *
@@ -1732,7 +1736,7 @@ public class CacheManager {
     /**
      * Replaces in the map of Caches managed by this CacheManager an Ehcache with a decorated version of the same
      * Ehcache. CacheManager can operate fully with a decorated Ehcache.
-     * <p/>
+     * <p>
      * Ehcache Decorators can be used to obtain different behaviour from an Ehcache in a very flexible way. Some examples in ehcache are:
      * <ol>
      * <li>{@link net.sf.ehcache.constructs.blocking.BlockingCache} - A cache that blocks other threads from getting a null element until
@@ -1741,10 +1745,10 @@ public class CacheManager {
      * to load its own entries.
      * </ol>
      * Many other kinds are possible.
-     * <p/>
+     * <p>
      * It is generally required that a decorated cache, once constructed, is made available to other execution threads. The simplest way of
      * doing this is to substitute the original cache for the decorated one here.
-     * <p/>
+     * <p>
      * Note that any overwritten Ehcache methods will take on new behaviours without casting. Casting is only required for new methods that
      * the decorator introduces. For more information see the well known Gang of Four Decorator pattern.
      *

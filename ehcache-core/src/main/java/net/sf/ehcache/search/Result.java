@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Represents a single cache entry that has been selected by a cache query.
- * <p/>
+ * <p>
  *
  * @author teck
  * @author Greg Luck

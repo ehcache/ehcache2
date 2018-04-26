@@ -45,7 +45,7 @@ public final class CacheConfigsResourceServiceImpl {
    * path.
    *
    *
-   * @param {@link UriInfo} for this resource request
+   * @param info {@link UriInfo} for this resource request
    * @return a collection of CacheConfigEntity objects. {@link net.sf.ehcache.management.resource.CacheConfigEntity}
    *         objects
    */

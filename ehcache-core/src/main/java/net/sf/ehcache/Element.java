@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 /**
  * A Cache Element, consisting of a key, value and attributes.
- * <p/>
+ * <p>
  * From ehcache-1.2, Elements can have keys and values that are Serializable or Objects. To preserve backward
  * compatibility, special accessor methods for Object keys and values are provided: {@link #getObjectKey()} and
  * {@link #getObjectValue()}. If placing Objects in ehcache, developers must use the new getObject... methods to
@@ -121,7 +121,7 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * A full constructor.
-     * <p/>
+     * <p>
      * Creation time is set to the current time. Last Access Time is not set.
      *
      * @since .4
@@ -133,7 +133,7 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * A full constructor.
-     * <p/>
+     * <p>
      * Creation time is set to the current time. Last Access Time and Previous To Last Access Time
      * are not set.
      *
@@ -300,7 +300,7 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Gets the key attribute of the Element object.
-     * <p/>
+     * <p>
      * This method is provided for those wishing to use ehcache as a memory only cache
      * and enables retrieval of non-Serializable values from elements.
      *
@@ -330,7 +330,7 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Gets the value attribute of the Element object as an Object.
-     * <p/>
+     * <p>
      * This method is provided for those wishing to use ehcache as a memory only cache
      * and enables retrieval of non-Serializable values from elements.
      *
@@ -361,9 +361,9 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Sets time to Live
-     * <P/>
+     * <p>
      * Value must be a positive integer, 0 means infinite time to live.
-     * <P/>
+     * <p>
      * If calling this method with 0 as the parameter, consider using {@link #setEternal(boolean)}
      * or make sure you also explicitly call {@link #setTimeToIdle(int)}.
      *
@@ -379,9 +379,9 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Sets time to idle
-     * <P/>
+     * <p>
      * Value must be a positive integer, 0 means infinite time to idle.
-     * <P/>
+     * <p>
      * If calling this method with 0 as the parameter, consider using {@link #setEternal(boolean)}
      * or make sure you also explicitly call {@link #setTimeToLive(int)}.
      *
@@ -492,10 +492,11 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Gets the last access time of this element.
-     * <p/>
+     * <p>
      * Access means the element was written into a cache or read from it.
      * When first instantiated an {@link Element} has a lastAccessTime of 0, unless passed into the constructor.
      *
+     * @return last access time in unix epoch
      * @see #Element(Object, Object, long, long, long, long, boolean, int, int, long)
      * @see #Element(Object, Object, long, long, long, long, long)
      * @see #resetAccessStatistics()
@@ -573,9 +574,9 @@ public class Element implements Serializable, Cloneable {
     /**
      * Clones an Element. A completely new object is created, with no common references with the
      * existing one.
-     * <p/>
+     * <p>
      * This method will not work unless the Object is Serializable
-     * <p/>
+     * <p>
      * Warning: This can be very slow on large object graphs. If you use this method
      * you should write a performance test to verify suitability.
      *
@@ -630,9 +631,9 @@ public class Element implements Serializable, Cloneable {
      * The size of this object in serialized form. This is not the same
      * thing as the memory size, which is JVM dependent. Relative values should be meaningful,
      * however.
-     * <p/>
+     * <p>
      * Warning: This method can be <b>very slow</b> for values which contain large object graphs.
-     * <p/>
+     * <p>
      * If the key or value of the Element is not Serializable, an error will be logged and 0 will be returned.
      *
      * @return The serialized size in bytes
@@ -667,11 +668,11 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Whether the element may be Serialized.
-     * <p/>
+     * <p>
      * While Element implements Serializable, it is possible to create non Serializable elements
      * for use in MemoryStores. This method checks that an instance of Element really is Serializable
      * and will not throw a NonSerializableException if Serialized.
-     * <p/>
+     * <p>
      * This method was tweaked in 1.6 as it has been shown that Serializable classes can be serializaed as can
      * null, regardless of what class it is a null of. ObjectOutputStream.write(null) works and ObjectInputStream.read()
      * will read null back.
@@ -686,10 +687,10 @@ public class Element implements Serializable, Cloneable {
 
     /**
      * Whether the element's key may be Serialized.
-     * <p/>
+     * <p>
      * While Element implements Serializable, it is possible to create non Serializable elements and/or
      * non Serializable keys for use in MemoryStores.
-     * <p/>
+     * <p>
      * This method checks that an instance of an Element's key really is Serializable
      * and will not throw a NonSerializableException if Serialized.
      *

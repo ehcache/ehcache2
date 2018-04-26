@@ -196,9 +196,9 @@ public class CacheWriterConfiguration implements Cloneable {
 
     /**
      * Sets whether to notify listeners when an exception occurs on a writer operation.
-     * <p/>
+     * <p>
      * This is only applicable to write through mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_NOTIFY_LISTENERS_ON_EXCEPTION}.
      *
      * @param notifyListenersOnException {@code true} if listeners should be notified when an exception occurs on a writer operation; {@code false} otherwise
@@ -229,9 +229,9 @@ public class CacheWriterConfiguration implements Cloneable {
      * amount of time, work is always being built up. If the minimum write delay is set to zero and the {@code CacheWriter}
      * performs its work very quickly, the overhead of processing the write behind queue items becomes very noticeable
      * in a cluster since all the operations might be done for individual items instead of for a collection of them.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_MIN_WRITE_DELAY}).
      *
      * @param minWriteDelay the minimum number of seconds to wait before writing behind
@@ -263,9 +263,9 @@ public class CacheWriterConfiguration implements Cloneable {
     /**
      * Set the maximum number of seconds to wait before writing behind. If set to a value greater than 0, it permits
      * operations to build up in the queue to enable effective coalescing and batching optimisations.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_MAX_WRITE_DELAY}).
      *
      * @param maxWriteDelay the maximum number of seconds to wait before writing behind
@@ -296,9 +296,9 @@ public class CacheWriterConfiguration implements Cloneable {
 
     /**
      * Sets the maximum number of write operations to allow per second when {@link #writeBatching} is enabled.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_RATE_LIMIT_PER_SECOND}.
      *
      * @param rateLimitPerSecond the number of write operations to allow; use a number {@code &lt;=0} to disable rate limiting.
@@ -331,9 +331,9 @@ public class CacheWriterConfiguration implements Cloneable {
      * Sets whether to use write coalescing. If set to {@code true} and multiple operations on the same key are present
      * in the write-behind queue, only the latest write is done, as the others are redundant. This can dramatically
      * reduce load on the underlying resource.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_WRITE_COALESCING}.
      *
      * @param writeCoalescing {@code true} to enable write coalescing; or {@code false} to disable it
@@ -363,9 +363,9 @@ public class CacheWriterConfiguration implements Cloneable {
      * Sets whether to batch write operations. If set to {@code true}, {@link net.sf.ehcache.writer.CacheWriter#writeAll} and {@code CacheWriter#deleteAll}
      * will be called rather than {@link net.sf.ehcache.writer.CacheWriter#write} and {@link net.sf.ehcache.writer.CacheWriter#delete} being called for each key. Resources such
      * as databases can perform more efficiently if updates are batched, thus reducing load.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_WRITE_BATCHING}.
      *
      * @param writeBatching {@code true} if write operations should be batched; {@code false} otherwise
@@ -393,9 +393,9 @@ public class CacheWriterConfiguration implements Cloneable {
     /**
      * Sets the number of operations to include in each batch when {@link #writeBatching} is enabled. If there are less
      * entries in the write-behind queue than the batch size, the queue length size is used.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_WRITE_BATCH_SIZE}.
      *
      * @param writeBatchSize the number of operations to include in each batch; numbers smaller than {@code 1} will cause
@@ -428,9 +428,9 @@ public class CacheWriterConfiguration implements Cloneable {
     /**
      * Sets the number of times the operation is retried in the {@code CacheWriter}, this happens after the
      * original operation.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_RETRY_ATTEMPTS}.
      *
      * @param retryAttempts the number of retries for a particular element
@@ -461,9 +461,9 @@ public class CacheWriterConfiguration implements Cloneable {
 
     /**
      * Sets the number of seconds to wait before retrying an failed operation.
-     * <p/>
+     * <p>
      * This is only applicable to write behind mode.
-     * <p/>
+     * <p>
      * Defaults to {@value #DEFAULT_RETRY_ATTEMPT_DELAY_SECONDS}.
      *
      * @param retryAttemptDelaySeconds the number of seconds to wait before retrying an operation

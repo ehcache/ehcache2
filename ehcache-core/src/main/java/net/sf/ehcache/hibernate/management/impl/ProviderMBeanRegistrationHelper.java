@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Helper class for registering mbeans for ehcache backed hibernate second level cache
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  *

@@ -105,7 +105,7 @@ public class HibernateAPIUsageTest extends AbstractCacheTest {
     /**
      * Make sure ehcache works with one of the main projects using it: Hibernate-3.1.3 and Hibernate 3.2
      * Note this test was updated to Hibernate3.2cr2 9 May 2006
-     * <p/>
+     * <p>
      * Note that getElementCountInMemory() is broken. It reports the total cache size rather than the memory size. Fixed in Hibernate 3.2
      * getTimeout appears to be broken. It returns 4096 minutes!
      */
@@ -447,7 +447,7 @@ public class HibernateAPIUsageTest extends AbstractCacheTest {
     /**
      * Test ehcache packaged provider and EhCache with Hibernate-3.1.3
      * Leave broken timeout until get clarification from Emmanuel
-     * <p/>
+     * <p>
      * Test new features:
      * <ol>
      * <li>Support for Object signatures
@@ -550,7 +550,7 @@ public class HibernateAPIUsageTest extends AbstractCacheTest {
     /**
      * Test ehcache packaged provider and EhCache with Hibernate-3.1.3
      * Leave broken timeout until get clarification from Emmanuel
-     * <p/>
+     * <p>
      * Test new features:
      * <ol>
      * <li>Support for Object signatures

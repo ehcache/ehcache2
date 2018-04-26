@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
 
 /**
  * This interface is to be implemented by CachingTier that sit above the {@link AuthoritativeTier}.
- * An important contract here is that a value being faulted in {@see #get} is to be entirely faulted in before it
+ * An important contract here is that a value being faulted in get is to be entirely faulted in before it
  * can become an eviction candidate, i.e. this cache can never evict mappings being faulted in
  *
  * @param <K>

@@ -51,11 +51,11 @@ public final class Timestamper {
     }
 
     /**
-     * Returns an increasing unique value based on the System.currentTimeMillis()
+     * Returns an increasing unique value based on the {@code System.currentTimeMillis()}
      * with some additional reserved space for a counter.
      *
      * @see net.sf.ehcache.util.Timestamper#BIN_DIGITS
-     * @return uniquely & increasing value
+     * @return uniquely &amp; increasing value
      */
     public static long next() {
         int runs = 0;

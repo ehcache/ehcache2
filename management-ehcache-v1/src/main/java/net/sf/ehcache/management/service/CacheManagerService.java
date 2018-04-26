@@ -13,7 +13,7 @@ import net.sf.ehcache.management.resource.QueryResultsEntity;
 import org.terracotta.management.ServiceExecutionException;
 
 /**
- * An interface for service implementations providing operations on {@link CacheManager} objects.
+ * An interface for service implementations providing operations on CacheManager objects.
  *
  * @author brandony
  */
@@ -22,7 +22,7 @@ public interface CacheManagerService {
   /**
    * Update a cache manager represented by the submitted entity.
    *
-   * @param cacheManagerName the name of the {@link CacheManager} to be updated
+   * @param cacheManagerName the name of the CacheManager to be updated
    * @param resource         the representation of the resource informing this update
    * @throws ServiceExecutionException if the update fails
    */

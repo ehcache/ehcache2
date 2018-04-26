@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A peer provider which discovers peers using Multicast.
- * <p/>
+ * <p>
  * Hosts can be in three different levels of conformance with the Multicast specification (RFC1112), according to the requirements they meet.
  * <ol>
  * <li>Level 0 is the "no support for IP Multicasting" level. Lots of hosts and routers in the Internet are in this state,
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * They must know the way to join and leave multicast groups and to propagate this information to multicast routers.
  * Thus, they must include an Internet Group Management Protocol (IGMP) implementation in their TCP/IP stack.
  * </ol>
- * <p/>
+ * <p>
  * The list of CachePeers is maintained via heartbeats. rmiUrls are looked up using RMI and converted to CachePeers on
  * registration. On lookup any stale references are removed.
  *
@@ -102,7 +102,7 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
 
     /**
      * Register a new peer, but only if the peer is new, otherwise the last seen timestamp is updated.
-     * <p/>
+     * <p>
      * This method is thread-safe. It relies on peerUrls being a synchronizedMap
      *
      * @param rmiUrl

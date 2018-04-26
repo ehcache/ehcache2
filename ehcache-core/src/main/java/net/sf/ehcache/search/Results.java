@@ -31,7 +31,7 @@ public interface Results {
      * Discard this query result. This call is not mandatory but is recommended after
      * the caller is done with results. It can allow the cache, which may be distributed,
      * to immediately free any resources associated with this result.
-     * <p/>
+     * <p>
      * Multiple calls are ignored. Attempting to read results from this instance after this method has been called will produce
      * {@link SearchException}
      */

@@ -28,7 +28,7 @@ import net.sf.ehcache.config.ConfigurationFactory;
 /**
  * Class encapsulating the source of configuration for a cache manager
  *
- * <p />
+ * <p>
  *
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  *

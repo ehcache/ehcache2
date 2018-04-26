@@ -26,7 +26,7 @@ public interface StoreListener extends EventListener {
     /**
      * Inform of cluster coherence.
      *
-     * @param clusterCoherent
+     * @param clusterCoherent if the cluster is coherent
      */
     void clusterCoherent(boolean clusterCoherent);
 }

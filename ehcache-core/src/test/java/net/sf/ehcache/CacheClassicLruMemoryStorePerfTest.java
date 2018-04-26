@@ -43,7 +43,7 @@ public class CacheClassicLruMemoryStorePerfTest extends CachePerfTest {
      * INFO: Average keySet Time for 439951 observations: 0.22111326 ms
      * INFO: Total loads: 229
      * INFO: Total loadAlls: 469
-     * <p/>
+     * <p>
      * Contrast this with the new one:
      *
      * INFO: Average Get Time for 4754409 observations: 0.0072621014 ms

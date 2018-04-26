@@ -20,7 +20,7 @@ import java.util.Properties;
 
 /**
  * An abstract factory for creating <code>CacheExceptionHandler</code>s at configuration time, in ehcache.xml.
- * <p/>
+ * <p>
  * Extend to create a concrete factory
  *
  * @author <a href="mailto:gluck@gregluck.com">Greg Luck</a>

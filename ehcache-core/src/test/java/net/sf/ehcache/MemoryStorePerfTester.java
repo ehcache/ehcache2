@@ -128,14 +128,14 @@ public abstract class MemoryStorePerfTester {
 
     /**
      * Benchmark to test speed.
-     * <p/>
+     * <p>
      * With iteration up to 5000:
      * 100: Time for putSpeed: 2772
      * 1000: Time for putSpeed: 10943
      * 4000: Time for putSpeed: 42367
      * 10000: Time for putSpeed: 4179
      * 300000: Time for putSpeed: 6616
-     * <p/>
+     * <p>
      * With no iteration:
      * 100: Time for putSpeed: 2358
      * 1000: Time for putSpeed: 2692

@@ -66,7 +66,7 @@ public class RMICacheReplicatorFactory extends CacheEventListenerFactory {
 
     /**
      * Create a <code>CacheEventListener</code> which is also a CacheReplicator.
-     * <p/>
+     * <p>
      * The defaults if properties are not specified are:
      * <ul>
      * <li>replicatePuts=true
@@ -80,7 +80,7 @@ public class RMICacheReplicatorFactory extends CacheEventListenerFactory {
      *
      * @param properties implementation specific properties. These are configured as comma
      *                   separated name value pairs in ehcache.xml e.g.
-     *                   <p/>
+     *                   <p>
      *                   <code>
      *                   &lt;cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
      *                   properties="

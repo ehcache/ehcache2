@@ -20,7 +20,7 @@ import net.sf.ehcache.CacheException;
 
 /**
  * A Cache Exception in the distribution mechanism.
- * <p/>
+ * <p>
  * A RemoteCacheException may not always matter to an application, which may want to ignore it.
  *
  * @author Greg Luck

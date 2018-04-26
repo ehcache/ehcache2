@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
  * A drop-in replacement {@code ThreadLocal} implementation that does not leak
  * when thread-local values reference the {@code ThreadLocal} object.
  * The code is optimised to cope with frequently changing values.
- * <p/>
+ * <p>
  * In comparison to plain {@code ThreadLocal}, this implementation:<ul>
  * <li>from the point of view of a single thread,
  * each thread-local

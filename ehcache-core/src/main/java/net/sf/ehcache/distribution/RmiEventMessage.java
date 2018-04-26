@@ -74,14 +74,14 @@ public final class RmiEventMessage extends EventMessage {
     /**
      * Gets the event.
      *
-     * @return either {@link #PUT} or {@link #REMOVE}
+     * @return either PUT or REMOVE
      */
     public final RmiEventType getType() {
         return type;
     }
 
     /**
-     * @return the element component of the message. null if a {@link #REMOVE} event
+     * @return the element component of the message. null if a REMOVE event
      */
     public final Element getElement() {
         return element;

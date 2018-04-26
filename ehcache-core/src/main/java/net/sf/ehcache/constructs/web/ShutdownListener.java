@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * A ServletContextListener that shutsdown CacheManager. Use this when you want to shutdown
  * ehcache automatically when the web application is shutdown.
- * <p/>
+ * <p>
  * To receive notification events, this class must be configured in the deployment
  * descriptor for the web application.
  *
@@ -40,7 +40,6 @@ import java.util.List;
  * &lt;listener&gt;
  *      &lt;listener-class&gt;net.sf.ehcache.constructs.web.ShutdownListener&lt;/listener-class&gt;
  * &lt;/listener&gt;
- * <p/>
  * </pre>
  *
  * @author Daniel Wiell
@@ -62,7 +61,7 @@ public class ShutdownListener implements ServletContextListener {
 
     /**
      * Notification that the servlet context is about to be shut down.
-     * <p/>
+     * <p>
      * Shuts down all cache managers known to {@link CacheManager#ALL_CACHE_MANAGERS}
      *
      * @param servletContextEvent

@@ -297,7 +297,6 @@ public class RefreshAheadCacheConfiguration implements Cloneable {
     /**
      * Set the name of this cache decorator
      * @param name
-     * @return
      */
     public void setName(String name) {
         valid = false;

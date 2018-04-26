@@ -35,18 +35,18 @@ import static net.sf.ehcache.hibernate.HibernateUtil.overwriteCacheManagerIfConf
  * Singleton cache Provider plugin for Hibernate 3.2 and ehcache-1.2. New in this provider is support for
  * non Serializable keys and values. This provider works as a Singleton. No matter how many Hibernate Configurations
  * you have, only one ehcache CacheManager is used. See EhCacheProvider for a non-singleton implementation.
- * <p/>
+ * <p>
  * Ehcache-1.2 also has many other features such as cluster support and listeners, which can be used seamlessly simply
  * by configurion in ehcache.xml.
- * <p/>
+ * <p>
  * Use <code>hibernate.cache.provider_class=net.sf.ehcache.hibernate.SingletonEhCacheProvider</code> in the Hibernate configuration
  * to enable this provider for Hibernate's second level cache.
- * <p/>
+ * <p>
  * Updated for ehcache-1.2. Note this provider requires ehcache-1.2.jar. Make sure ehcache-1.1.jar or earlier
  * is not in the classpath or it will not work.
- * <p/>
+ * <p>
  * See http://ehcache.org for documentation on ehcache
- * <p/>
+ * <p>
  *
  * @author Greg Luck
  * @author Emmanuel Bernard
@@ -57,9 +57,9 @@ public final class SingletonEhCacheProvider extends AbstractEhcacheProvider {
 
     /**
      * The Hibernate system property specifying the location of the ehcache configuration file name.
-     * <p/
+     * <p>
      * If not set, ehcache.xml will be looked for in the root of the classpath.
-     * <p/>
+     * <p>
      * If set to say ehcache-1.xml, ehcache-1.xml will be looked for in the root of the classpath.
      */
     public static final String NET_SF_EHCACHE_CONFIGURATION_RESOURCE_NAME = "net.sf.ehcache.configurationResourceName";
@@ -77,7 +77,7 @@ public final class SingletonEhCacheProvider extends AbstractEhcacheProvider {
     /**
      * Callback to perform any necessary initialization of the underlying cache implementation
      * during SessionFactory construction.
-     * <p/>
+     * <p>
      *
      * @param properties current configuration settings.
      */

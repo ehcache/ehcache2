@@ -18,7 +18,7 @@ package net.sf.ehcache.management.provider;
 /**
  * Exception thrown from {@link MBeanRegistrationProvider}
  * 
- * <p />
+ * <p>
  * 
  * @author <a href="mailto:asanoujam@terracottatech.com">Abhishek Sanoujam</a>
  * @since 1.7

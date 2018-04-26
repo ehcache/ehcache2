@@ -140,8 +140,7 @@ public class TimeoutBehaviorConfiguration implements Cloneable {
         /**
          * Timeout behavior type that uses a custom factory to create the actual timeout behavior on timeout. The custom factory has to be
          * configured using properties otherwise an exception will be thrown. There must be a property named
-         * {@link TimeoutBehaviorConfiguration#CUSTOM_TYPE_FACTORY_PROPERTY_NAME} whose value is the
-         * fully qualified name of a class that implements {@link NonstopTimeoutBehaviorFactory} having no-args constructor.
+         * {@link TimeoutBehaviorConfiguration#CUSTOM_TYPE_FACTORY_PROPERTY_NAME}.
          */
         CUSTOM() {
 
@@ -163,7 +162,6 @@ public class TimeoutBehaviorConfiguration implements Cloneable {
         public abstract String getTypeName();
 
         /**
-         * Get the {@link NonstopTimeoutBehaviorFactory} for this type
          *
          * @param properties The configured properties
          * @return the factory to create timeout behaviors for this type

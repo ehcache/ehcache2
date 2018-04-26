@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * An exception to indicate that an attribute extractor was unable to be processed.
- * <p/>
+ * <p>
  * Attributes are extracted on put or update, so this exception will be thrown to the calling
  * thread.
  *

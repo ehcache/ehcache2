@@ -32,14 +32,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * EHCache plugin for Hibernate.
- * <p/>
+ * <p>
  * EHCache uses a {@link net.sf.ehcache.store.MemoryStore} and a
  * {@link net.sf.ehcache.store.disk.DiskStore}.
- * <p/>
+ * <p>
  * The {@link net.sf.ehcache.store.disk.DiskStore} requires that both keys and values be {@link java.io.Serializable}.
  * However the MemoryStore does not and in ehcache-1.2 nonSerializable Objects are permitted. They are discarded
  * if an attempt it made to overflow them to Disk or to replicate them to remote cache peers.
- * <p/>
+ * <p>
  *
  * @author Greg Luck
  * @author Emmanuel Bernard
@@ -58,7 +58,7 @@ public final class EhCache implements Cache {
 
     /**
      * Creates a new Hibernate pluggable cache by name.
-     * <p/>
+     * <p>
      * ehcache will look in ehcache.xml to load the configuration for the cache.
      * If the cache is not there, it will use the defaultCache settings. It is
      * always a good idea to specifically configure each cache.
@@ -149,7 +149,7 @@ public final class EhCache implements Cache {
 
     /**
      * Removes the element which matches the key.
-     * <p/>
+     * <p>
      * If no element matches, nothing is removed and no Exception is thrown.
      *
      * @param key the key of the element to remove
@@ -180,7 +180,7 @@ public final class EhCache implements Cache {
 
     /**
      * Remove the cache and make it unuseable.
-     * <p/>
+     * <p>
      *
      * @throws CacheException
      */
@@ -241,7 +241,7 @@ public final class EhCache implements Cache {
      * Warning: This method can be very expensive to run. Allow approximately 1 second
      * per 1MB of entries. Running this method could create liveness problems
      * because the object lock is held for a long period
-     * <p/>
+     * <p>
      *
      * @return the approximate size of memory ehcache is using for the MemoryStore for this cache
      */

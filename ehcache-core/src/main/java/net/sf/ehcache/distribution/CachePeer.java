@@ -27,10 +27,10 @@ import java.util.List;
  * An interface for a cache peer to which updates are made remotely. The distribution mechanism
  * is meant to be pluggable. The requirements of RMI force this interface to exten Remote and
  * throw RemoteException.
- * <p/>
+ * <p>
  * It is acknowledged that not all implementations will use Remote. Remote is just a marker interface like Serializable,
  * so nothing specific is required.
- * <p/>
+ * <p>
  * Non-RMI implementations should be able to use this interface.
  * Implementations not using RMI should
  *
@@ -42,7 +42,7 @@ public interface CachePeer extends Remote {
 
     /**
      * Put an element in the cache.
-     * <p/>
+     * <p>
      * Resets the access statistics on the element, which would be the case if it has previously been
      * gotten from a cache, and is now being put back.
      *
@@ -72,7 +72,7 @@ public interface CachePeer extends Remote {
 
     /**
      * Send the cache peer with an ordered list of {@link EventMessage}s.
-     * <p/>
+     * <p>
      * This enables multiple messages to be delivered in one network invocation.
      * @param eventMessages a list of type {@link EventMessage}
      */
@@ -93,7 +93,7 @@ public interface CachePeer extends Remote {
     /**
      * The URL for the remote replicator to connect. The value will only have meaning
      * for a specific implementation of replicator and remote peer.
-     * <p/>
+     * <p>
      * This method is not meant to be used remotely. The replicator already needs to know this. It has
      * to throw RemoteException to comply with RMI requirements
      * @return the URL as a string
@@ -110,11 +110,11 @@ public interface CachePeer extends Remote {
 
     /**
      * Returns a list of all elements in the cache, whether or not they are expired.
-     * <p/>
+     * <p>
      * The returned keys are unique and can be considered a set.
-     * <p/>
+     * <p>
      * The List returned is not live. It is a copy.
-     * <p/>
+     * <p>
      * The time taken is O(n). On a single cpu 1.8Ghz P4, approximately 8ms is required
      * for each 1000 entries.
      *
@@ -134,7 +134,7 @@ public interface CachePeer extends Remote {
     /**
      * Gets a list of elements from the cache, for a list of keys, without updating Element statistics. Time to
      * idle lifetimes are therefore not affected.
-     * <p/>
+     * <p>
      * Cache statistics are still updated.
      * @param keys a list of serializable values which represent keys
      * @return a list of Elements. If an element was not found or null, it will not be in the list.

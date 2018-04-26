@@ -22,7 +22,7 @@ public interface EntityResourceFactoryV2 {
   /**
    * A factory method for {@link CacheManagerEntityV2} objects.
    *
-   * @param cacheManagerNames a {@code Set} of names for the {@link CacheManager} objects to be represented by the
+   * @param cacheManagerNames a {@code Set} of names for the CacheManager objects to be represented by the
    *                          returned resources
    * @param attributes        a {@code Set} of specific cache manager attributes to include in the returned representations;
    *                          if null, all attributes will be included
@@ -34,7 +34,7 @@ public interface EntityResourceFactoryV2 {
   /**
    * A factory method for {@link CacheManagerConfigEntityV2} objects.
    *
-   * @param cacheManagerNames a {@code Set} of names for the {@link CacheManager} configurations to be represented by the
+   * @param cacheManagerNames a {@code Set} of names for the CacheManager configurations to be represented by the
    *                          returned resources
    * @return a {@code ResponseEntityV2} containing {@code CacheManagerConfigEntity} objects
    */
@@ -43,9 +43,9 @@ public interface EntityResourceFactoryV2 {
   /**
    * A factory method for {@link CacheEntityV2} objects.
    *
-   * @param cacheManagerNames a {@code Set} of names for the {@link CacheManager}s that manage the {@link Cache}
+   * @param cacheManagerNames a {@code Set} of names for the CacheManagers that manage the Cache
    *                          objects to be represented by the returned resources
-   * @param cacheNames        a {@code Set} of names for the {@link Cache} objects to be represented by the
+   * @param cacheNames        a {@code Set} of names for the Cache objects to be represented by the
    *                          returned resources
    * @param attributes        a {@code Set} of specific cache manager attributes to include in the returned representations;
    *                          if null, all attributes will be included
@@ -58,9 +58,9 @@ public interface EntityResourceFactoryV2 {
   /**
    * A factory method for {@link CacheConfigEntityV2} objects.
    *
-   * @param cacheManagerNames a {@code Set} of names for the {@link CacheManager}s that manage the {@link Cache}
+   * @param cacheManagerNames a {@code Set} of names for the CacheManagers that manage the Cache
    *                          objects to be represented by the returned resources
-   * @param cacheNames        a {@code Set} of names for the {@link Cache} objects to be represented by the
+   * @param cacheNames        a {@code Set} of names for the Cache objects to be represented by the
    *                          returned resources
    * @return a {@code ResponseEntityV2} containing {@code CacheConfigEntity} objects
    */
@@ -70,9 +70,9 @@ public interface EntityResourceFactoryV2 {
   /**
    * A factory method for {@link CacheStatisticSampleEntityV2} objects.
    *
-   * @param cacheManagerNames a {@code Set} of names for the {@link CacheManager}s that manage the {@link Cache}s whose
+   * @param cacheManagerNames a {@code Set} of names for the CacheManagers that manage the Caches whose
    *                          sampled statistics are to be represented by the returned resources
-   * @param cacheNames        a {@code Set} of names for the {@link Cache}s whose sampled statistics are to be represented
+   * @param cacheNames        a {@code Set} of names for the Caches whose sampled statistics are to be represented
    *                          by the returned resources
    * @param statNames         a {@code Set} of names for the sampled statistics to be represented by the returned resources
    * @return a {@code ResponseEntityV2} containing {@code CacheStatisticSampleEntity} objects

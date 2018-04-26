@@ -176,7 +176,7 @@ public abstract class AbstractNodeElement implements NodeElement {
      *            the parent for each of the create {@link FactoryConfigurationElement}
      * @param name
      *            name of the element(s)
-     * @param factoryConfigurations
+     * @param factoryConfigurations1
      *            the {@link FactoryConfiguration}'s
      * @return list of {@link FactoryConfigurationElement}
      */

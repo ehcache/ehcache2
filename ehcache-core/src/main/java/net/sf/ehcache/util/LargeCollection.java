@@ -111,7 +111,7 @@ public abstract class LargeCollection < E > extends AbstractCollection < E > {
 
     /**
      * Iterator of initial set of entries.
-     * @return Iterator < E >
+     * @return {@code Iterator<E>}
      */
     public abstract Iterator < E > sourceIterator();
 

@@ -52,8 +52,7 @@ public class ProductInfo {
     /**
      * Construct product info object from a resource input stream
      *
-     * @param resource
-     * @throws java.io.IOException
+     * @param resource the resource
      */
     public ProductInfo(InputStream resource) {
         try {

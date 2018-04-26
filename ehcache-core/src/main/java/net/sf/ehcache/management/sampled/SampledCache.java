@@ -414,7 +414,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getMaxGetTimeNanos()
+     * @see LegacyCacheStatistics#getMaxGetTimeNanos()
      */
     public Long getMaxGetTimeNanos() {
         return sampledCacheDelegate.getMaxGetTimeNanos();
@@ -423,7 +423,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getMinGetTimeNanos()
+     * @see LegacyCacheStatistics#getMinGetTimeNanos()
      */
     public Long getMinGetTimeNanos() {
         return sampledCacheDelegate.getMinGetTimeNanos();
@@ -432,7 +432,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getXaCommitCount()
+     * @see LegacyCacheStatistics#getXaCommitCount()
      */
     public long getXaCommitCount() {
         return sampledCacheDelegate.getXaCommitCount();
@@ -441,7 +441,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getXaRollbackCount()
+     * @see LegacyCacheStatistics#getXaRollbackCount()
      */
     public long getXaRollbackCount() {
         return sampledCacheDelegate.getXaRollbackCount();
@@ -450,7 +450,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getXaRecoveredCount()
+     * @see LegacyCacheStatistics#getXaRecoveredCount()
      */
     public long getXaRecoveredCount() {
         return sampledCacheDelegate.getXaRecoveredCount();
@@ -466,7 +466,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * {@inheritDoc}
      *
-     * @see net.sf.ehcache.statistics.LiveCacheStatistics#getWriterQueueLength()
+     * @see LegacyCacheStatistics#getWriterQueueLength()
      */
     public long getWriterQueueLength() {
         return sampledCacheDelegate.getWriterQueueLength();
@@ -1188,7 +1188,7 @@ public class SampledCache extends BaseEmitterBean implements SampledCacheMBean, 
     /**
      * getCacheAttributes
      *
-     * @return map of attribute name -> value
+     * @return map of attribute name {@code ->} value
      */
     public Map<String, Object> getCacheAttributes() {
         Map<String, Object> result = new HashMap<String, Object>();

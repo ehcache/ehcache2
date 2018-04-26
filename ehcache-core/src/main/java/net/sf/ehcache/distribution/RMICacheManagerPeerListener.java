@@ -46,9 +46,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A cache server which exposes available cache operations remotely through RMI.
- * <p/>
+ * <p>
  * It acts as a Decorator to a Cache. It holds an instance of cache, which is a local cache it talks to.
- * <p/>
+ * <p>
  * This class could specify a security manager with code like:
  * <pre>
  * if (System.getSecurityManager() == null) {
@@ -56,12 +56,12 @@ import org.slf4j.LoggerFactory;
  * }
  * </pre>
  * Doing so would require the addition of <code>grant</code> statements in the <code>java.policy</code> file.
- * <p/>
+ * <p>
  * If no security manager is specified no class loading, by RMI clients or servers, is allowed,
  * aside from what can be found in the local CLASSPATH. The classpath of each instance of this class should have
  * all required classes to enable distribution, so no remote classloading is required or desirable. Accordingly,
  * no security manager is set and there are no special JVM configuration requirements.
- * <p/>
+ * <p>
  * This class opens a ServerSocket. The dispose method should be called for orderly closure of that socket. This class
  * has a shutdown hook which calls dispose() as a convenience feature for developers.
  *
@@ -236,7 +236,7 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
 
     /**
      * Returns a list of bound objects.
-     * <p/>
+     * <p>
      * This should match the list of cachePeers i.e. they should always be bound
      *
      * @return a list of String representations of <code>RMICachePeer</code> objects
@@ -307,9 +307,9 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
 
     /**
      * Start the rmiregistry.
-     * <p/>
+     * <p>
      * The alternative is to use the <code>rmiregistry</code> binary, in which case:
-     * <ol/>
+     * <ol>
      * <li>rmiregistry running
      * <li>-Djava.rmi.server.codebase="file:///Users/gluck/work/ehcache/build/classes/ file:///Users/gluck/work/ehcache/lib/commons-logging-1.0.4.jar"
      * </ol>
@@ -395,11 +395,11 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
 
     /**
      * Unbinds an RMICachePeer and unexports it.
-     * <p/>
+     * <p>
      * We unbind from the registry first before unexporting.
      * Unbinding first removes the very small possibility of a client
      * getting the object from the registry while we are trying to unexport it.
-     * <p/>
+     * <p>
      * This method may take up to 4 seconds to complete, if we are having trouble
      * unexporting the peer.
      *
@@ -490,10 +490,10 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
 
     /**
      * Called immediately after a cache has been added and activated.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to call a synchronized
      * method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that activation will also cause a CacheEventListener status change notification from
      * {@link net.sf.ehcache.Status#STATUS_UNINITIALISED} to {@link net.sf.ehcache.Status#STATUS_ALIVE}. Care should be
      * taken on processing that notification because:
@@ -503,7 +503,7 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
      * {@link net.sf.ehcache.CacheManager#getCache(String)} will cause a deadlock.
      * </ul>
      * The calling method will block until this method returns.
-     * <p/>
+     * <p>
      * Repopulates the list of cache peers and rebinds the list.
      * This method should be called if a cache is dynamically added
      *
@@ -552,10 +552,10 @@ public class RMICacheManagerPeerListener implements CacheManagerPeerListener {
     /**
      * Called immediately after a cache has been disposed and removed. The calling method will block until
      * this method returns.
-     * <p/>
+     * <p>
      * Note that the CacheManager calls this method from a synchronized method. Any attempt to call a synchronized
      * method on CacheManager from this method will cause a deadlock.
-     * <p/>
+     * <p>
      * Note that a {@link net.sf.ehcache.event.CacheEventListener} status changed will also be triggered. Any attempt from that notification
      * to access CacheManager will also result in a deadlock.
      *

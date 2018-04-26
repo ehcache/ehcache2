@@ -18,7 +18,7 @@ package net.sf.ehcache.constructs.blocking;
 
 /**
  * A cache entry factory that counts the number of entries it has created.
- * <p/>
+ * <p>
  * This is useful for writing tests.
  *
  * @author Greg Luck
@@ -50,10 +50,10 @@ public class CountingCollectionsCacheEntryFactory implements UpdatingCacheEntryF
      * Perform an incremental update of data within a CacheEntry.
      * Based on identification of dirty values within a CacheEntry
      * Insert Update or Delete those entries based on the existing value.
-     * <p/>
+     * <p>
      * This method does not return a modified value, because it modifies the value passed into it, relying
      * on the pass by reference feature of Java.
-     * <p/>
+     * <p>
      * Implementations of this method must be thread safe.
      *
      * @param key   the cache Key

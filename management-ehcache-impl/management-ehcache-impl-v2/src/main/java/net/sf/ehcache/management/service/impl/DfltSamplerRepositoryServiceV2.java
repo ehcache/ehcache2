@@ -60,9 +60,9 @@ import org.terracotta.management.resource.services.events.EventServiceV2;
 
 /**
  * A controller class registering new {@link CacheManager}.
- * </p>
+ * <p>
  * An {@link EntityResourceFactoryV2} implementation that interacts with the native Ehcache API.
- * </p>
+ * <p>
  * A {@link CacheServiceV2} implementation that interacts with the native Ehcache API to manipulate {@link Cache}
  * objects.
  *
