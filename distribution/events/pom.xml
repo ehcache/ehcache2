@@ -21,7 +21,7 @@
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.6-SNAPSHOT</terracotta.version>
     <h2.version>1.1.116</h2.version>
-    <jetty.version>8.1.15.v20140411</jetty.version>
+    <jetty.version>9.4.10.v20180503</jetty.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
   </properties>
@@ -89,9 +89,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>gf-3122</groupId>
+      <groupId>gf-40</groupId>
       <artifactId>gf.javax.servlet-api</artifactId>
-      <version>3.0.1</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
