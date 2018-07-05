@@ -9,6 +9,7 @@ import net.sf.ehcache.pool.sizeof.SizeOf;
 import net.sf.ehcache.pool.sizeof.UnsafeSizeOf;
 import net.sf.ehcache.store.Store;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -89,7 +90,7 @@ public class PoolCacheManagerTest {
         assertThat(MemoryUnit.MEGABYTES.toBytes(40) - mem >= 0, is(true));
         long consumes = measureMemoryUse() - usedBefore;
         assertThat(consumes +" bytes are actually being used, while we believe " + mem + " are",
-            mem / (float)consumes, new EqualsWithDelta(1f, 0.025f));
+            mem / (double)consumes, Matchers.closeTo(1d, 0.025d));
     }
 
     private long getInMemorySizeInBytes(final Cache oneSize) throws Exception {

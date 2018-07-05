@@ -70,7 +70,7 @@ public class TerracottaBootstrapCacheLoaderTest {
         file.writeAll(localKeys);
         final Ehcache cache = mockCacheToBootStrap();
         cacheLoader.load(cache);
-        verify(cache, times(new HashSet<Integer>(localKeys).size())).get(Matchers.anyObject());
+        verify(cache, times(new HashSet<Integer>(localKeys).size())).get(Matchers.any(Object.class));
         for (Integer localKey : localKeys) {
             verify(cache, times(1)).get((Object) localKey);
         }

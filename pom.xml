@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-parent</artifactId>
-    <version>2.21</version>
+    <version>2.22</version>
     <relativePath/>
   </parent>
 
@@ -25,11 +25,11 @@
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
     <surefire.version>2.15</surefire.version>
     <terracotta-toolkit-api-internal.version>1.17</terracotta-toolkit-api-internal.version>
-    <management-core.version>2.0.16</management-core.version>
+    <management-core.version>2.1.5</management-core.version>
     <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.2.3</quartz.version>
-    <jetty.version>8.1.15.v20140411</jetty.version>
+    <jetty.version>9.4.10.v20180503</jetty.version>
     <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
@@ -73,16 +73,16 @@
         <version>${jetty.version}</version>
         <exclusions>
           <exclusion>
-            <artifactId>javax.servlet</artifactId>
-            <groupId>org.eclipse.jetty.orbit</groupId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
 
       <dependency>
-        <groupId>gf-3122</groupId>
+        <groupId>gf-40</groupId>
         <artifactId>gf.javax.servlet-api</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0</version>
       </dependency>
 
       <!-- Provided dependencies -->
@@ -95,7 +95,7 @@
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
