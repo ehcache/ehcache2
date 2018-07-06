@@ -55,7 +55,7 @@
 
       <plugin>
         <artifactId>maven-jetty-plugin</artifactId>
-        <version>9.4.10.v20180503</version>
+        <version>9.4.11.v20180605</version>
         <groupId>org.eclipse.jetty</groupId>
         <configuration>
           <contextPath>${project.name}</contextPath>

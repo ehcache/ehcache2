@@ -29,7 +29,7 @@
     <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.2.3</quartz.version>
-    <jetty.version>9.4.10.v20180503</jetty.version>
+    <jetty.version>9.4.11.v20180605</jetty.version>
     <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
