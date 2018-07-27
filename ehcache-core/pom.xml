@@ -186,6 +186,7 @@
             <java.awt.headless>true</java.awt.headless>
             <net.sf.ehcache.speedAdjustmentFactor>${net.sf.ehcache.speedAdjustmentFactor}</net.sf.ehcache.speedAdjustmentFactor>
             <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+            <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
           </systemPropertyVariables>
           <classpathDependencyExcludes>
             <classpathDependencyExclude>net.sf.ehcache:sizeof-agent</classpathDependencyExclude>
