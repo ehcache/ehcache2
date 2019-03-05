@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-root</artifactId>
-    <version>2.10.7-SNAPSHOT</version>
+    <version>2.11.0_JAVA11-SNAPSHOT</version>
   </parent>
 
   <groupId>net.sf.ehcache.internal</groupId>
@@ -152,24 +152,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.terracotta</groupId>
-        <artifactId>maven-forge-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>build-info</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>buildinfo</goal>
-            </goals>
-            <configuration>
-              <rootPath>${basedir}/..</rootPath>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-
 
       <plugin>
         <groupId>org.terracotta</groupId>
@@ -193,6 +175,16 @@
           </classpathDependencyExcludes>
         </configuration>
         <executions>
+          <execution>
+            <id>build-info</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>buildinfo</goal>
+            </goals>
+            <configuration>
+              <rootPath>${basedir}/..</rootPath>
+            </configuration>
+          </execution>
           <execution>
             <!-- The default-test execution is automatically bound to the test phase by Surefire -->
             <id>default-test</id>
