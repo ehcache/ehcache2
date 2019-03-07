@@ -7,7 +7,8 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.terracotta.ehcache.tests.AbstractCacheTestBase;
 import org.terracotta.ehcache.tests.ClientBase;
@@ -31,7 +32,7 @@ public class ClusteredEventsEvictionExpiryTest extends AbstractCacheTestBase {
   }
 
   public static class App extends ClientBase {
-    private static final Logger LOG = Logger.getLogger(TopologyListenerImpl.class);
+    private static final Logger LOG = LogManager.getLogger(TopologyListenerImpl.class);
 
     public App(String[] args) {
       super("testSerializationExpiry", args);

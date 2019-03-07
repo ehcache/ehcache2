@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.taskdefs.Ear;
 import org.apache.tools.ant.types.FileSet;
+import org.codehaus.cargo.container.deployable.WAR;
 import org.codehaus.cargo.util.AntUtils;
 import org.junit.Assert;
 import org.slf4j.LoggerFactory;
@@ -139,7 +140,8 @@ public class EARContainerTest extends AbstractDeploymentTestCase {
     earLibs.addAll(TestBaseUtil.getToolkitRuntimeDependencies(Toolkit.class));
     earLibs.add(WARBuilder.calculatePathToClass(LoggerFactory.class).toString()); // slf4j-api
     earLibs.add(WARBuilder.calculatePathToClass(StaticLoggerBinder.class).toString()); // slf4j-log4j
-    earLibs.add(WARBuilder.calculatePathToClass(org.apache.log4j.LogManager.class).toString()); // log4j
+    earLibs.add(WARBuilder.calculatePathToClass(org.apache.logging.log4j.LogManager.class).toString());
+    earLibs.add(WARBuilder.calculatePathToClass(org.apache.logging.log4j.core.LoggerContext.class).toString()); // log4j
 
     File appXmlFile = getApplicationXml(resourceAppXml, earLibs);
 

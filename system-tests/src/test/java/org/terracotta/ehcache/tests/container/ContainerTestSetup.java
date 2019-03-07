@@ -45,7 +45,8 @@ public class ContainerTestSetup extends StandaloneTwoServerTestSetup {
     builder.addDirectoryOrJARContainingClass(Assert.class); // junit
     builder.addDirectoryOrJARContainingClass(LoggerFactory.class); // slf4j-api
     builder.addDirectoryOrJARContainingClass(StaticLoggerBinder.class); // slf4j-log4j
-    builder.addDirectoryOrJARContainingClass(org.apache.log4j.LogManager.class); // log4j
+    builder.addDirectoryOrJARContainingClass(org.apache.logging.log4j.LogManager.class);
+    builder.addDirectoryOrJARContainingClass(org.apache.logging.log4j.core.LoggerContext.class); // log4j
   }
 
   private void addEhcacheDependencies(DeploymentBuilder builder) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{ABSOLUTE} {%8.8t} [%-5p,%-10c{1}] %m%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="org.terracotta.modules.ehcache.async" level="DEBUG"/>
+    <Logger name="net.sf.ehcache.transaction" level="DEBUG"/>
+    <Logger name="com.atomikos" level="DEBUG"/>
+    <Logger name="bitronix" level="INFO"/>
+    <Logger name="myt" level="DEBUG"/>
+    <Root level="INFO">
+      <AppenderRef ref="console"/>
+    </Root>
+  </Loggers>
+</Configuration>

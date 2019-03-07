@@ -31,12 +31,13 @@ public class LoaderTest extends AbstractCacheTestBase {
     StringBuilder sb = new StringBuilder();
 
     sb.append(writeEhcacheConfigWithPort(EHCACHE_XML)).append(File.pathSeparator);
-    sb.append(writeXmlFileWithPort("log4j.xml", "log4j.xml")).append(File.pathSeparator);
+    sb.append(writeXmlFileWithPort("log4j2.xml", "log4j2.xml")).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(LoaderClient.class)).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(CacheManager.class)).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(org.slf4j.LoggerFactory.class)).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(org.slf4j.impl.StaticLoggerBinder.class)).append(File.pathSeparator);
-    sb.append(TestBaseUtil.jarFor(org.apache.log4j.LogManager.class)).append(File.pathSeparator);
+    sb.append(TestBaseUtil.jarFor(org.apache.logging.log4j.LogManager.class)).append(File.pathSeparator);
+    sb.append(TestBaseUtil.jarFor(org.apache.logging.log4j.core.LoggerContext.class)).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(org.apache.commons.logging.LogFactory.class)).append(File.pathSeparator);
     sb.append(TestBaseUtil.jarFor(ClassWriter.class)).append(File.pathSeparator); // needed for OtherClassloaderClient
     sb.append(TestBaseUtil.jarFor(org.junit.Assert.class)).append(File.pathSeparator);

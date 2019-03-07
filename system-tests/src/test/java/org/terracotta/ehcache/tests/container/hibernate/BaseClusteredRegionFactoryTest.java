@@ -7,7 +7,8 @@ package org.terracotta.ehcache.tests.container.hibernate;
 import net.sf.ehcache.util.DerbyWrapper;
 
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.terracotta.ehcache.tests.container.ContainerTestSetup;
 import org.terracotta.ehcache.tests.container.hibernate.nontransactional.HibernateUtil;
 
@@ -68,6 +69,7 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
       }
 
       if (appServerInfo().getId() != AppServerInfo.JBOSS) {
+        builder.addDirectoryOrJARContainingClass(LoggerContext.class);
         builder.addDirectoryOrJARContainingClass(Logger.class); // log4j
         builder.addDirectoryOrJARContainingClass(LogFactory.class); // common-loggings
       }
