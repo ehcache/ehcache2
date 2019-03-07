@@ -214,8 +214,8 @@ class DelegatingStoreAuthority implements AuthoritativeTier {
     }
 
     @Override
-    public boolean flush(final Element element) {
-        return flushAction.flush(element);
+    public void flush(final Element element) {
+        flushAction.flush(element);
     }
 
     @Override
