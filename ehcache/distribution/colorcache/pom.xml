@@ -27,7 +27,7 @@
   <properties>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.4.0_JAVA11-SNAPSHOT</terracotta.version>
-    <jetty.version>9.4.14.v20181114</jetty.version>
+    <jetty.version>9.4.15.v20190215</jetty.version>
     <skipDeploy>true</skipDeploy>
   </properties>
 
