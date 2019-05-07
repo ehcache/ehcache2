@@ -16,8 +16,7 @@ public class AbstractStandaloneContainerJTATestSetup extends ContainerTestSetup 
   @Override
   protected void addCommonJars(DeploymentBuilder builder) {
     super.addCommonJars(builder);
-    builder.addDirectoryOrJARContainingClass(org.apache.logging.log4j.LogManager.class);
-    builder.addDirectoryOrJARContainingClass(org.apache.logging.log4j.core.LoggerContext.class);
+    builder.addDirectoryOrJARContainingClass(org.apache.log4j.LogManager.class);
   }
 
   

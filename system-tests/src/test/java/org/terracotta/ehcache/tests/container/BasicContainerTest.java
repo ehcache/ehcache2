@@ -4,8 +4,7 @@
 package org.terracotta.ehcache.tests.container;
 
 import org.apache.commons.logging.LogFactory;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.log4j.Logger;
 import org.terracotta.toolkit.Toolkit;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -56,7 +55,6 @@ public class BasicContainerTest extends AbstractStandaloneTwoServerDeploymentTes
       builder.addDirectoryOrJARContainingClass(Toolkit.class); // toolkit-runtime
 
       if (appServerInfo().getId() != AppServerInfo.JBOSS) {
-        builder.addDirectoryOrJARContainingClass(LoggerContext.class);
         builder.addDirectoryOrJARContainingClass(Logger.class); // log4j
         builder.addDirectoryOrJARContainingClass(LogFactory.class); // common-loggings
       }
