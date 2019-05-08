@@ -6,13 +6,14 @@ package org.terracotta.modules.ehcache.cluster;
 import net.sf.ehcache.cluster.ClusterNode;
 import net.sf.ehcache.cluster.ClusterTopologyListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TopologyListenerImpl implements ClusterTopologyListener {
 
-  private static Logger       LOG            = Logger.getLogger(TopologyListenerImpl.class.getName());
+  private static Logger LOG                  = LoggerFactory.getLogger(TopologyListenerImpl.class.getName());
 
   private final AtomicInteger nodesJoined    = new AtomicInteger();
   private final AtomicInteger nodesLeft      = new AtomicInteger();

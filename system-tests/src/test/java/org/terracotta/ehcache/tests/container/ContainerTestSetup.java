@@ -3,6 +3,8 @@
  */
 package org.terracotta.ehcache.tests.container;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.Layout;
 import net.sf.ehcache.Ehcache;
 
 import org.apache.commons.io.IOUtils;
@@ -45,7 +47,8 @@ public class ContainerTestSetup extends StandaloneTwoServerTestSetup {
     builder.addDirectoryOrJARContainingClass(Assert.class); // junit
     builder.addDirectoryOrJARContainingClass(LoggerFactory.class); // slf4j-api
     builder.addDirectoryOrJARContainingClass(StaticLoggerBinder.class); // slf4j-log4j
-    builder.addDirectoryOrJARContainingClass(org.apache.log4j.LogManager.class); // log4j
+    builder.addDirectoryOrJARContainingClass(LoggerContext.class);
+    builder.addDirectoryOrJARContainingClass(Layout.class); // logback
   }
 
   private void addEhcacheDependencies(DeploymentBuilder builder) {

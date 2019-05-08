@@ -4,10 +4,11 @@
  */
 package org.terracotta.ehcache.tests.container.hibernate;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.Layout;
 import net.sf.ehcache.util.DerbyWrapper;
 
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 import org.terracotta.ehcache.tests.container.ContainerTestSetup;
 import org.terracotta.ehcache.tests.container.hibernate.nontransactional.HibernateUtil;
 
@@ -68,7 +69,8 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
       }
 
       if (appServerInfo().getId() != AppServerInfo.JBOSS) {
-        builder.addDirectoryOrJARContainingClass(Logger.class); // log4j
+        builder.addDirectoryOrJARContainingClass(LoggerContext.class);
+        builder.addDirectoryOrJARContainingClass(Layout.class); // logback
         builder.addDirectoryOrJARContainingClass(LogFactory.class); // common-loggings
       }
 
