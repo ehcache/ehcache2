@@ -24,9 +24,9 @@
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
     <surefire.version>2.15</surefire.version>
-    <terracotta-toolkit-api-internal.version>1.17</terracotta-toolkit-api-internal.version>
+    <terracotta-toolkit-api-internal.version>1.18_JAVA11-SNAPSHOT</terracotta-toolkit-api-internal.version>
     <management-core.version>2.2.0_JAVA11-SNAPSHOT</management-core.version>
-    <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
+    <clustered-entity-management.version>0.11.0_JAVA11-SNAPSHOT</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.4.0_JAVA11-SNAPSHOT</quartz.version>
     <jetty.version>9.4.15.v20190215</jetty.version>
