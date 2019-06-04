@@ -3,6 +3,9 @@
  */
 package org.terracotta.ehcache.tests.container;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.Layout;
+
 import com.tc.test.server.appserver.deployment.AbstractStandaloneTwoServerDeploymentTest;
 import com.tc.test.server.appserver.deployment.DeploymentBuilder;
 
@@ -16,7 +19,8 @@ public class AbstractStandaloneContainerJTATestSetup extends ContainerTestSetup 
   @Override
   protected void addCommonJars(DeploymentBuilder builder) {
     super.addCommonJars(builder);
-    builder.addDirectoryOrJARContainingClass(org.apache.log4j.LogManager.class);
+    builder.addDirectoryOrJARContainingClass(LoggerContext.class);
+    builder.addDirectoryOrJARContainingClass(Layout.class);
   }
 
   

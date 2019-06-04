@@ -3,6 +3,8 @@
  */
 package org.terracotta.ehcache.tests.container;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.Layout;
 import net.sf.ehcache.Ehcache;
 
 import org.apache.commons.io.FileUtils;
@@ -139,7 +141,8 @@ public class EARContainerTest extends AbstractDeploymentTestCase {
     earLibs.addAll(TestBaseUtil.getToolkitRuntimeDependencies(Toolkit.class));
     earLibs.add(WARBuilder.calculatePathToClass(LoggerFactory.class).toString()); // slf4j-api
     earLibs.add(WARBuilder.calculatePathToClass(StaticLoggerBinder.class).toString()); // slf4j-log4j
-    earLibs.add(WARBuilder.calculatePathToClass(org.apache.log4j.LogManager.class).toString()); // log4j
+    earLibs.add(WARBuilder.calculatePathToClass(LoggerContext.class).toString());
+    earLibs.add(WARBuilder.calculatePathToClass(Layout.class).toString()); // logback
 
     File appXmlFile = getApplicationXml(resourceAppXml, earLibs);
 

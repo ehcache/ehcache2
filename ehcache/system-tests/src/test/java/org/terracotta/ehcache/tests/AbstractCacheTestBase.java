@@ -67,7 +67,7 @@ public class AbstractCacheTestBase extends AbstractTestBase {
     String hamcrest = TestBaseUtil.jarFor(org.hamcrest.core.Is.class);
 
     writeEhcacheConfigWithPort(ehcacheConfigPath);
-    copyFile("/log4j.xml", "log4j.xml");
+    copyFile("/logback.xml", "logback.xml");
     String classpath = makeClasspath(ehcacheExpress, tempDir.getAbsolutePath(), jta, slf4jApi, slf4jBinder,
                                      clientBase, l2Mbean, hamcrest);
 
