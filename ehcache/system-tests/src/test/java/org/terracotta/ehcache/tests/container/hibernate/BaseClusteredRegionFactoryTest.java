@@ -73,8 +73,9 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
         builder.addDirectoryOrJARContainingClass(Layout.class); // logback
         builder.addDirectoryOrJARContainingClass(LogFactory.class); // common-loggings
       }
-
-      builder.addResource("/hibernate-config/appserver/", "jboss-web.xml", "WEB-INF");
+      if (appServerInfo().getId() == AppServerInfo.JBOSS && !appServerInfo().getName().equals("jboss-eap")) {
+        builder.addResource("/hibernate-config/appserver/", "jboss-web.xml", "WEB-INF");
+      }
       builder.addResource("/hibernate-config/appserver/", "weblogic.xml", "WEB-INF");
 
       customizeWar(builder);

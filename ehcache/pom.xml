@@ -29,7 +29,7 @@
     <clustered-entity-management.version>0.11.0_JAVA11-SNAPSHOT</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.4.0_JAVA11-SNAPSHOT</quartz.version>
-    <jetty.version>9.4.15.v20190215</jetty.version>
+    <jetty.version>9.4.19.v20190610</jetty.version>
     <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
@@ -287,7 +287,7 @@
         <plugin>
           <groupId>org.terracotta</groupId>
           <artifactId>maven-forge-plugin</artifactId>
-          <version>1.2.22</version>
+          <version>${maven-forge-plugin.version}</version>
           <configuration>
             <argLine>-Djava.net.preferIPv4Stack=true</argLine>
           </configuration>
