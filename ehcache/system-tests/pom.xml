@@ -12,7 +12,7 @@
     <groupId>org.terracotta</groupId>
     <artifactId>system-tests-parent</artifactId>
     <version>4.4.0_JAVA11-SNAPSHOT</version>
-    <relativePath/>
+    <relativePath>../../../../system-tests-parent/pom.xml</relativePath>
   </parent>
 
   <groupId>net.sf.ehcache.internal</groupId>
@@ -29,8 +29,8 @@
     <skipCheckstyle>true</skipCheckstyle>
     <derby.version>10.10.1.1</derby.version>
     <quartz.version>2.4.0_JAVA11-SNAPSHOT</quartz.version>
-    <slf4j.version>1.7.7</slf4j.version>
-    <osgi-test-tool.version>1.5</osgi-test-tool.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <osgi-test-tool.version>1.8</osgi-test-tool.version>
   </properties>
 
   <dependencies>  
@@ -46,8 +46,15 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.terracotta.internal</groupId>
+      <artifactId>common</artifactId>
+      <version>${terracotta.core.version}</version>
+      <scope>test</scope>
+      <classifier>tests</classifier>
+    </dependency>
+    <dependency>
       <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
+      <artifactId>ehcache-ee</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>   
@@ -62,11 +69,6 @@
       <artifactId>management-ehcache-v2</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>   
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>   
     <dependency>
       <groupId>org.terracotta</groupId>
@@ -145,6 +147,16 @@
       <artifactId>jotm-core</artifactId>
       <version>2.1.9</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.terracotta.test</groupId>
@@ -223,35 +235,6 @@
         </executions>
       </plugin>      
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <versionRange>[2.8,)</versionRange>
-                    <goals>
-                      <goal>checkstyle</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
   
   <profiles>

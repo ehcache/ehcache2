@@ -283,85 +283,6 @@ public enum JvmInformation {
     },
 
     /**
-     * Represents 32-Bit JRockit JVM"
-     */
-    JROCKIT_32_BIT(UNKNOWN_32_BIT) {
-
-        @Override
-        public int getAgentSizeOfAdjustment() {
-            return 8;
-        }
-
-        @Override
-        public int getFieldOffsetAdjustment() {
-            return 8;
-        }
-
-        @Override
-        public int getObjectHeaderSize() {
-            return 16;
-        }
-
-        @Override
-        public String getJvmDescription() {
-            return "32-Bit JRockit JVM";
-        }
-
-        @Override
-        public boolean supportsReflectionSizeOf() {
-            return false;
-        }
-    },
-
-    /**
-     * Represents 64-Bit JRockit JVM (with no reference compression)
-     */
-    JROCKIT_64_BIT(JROCKIT_32_BIT) {
-
-        @Override
-        public int getObjectHeaderSize() {
-            return 16;
-        }
-
-        @Override
-        public String getJvmDescription() {
-            return "64-Bit JRockit JVM (with no reference compression)";
-        }
-    },
-
-    /**
-     * Represents 64-Bit JRockit JVM with 64GB Compressed References
-     */
-    JROCKIT_64_BIT_WITH_64GB_COMPRESSED_REFS(JROCKIT_32_BIT) {
-
-
-        @Override
-        public int getObjectAlignment() {
-            return 16;
-        }
-
-        @Override
-        public int getAgentSizeOfAdjustment() {
-            return 16;
-        }
-
-        @Override
-        public int getFieldOffsetAdjustment() {
-            return 16;
-        }
-
-        @Override
-        public int getObjectHeaderSize() {
-            return 24;
-        }
-
-        @Override
-        public String getJvmDescription() {
-            return "64-Bit JRockit JVM with 64GB Compressed References";
-        }
-    },
-
-    /**
      * Represents IBM 32-bit
      */
     IBM_32_BIT(UNKNOWN_32_BIT) {
@@ -540,9 +461,6 @@ public enum JvmInformation {
         }
 
         if (jif == null) {
-            jif = detectJRockit();
-        }
-        if (jif == null) {
             jif = detectIBM();
         }
 
@@ -609,24 +527,6 @@ public enum JvmInformation {
         return jif;
     }
 
-    private static JvmInformation detectJRockit() {
-        JvmInformation jif = null;
-
-        if (isJRockit()) {
-            if (is64Bit()) {
-                if (isJRockit64GBCompression()) {
-                    jif = JROCKIT_64_BIT_WITH_64GB_COMPRESSED_REFS;
-                } else {
-                    jif = JROCKIT_64_BIT;
-                }
-            } else {
-                jif = JROCKIT_32_BIT;
-            }
-        }
-
-        return jif;
-    }
-
     private static JvmInformation detectIBM() {
         JvmInformation jif = null;
 
@@ -643,35 +543,6 @@ public enum JvmInformation {
         }
 
         return jif;
-    }
-
-    private static boolean isJRockit64GBCompression() {
-        if (getJRockitVmArgs().contains("-XXcompressedRefs:enable=false")) {
-            return false;
-        }
-        if (getJRockitVmArgs().contains("-XXcompressedRefs:size=4GB") ||
-                getJRockitVmArgs().contains("-XXcompressedRefs:size=32GB")) {
-            return false;
-        }
-
-        if (getJRockitVmArgs().contains("-XXcompressedRefs:size=64GB")) {
-            return true;
-        }
-        if (Runtime.getRuntime().maxMemory() > TWENTY_FIVE_GB && Runtime.getRuntime().maxMemory() <= FIFTY_SEVEN_GB
-                && getJRockitVmArgs().contains("-XXcompressedRefs:enable=true")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if VM is JRockit
-     * @return true, if JRockit
-     */
-    public static boolean isJRockit() {
-        return System.getProperty("jrockit.version") != null
-               || System.getProperty("java.vm.name", "").toLowerCase().indexOf("jrockit") >= 0;
     }
 
     /**
@@ -743,10 +614,6 @@ public enum JvmInformation {
         } catch (Throwable t) {
             return null;
         }
-    }
-
-    private static String getJRockitVmArgs() {
-        return getPlatformMBeanAttribute("oracle.jrockit.management:type=PerfCounters", "java.rt.vmArgs");
     }
 
     private static boolean isHotspotConcurrentMarkSweepGC() {

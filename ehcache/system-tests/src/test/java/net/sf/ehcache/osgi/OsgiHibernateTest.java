@@ -15,6 +15,9 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Status;
@@ -30,6 +33,7 @@ import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -63,6 +67,7 @@ import javax.inject.Inject;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
+@Ignore
 public class OsgiHibernateTest {
 
   private SessionFactory  sessionFactory;
@@ -85,17 +90,14 @@ public class OsgiHibernateTest {
 
   @org.ops4j.pax.exam.Configuration
   public Option[] config() {
-    return options(bootDelegationPackages("sun.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
-                   OsgiUtil.commonOptions(),
-                   wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
-                       .exports("javax.transaction;version=1.1"),
-                   OsgiUtil.getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-                   OsgiUtil.getMavenBundle("net.sf.ehcache.test", "hibernate-ehcache-ee-bundle",
-                                           "hibernate-ehcache-bundle").noStart(),
-                   mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
-                   mavenBundle("org.slf4j", "slf4j-simple").versionAsInProject().noStart(),
-                   wrappedBundle(maven("org.apache.derby", "derby").versionAsInProject()),
-                   systemProperty("derby.system.home").value("derby"));
+    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
+        commonOptions(),
+        wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
+            .exports("javax.transaction;version=1.1"),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+        getMavenBundle("net.sf.ehcache.test", "hibernate-ehcache-ee-bundle", "hibernate-ehcache-bundle").noStart(),
+        wrappedBundle(maven("org.apache.derby", "derby").versionAsInProject()),
+        systemProperty("derby.system.home").value("derby"));
   }
 
   @ProbeBuilder

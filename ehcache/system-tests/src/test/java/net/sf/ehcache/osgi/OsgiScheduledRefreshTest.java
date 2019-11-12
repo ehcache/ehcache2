@@ -3,10 +3,14 @@
  */
 package net.sf.ehcache.osgi;
 
+import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
@@ -17,6 +21,7 @@ import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.constructs.scheduledrefresh.ScheduledRefreshCacheExtension;
 import net.sf.ehcache.constructs.scheduledrefresh.ScheduledRefreshConfiguration;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -53,11 +58,11 @@ public class OsgiScheduledRefreshTest {
 
   @Configuration
   public Option[] config() {
-    return options(OsgiUtil.getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-                   mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
-                   mavenBundle("org.slf4j", "slf4j-simple").versionAsInProject().noStart(),    
-                   OsgiUtil.getMavenBundle("org.quartz-scheduler", "quartz"), wrappedBundle(maven("c3p0", "c3p0")
-                       .versionAsInProject()), OsgiUtil.commonOptions());
+    return options(bootDelegationPackages("sun.*,jdk.*"),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+        getMavenBundle("org.quartz-scheduler", "quartz"), wrappedBundle(maven("com.mchange", "c3p0")
+                       .versionAsInProject()),
+        commonOptions());
   }
 
   private static void sleepySeconds(int secs) {

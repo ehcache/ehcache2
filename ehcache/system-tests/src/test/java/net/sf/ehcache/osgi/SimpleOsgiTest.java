@@ -9,11 +9,15 @@ import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
@@ -22,6 +26,7 @@ import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.terracotta.context.ContextManager;
 import org.terracotta.test.OsgiUtil;
+import org.terracotta.test.categories.CheckShorts;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,17 +40,17 @@ import java.net.URL;
  * 
  * @author hhuynh
  */
+@Category(CheckShorts.class)
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class SimpleOsgiTest {
 
   @Configuration
   public Option[] config() {
-    return options(bootDelegationPackages("javax.xml.transform,org.w3c.dom,javax.xml.bind,com.sun.xml.internal.bind.v2,javax.xml.bind.annotation,javax.xml.bind.annotation.adapters"),
-                   mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
-                   mavenBundle("org.slf4j", "slf4j-simple").versionAsInProject().noStart(),
-                   // need this for REST agent test
-                   OsgiUtil.getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"), OsgiUtil.commonOptions());
+    return options(bootDelegationPackages("sun.*,jdk.*"),
+        // need this for REST agent test
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+        commonOptions());
   }
 
   @Test

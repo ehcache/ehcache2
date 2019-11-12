@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>4.0</version>
+    <version>4.10</version>
     <relativePath/>
   </parent>
 
@@ -27,7 +27,6 @@
   <properties>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.4.0_JAVA11-SNAPSHOT</terracotta.version>
-    <jetty.version>9.4.19.v20190610</jetty.version>
     <skipDeploy>true</skipDeploy>
   </properties>
 

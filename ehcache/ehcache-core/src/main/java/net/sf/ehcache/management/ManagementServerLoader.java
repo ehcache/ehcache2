@@ -56,7 +56,7 @@ public class ManagementServerLoader {
         } else {
             RESOURCE_CLASS_LOADER = new ResourceClassLoader(PRIVATE_CLASSPATH, CacheManager.class.getClassLoader());
         }
-        LOG.debug("XXX: using classloader: " + RESOURCE_CLASS_LOADER);
+        LOG.info("XXX: using classloader: " + RESOURCE_CLASS_LOADER);
 
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Class<?> managementServerClass = null;

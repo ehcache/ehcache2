@@ -31,9 +31,11 @@ public class SegmentTest {
         cacheEventNotificationService.registerListener(listener);
 
         OperationObserver<CacheOperationOutcomes.EvictionOutcome> evictionObserver = mock(OperationObserver.class);
+        DiskStorageFactory diskStorageFactory = mock(DiskStorageFactory.class);
 
-        Segment segment = new Segment(10, .95f, mock(DiskStorageFactory.class), mock(CacheConfiguration.class), onHeapAccessor, mock(PoolAccessor.class), cacheEventNotificationService, evictionObserver);
+        Segment segment = new Segment(10, .95f, diskStorageFactory, mock(CacheConfiguration.class), onHeapAccessor, mock(PoolAccessor.class), cacheEventNotificationService, evictionObserver);
         Element element = new Element("key", "value");
+        when(diskStorageFactory.create(element)).thenReturn(new DiskStorageFactory.DiskMarker(diskStorageFactory, 0L, 0, element));
         segment.put("key", 12, element, false, false);
         verify(listener).notifyElementEvicted(any(Ehcache.class), eq(element));
         verify(evictionObserver).end(CacheOperationOutcomes.EvictionOutcome.SUCCESS);

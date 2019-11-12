@@ -23,6 +23,4 @@ public class AbstractStandaloneContainerJTATestSetup extends ContainerTestSetup 
     builder.addDirectoryOrJARContainingClass(Layout.class);
   }
 
-  
-  
 }

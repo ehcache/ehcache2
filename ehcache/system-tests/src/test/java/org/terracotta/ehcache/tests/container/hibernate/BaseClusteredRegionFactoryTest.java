@@ -9,6 +9,7 @@ import ch.qos.logback.core.Layout;
 import net.sf.ehcache.util.DerbyWrapper;
 
 import org.apache.commons.logging.LogFactory;
+
 import org.terracotta.ehcache.tests.container.ContainerTestSetup;
 import org.terracotta.ehcache.tests.container.hibernate.nontransactional.HibernateUtil;
 
@@ -86,7 +87,7 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
     @Override
     protected void configureServerParamers(StandardAppServerParameters params) {
       super.configureServerParamers(params);
-      if (!Vm.isJRockit()) params.appendJvmArgs("-XX:MaxPermSize=160m");
+      params.appendJvmArgs("-XX:MaxPermSize=160m");
       params.appendSysProp(HibernateUtil.DB_PORT_SYSPROP, derbyPort);
     }
 
