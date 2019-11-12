@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>4.0</version>
+    <version>4.10</version>
     <relativePath/>
   </parent>
   
@@ -21,7 +21,6 @@
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.9-SNAPSHOT</terracotta.version>
     <h2.version>1.1.116</h2.version>
-    <jetty.version>9.4.19.v20190610</jetty.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
   </properties>
@@ -65,28 +64,8 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.1</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>logkit</groupId>
-          <artifactId>logkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>avalon-framework</groupId>
-          <artifactId>avalon-framework</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>gf-40</groupId>
-      <artifactId>gf.javax.servlet-api</artifactId>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
     </dependency>
     <dependency>
@@ -137,11 +116,13 @@
       </plugin>
       
       <plugin>
-        <artifactId>maven-jetty-plugin</artifactId>
+        <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
-        <groupId>org.mortbay.jetty</groupId>
+        <groupId>org.eclipse.jetty</groupId>
         <configuration>
-          <contextPath>${name}</contextPath>
+          <webApp>
+            <contextPath>${project.name}</contextPath>
+          </webApp>
           <stopKey>STOP</stopKey>
         </configuration>
       </plugin>
@@ -227,9 +208,9 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-jetty-plugin</artifactId>
+            <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>
@@ -248,9 +229,9 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-jetty-plugin</artifactId>
+            <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>
@@ -278,6 +259,7 @@
               <plugin>
               <groupId>org.terracotta</groupId>
               <artifactId>maven-forge-plugin</artifactId>
+              <version>${maven-forge-plugin.version}</version>
               <dependencies>
                 <dependency>
                   <groupId>com.softwareag.ibit.tools.util</groupId>

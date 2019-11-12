@@ -238,14 +238,15 @@ public final class DiskStore extends AbstractStore implements StripedReadWriteLo
     }
 
     @Override
-    public boolean flush(final Element element) {
+    public void flush(final Element element) {
         final Object key = element.getObjectKey();
         int hash = hash(key.hashCode());
         if (disk.getOnDiskSize() > disk.getDiskCapacity()) {
             // todo this is ugly and only there to please the tests ... again!
-            return segmentFor(hash).flush(key, hash, element) && segmentFor(hash).evict(key, hash, null) != null;
+            segmentFor(hash).flush(key, hash, element);
+            segmentFor(hash).evict(key, hash, null);
         } else {
-            return segmentFor(hash).flush(key, hash, element);
+            segmentFor(hash).flush(key, hash, element);
         }
     }
 

@@ -24,7 +24,6 @@
   </licenses>
   <url>http://ehcache.org</url>
 
-
   <properties>
     <kit.name>${project.artifactId}-${project.version}-distribution</kit.name>
     <root.dir>${project.build.directory}/${kit.name}</root.dir>
@@ -65,12 +64,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>product-upgradability-testing-utils</artifactId>
-      <version>0.9.2</version>
+      <version>0.9.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -82,14 +80,12 @@
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -111,7 +107,6 @@
             <configuration>
               <includeGroupIds>org.terracotta.modules</includeGroupIds>
               <outputDirectory>${project.build.outputDirectory}/META-INF/terracotta/TIMs</outputDirectory>
-              <excludes>**/META-INF/maven/**,**/license.txt,**/thirdpartylicenses.txt</excludes>
             </configuration>
             <phase>process-resources</phase>
             <goals>
@@ -156,35 +151,6 @@
         </executions>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[2.6,)</versionRange>
-                    <goals>
-                      <goal>list</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <profiles>
@@ -232,7 +198,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9</version>
+            <version>3.1.1</version>
             <executions>
               <execution>
                 <id>create-javadoc</id>
@@ -248,6 +214,7 @@
                       <version>${hibernate-core.version}</version>
                     </additionalDependency>
                   </additionalDependencies>
+                  <doclint>none</doclint>
                   <skip>${skipJavadoc}</skip>
                   <author>true</author>
                   <minmemory>128m</minmemory>
@@ -262,7 +229,8 @@
                   <dependencySourceIncludes>
                     <dependencySourceInclude>net.sf.ehcache.internal:ehcache-core</dependencySourceInclude>
                   </dependencySourceIncludes>
-                </configuration>                
+                  <source>8</source>
+                </configuration>
               </execution>
             </executions>
           </plugin>       
@@ -346,7 +314,7 @@
           <plugin>
             <groupId>org.apache.felix</groupId>
             <artifactId>maven-bundle-plugin</artifactId>
-            <version>2.3.7</version>
+            <version>4.2.1</version>
             <configuration>
               <manifestLocation>${project.build.directory}</manifestLocation>
               <instructions>
@@ -363,15 +331,20 @@
               javax.xml.transform.sax;resolution:=optional,
               javax.xml.transform.dom;resolution:=optional,
               javax.xml.transform.stream;resolution:=optional,
+              org.hibernate;resolution:=optional,
               org.hibernate.*;resolution:=optional,
+              org.hibernate.cache.access;resolution:=optional,
               org.terracotta.toolkit.*;resolution:=optional,
               org.quartz.*;resolution:=optional,
               org.terracotta.quartz.*;resolution:=optional,
+              com.sun.management.*;resolution:="optional",
+              sun.management.*;resolution:=optional,
+              !com.google.apphosting.api,
               !sun.misc,*
                 </Import-Package>
-                <Export-Package>net.sf.ehcache.*</Export-Package>
+                <Export-Package>!net.sf.ehcache.terracotta.security,net.sf.ehcache.*</Export-Package>
                 <Private-Package>org.terracotta.*</Private-Package>
-                <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
               </instructions>
               <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
             </configuration>

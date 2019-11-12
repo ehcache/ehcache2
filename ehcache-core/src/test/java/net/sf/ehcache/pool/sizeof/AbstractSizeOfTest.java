@@ -13,7 +13,6 @@ abstract class AbstractSizeOfTest {
   protected static final boolean COMPRESSED_OOPS;
   protected static final boolean HOTSPOT_CMS;
   protected static final boolean IS_HOTSPOT;
-  protected static final boolean IS_JROCKIT;
   protected static final boolean IS_IBM;
   protected static final boolean IS_64_BIT;
 
@@ -31,9 +30,6 @@ abstract class AbstractSizeOfTest {
     IS_64_BIT = System.getProperty("sun.arch.data.model").equals("64");
 
     IS_HOTSPOT = System.getProperty("java.vm.name", "").toLowerCase().contains("hotspot");
-
-    IS_JROCKIT = System.getProperty("jrockit.version") != null ||
-        System.getProperty("java.vm.name", "").toLowerCase().indexOf("jrockit") >= 0;
 
     IS_IBM = System.getProperty("java.vm.name", "").contains("IBM") &&
         System.getProperty("java.vm.vendor").contains("IBM");

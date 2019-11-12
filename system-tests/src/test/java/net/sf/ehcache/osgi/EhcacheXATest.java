@@ -10,6 +10,9 @@ import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
+
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -41,32 +44,30 @@ public class EhcacheXATest {
 
   @Configuration
   public Option[] configBitronix() {
-    return options(bootDelegationPackages("sun.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
-                   wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
-                       .exports("javax.transaction;version=1.1"),
-                   wrappedBundle(maven("org.codehaus.btm", "btm").versionAsInProject()).exports("bitronix.tm.*"),
-                   mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
-                   mavenBundle("org.slf4j", "slf4j-simple").versionAsInProject().noStart(),                   
-                   OsgiUtil.getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"), OsgiUtil.commonOptions());
+    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
+        wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
+            .exports("javax.transaction;version=1.1"),
+        wrappedBundle(maven("org.codehaus.btm", "btm").versionAsInProject()).exports("bitronix.tm.*"),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+        commonOptions());
   }
 
   @Configuration
   public Option[] configAtomikos() {
-    return options(bootDelegationPackages("sun.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
-                   wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
-                       .exports("javax.transaction;version=1.1"),
-                   wrappedBundle(maven("com.atomikos", "transactions-jta").versionAsInProject())
-                       .imports("!javax.servlet.*,!javax.jms,!javax.resource,*;resolution:=optional")
-                       .exports("com.atomikos.icatch.standalone,com.atomikos.datasource.xa,com.atomikos.*"),
-                   wrappedBundle(maven("com.atomikos", "transactions").versionAsInProject())
-                       .imports("!javax.servlet.*,com.atomikos.datasource.xa,*").exports("*"),
-                   wrappedBundle(maven("com.atomikos", "transactions-api").versionAsInProject())
-                       .imports("!javax.servlet.*,*").exports("*"),
-                   wrappedBundle(maven("com.atomikos", "atomikos-util").versionAsInProject())
-                       .imports("!javax.servlet.*,com.atomikos.icatch.standalone,*").exports("*"),
-                   mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(),
-                   mavenBundle("org.slf4j", "slf4j-simple").versionAsInProject().noStart(),                        
-                   OsgiUtil.getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"), OsgiUtil.commonOptions());
+    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
+        wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
+            .exports("javax.transaction;version=1.1"),
+        wrappedBundle(maven("com.atomikos", "transactions-jta").versionAsInProject())
+            .imports("!javax.servlet.*,!javax.jms,!javax.resource,*;resolution:=optional")
+            .exports("com.atomikos.icatch.standalone,com.atomikos.datasource.xa,com.atomikos.*"),
+        wrappedBundle(maven("com.atomikos", "transactions").versionAsInProject())
+            .imports("!javax.servlet.*,com.atomikos.datasource.xa,*").exports("*"),
+        wrappedBundle(maven("com.atomikos", "transactions-api").versionAsInProject())
+            .imports("!javax.servlet.*,*").exports("*"),
+        wrappedBundle(maven("com.atomikos", "atomikos-util").versionAsInProject())
+            .imports("!javax.servlet.*,com.atomikos.icatch.standalone,*").exports("*"),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+        commonOptions());
   }
 
   @ProbeBuilder

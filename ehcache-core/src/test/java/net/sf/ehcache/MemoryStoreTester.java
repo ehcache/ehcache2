@@ -486,8 +486,6 @@ public class MemoryStoreTester extends AbstractCacheTest {
      */
     @Test
     public void testReadWriteThreadsSurya() throws Exception {
-        Assume.assumeThat(JvmInformation.isJRockit(), is(false));
-
         long start = System.currentTimeMillis();
         final List executables = new ArrayList();
         final Random random = new Random();
@@ -539,7 +537,6 @@ public class MemoryStoreTester extends AbstractCacheTest {
      */
     @Test
     public void testMemoryStoreOutOfMemoryLimit() throws Exception {
-        Assume.assumeThat(JvmInformation.isJRockit(), is(false));
         LOG.info("Starting out of memory limit test");
         //Set size so the second element overflows to disk.
         cache = manager.getCache("memoryLimitTest");
