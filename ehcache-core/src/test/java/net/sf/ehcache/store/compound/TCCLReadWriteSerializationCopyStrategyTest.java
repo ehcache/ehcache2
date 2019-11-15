@@ -1,7 +1,11 @@
 package net.sf.ehcache.store.compound;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 
 import net.sf.ehcache.EhcacheDefaultClassLoader;
 import net.sf.ehcache.Element;
@@ -41,7 +45,7 @@ public class TCCLReadWriteSerializationCopyStrategyTest {
 
         {
             // Type only in TCCL
-            ClassLoader loader = new Loader();
+            ClassLoader loader = newLoader();
             Thread.currentThread().setContextClassLoader(loader);
 
             Object foo = createFooInOtherLoader(loader);
@@ -80,10 +84,18 @@ public class TCCLReadWriteSerializationCopyStrategyTest {
         }
     }
 
-    private static class Loader extends URLClassLoader {
-        public Loader() {
-            super(((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs(), null);
-        }
+    private static ClassLoader newLoader() {
+        String pathSeparator = System.getProperty("path.separator");
+        String[] classPathEntries = System.getProperty("java.class.path").split(pathSeparator);
+        URL[] urls = Arrays.stream(classPathEntries).map(s -> {
+            try {
+                return new File(s).toURI().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).toArray(URL[]::new);
+        return new URLClassLoader(urls, null);
     }
 
 }

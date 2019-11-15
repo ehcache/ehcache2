@@ -24,11 +24,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
+import net.sf.ehcache.pool.sizeof.filter.PassThroughFilter;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import javax.xml.datatype.DatatypeConstants;
 
 import org.junit.Assume;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -124,6 +128,8 @@ public class SizeOfTest extends AbstractSizeOfTest {
 
   @Test
   public void testOnHeapConsumption() throws Exception {
+    assumeThat(System.getProperty("java.version"), Matchers.startsWith("1."));
+
     SizeOf sizeOf = new CrossCheckingSizeOf();
 
     int size = 80000;

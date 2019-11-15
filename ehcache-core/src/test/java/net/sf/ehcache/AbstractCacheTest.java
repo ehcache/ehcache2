@@ -118,9 +118,9 @@ public abstract class AbstractCacheTest {
     }
 
     private static void allocateFiftyMegabytes() {
-        Object[] arrays = new Object[50];
+        Object[] arrays = new Object[50_000];
         for (int i = 0; i < arrays.length; i++) {
-            arrays[i] = new byte[1024 * 1024];
+            arrays[i] = new byte[1024];
         }
     }
 
