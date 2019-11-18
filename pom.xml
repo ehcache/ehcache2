@@ -20,6 +20,8 @@
   </scm>
   
   <properties>
+    <!-- Disable SAG Finder while we figure out what to do with it -->
+    <skipSagFinder>true</skipSagFinder>
     <slf4j.version>1.7.25</slf4j.version>
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
