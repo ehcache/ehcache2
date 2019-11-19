@@ -46,13 +46,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.terracotta.internal</groupId>
-      <artifactId>common</artifactId>
-      <version>${terracotta.core.version}</version>
-      <scope>test</scope>
-      <classifier>tests</classifier>
-    </dependency>
-    <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache-ee</artifactId>
       <version>${project.version}</version>
