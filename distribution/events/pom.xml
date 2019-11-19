@@ -18,6 +18,8 @@
   <description>Clustered Ehcache Terracotta as second level cache for Hibernate</description>
 
   <properties>
+    <!-- Disable SAG Finder while we figure out what to do with it -->
+    <skipSagFinder>true</skipSagFinder>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.9-SNAPSHOT</terracotta.version>
     <h2.version>1.1.116</h2.version>
