@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.terracotta.test.OsgiUtil.commonOptions;
 import static org.terracotta.test.OsgiUtil.getMavenBundle;
@@ -17,7 +16,6 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
@@ -25,8 +23,6 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.terracotta.context.ContextManager;
-import org.terracotta.test.OsgiUtil;
-import org.terracotta.test.categories.CheckShorts;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -40,7 +36,6 @@ import java.net.URL;
  * 
  * @author hhuynh
  */
-@Category(CheckShorts.class)
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class SimpleOsgiTest {
