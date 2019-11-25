@@ -1219,7 +1219,11 @@ public class Cache implements InternalEhcache, StoreListener {
                         }
                     }
                 } else {
-                    store = featuresManager.createStore(this, onHeapPool, onDiskPool);
+                    try {
+                        store = featuresManager.createStore(this, onHeapPool, onDiskPool);
+                    } catch (IllegalStateException e) {
+                        throw new CacheException(e.getMessage(), e);
+                    }
                 }
                 store = handleTransactionalAndCopy(store, loader);
             }
