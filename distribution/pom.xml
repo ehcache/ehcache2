@@ -20,8 +20,6 @@
   </modules>
   
   <properties>
-    <!-- Disable SAG Finder while we figure out what to do with it -->
-    <skipSagFinder>true</skipSagFinder>
     <productName>ehcache</productName>
     <kitFolder>${productName}-${project.version}</kitFolder>
     <tarballName>${kitFolder}-distribution</tarballName>

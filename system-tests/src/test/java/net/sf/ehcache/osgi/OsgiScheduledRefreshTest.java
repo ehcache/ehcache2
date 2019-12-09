@@ -60,7 +60,7 @@ public class OsgiScheduledRefreshTest {
   public Option[] config() {
     return options(bootDelegationPackages("sun.*,jdk.*"),
         getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-        getMavenBundle("org.quartz-scheduler", "quartz"), wrappedBundle(maven("com.mchange", "c3p0")
+        getMavenBundle("org.quartz-scheduler", "quartz"), wrappedBundle(maven("c3p0", "c3p0")
                        .versionAsInProject()),
         commonOptions());
   }

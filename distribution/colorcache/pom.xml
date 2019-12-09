@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>4.10</version>
+    <version>4.12</version>
     <relativePath/>
   </parent>
 
@@ -25,8 +25,6 @@
   <description>Clustered Ehcache sample with Terracotta</description>
 
   <properties>
-    <!-- Disable SAG Finder while we figure out what to do with it -->
-    <skipSagFinder>true</skipSagFinder>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.9-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
@@ -150,35 +148,6 @@
           </plugin>
         </plugins>
       </build>
-    </profile>
-    <profile>
-      <id>sag-deps</id>
-        <activation>
-          <property>
-            <name>sag-deps</name>
-            <value>true</value>
-          </property>
-        </activation>
-        <build>
-          <pluginManagement>
-            <plugins>
-              <plugin>
-              <groupId>org.terracotta</groupId>
-              <artifactId>maven-forge-plugin</artifactId>
-              <version>${maven-forge-plugin.version}</version>
-              <dependencies>
-                <dependency>
-                  <groupId>com.softwareag.ibit.tools.util</groupId>
-                  <artifactId>finder</artifactId>
-                  <!-- Before bumping version - verify it still accepts exclusion files -->
-                  <version>3.0</version>
-                  <scope>compile</scope>
-                </dependency>
-              </dependencies>
-              </plugin>
-            </plugins>
-          </pluginManagement>
-        </build>
     </profile>
   </profiles>
 

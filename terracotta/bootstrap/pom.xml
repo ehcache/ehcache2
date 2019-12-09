@@ -14,8 +14,8 @@
 
   <properties>
     <skipDeploy>false</skipDeploy>
-    <terracotta-toolkit-api-internal.version>1.18</terracotta-toolkit-api-internal.version>
-    <clustered-entity-management.version>0.11.0</clustered-entity-management.version>
+    <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
+    <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
   </properties>
 
   <dependencies>

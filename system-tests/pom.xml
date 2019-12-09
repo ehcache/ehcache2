@@ -25,12 +25,11 @@
     <surefire.min-memory>512m</surefire.min-memory>
     <surefire.max-memory>1024m</surefire.max-memory>
     <surefire.additional-jvm-args>-XX:MaxPermSize=512m</surefire.additional-jvm-args>
-    <skipSagFinder>true</skipSagFinder>
     <skipCheckstyle>true</skipCheckstyle>
     <derby.version>10.10.1.1</derby.version>
     <quartz.version>2.2.3</quartz.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <osgi-test-tool.version>1.8</osgi-test-tool.version>
+    <osgi-test-tool.version>1.9</osgi-test-tool.version>
   </properties>
 
   <dependencies>  
@@ -47,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache-ee</artifactId>
+      <artifactId>ehcache</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>   
@@ -72,7 +71,7 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
-      <version>7.0</version>
+      <version>7.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>

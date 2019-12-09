@@ -68,7 +68,7 @@
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>product-upgradability-testing-utils</artifactId>
-      <version>0.9.3</version>
+      <version>0.9.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -319,30 +319,32 @@
               <manifestLocation>${project.build.directory}</manifestLocation>
               <instructions>
                 <Import-Package>bitronix.tm;resolution:=optional,
-              bitronix.tm.resource.ehcache;resolution:=optional,
-              com.atomikos.*;resolution:=optional,
-              com.atomikos.icatch.jta;resolution:=optional,
-              weblogic.transaction;resolution:=optional,
-              javax.transaction;resolution:=optional,
-              javax.servlet;resolution:=optional,
-              javax.net.ssl;resolution:=optional,
-              javax.activation;resolution:=optional,
-              javax.xml.stream;resolution:=optional,
-              javax.xml.transform.sax;resolution:=optional,
-              javax.xml.transform.dom;resolution:=optional,
-              javax.xml.transform.stream;resolution:=optional,
-              org.hibernate;resolution:=optional,
-              org.hibernate.*;resolution:=optional,
-              org.hibernate.cache.access;resolution:=optional,
-              org.terracotta.toolkit.*;resolution:=optional,
-              org.quartz.*;resolution:=optional,
-              org.terracotta.quartz.*;resolution:=optional,
-              com.sun.management.*;resolution:="optional",
-              sun.management.*;resolution:=optional,
-              !com.google.apphosting.api,
-              !sun.misc,*
+                  bitronix.tm.resource.ehcache;resolution:=optional,
+                  com.atomikos.*;resolution:=optional,
+                  com.atomikos.icatch.jta;resolution:=optional,
+                  weblogic.transaction;resolution:=optional,
+                  javax.transaction.*;resolution:=optional,
+                  javax.servlet;resolution:=optional,
+                  javax.net.ssl;resolution:=optional,
+                  javax.activation;resolution:=optional,
+                  javax.xml.stream;resolution:=optional,
+                  javax.xml.transform;resolution:=optional,
+                  javax.xml.transform.sax;resolution:=optional,
+                  javax.xml.transform.dom;resolution:=optional,
+                  javax.xml.transform.stream;resolution:=optional,
+                  org.w3c.dom;resolution:=optional,
+                  org.hibernate.*;resolution:=optional,
+                  org.terracotta.toolkit.*;resolution:=optional,
+                  org.quartz.*;resolution:=optional,
+                  org.terracotta.quartz.*;resolution:=optional,
+                  com.sun.management.*;resolution:="optional",
+                  net.sf.ehcache.terracotta.security;resolution:=optional,
+                  org.jboss.vfs;resolution:=optional,
+                  sun.management.*;resolution:=optional,
+                  !com.google.apphosting.api,
+                  !sun.misc,*
                 </Import-Package>
-                <Export-Package>!net.sf.ehcache.terracotta.security,net.sf.ehcache.*</Export-Package>
+                <Export-Package>net.sf.ehcache.*</Export-Package>
                 <Private-Package>org.terracotta.*</Private-Package>
                 <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
               </instructions>

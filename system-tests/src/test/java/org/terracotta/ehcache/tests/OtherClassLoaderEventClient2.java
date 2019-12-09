@@ -8,9 +8,13 @@ import com.otherclassloader.Client;
 import com.otherclassloader.Value;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,7 +34,12 @@ public class OtherClassLoaderEventClient2 extends ClientBase {
     String config = cache.getCacheManager().getActiveConfigurationText();
 
     // This loader simulates ehcache in an isolated loader (similiar to an osgi bundle)
-    EhcacheLoader ehcacheLoader = new EhcacheLoader();
+    ClassLoader parentLoader = null;
+    boolean isPreJava9 = System.getProperty("java.specification.version").contains(".");
+    if (!isPreJava9) {
+      parentLoader = (ClassLoader)ClassLoader.class.getMethod("getPlatformClassLoader").invoke(null);
+    }
+    EhcacheLoader ehcacheLoader = new EhcacheLoader(parentLoader);
 
     // make sure the "app" types not visible to loader where ehcache is running
     try {
@@ -69,9 +78,22 @@ public class OtherClassLoaderEventClient2 extends ClientBase {
     if (error.get() != null) { throw error.get(); }
   }
 
+  private static URL[] getSystemUrls() {
+    String pathSeparator = System.getProperty("path.separator");
+    String[] classPathEntries = System.getProperty("java.class.path").split(pathSeparator);
+    return Arrays.stream(classPathEntries).map(s -> {
+      try {
+        return new File(s).toURI().toURL();
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+        return null;
+      }
+    }).toArray(URL[]::new);
+  }
+
   static class EhcacheLoader extends URLClassLoader {
-    EhcacheLoader() {
-      super(((URLClassLoader) (ClassLoader.getSystemClassLoader())).getURLs(), null);
+    EhcacheLoader(ClassLoader parentLoader) {
+      super(getSystemUrls(), parentLoader);
     }
 
     @Override

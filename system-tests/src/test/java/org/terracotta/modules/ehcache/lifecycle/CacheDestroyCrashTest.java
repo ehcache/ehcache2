@@ -12,6 +12,7 @@ import net.sf.ehcache.config.TerracottaConfiguration;
 
 import org.mockito.Mockito;
 import org.objenesis.ObjenesisStd;
+import net.bytebuddy.matcher.NullMatcher;
 import org.terracotta.ehcache.tests.AbstractCacheTestBase;
 import org.terracotta.ehcache.tests.ClientBase;
 import org.terracotta.test.util.TestBaseUtil;
@@ -46,6 +47,7 @@ public class CacheDestroyCrashTest extends AbstractCacheTestBase {
         String classpath = super.createClassPath(client);
         classpath = addToClasspath(classpath, TestBaseUtil.jarFor(Mockito.class));
         classpath = addToClasspath(classpath, TestBaseUtil.jarFor(ObjenesisStd.class));
+        classpath = addToClasspath(classpath, TestBaseUtil.jarFor(NullMatcher.class));
         return classpath;
     }
 

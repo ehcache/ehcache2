@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-parent</artifactId>
-    <version>2.23</version>
+    <version>2.24</version>
     <relativePath/>
   </parent>
 
@@ -20,16 +20,14 @@
   </scm>
   
   <properties>
-    <!-- Disable SAG Finder while we figure out what to do with it -->
-    <skipSagFinder>true</skipSagFinder>
     <slf4j.version>1.7.25</slf4j.version>
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
     <surefire.version>3.0.0-M3</surefire.version>
-    <terracotta-toolkit-api-internal.version>1.18</terracotta-toolkit-api-internal.version>
-    <management-core.version>2.1.14</management-core.version>
-    <clustered-entity-management.version>0.11.0</clustered-entity-management.version>
-    <statistics.version>1.0.4</statistics.version>
+    <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
+    <management-core.version>2.1.16</management-core.version>
+    <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
+    <statistics.version>1.0.5</statistics.version>
     <quartz.version>2.2.3</quartz.version>
     <jetty.version>9.4.20.v20190813</jetty.version>
     <jaxb-runtime.version>2.3.1</jaxb-runtime.version>
@@ -363,9 +361,6 @@
     </profile>
     <profile>
       <id>dist</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
       <modules>
         <module>distribution</module>
       </modules>

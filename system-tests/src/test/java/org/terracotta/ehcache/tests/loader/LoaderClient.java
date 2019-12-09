@@ -52,7 +52,13 @@ public class LoaderClient extends AbstractClientBase {
 
     }
 
-    Loader loader = new Loader(urls, null, extra);
+    ClassLoader parentLoader = null;
+    boolean isPreJava9 = System.getProperty("java.specification.version").contains(".");
+    if (!isPreJava9) {
+      parentLoader = (ClassLoader)ClassLoader.class.getMethod("getPlatformClassLoader").invoke(null);
+    }
+
+    Loader loader = new Loader(urls, parentLoader, extra);
     Runnable r = (Runnable) loader.loadClass(Asserter.class.getName()).newInstance();
     r.run();
 
