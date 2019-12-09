@@ -23,11 +23,20 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Iterator;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static java.util.Collections.list;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.iterableWithSize;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -72,6 +81,20 @@ public class ResourceClassLoaderTest {
     public void contentOfTheJarNotVisibleWithNormalClassLoaderTest() throws ClassNotFoundException {
         // a normal classloader, can not read classes located in the subdirectory of a jar
         Class<?> simpleClass = testCaseClassLoader.loadClass("pof.Simple");
+    }
+
+    @Test
+    public void testServicesFilesDoNotDelegate() throws IOException {
+        ResourceClassLoader resourceClassLoader = new ResourceClassLoader("rest-management-private-classpath", testCaseClassLoader);
+        assertThat(list(testCaseClassLoader.getResources("META-INF/services/" + ManagementServer.class.getName())), iterableWithSize(1));
+        assertThat(list(resourceClassLoader.getResources("META-INF/services/" + ManagementServer.class.getName())), iterableWithSize(1));
+        assertThat(ServiceLoader.load(ManagementServer.class, resourceClassLoader), iterableWithSize(1));
+        try {
+            for (ManagementServer unused : ServiceLoader.load(ManagementServer.class, testCaseClassLoader)) { }
+            fail("Expected ServiceConfigurationError");
+        } catch (ServiceConfigurationError e) {
+            assertThat(e.getMessage(), containsString("Provider net.sf.ehcache.management.ClassThatDoesntExist not found"));
+        }
     }
 
     @Test

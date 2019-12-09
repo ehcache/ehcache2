@@ -1,2 +1,2 @@
-#used by ManagementServerLoaderTest
-net.sf.ehcache.management.DummyManagementServerImpl
+#used by ResourceClassLoaderTest
+net.sf.ehcache.management.ClassThatDoesntExist
