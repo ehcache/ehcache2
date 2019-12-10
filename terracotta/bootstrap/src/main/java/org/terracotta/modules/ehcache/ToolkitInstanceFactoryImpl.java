@@ -73,6 +73,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -578,27 +579,33 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
 
   @Override
   public void linkClusteredCacheManager(String cacheManagerName, net.sf.ehcache.config.Configuration configuration) {
+    Objects.requireNonNull(cacheManagerName);
     if (clusteredCacheManagerEntity == null) {
-      logCacheManagerConfigInTerracottaClientLogs(cacheManagerName, configuration);
+      try {
+        logCacheManagerConfigInTerracottaClientLogs(cacheManagerName, configuration);
 
-      ClusteredCacheManager clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName,
-          ClusteredCacheManager.class);
-      ToolkitReadWriteLock cmRWLock = clusteredEntityManager.getEntityLock(EhcacheEntitiesNaming
-          .getCacheManagerLockNameFor(cacheManagerName));
-      ToolkitLock cmWriteLock = cmRWLock.writeLock();
-      while (clusteredCacheManager == null) {
-        if (cmWriteLock.tryLock()) {
-          try {
-            clusteredCacheManager = createClusteredCacheManagerEntity(cacheManagerName, configuration);
-          } finally {
-            cmWriteLock.unlock();
+        ClusteredCacheManager clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName,
+            ClusteredCacheManager.class);
+        ToolkitReadWriteLock cmRWLock = clusteredEntityManager.getEntityLock(EhcacheEntitiesNaming
+            .getCacheManagerLockNameFor(cacheManagerName));
+        ToolkitLock cmWriteLock = cmRWLock.writeLock();
+        while (clusteredCacheManager == null) {
+          if (cmWriteLock.tryLock()) {
+            try {
+              clusteredCacheManager = createClusteredCacheManagerEntity(cacheManagerName, configuration);
+            } finally {
+              cmWriteLock.unlock();
+            }
+          } else {
+            clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName, ClusteredCacheManager.class);
           }
-        } else {
-          clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName, ClusteredCacheManager.class);
         }
+        clusteredCacheManagerEntity = clusteredCacheManager;
+        entityNames.setCacheManagerName(cacheManagerName);
+      } catch (RuntimeException re) {
+        entityNames.linkFailure = re;
+        throw re;
       }
-      clusteredCacheManagerEntity = clusteredCacheManager;
-      entityNames.setCacheManagerName(cacheManagerName);
     }
   }
 
@@ -706,6 +713,39 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
   public void clusterRejoined() {
     synchronized (entityNames) {
       String cacheManagerName = entityNames.cacheManagerName;
+      /*
+       * There's tricky race condition in the cache manager's initialization that requires a perfectly timed disconnection event plus a rejoin event to happen at the exact right moment.
+       *
+       * In a normal scenario, here is what happens when a clustered cache manager gets initialized:
+       *
+       * CacheManager.doInit() is called
+       * then terracottaClient.createClusteredInstanceFactory() is called
+       * then terracottaClient.getClusteredInstanceFactory().linkClusteredCacheManager(getName(), configuration) is called
+       *
+       * If any call in doInit() fails, the ClusteredInstanceFactory gets cleaned up which tears down the L1 (plus other local cleanups).
+       *
+       * The linkClusteredCacheManager() call initializes a cacheManagerName variable in ToolkitInstanceFactoryImpl, which is then used later on during a rejoin to tell the entity manager that this cache manager is being released then re-used.
+       *
+       *
+       * Now imagine what would happen in the following scenario:
+       *
+       * CacheManager.doInit() is called
+       * then terracottaClient.createClusteredInstanceFactory() is called and succeeds
+       * then a disconnection happens
+       * then terracottaClient.getClusteredInstanceFactory().linkClusteredCacheManager(getName(), configuration) is called and fails, the cacheManagerName variable in ToolkitInstanceFactoryImpl is left to null
+       * then rejoin happens
+       * then the clusterRejoined() notification that tries to read the cacheManagerName variable gets called before the doInit() teardown happens
+       *
+       * -> you get a NPE from clusterRejoined()
+       *
+       * Hence, this null check is about catching this exact event, log it clearly and force shutting down the L1.
+       */
+      if (cacheManagerName == null) {
+        LOGGER.error("Cache Manager {} linking to the entity manager failed - shutting down to prevent any further use of clustered features", cacheManagerName, entityNames.linkFailure);
+        shutdown();
+        return;
+      }
+
       ClusteredCacheManager clusteredCacheManager = clusteredEntityManager.getRootEntity(cacheManagerName,
                                                                                          ClusteredCacheManager.class);
       if (clusteredCacheManager == null) {
@@ -807,6 +847,8 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
   }
 
   private class EntityNamesHolder {
+    volatile RuntimeException linkFailure;
+
     private String            cacheManagerName;
     private final Set<String> cacheNames;
 
