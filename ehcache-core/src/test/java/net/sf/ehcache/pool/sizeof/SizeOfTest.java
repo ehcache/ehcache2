@@ -126,6 +126,7 @@ public class SizeOfTest extends AbstractSizeOfTest {
     }
   }
 
+  @Ignore("EHC-1154")
   @Test
   public void testOnHeapConsumption() throws Exception {
     assumeThat(System.getProperty("java.version"), Matchers.startsWith("1."));
