@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-parent</artifactId>
-    <version>2.24</version>
+    <version>2.25</version>
     <relativePath/>
   </parent>
 
@@ -23,7 +23,6 @@
     <slf4j.version>1.7.25</slf4j.version>
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
-    <surefire.version>3.0.0-M3</surefire.version>
     <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
     <management-core.version>2.1.16</management-core.version>
     <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
@@ -256,14 +255,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire.version}</version>
-          <configuration>
-            <skip>true</skip><!-- we use maven-forge-plugin to run tests -->
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.1.1</version>
           <configuration>
@@ -363,26 +354,6 @@
       <modules>
         <module>distribution</module>
       </modules>
-    </profile>
-
-    <profile>
-      <id>testVM</id>
-      <activation>
-        <property>
-          <name>testVM</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.terracotta</groupId>
-            <artifactId>maven-forge-plugin</artifactId>
-            <configuration>
-              <jvm>${testVM}</jvm>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
 
     <!-- Profile for running only check-short -->
