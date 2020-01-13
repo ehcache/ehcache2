@@ -2,6 +2,7 @@ package net.sf.ehcache.management.resource.services;
 
 import com.tc.test.config.builder.OffHeap;
 import com.tc.util.concurrent.ThreadUtil;
+import io.restassured.specification.RequestSpecification;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
@@ -13,7 +14,7 @@ import net.sf.ehcache.config.TerracottaConfiguration;
 import org.junit.AfterClass;
 import org.terracotta.test.util.TestBaseUtil;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import com.tc.test.config.builder.ClusterManager;
 import com.tc.test.config.builder.TcConfig;
 import com.tc.test.config.builder.TcMirrorGroup;
@@ -22,8 +23,9 @@ import com.tc.util.PortChooser;
 
 import java.io.IOException;
 
-import static com.jayway.restassured.RestAssured.get;
-import static com.jayway.restassured.path.json.JsonPath.from;
+import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static io.restassured.path.json.JsonPath.from;
 
 /**
  * @author: Anthony Dahanne
@@ -80,7 +82,6 @@ public abstract class ResourceServiceImplITHelper {
 
   @AfterClass
   public static void tearDownCluster() throws Exception {
-
     if (cacheManagerMaxElements != null) {
       cacheManagerMaxElements.shutdown();
     }
@@ -89,15 +90,18 @@ public abstract class ResourceServiceImplITHelper {
 
   static String waitUntilEhcacheAgentUp(String clusterUuid) {
     while (true) {
-      String response = get(CLUSTERED_BASE_URL + "/tc-management-api/agents/cacheManagers").asString();
       try {
-        return from(response).get("find{it.attributes.ClusterUUID == '" + clusterUuid + "'}.agentId");
-      } catch (IllegalArgumentException iae) {
+        String response = givenClustered()
+          .get("/tc-management-api/agents/cacheManagers").asString();
+        String agentId = from(response).get("find{it.attributes.ClusterUUID == '" + clusterUuid + "'}.agentId");
+        if (agentId != null) {
+          return agentId;
+        }
+      } finally {
         ThreadUtil.reallySleep(500);
       }
     }
   }
-
 
   protected static CacheManager getCacheManagerMaxBytes() {
     Configuration configuration = new Configuration();
@@ -146,6 +150,19 @@ public abstract class ResourceServiceImplITHelper {
     RestAssured.baseURI = BASEURI;
   }
 
+  protected static RequestSpecification givenStandalone() {
+    return RestAssured.given()
+      .port(STANDALONE_REST_AGENT_PORT)
+      .baseUri(BASEURI)
+      .urlEncodingEnabled(false);
+  }
+
+  protected static RequestSpecification givenClustered() {
+    return RestAssured.given()
+      .port(MANAGEMENT_PORT)
+      .baseUri(BASEURI)
+      .urlEncodingEnabled(false);
+  }
 
 //  protected String getEhCacheAgentId() {
 //    // looking up the ehcache agent id, so that we ask for it throguh the tsa

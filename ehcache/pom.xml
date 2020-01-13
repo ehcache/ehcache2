@@ -28,7 +28,7 @@
     <kit.name>${project.artifactId}-${project.version}-distribution</kit.name>
     <root.dir>${project.build.directory}/${kit.name}</root.dir>
     <terracotta.kit.path>${project.build.directory}/tmp/terracotta</terracotta.kit.path>
-    <gmaven-plugin.version>1.4</gmaven-plugin.version>
+    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <skipJavadoc>false</skipJavadoc>
     <devmode>true</devmode>
   </properties>
@@ -362,8 +362,8 @@
           </plugin>
           <plugin>
             <groupId>org.codehaus.gmaven</groupId>
-            <artifactId>gmaven-plugin</artifactId>
-            <version>${gmaven-plugin.version}</version>
+            <artifactId>groovy-maven-plugin</artifactId>
+            <version>${groovy-maven-plugin.version}</version>
             <executions>
               <execution>
                 <id>repackage-jar</id>

@@ -22,7 +22,7 @@
   <properties>
     <slf4j.version>1.7.25</slf4j.version>
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
-    <gmaven-plugin.version>1.4</gmaven-plugin.version>
+    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
     <management-core.version>2.1.17</management-core.version>
     <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
@@ -304,8 +304,8 @@
         </plugin>
         <plugin>
           <groupId>org.codehaus.gmaven</groupId>
-          <artifactId>gmaven-plugin</artifactId>
-          <version>${gmaven-plugin.version}</version>
+          <artifactId>groovy-maven-plugin</artifactId>
+          <version>${groovy-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
