@@ -20,7 +20,7 @@
     <private-class-suffix>.class_terracotta</private-class-suffix>
     <devmode>true</devmode>
     <sag-deps>false</sag-deps>
-    <jaxb-runtime.version>2.3.1</jaxb-runtime.version>
+    <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
   </properties>
 
   <dependencies>
