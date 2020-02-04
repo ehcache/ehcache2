@@ -130,10 +130,14 @@ public class ResourceClassLoader extends ClassLoader {
      * except the first resources (more important) are the ones found with our ResourceClassLoader
      */
     public Enumeration<URL> getResources(String resourceName) throws IOException {
-        Enumeration[] tmp = new Enumeration[2];
-        tmp[0] = findResources(resourceName);
-        tmp[1] = getParent().getResources(resourceName);
-        return new MergedEnumeration<URL>(tmp[0], tmp[1]);
+        if (resourceName.startsWith("META-INF/services/")) {
+            return findResources(resourceName);
+        } else {
+            Enumeration[] tmp = new Enumeration[2];
+            tmp[0] = findResources(resourceName);
+            tmp[1] = getParent().getResources(resourceName);
+            return new MergedEnumeration<URL>(tmp[0], tmp[1]);
+        }
     };
 
     @Override

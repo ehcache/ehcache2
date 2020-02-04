@@ -169,10 +169,14 @@ public class DevModeClassLoader extends ClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        Enumeration[] tmp = new Enumeration[2];
-        tmp[0] = findResources(name);
-        tmp[1] = getParent().getResources(name);
-        return new MergedEnumeration<URL>(tmp[0], tmp[1]);
+        if (name.startsWith("META-INF/services")) {
+            return findResources(name);
+        } else {
+            Enumeration[] tmp = new Enumeration[2];
+            tmp[0] = findResources(name);
+            tmp[1] = getParent().getResources(name);
+            return new MergedEnumeration<URL>(tmp[0], tmp[1]);
+        }
     }
 
     @Override
