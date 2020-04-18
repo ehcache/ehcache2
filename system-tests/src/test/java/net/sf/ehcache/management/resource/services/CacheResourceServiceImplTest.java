@@ -1,6 +1,7 @@
 package net.sf.ehcache.management.resource.services;
 
-import static com.jayway.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,7 +22,7 @@ import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +33,7 @@ import java.util.Map;
  * works fine
  */
 public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
-
-  protected static final String EXPECTED_RESOURCE_LOCATION = "{baseUrl}/tc-management-api/agents{agentIds}/cacheManagers{cmIds}/caches{cacheIds}";
+  protected static final String EXPECTED_RESOURCE_LOCATION = "/tc-management-api/agents{agentIds}/cacheManagers{cmIds}/caches{cacheIds}";
 
   @BeforeClass
   public static void setUpCluster() throws Exception {
@@ -223,11 +223,9 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
 ]
      */
 
-
     // I need a cacheManager not clustered
     CacheManager standaloneCacheManager = createStandaloneCacheManagerARC();
     Cache cacheStandalone = standaloneCacheManager.getCache("testCacheStandaloneARC");
-
 
     for (int i=0; i<1000 ; i++) {
       cacheStandalone.put(new Element("key" + i, "value" + i));
@@ -237,50 +235,52 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     String cmsFilter = "";
     String cachesFilter = "";
 
-
-    expect().contentType(ContentType.JSON)
-            .body("size()", is(2))
-            .body("find { it.name == 'testCache' }.agentId", equalTo("embedded"))
-            .rootPath("find { it.name == 'testCacheStandaloneARC' }")
-              .body("agentId", equalTo("embedded"))
-              .body("cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
-              .body("attributes.LocalHeapSizeInBytes", greaterThan(0))
-              .body("attributes.InMemorySize", equalTo(1000))
-              .body("attributes.LocalDiskSize", greaterThan(0))
-              .body("attributes.LocalHeapSize", equalTo(1000))
-              .body("attributes.SizeSample", equalTo(1000))
-              .body("attributes.DiskExpiryThreadIntervalSeconds", equalTo(120))
-              .body("attributes.LocalHeapSizeInBytesSample", greaterThan(0))
-              .body("attributes.LocalDiskSizeSample", greaterThan(0))
-              .body("attributes.LocalDiskSizeInBytes", greaterThan(0))
-              .body("attributes.Size", equalTo(1000))
-              .body("attributes.LocalHeapSizeSample", equalTo(1000))
-              .body("attributes.PutCount", equalTo(1000))
-              .body("attributes.LocalDiskSizeInBytesSample", greaterThan(0))
-              .body("attributes.Status", equalTo("STATUS_ALIVE"))
-            .statusCode(200)
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
-
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("size()", is(2))
+        .body("find { it.name == 'testCache' }.agentId", equalTo("embedded"))
+        .rootPath("find { it.name == 'testCacheStandaloneARC' }")
+        .body("agentId", equalTo("embedded"))
+        .body("cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
+        .body("attributes.LocalHeapSizeInBytes", greaterThan(0))
+        .body("attributes.InMemorySize", equalTo(1000))
+        .body("attributes.LocalDiskSize", greaterThan(0))
+        .body("attributes.LocalHeapSize", equalTo(1000))
+        .body("attributes.SizeSample", equalTo(1000))
+        .body("attributes.DiskExpiryThreadIntervalSeconds", equalTo(120))
+        .body("attributes.LocalHeapSizeInBytesSample", greaterThan(0))
+        .body("attributes.LocalDiskSizeSample", greaterThan(0))
+        .body("attributes.LocalDiskSizeInBytes", greaterThan(0))
+        .body("attributes.Size", equalTo(1000))
+        .body("attributes.LocalHeapSizeSample", equalTo(1000))
+        .body("attributes.PutCount", equalTo(1000))
+        .body("attributes.LocalDiskSizeInBytesSample", greaterThan(0))
+        .body("attributes.Status", equalTo("STATUS_ALIVE"))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cachesFilter = ";names=testCacheStandaloneARC";
     // we filter to return only the attribute CacheNames, and working only on the testCache2 Cache
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheStandaloneARC"))
-            .body("get(0).cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
-            .body("get(0).attributes.PutCount", equalTo(1000))
-            .body("get(0).attributes.Size", equalTo(1000))
-            .body("get(0).attributes.LocalHeapSizeSample", nullValue())
-            .body("size()",is(1))
-            .statusCode(200)
-            .given()
-              .queryParam("show", "Size")
-              .queryParam("show", "PutCount")
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .queryParam("show", "Size")
+        .queryParam("show", "PutCount")
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", equalTo("embedded"))
+        .body("get(0).name", equalTo("testCacheStandaloneARC"))
+        .body("get(0).cacheManagerName", equalTo("testCacheManagerStandaloneARC"))
+        .body("get(0).attributes.PutCount", equalTo(1000))
+        .body("get(0).attributes.Size", equalTo(1000))
+        .body("get(0).attributes.LocalHeapSizeSample", nullValue())
+        .body("size()",is(1))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     standaloneCacheManager.removeAllCaches();
     standaloneCacheManager.shutdown();
-
   }
 
   @Test
@@ -300,54 +300,64 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     String cmsFilter = "";
     String cachesFilter = "";
 
-    expect().statusCode(400)
-            .body("details", equalTo(""))
-            .body("error", equalTo("No cache specified. Unsafe requests must specify a single cache name."))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
-
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheManagerEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo(""))
+        .body("error", equalTo("No cache specified. Unsafe requests must specify a single cache name."))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cachesFilter = ";names=testCache";
-    expect().statusCode(400)
-            .body("details", equalTo(""))
-            .body("error", equalTo("No cache manager specified. Unsafe requests must specify a single cache manager name."))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheManagerEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo(""))
+        .body("error", equalTo("No cache manager specified. Unsafe requests must specify a single cache manager name."))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter = ";names=testCacheManager";
     cachesFilter = ";names=boups";
-    expect().statusCode(400)
-            .body("details", equalTo("Cache not found !"))
-            .body("error", equalTo("Failed to create or update cache"))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheManagerEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo("Cache not found !"))
+        .body("error", equalTo("Failed to create or update cache"))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter = ";names=pif";
     cachesFilter = ";names=testCache";
-    expect().statusCode(400)
-            .body("details", equalTo("CacheManager not found !"))
-            .body("error", equalTo("Failed to create or update cache"))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheManagerEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo("CacheManager not found !"))
+        .body("error", equalTo("Failed to create or update cache"))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter = "";
     cachesFilter = "";
     // we check nothing has changed
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache"))
-            .body("get(0).attributes.MaxEntriesLocalHeap",equalTo(10000) )
-            .body("get(0).attributes.Enabled", equalTo(Boolean.TRUE))
-            .statusCode(200)
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", equalTo("embedded"))
+        .body("get(0).name", equalTo("testCache"))
+        .body("get(0).attributes.MaxEntriesLocalHeap",equalTo(10000) )
+        .body("get(0).attributes.Enabled", equalTo(Boolean.TRUE))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
   }
 
   @Test
@@ -369,7 +379,6 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void updateCachesTest() throws Exception {
-
     // I need a cacheManager not clustered
     CacheManager standaloneCacheManager = createStandaloneCacheManager();
 
@@ -384,33 +393,36 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     attributes.put("TimeToLiveSeconds", 43);
     attributes.put("Enabled", Boolean.FALSE);
 
-
     String agentsFilter = "";
     String cmsFilter = ";names=testCacheManagerStandalone";
     String cachesFilter = ";names=testCacheStandalone";
     cacheEntity.getAttributes().putAll(attributes);
-    expect().statusCode(204).log().ifStatusCodeIsEqualTo(400)
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
-
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheEntity)
+        .expect()
+        .statusCode(204)
+        .log().ifStatusCodeIsEqualTo(400)
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter = "";
     // we check the properties were changed
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCacheStandalone"))
-            .body("get(0).attributes.MaxEntriesInCache", equalTo(30000))
-            .body("get(0).attributes.MaxEntriesLocalHeap", equalTo(20000))
-            .body("get(0).attributes.LoggingEnabled", equalTo(Boolean.TRUE))
-            .body("get(0).attributes.MaxElementsOnDisk", equalTo(40000))
-            .body("get(0).attributes.TimeToIdleSeconds", equalTo(20))
-            .body("get(0).attributes.TimeToLiveSeconds", equalTo(43))
-            .body("get(0).attributes.Enabled", equalTo(Boolean.FALSE))
-            .statusCode(200)
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
-
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", equalTo("embedded"))
+        .body("get(0).name", equalTo("testCacheStandalone"))
+        .body("get(0).attributes.MaxEntriesInCache", equalTo(30000))
+        .body("get(0).attributes.MaxEntriesLocalHeap", equalTo(20000))
+        .body("get(0).attributes.LoggingEnabled", equalTo(Boolean.TRUE))
+        .body("get(0).attributes.MaxElementsOnDisk", equalTo(40000))
+        .body("get(0).attributes.TimeToIdleSeconds", equalTo(20))
+        .body("get(0).attributes.TimeToLiveSeconds", equalTo(43))
+        .body("get(0).attributes.Enabled", equalTo(Boolean.FALSE))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     standaloneCacheManager.removeAllCaches();
     standaloneCacheManager.shutdown();
@@ -426,27 +438,31 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     cmsFilter = ";names=cacheManagerNew";
     cachesFilter = ";names=CacheNew";
 
-    expect().log().ifStatusCodeIsEqualTo(400)
-            .statusCode(204)
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheEntity)
+        .expect()
+        .log().ifStatusCodeIsEqualTo(400)
+        .statusCode(204)
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter = "";
     cachesFilter = ";names=CacheNew";
     // we check the properties were changed
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("CacheNew"))
-            .body("get(0).attributes.MaxBytesLocalDiskAsString", equalTo("30M"))
-            .body("get(0).attributes.MaxBytesLocalHeapAsString", equalTo("20M"))
-            .statusCode(200)
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", equalTo("embedded"))
+        .body("get(0).name", equalTo("CacheNew"))
+        .body("get(0).attributes.MaxBytesLocalDiskAsString", equalTo("30M"))
+        .body("get(0).attributes.MaxBytesLocalHeapAsString", equalTo("20M"))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
+
     cacheManagerNew.removeAllCaches();
     cacheManagerNew.shutdown();
-
-
   }
 
   @Test
@@ -468,8 +484,6 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void updateCachesTest__clustered() throws Exception {
-
-
     CacheManager clusteredCacheManager = createClusteredCacheManager();
 
     try {
@@ -488,34 +502,37 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
       String cmsFilter = ";names=testCacheManagerClustered";
       String cachesFilter = ";names=testCacheClustered";
       cacheEntity.getAttributes().putAll(attributes);
-      expect().statusCode(204).log().ifStatusCodeIsEqualTo(400)
-              .given()
-              .contentType(ContentType.JSON)
-              .body(cacheEntity)
-              .when().put(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter);
-
+      givenClustered()
+          .contentType(ContentType.JSON)
+          .body(cacheEntity)
+          .expect()
+          .statusCode(204)
+          .log().ifStatusCodeIsEqualTo(400)
+          .when()
+          .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
       cmsFilter = "";
       // we check the properties were changed
-      expect().contentType(ContentType.JSON)
-              .body("get(0).agentId", equalTo(clusteredCacheManagerAgentId))
-              .body("get(0).name", equalTo("testCacheClustered"))
-              .body("get(0).attributes.MaxEntriesInCache", equalTo(30000))
-              .body("get(0).attributes.MaxEntriesLocalHeap", equalTo(20000))
-              .body("get(0).attributes.LoggingEnabled", equalTo(Boolean.TRUE))
-              .body("get(0).attributes.NodeBulkLoadEnabled", equalTo(Boolean.TRUE)) //ONLY FOR CLUSTERED !!!
-              .body("get(0).attributes.ClusterBulkLoadEnabled", equalTo(Boolean.TRUE)) //ONLY FOR CLUSTERED !!!
-              .body("get(0).attributes.TimeToIdleSeconds", equalTo(20))
-              .body("get(0).attributes.TimeToLiveSeconds", equalTo(43))
-              .body("get(0).attributes.Enabled", equalTo(Boolean.FALSE))
-              .statusCode(200)
-              .when().get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter);
+      givenClustered()
+          .expect()
+          .contentType(ContentType.JSON)
+          .body("get(0).agentId", equalTo(clusteredCacheManagerAgentId))
+          .body("get(0).name", equalTo("testCacheClustered"))
+          .body("get(0).attributes.MaxEntriesInCache", equalTo(30000))
+          .body("get(0).attributes.MaxEntriesLocalHeap", equalTo(20000))
+          .body("get(0).attributes.LoggingEnabled", equalTo(Boolean.TRUE))
+          .body("get(0).attributes.NodeBulkLoadEnabled", equalTo(Boolean.TRUE)) //ONLY FOR CLUSTERED !!!
+          .body("get(0).attributes.ClusterBulkLoadEnabled", equalTo(Boolean.TRUE)) //ONLY FOR CLUSTERED !!!
+          .body("get(0).attributes.TimeToIdleSeconds", equalTo(20))
+          .body("get(0).attributes.TimeToLiveSeconds", equalTo(43))
+          .body("get(0).attributes.Enabled", equalTo(Boolean.FALSE))
+          .statusCode(200)
+          .when()
+          .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
     } finally {
       clusteredCacheManager.shutdown();
     }
-
   }
-
 
   @Test
   /**
@@ -524,7 +541,6 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void updateCachesTest__FailWhenMutatingForbiddenAttributes() throws Exception {
-
     CacheEntity cacheManagerEntity = new CacheEntity();
     cacheManagerEntity.setName("superName");
     Map<String,Object> attributes = new HashMap<String, Object>();
@@ -536,31 +552,34 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     String cmsFilter = ";names=testCacheManager";
     String cachesFilter = ";names=testCache";
 
-    expect().statusCode(400)
-            .body("details", allOf(containsString("You are not allowed to update those attributes : name LocalOffHeapSizeInBytes Pinned . Only"),
-                                   containsString("TimeToIdleSeconds"), containsString("Enabled"), containsString("MaxBytesLocalDiskAsString"),
-                                   containsString("MaxBytesLocalHeapAsString"), containsString("MaxElementsOnDisk"), containsString("TimeToLiveSeconds"),
-                                   containsString("MaxEntriesLocalHeap"), containsString("LoggingEnabled"), containsString("NodeBulkLoadEnabled"),
-                                   containsString("MaxEntriesInCache"), Matchers.containsString(" can be updated for a Cache.")))
-            .body("error", equalTo("Failed to create or update cache"))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheManagerEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheManagerEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", allOf(containsString("You are not allowed to update those attributes : name LocalOffHeapSizeInBytes Pinned . Only"),
+            containsString("TimeToIdleSeconds"), containsString("Enabled"), containsString("MaxBytesLocalDiskAsString"),
+            containsString("MaxBytesLocalHeapAsString"), containsString("MaxElementsOnDisk"), containsString("TimeToLiveSeconds"),
+            containsString("MaxEntriesLocalHeap"), containsString("LoggingEnabled"), containsString("NodeBulkLoadEnabled"),
+            containsString("MaxEntriesInCache"), Matchers.containsString(" can be updated for a Cache.")))
+        .body("error", equalTo("Failed to create or update cache"))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
 
     cmsFilter ="";
     // we check nothing has changed
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", equalTo("embedded"))
-            .body("get(0).name", equalTo("testCache"))
-            .body("get(0).attributes.LocalOffHeapSizeInBytes", equalTo(0))
-            .body("get(0).attributes.Pinned", equalTo(Boolean.FALSE))
-            .body("size()",is(1))
-            .statusCode(200)
-            .when().get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", equalTo("embedded"))
+        .body("get(0).name", equalTo("testCache"))
+        .body("get(0).attributes.LocalOffHeapSizeInBytes", equalTo(0))
+        .body("get(0).attributes.Pinned", equalTo(Boolean.FALSE))
+        .body("size()",is(1))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
   }
-
-
 
   @Test
   /**
@@ -568,22 +587,21 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void updateCachesTest__CacheManagerDoesNotExist() throws Exception {
-
-
     String agentsFilter = "";
     String cmsFilter = ";names=cachemanagerDoesNotExist";
     String cachesFilter = ";names=testCache";
 
     CacheEntity cacheEntity = new CacheEntity();
-    expect().statusCode(400)
-            .body("details", equalTo("CacheManager not found !"))
-            .body("error", equalTo("Failed to create or update cache"))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo("CacheManager not found !"))
+        .body("error", equalTo("Failed to create or update cache"))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
   }
-
 
   @Test
   /**
@@ -592,19 +610,19 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void updateCachesTest__CantCreateCache() throws Exception {
-
-
     String agentsFilter = "";
     String cmsFilter = ";names=testCacheManager";
     String cachesFilter = ";names=cacheThatDoesNotExist";
     CacheEntity cacheEntity = new CacheEntity();
-    expect().statusCode(400)
-            .body("details", equalTo("Cache not found !"))
-            .body("error", equalTo("Failed to create or update cache"))
-            .given()
-            .contentType(ContentType.JSON)
-            .body(cacheEntity)
-            .when().put(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter,cmsFilter, cachesFilter);
+    givenStandalone()
+        .contentType(ContentType.JSON)
+        .body(cacheEntity)
+        .expect()
+        .statusCode(400)
+        .body("details", equalTo("Cache not found !"))
+        .body("error", equalTo("Failed to create or update cache"))
+        .when()
+        .put(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter);
   }
 
   private CacheManager getCacheManagerNew() {
@@ -612,7 +630,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     configuration.setName("cacheManagerNew");
 
     CacheConfiguration myCache = new CacheConfiguration()
-            .eternal(false).name("CacheNew");
+        .eternal(false).name("CacheNew");
     myCache.setMaxBytesLocalHeap("5M");
     myCache.setMaxBytesLocalDisk("3M");
     configuration.addCache(myCache);
@@ -676,8 +694,7 @@ public class CacheResourceServiceImplTest extends ResourceServiceImplITHelper {
     CacheManager mgr = new CacheManager(configuration);
     Cache exampleCache = mgr.getCache("testCacheClustered");
     assert (exampleCache != null);
-    clusteredCacheManagerAgentId = ResourceServiceImplITHelper.waitUntilEhcacheAgentUp(mgr.getClusterUUID());
+    clusteredCacheManagerAgentId = waitUntilEhcacheAgentUp(mgr.getClusterUUID());
     return mgr;
   }
-
 }

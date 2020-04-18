@@ -21,7 +21,7 @@
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.8-SNAPSHOT</terracotta.version>
     <h2.version>1.1.116</h2.version>
-    <jetty.version>9.4.19.v20190610</jetty.version>
+    <jetty.version>9.4.28.v20200408</jetty.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
   </properties>
@@ -137,11 +137,13 @@
       </plugin>
       
       <plugin>
-        <artifactId>maven-jetty-plugin</artifactId>
+        <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
         <groupId>org.mortbay.jetty</groupId>
         <configuration>
-          <contextPath>${name}</contextPath>
+          <webApp>
+            <contextPath>${project.name}</contextPath>
+          </webApp>
           <stopKey>STOP</stopKey>
         </configuration>
       </plugin>
@@ -227,7 +229,7 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-jetty-plugin</artifactId>
+            <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
             <groupId>org.mortbay.jetty</groupId>
             <configuration>
@@ -248,7 +250,7 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-jetty-plugin</artifactId>
+            <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
             <groupId>org.mortbay.jetty</groupId>
             <configuration>

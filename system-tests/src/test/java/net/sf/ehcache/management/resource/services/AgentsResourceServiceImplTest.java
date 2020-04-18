@@ -1,11 +1,12 @@
 package net.sf.ehcache.management.resource.services;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static com.jayway.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -17,14 +18,12 @@ import static org.hamcrest.Matchers.containsString;
  * works fine
  */
 public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
-
   protected static final String EXPECTED_RESOURCE_LOCATION = "/tc-management-api/agents";
 
   @BeforeClass
   public static void setUpCluster() throws Exception {
     setUpCluster(AgentsResourceServiceImplTest.class);
   }
-
 
   @Test
   /**
@@ -34,66 +33,75 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
    * @throws Exception
    */
   public void getAgentsTest__OneCacheManager() throws Exception {
-
+    // [{"version":null,"agentId":"embedded","agencyOf":"Ehcache","rootRepresentables":{"cacheManagerNames":"testCacheManager"}}]
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .rootPath("get(0)")
+        .body("agentId", equalTo("embedded"))
+        .body("agencyOf", equalTo("Ehcache"))
+        .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManager"))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION);
 
     // [{"version":null,"agentId":"embedded","agencyOf":"Ehcache","rootRepresentables":{"cacheManagerNames":"testCacheManager"}}]
-    expect().contentType(ContentType.JSON)
-            .rootPath("get(0)")
-            .body("agentId", equalTo("embedded"))
-            .body("agencyOf", equalTo("Ehcache"))
-            .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManager"))
-            .statusCode(200)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION);
-
-
-    // [{"version":null,"agentId":"embedded","agencyOf":"Ehcache","rootRepresentables":{"cacheManagerNames":"testCacheManager"}}]
-    expect().contentType(ContentType.JSON)
-            .rootPath("get(0)")
-            .body("agentId", equalTo("embedded"))
-            .body("agencyOf", equalTo("Ehcache"))
-            .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManager"))
-            .statusCode(200)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION +";ids=embedded");
-
+    givenStandalone()
+        .expect().contentType(ContentType.JSON)
+        .rootPath("get(0)")
+        .body("agentId", equalTo("embedded"))
+        .body("agencyOf", equalTo("Ehcache"))
+        .body("rootRepresentables.cacheManagerNames", equalTo("testCacheManager"))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION +";ids=embedded");
 
     // [{"version":null,"agentId":"embedded","agencyOf":"Ehcache","rootRepresentables":{"cacheManagerNames":"testCacheManager"}}]
-    expect().contentType(ContentType.JSON)
-            .statusCode(400)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION +";ids=w00t");
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .statusCode(400)
+        .when().get(EXPECTED_RESOURCE_LOCATION +";ids=w00t");
 
     // /info
     //[{"agentId":"embedded","agencyOf":"Ehcache","available":true,"secured":false,"sslEnabled":false,"needClientAuth":false,"licensed":false,"sampleHistorySize":30,"sampleIntervalSeconds":1,"enabled":true,"restAPIVersion":null}]
-    expect().contentType(ContentType.JSON)
-            .rootPath("get(0)")
-            .body("agentId", equalTo("embedded"))
-            .body("agencyOf", equalTo("Ehcache"))
-            .body("available", equalTo(true))
-            .body("secured", equalTo(false))
-            .body("sslEnabled", equalTo(false))
-            .body("needClientAuth", equalTo(false))
-            .body("licensed", equalTo(false))
-            .body("sampleHistorySize", equalTo(30))
-            .body("sampleIntervalSeconds", equalTo(1))
-            .body("enabled", equalTo(true))
-            .statusCode(200)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION + INFO);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .rootPath("get(0)")
+        .body("agentId", equalTo("embedded"))
+        .body("agencyOf", equalTo("Ehcache"))
+        .body("available", equalTo(true))
+        .body("secured", equalTo(false))
+        .body("sslEnabled", equalTo(false))
+        .body("needClientAuth", equalTo(false))
+        .body("licensed", equalTo(false))
+        .body("sampleHistorySize", equalTo(30))
+        .body("sampleIntervalSeconds", equalTo(1))
+        .body("enabled", equalTo(true))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION + INFO);
 
     // /info
     //[{"agentId":"embedded","agencyOf":"Ehcache","available":true,"secured":false,"sslEnabled":false,"needClientAuth":false,"licensed":false,"sampleHistorySize":30,"sampleIntervalSeconds":1,"enabled":true,"restAPIVersion":null}]
-    expect().contentType(ContentType.JSON)
-            .rootPath("get(0)")
-            .body("agentId", equalTo("embedded"))
-            .body("agencyOf", equalTo("Ehcache"))
-            .body("available", equalTo(true))
-            .body("secured", equalTo(false))
-            .body("sslEnabled", equalTo(false))
-            .body("needClientAuth", equalTo(false))
-            .body("licensed", equalTo(false))
-            .body("sampleHistorySize", equalTo(30))
-            .body("sampleIntervalSeconds", equalTo(1))
-            .body("enabled", equalTo(true))
-            .statusCode(200)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION  +";ids=embedded"+ INFO);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .rootPath("get(0)")
+        .body("agentId", equalTo("embedded"))
+        .body("agencyOf", equalTo("Ehcache"))
+        .body("available", equalTo(true))
+        .body("secured", equalTo(false))
+        .body("sslEnabled", equalTo(false))
+        .body("needClientAuth", equalTo(false))
+        .body("licensed", equalTo(false))
+        .body("sampleHistorySize", equalTo(30))
+        .body("sampleIntervalSeconds", equalTo(1))
+        .body("enabled", equalTo(true))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION  +";ids=embedded"+ INFO);
   }
 
   @Test
@@ -106,32 +114,33 @@ public class AgentsResourceServiceImplTest extends ResourceServiceImplITHelper {
     // we configure the second cache manager programmatically
     cacheManagerMaxBytes = getCacheManagerMaxBytes();
     // let's check the agent was edited correctly server side
-    expect().contentType(ContentType.JSON)
-            .rootPath("get(0)")
-            .body("agentId", equalTo("embedded"))
-            .body("agencyOf", equalTo("Ehcache"))
-            .body("rootRepresentables.cacheManagerNames", allOf(containsString("testCacheManagerProgrammatic"), containsString("testCacheManager")))
-            .statusCode(200)
-            .when().get(STANDALONE_BASE_URL + EXPECTED_RESOURCE_LOCATION);
+    givenStandalone()
+        .expect()
+        .contentType(ContentType.JSON)
+        .rootPath("get(0)")
+        .body("agentId", equalTo("embedded"))
+        .body("agencyOf", equalTo("Ehcache"))
+        .body("rootRepresentables.cacheManagerNames", allOf(containsString("testCacheManagerProgrammatic"), containsString("testCacheManager")))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION);
     cacheManagerMaxBytes.clearAll();
     cacheManagerMaxBytes.shutdown();
   }
 
-
   @Test
   public void getAgentsTest__clustered() throws Exception {
-
     // [{"version":null,"agentId":"embedded","agencyOf":"Ehcache","rootRepresentables":{"cacheManagerNames":"testCacheManager"}}]
-    expect().contentType(ContentType.JSON)
-            .body("get(0).agentId", Matchers.equalTo("embedded"))
-            .body("get(0).agencyOf", Matchers.equalTo("TSA"))
-            .body("get(0).rootRepresentables.urls", Matchers.equalTo("http://localhost:" + MANAGEMENT_PORT))
-            .body("get(1).agentId", anyOf(containsString("localhost_"), containsString("127.0.0.1_"), containsString("localhost.localdomain_"), containsString("localhost.home_")))
-            .body("get(1).agencyOf", Matchers.equalTo("Ehcache"))
-            .statusCode(200)
-            .when().get(CLUSTERED_BASE_URL + EXPECTED_RESOURCE_LOCATION);
-
-
+    givenClustered()
+        .expect()
+        .contentType(ContentType.JSON)
+        .body("get(0).agentId", Matchers.equalTo("embedded"))
+        .body("get(0).agencyOf", Matchers.equalTo("TSA"))
+        .body("get(0).rootRepresentables.urls", Matchers.equalTo("http://localhost:" + MANAGEMENT_PORT))
+        .body("get(1).agentId", anyOf(containsString("localhost_"), containsString("127.0.0.1_"), containsString("localhost.localdomain_"), containsString("localhost.home_")))
+        .body("get(1).agencyOf", Matchers.equalTo("Ehcache"))
+        .statusCode(200)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION);
   }
-
 }

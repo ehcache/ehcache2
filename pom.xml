@@ -22,14 +22,14 @@
   <properties>
     <slf4j.version>1.7.25</slf4j.version>
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
-    <gmaven-plugin.version>1.4</gmaven-plugin.version>
+    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <surefire.version>2.15</surefire.version>
     <terracotta-toolkit-api-internal.version>1.17</terracotta-toolkit-api-internal.version>
-    <management-core.version>2.1.13.2</management-core.version>
+    <management-core.version>2.1.13.3</management-core.version>
     <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.2.3</quartz.version>
-    <jetty.version>9.4.19.v20190610</jetty.version>
+    <jetty.version>9.4.28.v20200408</jetty.version>
     <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
@@ -304,38 +304,13 @@
         </plugin>
         <plugin>
           <groupId>org.codehaus.gmaven</groupId>
-          <artifactId>gmaven-plugin</artifactId>
-          <version>${gmaven-plugin.version}</version>
+          <artifactId>groovy-maven-plugin</artifactId>
+          <version>${groovy-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>rmic-maven-plugin</artifactId>
           <version>1.1</version>
-        </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>javacc-maven-plugin</artifactId>
-                    <versionRange>[2.6,)</versionRange>
-                    <goals>
-                      <goal>javacc</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

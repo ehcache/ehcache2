@@ -5,13 +5,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.internal.path.xml.NodeImpl;
-import com.jayway.restassured.path.xml.XmlPath;
+import io.restassured.http.ContentType;
+import io.restassured.internal.path.xml.NodeImpl;
+import io.restassured.path.xml.XmlPath;
 
 import java.io.UnsupportedEncodingException;
 
-import static com.jayway.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -25,8 +26,7 @@ import static org.hamcrest.Matchers.hasEntry;
  * @author Anthony Dahanne
  */
 public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHelper {
-
-  protected static final String EXPECTED_RESOURCE_LOCATION = "{baseUrl}/tc-management-api/agents{agentIds}/cacheManagers{cmIds}/caches{cacheIds}/configs";
+  protected static final String EXPECTED_RESOURCE_LOCATION = "/tc-management-api/agents{agentIds}/cacheManagers{cmIds}/caches{cacheIds}/configs";
 
   @BeforeClass
   public static void setUpCluster() throws Exception {
@@ -49,16 +49,18 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
     String cmsFilter = "";
     String cachesFilter = "";
 
-    String xml = expect()
-        .contentType(ContentType.JSON)
-        .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
-        .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
-        .body("[0].agentId", equalTo("embedded"))
-        .body("[1].agentId", equalTo("embedded"))
-        .statusCode(200)
-      .when()
-        .get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
-        .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
+    String xml =
+        givenStandalone()
+            .expect()
+            .contentType(ContentType.JSON)
+            .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
+            .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
+            .body("[0].agentId", equalTo("embedded"))
+            .body("[1].agentId", equalTo("embedded"))
+            .statusCode(200)
+            .when()
+            .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter)
+            .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
     NodeImpl cache = xmlPath.get("cache");
@@ -69,14 +71,15 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
     cmsFilter = ";names=testCacheManagerProgrammatic";
     cachesFilter = ";names=testCache2";
 
-    String filteredXml = expect()
+    String filteredXml = givenStandalone()
+        .expect()
         .contentType(ContentType.JSON)
         .body("[0].agentId", equalTo("embedded"))
         .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
         .body("[0].cacheName", equalTo("testCache2"))
         .statusCode(200)
-      .when()
-        .get(EXPECTED_RESOURCE_LOCATION, STANDALONE_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter)
         .jsonPath().get("[0].xml").toString();
 
     xmlPath = new XmlPath(filteredXml);
@@ -88,36 +91,37 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
   public void getCacheConfigsTest__clustered() throws Exception {
     String cmsFilter = "";
     String cachesFilter = "";
-      String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId + "," + cacheManagerMaxElementsAgentId;
+    String agentsFilter = ";ids=" + cacheManagerMaxBytesAgentId + "," + cacheManagerMaxElementsAgentId;
 
-    String xml = expect()
+    String xml = givenClustered()
+        .expect()
         .contentType(ContentType.JSON)
         .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.agentId", equalTo(cacheManagerMaxBytesAgentId))
         .body("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.cacheName", is("testCache2"))
         .body("find { it.cacheManagerName == 'testCacheManager' }.cacheName", is("testCache"))
         .body("find { it.cacheManagerName == 'testCacheManager' }.agentId", equalTo(cacheManagerMaxElementsAgentId))
         .statusCode(200)
-      .when()
-        .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter)
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
     NodeImpl cache = xmlPath.get("cache");
     assertEquals("testCache", cache.attributes().get("name"));
 
-
     //same thing but we specify only a given cacheManager
     cmsFilter = ";names=testCacheManagerProgrammatic";
     cachesFilter = ";names=testCache2";
 
-    String filteredXml = expect()
+    String filteredXml = givenClustered()
+        .expect()
         .contentType(ContentType.JSON)
         .body("[0].agentId", equalTo(cacheManagerMaxBytesAgentId))
         .body("[0].cacheManagerName", equalTo("testCacheManagerProgrammatic"))
         .body("[0].cacheName", equalTo("testCache2"))
         .statusCode(200)
-      .when()
-        .get(EXPECTED_RESOURCE_LOCATION, CLUSTERED_BASE_URL, agentsFilter, cmsFilter, cachesFilter)
+        .when()
+        .get(EXPECTED_RESOURCE_LOCATION, agentsFilter, cmsFilter, cachesFilter)
         .jsonPath().get("[0].xml").toString();
 
     xmlPath = new XmlPath(filteredXml);
@@ -131,5 +135,4 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
       cacheManagerMaxBytes.shutdown();
     }
   }
-
 }

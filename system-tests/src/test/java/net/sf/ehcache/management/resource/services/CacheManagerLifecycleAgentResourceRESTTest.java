@@ -30,7 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.terracotta.test.util.TestBaseUtil;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import com.tc.test.config.builder.ClusterManager;
 import com.tc.test.config.builder.OffHeap;
 import com.tc.test.config.builder.TcConfig;
@@ -38,7 +38,7 @@ import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
 import com.tc.util.concurrent.ThreadUtil;
 
-import static com.jayway.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.expect;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 
