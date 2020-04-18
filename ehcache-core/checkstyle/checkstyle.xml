@@ -21,11 +21,6 @@
     <property name="max" value="1400"/>
   </module>
 
-  <!-- Duplicate Code -->
-  <module name="StrictDuplicateCode">
-    <property name="min" value="30"/>
-  </module>
-
   <module name="FileTabCharacter"/>
 
   <!-- Miscellaneous -->
@@ -38,8 +33,6 @@
   </module>
 
   <module name="TreeWalker">
-    <property name="cacheFile" value="target/checkstyle.cache"/>
-
     <!-- javadoc -->
     <module name="JavadocType">
       <property name="scope" value="public"/>
