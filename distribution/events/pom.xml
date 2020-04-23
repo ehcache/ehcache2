@@ -24,6 +24,7 @@
     <jetty.version>9.4.28.v20200408</jetty.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
+    <skipSagFinder>true</skipSagFinder>
   </properties>
 
   <dependencies>
@@ -139,7 +140,7 @@
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
-        <groupId>org.mortbay.jetty</groupId>
+        <groupId>org.eclipse.jetty</groupId>
         <configuration>
           <webApp>
             <contextPath>${project.name}</contextPath>
@@ -231,7 +232,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>
@@ -252,7 +253,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>

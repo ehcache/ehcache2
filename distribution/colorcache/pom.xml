@@ -28,6 +28,7 @@
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
     <terracotta.version>4.3.8-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
+    <skipSagFinder>true</skipSagFinder>
     <jetty.version>9.4.28.v20200408</jetty.version>
   </properties>
 
@@ -115,7 +116,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>
@@ -136,7 +137,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <version>${jetty.version}</version>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
                 <systemProperty>
