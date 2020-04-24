@@ -46,7 +46,6 @@ public interface AuthoritativeTier extends Store {
      * This marks the entry as evictable again and updates relevant access stats
      *
      * @param element
-     * @return
      */
     void flush(Element element);
 
