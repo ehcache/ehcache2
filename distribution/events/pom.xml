@@ -1,70 +1,57 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.terracotta.forge</groupId>
     <artifactId>forge-parent</artifactId>
     <version>4.0</version>
     <relativePath/>
   </parent>
-  
   <groupId>net.sf.ehcache.examples</groupId>
   <artifactId>events</artifactId>
-  <version>2.10.8-SNAPSHOT</version>
+  <version>2.10.8.1.63</version>
   <name>events</name>
   <packaging>war</packaging>
   <description>Clustered Ehcache Terracotta as second level cache for Hibernate</description>
-
   <properties>
     <tc-maven-plugin.version>2.1.0</tc-maven-plugin.version>
-    <terracotta.version>4.3.8-SNAPSHOT</terracotta.version>
+    <terracotta.version>4.3.8.1.46</terracotta.version>
     <h2.version>1.1.116</h2.version>
     <jetty.version>9.4.28.v20200408</jetty.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
     <skipSagFinder>true</skipSagFinder>
   </properties>
-
   <dependencies>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.7.25</version>
     </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
     </dependency>
-
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.8.0.GA</version>
     </dependency>
-
     <dependency>
       <artifactId>h2</artifactId>
       <version>${h2.version}</version>
       <groupId>com.h2database</groupId>
     </dependency>
-
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
       <version>${project.version}</version>
-    </dependency>      
-
+    </dependency>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>terracotta-toolkit-runtime</artifactId>
       <version>${terracotta.version}</version>
     </dependency>
-
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
@@ -111,11 +98,8 @@
       <version>1.1</version>
     </dependency>
   </dependencies>
-
   <build>
-    <!-- we dont want the version to be part of the generated war file name -->
     <finalName>${project.name}</finalName>
-    
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -136,7 +120,6 @@
           </execution>
         </executions>
       </plugin>
-      
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
@@ -148,7 +131,6 @@
           <stopKey>STOP</stopKey>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>hibernate3-maven-plugin</artifactId>
         <version>2.1</version>
@@ -159,7 +141,7 @@
             <configurationfile>target/classes/hibernate.cfg.xml</configurationfile>
             <drop>true</drop>
             <export>true</export>
-           <outputfilename>schema.sql</outputfilename>
+            <outputfilename>schema.sql</outputfilename>
           </componentProperties>
         </configuration>
         <dependencies>
@@ -170,7 +152,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
       <plugin>
         <groupId>org.terracotta.maven.plugins</groupId>
         <artifactId>tc-maven-plugin</artifactId>
@@ -185,7 +166,6 @@
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>start-h2</id>
@@ -269,34 +249,32 @@
     </profile>
     <profile>
       <id>sag-deps</id>
-        <activation>
-          <property>
-            <name>sag-deps</name>
-            <value>true</value>
-          </property>
-        </activation>
-        <build>
-          <pluginManagement>
-            <plugins>
-              <plugin>
+      <activation>
+        <property>
+          <name>sag-deps</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
               <groupId>org.terracotta</groupId>
               <artifactId>maven-forge-plugin</artifactId>
               <dependencies>
                 <dependency>
                   <groupId>com.softwareag.ibit.tools.util</groupId>
                   <artifactId>finder</artifactId>
-                  <!-- Before bumping version - verify it still accepts exclusion files -->
                   <version>3.0</version>
                   <scope>compile</scope>
                 </dependency>
               </dependencies>
-              </plugin>
-            </plugins>
-          </pluginManagement>
-        </build>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
-  
   <repositories>
     <repository>
       <id>terracotta-snapshots</id>
@@ -307,7 +285,6 @@
       <url>http://www.terracotta.org/download/reflector/releases</url>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>terracotta-snapshots</id>
@@ -316,7 +293,6 @@
     <pluginRepository>
       <id>terracotta-releases</id>
       <url>http://www.terracotta.org/download/reflector/releases</url>
-    </pluginRepository>   
+    </pluginRepository>
   </pluginRepositories>
-
 </project>
