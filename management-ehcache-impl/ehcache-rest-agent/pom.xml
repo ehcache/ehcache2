@@ -19,7 +19,6 @@
     <private-classpath>rest-management-private-classpath</private-classpath>
     <private-class-suffix>.class_terracotta</private-class-suffix>
     <devmode>true</devmode>
-    <sag-deps>false</sag-deps>
   </properties>
 
   <dependencies>

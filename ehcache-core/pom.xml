@@ -152,24 +152,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.terracotta</groupId>
-        <artifactId>maven-forge-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>build-info</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>buildinfo</goal>
-            </goals>
-            <configuration>
-              <rootPath>${basedir}/..</rootPath>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-
 
       <plugin>
         <groupId>org.terracotta</groupId>
@@ -223,6 +205,16 @@
                <include>**/*ITCase.java</include>
               </includes>
               <argLine>${tests.supplemental.args} -Xms512m -Xmx512m</argLine>
+            </configuration>
+          </execution>
+          <execution>
+            <id>build-info</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>buildinfo</goal>
+            </goals>
+            <configuration>
+              <rootPath>${basedir}/..</rootPath>
             </configuration>
           </execution>
         </executions>

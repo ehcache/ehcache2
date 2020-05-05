@@ -13,10 +13,6 @@
   <name>management-ehcache-common</name>
   <description>A common library shared between different management-ehcache implementation versions</description>
 
-  <properties>
-    <sag-deps>false</sag-deps>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.terracotta</groupId>
