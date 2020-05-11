@@ -24,7 +24,7 @@
     <sizeof-agent.version>1.0.1</sizeof-agent.version>
     <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
-    <management-core.version>2.1.20</management-core.version>
+    <management-core.version>2.1.21</management-core.version>
     <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
     <statistics.version>1.0.5</statistics.version>
     <quartz.version>2.2.3</quartz.version>
