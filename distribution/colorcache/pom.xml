@@ -19,13 +19,13 @@
 
   <groupId>net.sf.ehcache.examples</groupId>
   <artifactId>colorcache</artifactId>
-  <version>2.10.9-SNAPSHOT</version>
+  <version>2.10.10-SNAPSHOT</version>
   <name>colorcache</name>
   <packaging>war</packaging>
   <description>Clustered Ehcache sample with Terracotta</description>
 
   <properties>
-    <terracotta.version>4.3.9-SNAPSHOT</terracotta.version>
+    <terracotta.version>4.3.10-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
     <jetty.version>9.4.30.v20200611</jetty.version>
   </properties>
