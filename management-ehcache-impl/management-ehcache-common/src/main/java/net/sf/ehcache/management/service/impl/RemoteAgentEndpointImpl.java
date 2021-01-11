@@ -56,8 +56,15 @@ public class RemoteAgentEndpointImpl extends AbstractRemoteAgentEndpointImpl imp
         @Override
         public Object invoke(String actionName, Object[] params, String[] signature) throws MBeanException, ReflectionException {
           try {
-            requestClusterUUID.set(clientUUID);
-            return super.invoke(actionName, params, signature);
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            try {
+              // because some code in Jersey is using the TCCL to resolve some classes
+              Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+              requestClusterUUID.set(clientUUID);
+              return super.invoke(actionName, params, signature);
+            } finally {
+              Thread.currentThread().setContextClassLoader(contextClassLoader);
+            }
           } finally {
             requestClusterUUID.remove();
           }
