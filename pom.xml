@@ -25,11 +25,11 @@
     <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <surefire.version>2.15</surefire.version>
     <terracotta-toolkit-api-internal.version>1.17</terracotta-toolkit-api-internal.version>
-    <management-core.version>2.1.13.10</management-core.version>
+    <management-core.version>2.1.13.11</management-core.version>
     <clustered-entity-management.version>0.10.0</clustered-entity-management.version>
     <statistics.version>1.0.2</statistics.version>
     <quartz.version>2.2.3</quartz.version>
-    <jetty.version>9.4.30.v20200611</jetty.version>
+    <jetty.version>9.4.35.v20201120</jetty.version>
     <hibernate-core.version>3.5.1-Final</hibernate-core.version>
   </properties>
 
