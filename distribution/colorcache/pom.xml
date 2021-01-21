@@ -27,7 +27,7 @@
   <properties>
     <terracotta.version>4.3.10-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
-    <jetty.version>9.4.30.v20200611</jetty.version>
+    <jetty.version>9.4.35.v20201120</jetty.version>
   </properties>
 
   <build>
