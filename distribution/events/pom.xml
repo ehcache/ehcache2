@@ -22,7 +22,7 @@
     <h2.version>1.1.116</h2.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
-    <jetty.version>9.4.35.v20201120</jetty.version>
+    <jetty.version>9.4.39.v20210325</jetty.version>
   </properties>
 
   <dependencies>
@@ -40,9 +40,9 @@
     </dependency>
 
     <dependency>
-      <groupId>javassist</groupId>
+      <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.8.0.GA</version>
+      <version>3.19.0-GA</version>
     </dependency>
 
     <dependency>
