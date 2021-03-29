@@ -27,7 +27,7 @@
   <properties>
     <terracotta.version>4.3.9-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
-    <jetty.version>9.4.38.v20210224</jetty.version>
+    <jetty.version>9.4.39.v20210325</jetty.version>
     <commons-io.version>2.8.0</commons-io.version>
   </properties>
 
