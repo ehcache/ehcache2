@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd">
+    <!-- Disable for test ehcache.xml. Should go to the same place. -->
+    <!-- <diskStore path="java.io.tmpdir"/> -->
+    <cache name="sampleCache1"
+           eternal="false"
+           timeToIdleSeconds="360"
+           timeToLiveSeconds="1000"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+</ehcache>
