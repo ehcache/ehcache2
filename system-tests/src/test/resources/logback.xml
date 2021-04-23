@@ -1,0 +1,19 @@
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS}{%8.8t} [%-5p,%c{0}] %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+
+  <logger name="org.terracotta.modules.ehcache.async" level="DEBUG"/>
+  <logger name="net.sf.ehcache.transaction" level="DEBUG"/>
+  <logger name="com.atomikos" level="DEBUG"/>
+  <logger name="bitronix" level="INFO"/>
+</configuration>
