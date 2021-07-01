@@ -6,6 +6,7 @@ package net.sf.ehcache.management.service.impl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,6 +58,9 @@ import org.terracotta.management.resource.services.AgentServiceV2;
 import org.terracotta.management.resource.services.LicenseService;
 import org.terracotta.management.resource.services.Utils;
 import org.terracotta.management.resource.services.events.EventServiceV2;
+
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.PathSegment;
 
 /**
  * A controller class registering new {@link CacheManager}.
@@ -368,6 +372,18 @@ public class DfltSamplerRepositoryServiceV2 implements SamplerRepositoryServiceV
 
     responseEntityV2.getEntities().addAll(entities);
     return responseEntityV2;
+  }
+
+  @Override
+  public ResponseEntityV2<CacheEntityV2> createCacheEntities(Set<String> cacheManagerNames,
+                                                             Set<String> cacheNames,
+                                                             Set<String> attributes,
+                                                             Set<String> agentIds,
+                                                             URI uri,
+                                                             List<PathSegment> pathSegmentList,
+                                                             MultivaluedMap<String, String> queryParameters) {
+    
+    return createCacheEntities(cacheManagerNames, cacheNames, attributes);
   }
 
   @Override
