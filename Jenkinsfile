@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-mavenBuildOSS(
+mavenBuildOSS.legacy4x(
     maven_params  : '-Pfullmode,check-short -Dsag-deps=true -DskipLocalStaging=true',
 )
 
