@@ -191,7 +191,12 @@
           </execution>
         </executions>            
       </plugin>
-      <!-- package lib folder, use this plugin to get proper SNAPSHOT file name --> 
+      <!-- look up slf4j.version -->
+      <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+      </plugin>
+      <!-- package lib folder, use this plugin to get proper SNAPSHOT file name -->
       <plugin>
         <groupId>org.terracotta</groupId>
         <artifactId>maven-forge-plugin</artifactId>

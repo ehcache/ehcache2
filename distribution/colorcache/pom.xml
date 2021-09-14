@@ -11,10 +11,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.terracotta.forge</groupId>
-    <artifactId>forge-parent</artifactId>
-    <version>4.17</version>
-    <relativePath/>
+    <groupId>net.sf.ehcache</groupId>
+    <artifactId>ehcache-root</artifactId>
+    <version>2.10.10-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>net.sf.ehcache.examples</groupId>
@@ -27,7 +27,6 @@
   <properties>
     <terracotta.version>4.3.10-SNAPSHOT</terracotta.version>
     <skipDeploy>true</skipDeploy>
-    <jetty.version>9.4.39.v20210325</jetty.version>
   </properties>
 
   <build>
@@ -55,7 +54,6 @@
 
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
         <groupId>org.eclipse.jetty</groupId>
         <configuration>
           <webApp>
@@ -95,13 +93,12 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.25</version>
     </dependency>
   </dependencies>
 
@@ -112,7 +109,6 @@
         <plugins>
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
-            <version>${jetty.version}</version>
             <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
@@ -133,7 +129,6 @@
         <plugins>
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
-            <version>${jetty.version}</version>
             <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>

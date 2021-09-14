@@ -44,40 +44,49 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>jta</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>sizeof-agent</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Test scope -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.btm</groupId>
       <artifactId>btm</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>net.sf.hibernate</groupId>
       <artifactId>hibernate</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -88,34 +97,48 @@
           <groupId>org.hamcrest</groupId>
         </exclusion>
       </exclusions>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>ehcache</artifactId>
+          <groupId>net.sf.ehcache</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.xsom</groupId>
       <artifactId>xsom</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.beanshell</groupId>
       <artifactId>bsh</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
