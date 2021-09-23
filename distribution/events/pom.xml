@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.terracotta.forge</groupId>
-    <artifactId>forge-parent</artifactId>
-    <version>4.17</version>
-    <relativePath/>
+    <groupId>net.sf.ehcache</groupId>
+    <artifactId>ehcache-root</artifactId>
+    <version>2.10.10-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
-  
+
   <groupId>net.sf.ehcache.examples</groupId>
   <artifactId>events</artifactId>
   <version>2.10.10-SNAPSHOT</version>
@@ -19,10 +19,8 @@
 
   <properties>
     <terracotta.version>4.3.10-SNAPSHOT</terracotta.version>
-    <h2.version>1.1.116</h2.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
-    <jetty.version>9.4.39.v20210325</jetty.version>
   </properties>
 
   <dependencies>
@@ -30,24 +28,20 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.25</version>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.19.0-GA</version>
     </dependency>
 
     <dependency>
       <artifactId>h2</artifactId>
-      <version>${h2.version}</version>
       <groupId>com.h2database</groupId>
     </dependency>
 
@@ -66,12 +60,11 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>3.3.1.GA</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -82,11 +75,11 @@
           <artifactId>jta</artifactId>
         </exclusion>
       </exclusions>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>gf-3122</groupId>
       <artifactId>gf.javax.transaction</artifactId>
-      <version>1.1</version>
     </dependency>
   </dependencies>
 
@@ -117,7 +110,6 @@
       
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
         <groupId>org.eclipse.jetty</groupId>
         <configuration>
           <webApp>
@@ -144,7 +136,6 @@
           <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -208,7 +199,6 @@
         <plugins>
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
-            <version>${jetty.version}</version>
             <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
@@ -229,7 +219,6 @@
         <plugins>
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
-            <version>${jetty.version}</version>
             <groupId>org.eclipse.jetty</groupId>
             <configuration>
               <systemProperties>
