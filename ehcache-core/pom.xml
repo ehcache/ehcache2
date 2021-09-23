@@ -223,22 +223,10 @@
             </configuration>
           </execution>
           <execution>
-            <id>integration-test-execution</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
+            <id>default-integration-test</id>
             <configuration>
               <skip>${checkshort}</skip> <!-- don't run these when check-short profile is on -->
               <failIfNoTests>false</failIfNoTests>
-              <excludes>
-                <exclude>**/*$*</exclude>
-              </excludes>
-              <includes>
-               <include>**/IT*.java</include>
-               <include>**/*IT.java</include>
-               <include>**/*ITCase.java</include>
-              </includes>
               <argLine>${tests.supplemental.args} -Xms512m -Xmx512m</argLine>
             </configuration>
           </execution>

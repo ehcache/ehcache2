@@ -32,6 +32,11 @@
     <property name="format" value="import org\.apache\.commons\.logging\.Log;"/>
   </module>
 
+  <!-- cannot be in TreeWalker any longer: https://github.com/checkstyle/eclipse-cs/issues/190 -->
+  <module name="LineLength">
+    <property name="max" value="150"/>
+  </module>
+
   <module name="TreeWalker">
     <!-- javadoc -->
     <module name="JavadocType">
@@ -70,9 +75,7 @@
     </module>
 
     <!-- Size Violations -->
-    <module name="LineLength">
-      <property name="max" value="150"/>
-    </module>
+
     <module name="MethodLength">
       <property name="max" value="200"/>
       <property name="tokens" value="METHOD_DEF"/>
