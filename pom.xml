@@ -13,7 +13,7 @@
   <groupId>net.sf.ehcache</groupId>
   <artifactId>ehcache-root</artifactId>
   <packaging>pom</packaging>
-  <version>2.10.10-SNAPSHOT</version>
+  <version>2.10.10</version>
 
   <scm>
     <developerConnection>scm:git:https://github.com/ehcache/ehcache2.git</developerConnection>
@@ -459,7 +459,7 @@
       <distributionManagement>
         <repository>
           <id>sonatype-nexus-staging</id>
-          <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
           <id>sonatype-nexus-snapshots</id>
