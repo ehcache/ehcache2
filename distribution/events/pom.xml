@@ -1,62 +1,49 @@
-<?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-root</artifactId>
-    <version>2.10.10-SNAPSHOT</version>
+    <version>2.10.10.3.1</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
-
   <groupId>net.sf.ehcache.examples</groupId>
   <artifactId>events</artifactId>
-  <version>2.10.10-SNAPSHOT</version>
+  <version>2.10.10.3.1</version>
   <name>events</name>
   <packaging>war</packaging>
   <description>Clustered Ehcache Terracotta as second level cache for Hibernate</description>
-
   <properties>
-    <terracotta.version>4.3.10-SNAPSHOT</terracotta.version>
+    <terracotta.version>4.3.10.3.4</terracotta.version>
     <exec-maven-plugin.version>1.1</exec-maven-plugin.version>
     <skipDeploy>true</skipDeploy>
   </properties>
-
   <dependencies>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
     </dependency>
-
     <dependency>
       <artifactId>h2</artifactId>
       <groupId>com.h2database</groupId>
     </dependency>
-
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
       <version>${project.version}</version>
-    </dependency>      
-
+    </dependency>
     <dependency>
       <groupId>org.terracotta</groupId>
       <artifactId>terracotta-toolkit-runtime</artifactId>
       <version>${terracotta.version}</version>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -82,11 +69,8 @@
       <artifactId>gf.javax.transaction</artifactId>
     </dependency>
   </dependencies>
-
   <build>
-    <!-- we dont want the version to be part of the generated war file name -->
     <finalName>${project.name}</finalName>
-    
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -107,7 +91,6 @@
           </execution>
         </executions>
       </plugin>
-      
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
         <groupId>org.eclipse.jetty</groupId>
@@ -118,7 +101,6 @@
           <stopKey>STOP</stopKey>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>hibernate3-maven-plugin</artifactId>
         <version>2.1</version>
@@ -129,7 +111,7 @@
             <configurationfile>target/classes/hibernate.cfg.xml</configurationfile>
             <drop>true</drop>
             <export>true</export>
-           <outputfilename>schema.sql</outputfilename>
+            <outputfilename>schema.sql</outputfilename>
           </componentProperties>
         </configuration>
         <dependencies>
@@ -140,7 +122,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
       <plugin>
         <groupId>org.terracotta.maven.plugins</groupId>
         <artifactId>tc-maven-plugin</artifactId>
@@ -154,7 +135,6 @@
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>start-h2</id>
@@ -235,5 +215,4 @@
       </build>
     </profile>
   </profiles>
-
 </project>
