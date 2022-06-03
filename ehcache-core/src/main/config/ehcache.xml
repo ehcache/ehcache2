@@ -41,6 +41,8 @@ to use at most the specified number of bytes of the local VM's offHeap memory.
 * maxBytesLocalDisk - optional setting that constraints the disk usage of the Caches managed by the CacheManager
 to use at most the specified number of bytes of the local disk.
 
+NOTE - Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead.
+
 These settings let you define "resource pools", caches will share. For instance setting maxBytesLocalHeap to 100M, will result in
 all caches sharing 100 MegaBytes of ram. The CacheManager will balance these 100 MB across all caches based on their respective usage
 patterns. You can allocate a precise amount of bytes to a particular cache by setting the appropriate maxBytes* attribute for that cache.
@@ -56,6 +58,8 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
          xsi:noNamespaceSchemaLocation="ehcache.xsd"
          monitoring="autodetect"
          dynamicConfig="true" maxBytesLocalHeap="400M" maxBytesLocalOffHeap="2G">
+
+NOTE - Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead.
 
 -->
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -491,6 +495,9 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
     If you specify a maxBytesLocalHeap, you can't use the maxEntriesLocalHeap attribute.
     maxEntriesLocalHeap can't be used if a CacheManager maxBytesLocalHeap is set.
 
+    NOTE - Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead.
+
+
     Elements put into the cache will be measured in size using net.sf.ehcache.pool.sizeof.SizeOf
     If you wish to ignore some part of the object graph, see net.sf.ehcache.pool.sizeof.annotations.IgnoreSizeOf
 
@@ -508,6 +515,8 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
 
     maxBytesLocalDisk:
     As for maxBytesLocalHeap, but specifies the limit of disk storage this cache will ever use.
+
+    NOTE - Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead.
 
     timeToIdleSeconds:
     Sets the time to idle for an element before it expires.
@@ -608,6 +617,8 @@ Here is an example of CacheManager level resource tuning, which will use up to 4
 
     Example of cache level resource tuning:
     <cache name="memBound" maxBytesLocalHeap="100m" maxBytesLocalOffHeap="4g" maxBytesLocalDisk="200g" />
+
+    NOTE - Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead.
 
 
     Cache Event Listeners

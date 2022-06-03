@@ -64,7 +64,10 @@ public final class Configuration {
     public static final int  DEFAULT_TRANSACTION_TIMEOUT = 15;
     /**
      * Default value for maxBytesLocalHeap when not explicitly set
+     *
+     * @deprecated Use {@link #DEFAULT_MAX_BYTES_OFF_HEAP } instead
      */
+    @Deprecated
     public static final long DEFAULT_MAX_BYTES_ON_HEAP   =  0;
     /**
      * Default value for maxBytesLocalOffHeap when not explicitly set
@@ -194,6 +197,7 @@ public final class Configuration {
     private final Map<String, CacheConfiguration> cacheConfigurations = new ConcurrentHashMap<String, CacheConfiguration>();
     private ConfigurationSource configurationSource;
     private boolean dynamicConfig = DEFAULT_DYNAMIC_CONFIG;
+
     private Long maxBytesLocalHeap;
     private String maxBytesLocalHeapInput;
     private Long maxBytesLocalOffHeap;
@@ -283,7 +287,10 @@ public final class Configuration {
      * Checks whether the user explicitly set the maxBytesOnHeap
      * @return true if set by user, false otherwise
      * @see #setMaxBytesLocalHeap(Long)
+     * 
+     * @deprecated Use {@link #isMaxBytesLocalOffHeapSet() } instead
      */
+    @Deprecated
     public boolean isMaxBytesLocalHeapSet() {
         return maxBytesLocalHeap != null;
     }
@@ -480,7 +487,10 @@ public final class Configuration {
     /**
      * Maximum amount of bytes the CacheManager will use on the heap
      * @return amount of bytes, 0 is unbound
+     *
+     * @deprecated Use {@link #getMaxBytesLocalOffHeap() } instead
      */
+    @Deprecated
     public long getMaxBytesLocalHeap() {
         return maxBytesLocalHeap == null ? DEFAULT_MAX_BYTES_ON_HEAP : maxBytesLocalHeap;
     }
@@ -489,7 +499,10 @@ public final class Configuration {
      * Sets maximum amount of bytes the CacheManager will use on the Disk Tier.
      * @param maxBytesOnHeap String representation of the size.
      * @see MemoryUnit#parseSizeInBytes(String)
+     * 
+     * @deprecated Use {@link #setMaxBytesLocalOffHeap(String) } instead
      */
+    @Deprecated
     public void setMaxBytesLocalHeap(final String maxBytesOnHeap) {
         assertArgumentNotNull("MaxBytesLocalHeap", maxBytesOnHeap);
         
@@ -511,7 +524,10 @@ public final class Configuration {
 
     /**
      * @return Original input for maxBytesLocalHeap
+     *
+     * @deprecated Use {@link #getMaxBytesLocalOffHeapAsString()} instead
      */
+    @Deprecated
     public String getMaxBytesLocalHeapAsString() {
         return maxBytesLocalHeapInput != null ? maxBytesLocalHeapInput : Long.toString(getMaxBytesLocalHeap());
     }
@@ -533,7 +549,10 @@ public final class Configuration {
     /**
      * Sets the maximum amount of bytes the cache manager being configured will use on the OnHeap tier
      * @param maxBytesOnHeap amount of bytes
+     *
+     * @deprecated Use {@link #setMaxBytesLocalOffHeap(Long)} } instead
      */
+    @Deprecated
     public void setMaxBytesLocalHeap(final Long maxBytesOnHeap) {
         final String prop = "maxBytesLocalHeap";
         verifyGreaterThanZero(maxBytesOnHeap, prop);
@@ -551,7 +570,10 @@ public final class Configuration {
      * @param memoryUnit the actual unit
      * @return this
      * @see #setMaxBytesLocalHeap(Long)
+     *
+     * @deprecated Use {@link #maxBytesLocalOffHeap(long, MemoryUnit) } instead
      */
+    @Deprecated
     public Configuration maxBytesLocalHeap(final long amount, final MemoryUnit memoryUnit) {
         setMaxBytesLocalHeap(memoryUnit.toBytes(amount));
         return this;

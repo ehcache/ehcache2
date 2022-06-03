@@ -1099,6 +1099,7 @@ public class Cache implements InternalEhcache, StoreListener {
             // on-heap pool configuration
             final Pool onHeapPool;
             if (configuration.getMaxBytesLocalHeap() > 0) {
+                LOG.warn("Size based cache capacity constraints at heap tier (maxBytesLocalHeap) is deprecated now and not expected to work from Java 17 onwards. Consider maxEntriesLocalHeap instead");
                 PoolEvictor evictor = new FromLargestCachePoolEvictor();
                 SizeOfEngine sizeOfEngine = cacheManager.createSizeOfEngine(this);
                 onHeapPool = new BoundedPool(configuration.getMaxBytesLocalHeap(), evictor, sizeOfEngine);

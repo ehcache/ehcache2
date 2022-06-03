@@ -185,7 +185,10 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Default maxBytesOnHeap value
+     *
+     * @deprecated Use {@link #DEFAULT_MAX_BYTES_OFF_HEAP } instead
      */
+    @Deprecated
     public static final long DEFAULT_MAX_BYTES_ON_HEAP  = 0;
 
     /**
@@ -1333,7 +1336,10 @@ public class CacheConfiguration implements Cloneable {
     /**
      * The maximum amount of bytes the cache should occupy on heap
      * @return value in bytes, 0 if none set
+     *
+     * @deprecated Use {@link #getMaxEntriesLocalHeap() } instead
      */
+    @Deprecated
     public long getMaxBytesLocalHeap() {
         return maxBytesLocalHeap == null ? DEFAULT_MAX_BYTES_ON_HEAP : maxBytesLocalHeap;
     }
@@ -1344,7 +1350,10 @@ public class CacheConfiguration implements Cloneable {
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesHeap String representation of the size, can be relative (in %)
+     *
+     * @deprecated Use {@link #setMaxEntriesLocalHeap(long)} instead
      */
+    @Deprecated
     public void setMaxBytesLocalHeap(final String maxBytesHeap) {
         assertArgumentNotNull("Cache maxBytesLocalHeap", maxBytesHeap);
         if (isPercentage(maxBytesHeap)) {
@@ -1361,7 +1370,9 @@ public class CacheConfiguration implements Cloneable {
      * This property can be modified dynamically while the cache is operating.
      *
      * @param maxBytesHeap max bytes in heap in bytes
+     * @deprecated Use {@link #setMaxEntriesLocalHeap(long)} instead
      */
+    @Deprecated
     public void setMaxBytesLocalHeap(final Long maxBytesHeap) {
         if (onHeapPoolUsage != null && getMaxEntriesLocalHeap() > 0) {
             throw new InvalidConfigurationException("MaxEntriesLocalHeap is not compatible with " +
@@ -1458,7 +1469,10 @@ public class CacheConfiguration implements Cloneable {
     /**
      * Getter for maximum bytes on heap expressed as a percentage
      * @return percentage (between 0 and 100)
+     *
+     * @deprecated Use {@link #setMaxEntriesLocalHeap(long)} instead
      */
+    @Deprecated
     public Integer getMaxBytesLocalHeapPercentage() {
         return maxBytesLocalHeapPercentage;
     }
@@ -1466,7 +1480,10 @@ public class CacheConfiguration implements Cloneable {
     /**
      * The string form of the maximum amount of bytes the cache should occupy on heap
      * @return value as string in bytes
+     *
+     * @deprecated Use {@link #getMaxEntriesLocalHeap() } instead
      */
+    @Deprecated
     public String getMaxBytesLocalHeapAsString() {
         return maxBytesLocalHeapInput != null ? maxBytesLocalHeapInput : Long.toString(getMaxBytesLocalHeap());
     }
@@ -1657,7 +1674,10 @@ public class CacheConfiguration implements Cloneable {
      * Checks whether the user explicitly set the maxBytesOnHeapPercentage
      * @return true if set by user, false otherwise
      * @see #setMaxBytesLocalHeap(String)
+     *
+     * @deprecated Use {@link #maxEntriesLocalHeap } instead
      */
+    @Deprecated
     public boolean isMaxBytesLocalHeapPercentageSet() {
         return maxBytesLocalHeapPercentage != null;
     }
@@ -3005,7 +3025,10 @@ public class CacheConfiguration implements Cloneable {
 
     /**
      * Intended for internal use only, and subject to change.
+     *
+     * @deprecated Use {@link #internalSetMemCapacity(int) } instead
      */
+    @Deprecated
     public void internalSetMemCapacityInBytes(long capacity) {
         this.maxBytesLocalHeap = capacity;
     }
