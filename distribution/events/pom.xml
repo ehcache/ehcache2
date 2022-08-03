@@ -111,6 +111,7 @@
       <plugin>
         <artifactId>jetty-maven-plugin</artifactId>
         <groupId>org.eclipse.jetty</groupId>
+        <version>${jetty.version}</version>
         <configuration>
           <webApp>
             <contextPath>${project.name}</contextPath>
@@ -201,6 +202,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <groupId>org.eclipse.jetty</groupId>
+            <version>${jetty.version}</version>
             <configuration>
               <systemProperties>
                 <systemProperty>
@@ -221,6 +223,7 @@
           <plugin>
             <artifactId>jetty-maven-plugin</artifactId>
             <groupId>org.eclipse.jetty</groupId>
+            <version>${jetty.version}</version>
             <configuration>
               <systemProperties>
                 <systemProperty>

@@ -16,5 +16,6 @@
 
 mavenBuildOSS.legacy4x(
     maven_params  : '-Pfullmode,check-short -Dsag-deps=true -DskipLocalStaging=true',
+    jdk: 11
 )
 

@@ -216,7 +216,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.1.1</version>
+            <version>3.4.0</version>
             <executions>
               <execution>
                 <id>create-javadoc</id>
@@ -227,11 +227,17 @@
                 <configuration>
                   <additionalDependencies>
                     <additionalDependency>
+                      <groupId>javax.servlet</groupId>
+                      <artifactId>javax.servlet-api</artifactId>
+                      <version>4.0.1</version>
+                    </additionalDependency>
+                    <additionalDependency>
                       <groupId>org.hibernate</groupId>
                       <artifactId>hibernate-core</artifactId>
                       <version>${hibernate-core.version}</version>
                     </additionalDependency>
                   </additionalDependencies>
+                  <detectJavaApiLink>false</detectJavaApiLink>
                   <doclint>none</doclint>
                   <skip>${skipJavadoc}</skip>
                   <author>true</author>
@@ -364,7 +370,7 @@
                 </Import-Package>
                 <Export-Package>net.sf.ehcache.*</Export-Package>
                 <Private-Package>org.terracotta.*</Private-Package>
-                <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+                <Bundle-RequiredExecutionEnvironment>JavaSE-11</Bundle-RequiredExecutionEnvironment>
               </instructions>
               <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
             </configuration>

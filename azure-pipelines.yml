@@ -26,11 +26,7 @@ resources:
 jobs:
   - template: build-templates/maven-common.yml@templates
     parameters:
-      jobName: Linux_Java_8
-      options: -B -Djava.test.version=1.8 -Djava.test.vendor=zulu -Pfullmode,check-short -Dsag-deps=true 
-      mavenGoals: 'clean verify'
-  - template: build-templates/maven-common.yml@templates
-    parameters:
-      jobName: Windows_Java_8
-      options: -B -Djava.test.version=1.8 -Djava.test.vendor=zulu -Pfullmode,check-short -Dsag-deps=true 
+      jobName: Linux_Java_11
+      jdkVersion: '1.11'
+      options: -B -Djava.test.vendor=zulu -Pfullmode,check-short -Dsag-deps=true 
       mavenGoals: 'clean verify'

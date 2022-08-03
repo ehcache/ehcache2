@@ -458,7 +458,7 @@ public class ElementTest {
         try {
             e.setId(0);
             fail();
-        } catch (IllegalArgumentException _) {
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }
