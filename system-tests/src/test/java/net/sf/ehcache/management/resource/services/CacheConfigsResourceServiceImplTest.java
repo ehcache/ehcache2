@@ -16,13 +16,14 @@
  */
 package net.sf.ehcache.management.resource.services;
 
+import io.restassured.path.xml.element.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.restassured.http.ContentType;
-import io.restassured.internal.path.xml.NodeImpl;
+import io.restassured.internal.path.xml.NodeBase;
 import io.restassured.path.xml.XmlPath;
 
 import java.io.UnsupportedEncodingException;
@@ -79,7 +80,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cache = xmlPath.get("cache");
+    Node cache = xmlPath.getNode("cache");
     assertEquals("testCache", cache.attributes().get("name"));
 
     //same thing but we specify only a given cacheManager
@@ -122,7 +123,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cache = xmlPath.get("cache");
+    Node cache = xmlPath.getNode("cache");
     assertEquals("testCache", cache.attributes().get("name"));
 
     //same thing but we specify only a given cacheManager
