@@ -591,9 +591,7 @@ public class MemoryStore extends AbstractStore implements TierableStore, Poolabl
 
         // If the element is expired, remove
         if (element.isExpired()) {
-            remove(element.getObjectKey());
-            notifyExpiry(element);
-            return true;
+            return expire(element);
         }
 
         if (isPinningEnabled(element)) {
@@ -854,6 +852,34 @@ public class MemoryStore extends AbstractStore implements TierableStore, Poolabl
             cacheEventNotificationService.notifyElementEvicted(remove, false);
         }
         return remove != null;
+    }
+
+    /**
+     * Evicts the element from the store
+     * @param element the element to be evicted
+     * @return true if succeeded, false otherwise
+     */
+    protected boolean expire(final Element element) {
+        final ReentrantReadWriteLock.WriteLock lock = map.lockFor(element.getObjectKey()).writeLock();
+        if (lock.tryLock()) {
+            Element remove;
+            try {
+                remove = remove(element.getObjectKey());
+            } finally {
+                lock.unlock();
+            }
+
+            if (remove != null) {
+                if (remove.isExpired()) {
+                    notifyExpiry(remove);
+                } else {
+                    notifyDirectEviction(remove);
+                }
+            }
+            return remove != null;
+        } else {
+            return false;
+        }
     }
 
     /**
