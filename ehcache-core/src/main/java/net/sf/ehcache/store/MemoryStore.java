@@ -305,10 +305,11 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
         }
         long delta = poolAccessor.add(element.getObjectKey(), element.getObjectValue(), map.storedObject(element), storePinned);
         if (delta > -1) {
+            Element old;
             final ReentrantReadWriteLock lock = map.lockFor(element.getObjectKey());
             lock.writeLock().lock();
             try {
-                Element old = map.put(element.getObjectKey(), element, delta);
+                old = map.put(element.getObjectKey(), element, delta);
                 if (writerManager != null) {
                     try {
                         writerManager.put(element);
@@ -316,11 +317,11 @@ public class MemoryStore extends AbstractStore implements CacheConfigurationList
                         throw new StoreUpdateException(e, old != null);
                     }
                 }
-                checkCapacity(element);
-                return old == null;
             } finally {
                 lock.writeLock().unlock();
             }
+            checkCapacity(element);
+            return old == null;
         } else {
             notifyDirectEviction(element);
             return true;
