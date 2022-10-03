@@ -4,7 +4,7 @@ Ehcache 3.0 was released April 2016.
 
 As of October 2022, this project will receive reduced attention, excepting for important/critical fixes.
 
-After October 2023, we will no longer maintain Ehcache 2.x.
+After September 2023, we will no longer maintain Ehcache 2.x.
 
 
 # To compile:
