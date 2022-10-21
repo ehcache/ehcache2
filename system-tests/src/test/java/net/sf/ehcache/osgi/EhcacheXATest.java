@@ -16,22 +16,11 @@
  */
 package net.sf.ehcache.osgi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
-import static org.terracotta.test.OsgiUtil.commonOptions;
-import static org.terracotta.test.OsgiUtil.getMavenBundle;
-
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup;
 import net.sf.ehcache.transaction.manager.TransactionManagerLookup;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -42,9 +31,17 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.osgi.framework.Constants;
-import org.terracotta.test.OsgiUtil;
 
 import javax.transaction.TransactionManager;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
 
 /**
  * Simple XA strict Ehcache test
@@ -57,17 +54,16 @@ public class EhcacheXATest {
 
   @Configuration
   public Option[] configBitronix() {
-    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
+    return options(commonOptions(),
         wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
             .exports("javax.transaction;version=1.1"),
         wrappedBundle(maven("org.codehaus.btm", "btm").versionAsInProject()).exports("bitronix.tm.*"),
-        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-        commonOptions());
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"));
   }
 
   @Configuration
   public Option[] configAtomikos() {
-    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
+    return options(commonOptions(),
         wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
             .exports("javax.transaction;version=1.1"),
         wrappedBundle(maven("com.atomikos", "transactions-jta").versionAsInProject())
@@ -79,8 +75,8 @@ public class EhcacheXATest {
             .imports("!javax.servlet.*,*").exports("*"),
         wrappedBundle(maven("com.atomikos", "atomikos-util").versionAsInProject())
             .imports("!javax.servlet.*,com.atomikos.icatch.standalone,*").exports("*"),
-        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-        commonOptions());
+        mavenBundle("org.apache.log4j", "org.apache.log4j").version("1.2.13.v200706111418"),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"));
   }
 
   @ProbeBuilder

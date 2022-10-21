@@ -115,7 +115,7 @@ public class DaemonThreadsWriteBehindTest extends AbstractCacheTestBase {
       System.out.println("\n\n" + listIntC.size() + " Start Printing Stack Trace\n--------------------");
       for (Long threadId : listIntC) {
         ThreadInfo tinfo = tbean.getThreadInfo(threadId);
-        if (knownThreads.contains(tinfo.getThreadName().trim())) {
+        if (tinfo == null || knownThreads.contains(tinfo.getThreadName().trim())) {
           ++skipThreadCount;
           continue;
         }

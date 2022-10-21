@@ -18,18 +18,15 @@ package org.terracotta.ehcache.tests.container;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Layout;
-
-import org.apache.commons.logging.LogFactory;
-import org.terracotta.toolkit.Toolkit;
-
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.tc.test.AppServerInfo;
 import com.tc.test.server.appserver.deployment.AbstractStandaloneTwoServerDeploymentTest;
 import com.tc.test.server.appserver.deployment.DeploymentBuilder;
 import com.tc.test.server.appserver.deployment.WebApplicationServer;
-
 import junit.framework.Test;
+import org.apache.commons.logging.LogFactory;
+import org.terracotta.toolkit.Toolkit;
 
 public class BasicContainerTest extends AbstractStandaloneTwoServerDeploymentTest {
 

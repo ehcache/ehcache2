@@ -16,18 +16,9 @@
  */
 package net.sf.ehcache.osgi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.terracotta.test.OsgiUtil.commonOptions;
-import static org.terracotta.test.OsgiUtil.getMavenBundle;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -35,6 +26,8 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terracotta.context.ContextManager;
 
 import java.io.BufferedReader;
@@ -42,6 +35,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
 
 /**
  * Test a simple BigMemory usage with BM Go license key. The product name should include "BigMemory" and not "Ehcache"
@@ -52,13 +52,13 @@ import java.net.URL;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class SimpleOsgiTest {
+  private static final Logger LOG = LoggerFactory.getLogger(SimpleOsgiTest.class);
 
   @Configuration
   public Option[] config() {
-    return options(bootDelegationPackages("sun.*,jdk.*"),
+    return options(commonOptions(),
         // need this for REST agent test
-        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-        commonOptions());
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"));
   }
 
   @Test

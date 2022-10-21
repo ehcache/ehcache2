@@ -28,7 +28,6 @@
     <kit.name>${project.artifactId}-${project.version}-distribution</kit.name>
     <root.dir>${project.build.directory}/${kit.name}</root.dir>
     <terracotta.kit.path>${project.build.directory}/tmp/terracotta</terracotta.kit.path>
-    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <skipJavadoc>false</skipJavadoc>
     <devmode>true</devmode>
   </properties>
@@ -216,7 +215,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.4.0</version>
             <executions>
               <execution>
                 <id>create-javadoc</id>
@@ -319,7 +317,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.7</version>
             <executions>
               <execution>
                 <id>unpack-jar-for-bundling</id>
@@ -338,11 +335,12 @@
           <plugin>
             <groupId>org.apache.felix</groupId>
             <artifactId>maven-bundle-plugin</artifactId>
-            <version>4.2.1</version>
+            <version>5.1.8</version>
             <configuration>
               <manifestLocation>${project.build.directory}</manifestLocation>
               <instructions>
-                <Import-Package>bitronix.tm;resolution:=optional,
+                <Import-Package>
+                  bitronix.tm;resolution:=optional,
                   bitronix.tm.resource.ehcache;resolution:=optional,
                   com.atomikos.*;resolution:=optional,
                   com.atomikos.icatch.jta;resolution:=optional,
@@ -366,7 +364,8 @@
                   org.jboss.vfs;resolution:=optional,
                   sun.management.*;resolution:=optional,
                   !com.google.apphosting.api,
-                  !sun.misc,*
+                  !sun.misc,
+                  *
                 </Import-Package>
                 <Export-Package>net.sf.ehcache.*</Export-Package>
                 <Private-Package>org.terracotta.*</Private-Package>

@@ -16,15 +16,9 @@
  */
 package org.terracotta.ehcache.tests.container.hibernate;
 
+import antlr.Tool;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Layout;
-import net.sf.ehcache.util.DerbyWrapper;
-
-import org.apache.commons.logging.LogFactory;
-
-import org.terracotta.ehcache.tests.container.ContainerTestSetup;
-import org.terracotta.ehcache.tests.container.hibernate.nontransactional.HibernateUtil;
-
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.tc.test.AppServerInfo;
@@ -33,8 +27,22 @@ import com.tc.test.server.appserver.deployment.AbstractStandaloneTwoServerDeploy
 import com.tc.test.server.appserver.deployment.DeploymentBuilder;
 import com.tc.test.server.appserver.deployment.WebApplicationServer;
 import com.tc.util.PortChooser;
-import com.tc.util.runtime.Vm;
+import javassist.util.proxy.ProxyFactory;
+import net.sf.ehcache.util.DerbyWrapper;
+import org.apache.commons.collections.LRUMap;
+import org.apache.commons.logging.LogFactory;
+import org.apache.derby.client.ClientDataSourceFactory;
+import org.apache.derby.drda.NetServlet;
+import org.apache.derby.iapi.tools.ToolUtils;
+import org.apache.derby.impl.db.BasicDatabase;
+import org.dom4j.Node;
+import org.hibernate.SessionFactory;
+import org.hibernate.annotations.common.reflection.MetadataProvider;
+import org.terracotta.ehcache.tests.container.ContainerTestSetup;
+import org.terracotta.ehcache.tests.container.hibernate.nontransactional.HibernateUtil;
 
+import javax.persistence.EntityListeners;
+import javax.transaction.Synchronization;
 import java.io.File;
 
 public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneTwoServerDeploymentTest {
@@ -69,16 +77,21 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
     protected final void configureWar(DeploymentBuilder builder) {
       super.configureWar(builder);
       builder.addDirectoryOrJARContainingClass(com.tc.test.TCTestCase.class); // hibernate*.jar
-      builder.addDirectoryOrJARContainingClass(org.hibernate.SessionFactory.class); // hibernate*.jar
-      builder.addDirectoryOrJARContainingClass(org.apache.commons.collections.LRUMap.class);
-      builder.addDirectoryOrJARContainingClass(org.apache.derby.jdbc.ClientDriver.class); // derby*.jar
-      builder.addDirectoryOrJARContainingClass(org.dom4j.Node.class); // domj4*.jar
-      builder.addDirectoryOrJARContainingClass(antlr.Tool.class); // antlr*.jar
-      builder.addDirectoryOrJARContainingClass(javassist.util.proxy.ProxyFactory.class); // java-assist
+      builder.addDirectoryOrJARContainingClass(SessionFactory.class); // hibernate*.jar
+      builder.addDirectoryOrJARContainingClass(MetadataProvider.class); // hibernate*.jar
+      builder.addDirectoryOrJARContainingClass(EntityListeners.class); // JPA
+      builder.addDirectoryOrJARContainingClass(LRUMap.class);
+      builder.addDirectoryOrJARContainingClass(BasicDatabase.class); // derby
+      builder.addDirectoryOrJARContainingClass(ToolUtils.class); // derbytools
+      builder.addDirectoryOrJARContainingClass(NetServlet.class); // derbynet
+      builder.addDirectoryOrJARContainingClass(ClientDataSourceFactory.class); // derbyclient
+      builder.addDirectoryOrJARContainingClass(Node.class); // domj4*.jar
+      builder.addDirectoryOrJARContainingClass(Tool.class); // antlr*.jar
+      builder.addDirectoryOrJARContainingClass(ProxyFactory.class); // java-assist
 
       // Tomcat is not a full J2EE application-server - we have to manually add the JTA classes to its classpath.
       if (appServerInfo().getId() == AppServerInfo.TOMCAT || appServerInfo().getId() == AppServerInfo.JETTY) {
-        builder.addDirectoryOrJARContainingClass(javax.transaction.Synchronization.class); // jta
+        builder.addDirectoryOrJARContainingClass(Synchronization.class); // jta
       }
 
       if (appServerInfo().getId() != AppServerInfo.JBOSS) {

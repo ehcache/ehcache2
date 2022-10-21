@@ -260,12 +260,6 @@ public class CacheConfigurationTest {
     public void testWarnTieredSizing() {
         final AtomicReference<String> ref = new AtomicReference<String>();
 
-        try {
-            Class.forName("org.slf4j.impl.JDK14LoggerFactory");
-        } catch (ClassNotFoundException e) {
-            fail("Could not load org.slf4j.impl.JDK14LoggerFactory, required for test to work. Is slf4j-jdk14 in test dependencies?");
-        }
-
         LogManager logManager = LogManager.getLogManager();
         Logger logger = logManager.getLogger(CacheConfiguration.class.getName());
         assumeNotNull(logger);

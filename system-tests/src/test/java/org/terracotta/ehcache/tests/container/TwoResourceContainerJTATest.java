@@ -22,7 +22,6 @@ import com.tc.test.AppServerInfo;
 import com.tc.test.server.appserver.deployment.AbstractStandaloneTwoServerDeploymentTest;
 import com.tc.test.server.appserver.deployment.DeploymentBuilder;
 import com.tc.test.server.appserver.deployment.WebApplicationServer;
-
 import junit.framework.Test;
 
 public class TwoResourceContainerJTATest extends AbstractStandaloneTwoServerDeploymentTest {

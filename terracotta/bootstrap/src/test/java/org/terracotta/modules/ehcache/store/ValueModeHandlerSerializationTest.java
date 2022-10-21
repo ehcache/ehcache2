@@ -3,21 +3,22 @@
  */
 package org.terracotta.modules.ehcache.store;
 
+import junit.framework.Assert;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.ElementData;
 import net.sf.ehcache.EternalElementData;
 import net.sf.ehcache.NonEternalElementData;
-
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
-import junit.framework.Assert;
 
 public class ValueModeHandlerSerializationTest {
 
@@ -26,6 +27,9 @@ public class ValueModeHandlerSerializationTest {
   private ValueModeHandlerSerialization valueModeHandler;
   private Element                       eternalElement;
   private Element                       nonEternalElement;
+
+  @Rule
+  public final TemporaryFolder tempFolder = new TemporaryFolder();
 
   @Before
   public void setUp() {
@@ -77,11 +81,12 @@ public class ValueModeHandlerSerializationTest {
 
   private void checkSerialization(Element element) throws Exception {
     // Create ElementData and Serialize it
+    File tmpFile = tempFolder.newFile("eternalElement");
     ElementData eternalElementData = valueModeHandler.createElementData(element);
-    serialize("eternalElement", eternalElementData);
+    serialize(tmpFile, eternalElementData);
 
-    // Deserialize elemenData and create new Element
-    Serializable deserialized = deserialize("eternalElement");
+    // Deserialize elementData and create new Element
+    Serializable deserialized = deserialize(tmpFile);
     Element deserializedElement = valueModeHandler.createElement(KEY, deserialized);
 
     // Assert deserialized Element is equal to original Element
@@ -101,16 +106,16 @@ public class ValueModeHandlerSerializationTest {
     Assert.assertEquals((String) element1.getObjectValue(), (String) element2.getObjectValue());
   }
 
-  private void serialize(String fileName, ElementData elementData) throws Exception {
-    FileOutputStream fos = new FileOutputStream(fileName);
+  private void serialize(File file, ElementData elementData) throws Exception {
+    FileOutputStream fos = new FileOutputStream(file);
     ObjectOutputStream oos = new ObjectOutputStream(fos);
     oos.writeObject(elementData);
     oos.flush();
     oos.close();
   }
 
-  private Serializable deserialize(String fileName) throws Exception {
-    FileInputStream fis = new FileInputStream(fileName);
+  private Serializable deserialize(File file) throws Exception {
+    FileInputStream fis = new FileInputStream(file);
     ObjectInputStream ois = new ObjectInputStream(fis);
     return (Serializable) ois.readObject();
   }
