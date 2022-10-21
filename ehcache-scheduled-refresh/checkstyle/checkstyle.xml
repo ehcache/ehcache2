@@ -48,7 +48,8 @@
             <property name="authorFormat" value=".+"/>
         </module>
         <module name="JavadocMethod">
-            <property name="scope" value="package"/>
+            <!--property name="scope" value="package"/-->
+            <property name="accessModifiers" value="package"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>

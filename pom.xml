@@ -5,7 +5,7 @@
   <parent>
     <groupId>net.sf.ehcache</groupId>
     <artifactId>ehcache-parent</artifactId>
-    <version>4.0</version>
+    <version>5.0</version>
     <relativePath/>
   </parent>
 
@@ -22,13 +22,14 @@
   <properties>
     <jetty.version>10.0.11</jetty.version>
     <thirdparty-bom.version>4.4.0-SNAPSHOT</thirdparty-bom.version>
-    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
     <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
     <management-core.version>2.1.35-SNAPSHOT</management-core.version>
     <clustered-entity-management.version>0.11.1</clustered-entity-management.version>
     <statistics.version>1.0.5</statistics.version>
     <quartz.version>2.2.3</quartz.version>
     <skipJavadoc>false</skipJavadoc>
+    <groovy.version>4.0.5</groovy.version>
+    <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
 
     <!-- only used for plugins.  Keep in sync with terracotta-third-party-bom-4.x -->
     <!-- hardcoded because https://issues.apache.org/jira/browse/MNG-5588 -->
@@ -96,7 +97,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.3.0</version>
           <configuration>
             <archive>
               <manifest>
@@ -108,7 +109,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.4.1</version>
           <configuration>
             <skip>${skipJavadoc}</skip>
             <source>8</source>
@@ -120,22 +121,22 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.7</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.3</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.terracotta</groupId>
@@ -143,17 +144,18 @@
           <version>${maven-forge-plugin.version}</version>
           <configuration>
             <argLine>-Djava.net.preferIPv4Stack=true</argLine>
+            <trimStackTrace>false</trimStackTrace>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>2.3</version>
+          <version>3.4.0</version>
           <dependencies>
             <dependency>
               <groupId>org.terracotta.maven.plugins</groupId>
               <artifactId>terracotta-shader</artifactId>
-              <version>1.2</version>
+              <version>2.0</version>
             </dependency>
           </dependencies>          
         </plugin>
@@ -207,14 +209,20 @@
             <dependency>
               <groupId>org.apache.groovy</groupId>
               <artifactId>groovy-all</artifactId>
-              <version>4.0.4</version>
+              <version>${groovy.version}</version>
               <scope>runtime</scope>
               <type>pom</type>
             </dependency>
           </dependencies>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.4.2</version>
+        </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.terracotta</groupId>
@@ -263,7 +271,6 @@
           <plugin>
             <groupId>org.codehaus.gmavenplus</groupId>
             <artifactId>gmavenplus-plugin</artifactId>
-            <version>1.13.1</version>
             <executions>
               <execution>
                 <phase>process-test-classes</phase>
@@ -289,7 +296,7 @@
               <dependency>
                 <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
-                <version>4.0.4</version>
+                <version>${groovy.version}</version>
                 <scope>runtime</scope>
                 <type>pom</type>
               </dependency>
@@ -313,6 +320,7 @@
                   <value>true</value>
                 </property>
               </systemProperties>
+              <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
         </plugins>
@@ -327,7 +335,7 @@
             <plugin>
               <groupId>org.sonatype.plugins</groupId>
               <artifactId>nexus-staging-maven-plugin</artifactId>
-              <version>1.6.1</version>
+              <version>1.6.13</version>
               <extensions>true</extensions>
               <configuration>
                 <!-- The Base URL of Nexus instance where we want to stage -->

@@ -34,6 +34,8 @@
     <property name="net.sf.ehcache.configurationResourceName">/net/sf/ehcache/osgi/ehcache-hibernate.xml</property>
     <!-- Echo all executed SQL to stdout -->
     <property name="show_sql">false</property>
+    <!-- If this isn't set, Hibernate will use whatever validator it finds on classpath -->
+    <property name="javax.persistence.validation.mode">none</property>
 
     <mapping resource="/net/sf/ehcache/osgi/Event.hbm.xml" />
     <mapping resource="/net/sf/ehcache/osgi/Person.hbm.xml" />

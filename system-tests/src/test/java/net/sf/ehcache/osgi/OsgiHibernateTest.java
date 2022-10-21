@@ -16,25 +16,9 @@
  */
 package net.sf.ehcache.osgi;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackages;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
-import static org.terracotta.test.OsgiUtil.commonOptions;
-import static org.terracotta.test.OsgiUtil.getMavenBundle;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Status;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,7 +30,6 @@ import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -64,15 +47,27 @@ import org.terracotta.ehcache.tests.container.hibernate.domain.Item;
 import org.terracotta.ehcache.tests.container.hibernate.domain.Person;
 import org.terracotta.ehcache.tests.container.hibernate.domain.PhoneNumber;
 import org.terracotta.ehcache.tests.container.hibernate.domain.VersionedItem;
-import org.terracotta.test.OsgiUtil;
 
+import javax.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemProperty;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.terracotta.test.OsgiUtil.commonOptions;
+import static org.terracotta.test.OsgiUtil.getMavenBundle;
 
 /**
  * @author Chris Dennis
@@ -80,7 +75,6 @@ import javax.inject.Inject;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-@Ignore
 public class OsgiHibernateTest {
 
   private SessionFactory  sessionFactory;
@@ -103,13 +97,15 @@ public class OsgiHibernateTest {
 
   @org.ops4j.pax.exam.Configuration
   public Option[] config() {
-    return options(bootDelegationPackages("sun.*,jdk.*,javax.naming,javax.naming.spi,javax.naming.event,javax.management"),
-        commonOptions(),
-        wrappedBundle(maven("javax.transaction", "jta").versionAsInProject())
-            .exports("javax.transaction;version=1.1"),
-        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+    return options(commonOptions(),
+        wrappedBundle(maven("javax.transaction", "jta").versionAsInProject()).exports("javax.transaction;version=1.1"),
+        wrappedBundle(maven("org.javassist", "javassist").versionAsInProject()),
         getMavenBundle("net.sf.ehcache.test", "hibernate-ehcache-ee-bundle", "hibernate-ehcache-bundle").noStart(),
-        wrappedBundle(maven("org.apache.derby", "derby").versionAsInProject()),
+        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache").versionAsInProject(),
+        mavenBundle("org.apache.derby", "derby").versionAsInProject(),
+        mavenBundle("org.apache.derby", "derbyclient").versionAsInProject(),
+        wrappedBundle(maven("org.apache.derby", "derbynet").versionAsInProject()),
+        wrappedBundle(maven("org.apache.derby", "derbytools").versionAsInProject()),
         systemProperty("derby.system.home").value("derby"));
   }
 

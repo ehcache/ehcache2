@@ -71,11 +71,12 @@ public class OsgiScheduledRefreshTest {
 
   @Configuration
   public Option[] config() {
-    return options(bootDelegationPackages("sun.*,jdk.*"),
-        getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
-        getMavenBundle("org.quartz-scheduler", "quartz"), wrappedBundle(maven("c3p0", "c3p0")
-                       .versionAsInProject()),
-        commonOptions());
+    return options(commonOptions(),
+      getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache"),
+      getMavenBundle("org.quartz-scheduler", "quartz"),
+      wrappedBundle(maven("c3p0", "c3p0").versionAsInProject()),
+      wrappedBundle(maven("javax.xml.bind", "jaxb-api").versionAsInProject()),
+      wrappedBundle(maven("com.sun.activation", "jakarta.activation").versionAsInProject()));
   }
 
   private static void sleepySeconds(int secs) {
