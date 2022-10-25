@@ -102,6 +102,8 @@ public class OsgiHibernateTest {
         wrappedBundle(maven("org.javassist", "javassist").versionAsInProject()),
         getMavenBundle("net.sf.ehcache.test", "hibernate-ehcache-ee-bundle", "hibernate-ehcache-bundle").noStart(),
         getMavenBundle("net.sf.ehcache", "ehcache-ee", "ehcache").versionAsInProject(),
+        mavenBundle("jakarta.xml.bind", "jakarta.xml.bind-api").versionAsInProject(),
+        mavenBundle("com.sun.activation", "jakarta.activation").versionAsInProject(),
         mavenBundle("org.apache.derby", "derby").versionAsInProject(),
         mavenBundle("org.apache.derby", "derbyclient").versionAsInProject(),
         wrappedBundle(maven("org.apache.derby", "derbynet").versionAsInProject()),
