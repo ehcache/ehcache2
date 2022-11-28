@@ -99,6 +99,16 @@ TOKEN [ IGNORE_CASE ] :
 
 TOKEN [ IGNORE_CASE ] :
 {
+  < KW_NULL : "IS NULL" >
+}
+
+TOKEN [ IGNORE_CASE ] :
+{
+  < KW_NOT_NULL : "IS NOT NULL" >
+}
+
+TOKEN [ IGNORE_CASE ] :
+{
   < KW_GE : ">=" >
 }
 
@@ -680,13 +690,13 @@ MCriteria SimpleCriteria() :
 {
   MAttribute attr;
   MCriteria.SimpleOp op;
-  ModelElement<? > v1;
+  ModelElement<? > v1 = null;
   MCriteria crit;
 }
 {
   attr = Attribute()
   (
-    op = SimpleCriteriaOp() v1 = Value()
+    op = SimpleCriteriaOp() (v1 = Value())?
     {
       crit = new MCriteria.Simple(attr, op, v1);
     }
@@ -818,6 +828,14 @@ MCriteria.SimpleOp SimpleCriteriaOp() :
   | t = < KW_NE >
     {
       return MCriteria.SimpleOp.NE;
+    }
+  | t = < KW_NULL >
+    {
+      return MCriteria.SimpleOp.NULL;
+    }
+  | t = < KW_NOT_NULL >
+    {
+      return MCriteria.SimpleOp.NOT_NULL;
     }
   | t = < KW_LT >
     {
