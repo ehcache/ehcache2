@@ -503,7 +503,8 @@ void GroupBy() :
  */
 void OrderBy() :
 {
-  boolean isAsc = true;
+  boolean asc1 = true;
+  boolean asc2 = true;
   MAttribute attr1;
   MAttribute attr2;
 }
@@ -514,16 +515,16 @@ void OrderBy() :
       < KW_ASC >
     | < KW_DESC >
       {
-        isAsc = false;
+        asc1 = false;
       }
     | < KW_SHORT_ASC >
     | < KW_SHORT_DESC >
       {
-        isAsc = false;
+        asc1 = false;
       }
     )?
     {
-      this.qmodel.addOrderBy(attr1, isAsc);
+      this.qmodel.addOrderBy(attr1, asc1);
     }
       (
         < KW_COMMA > attr2 = Attribute()
@@ -531,16 +532,16 @@ void OrderBy() :
           < KW_ASC >
         | < KW_DESC >
           {
-            isAsc = false;
+            asc2 = false;
           }
         | < KW_SHORT_ASC >
         | < KW_SHORT_DESC >
           {
-            isAsc = false;
+            asc2 = false;
           }
         )?
         {
-            this.qmodel.addOrderBy(attr2, isAsc);
+            this.qmodel.addOrderBy(attr2, asc2);
         }
       )*
   )
