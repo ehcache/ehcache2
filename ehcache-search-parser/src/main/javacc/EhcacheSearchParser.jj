@@ -59,6 +59,11 @@ TOKEN [ IGNORE_CASE ] :
 
 TOKEN [ IGNORE_CASE ] :
 {
+  < KW_ALL : "all" >
+}
+
+TOKEN [ IGNORE_CASE ] :
+{
   < KW_COMMA : "," >
 }
 
@@ -940,6 +945,11 @@ void SingleTarget() :
       this.qmodel.includeTargetStar();
     }
   |
+    < KW_ALL >
+    {
+      this.qmodel.includeTargetStar();
+    }
+  |
     m = Attribute()
     {
       this.qmodel.includeTargetAttribute(m);
@@ -1002,6 +1012,10 @@ MAttribute Attribute() :
     return MAttribute.VALUE;
   }
 | < KW_STAR >
+  {
+    return MAttribute.STAR;
+  }
+| < KW_ALL >
   {
     return MAttribute.STAR;
   }
