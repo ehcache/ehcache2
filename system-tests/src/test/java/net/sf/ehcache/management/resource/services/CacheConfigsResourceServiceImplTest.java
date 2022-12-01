@@ -16,25 +16,19 @@
  */
 package net.sf.ehcache.management.resource.services;
 
+import io.restassured.http.ContentType;
+import io.restassured.path.xml.XmlPath;
+import io.restassured.path.xml.element.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import io.restassured.http.ContentType;
-import io.restassured.internal.path.xml.NodeImpl;
-import io.restassured.path.xml.XmlPath;
-
 import java.io.UnsupportedEncodingException;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.RestAssured.given;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * The aim of this test is to check via HTTP that the ehcache standalone agent /tc-management-api/agents/cacheManagers/caches/config endpoint
@@ -79,7 +73,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cache = xmlPath.get("cache");
+    Node cache = xmlPath.get("cache");
     assertEquals("testCache", cache.attributes().get("name"));
 
     //same thing but we specify only a given cacheManager
@@ -122,7 +116,7 @@ public class CacheConfigsResourceServiceImplTest extends ResourceServiceImplITHe
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManager' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cache = xmlPath.get("cache");
+    Node cache = xmlPath.get("cache");
     assertEquals("testCache", cache.attributes().get("name"));
 
     //same thing but we specify only a given cacheManager

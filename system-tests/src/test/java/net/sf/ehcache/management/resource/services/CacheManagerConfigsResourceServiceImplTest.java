@@ -17,8 +17,8 @@
 package net.sf.ehcache.management.resource.services;
 
 import io.restassured.http.ContentType;
-import io.restassured.internal.path.xml.NodeImpl;
 import io.restassured.path.xml.XmlPath;
+import io.restassured.path.xml.element.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,9 +26,6 @@ import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -72,17 +69,17 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cacheManager = xmlPath.get("ehcache");
+    Node cacheManager = xmlPath.get("ehcache");
     assertEquals("testCacheManagerProgrammatic", cacheManager.attributes().get("name"));
     assertEquals("5M", cacheManager.attributes().get("maxBytesLocalHeap"));
     assertEquals("10M", cacheManager.attributes().get("maxBytesLocalDisk"));
-    NodeImpl cache = (NodeImpl) cacheManager.get("cache");
+    Node cache = (Node) cacheManager.get("cache");
     assertEquals("testCache2", cache.getAttribute("name"));
     assertNotNull(cache.get("terracotta"));
-    NodeImpl managementRESTService = (NodeImpl) cacheManager.get("managementRESTService");
+    Node managementRESTService = (Node) cacheManager.get("managementRESTService");
     assertEquals("true", managementRESTService.getAttribute("enabled"));
     assertEquals("0.0.0.0:" + STANDALONE_REST_AGENT_PORT, managementRESTService.getAttribute("bind"));
-    NodeImpl terracottaConfig = (NodeImpl) cacheManager.get("terracottaConfig");
+    Node terracottaConfig = (Node) cacheManager.get("terracottaConfig");
     assertNotNull(terracottaConfig.getAttribute("url"));
 
     //same thing but we specify only a given cacheManager
@@ -103,13 +100,13 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
     cacheManager = xmlPath.get("ehcache");
     assertEquals("testCacheManager", cacheManager.attributes().get("name"));
-    cache = (NodeImpl) cacheManager.get("cache");
+    cache = (Node) cacheManager.get("cache");
     assertEquals("testCache", cache.getAttribute("name"));
     assertNotNull(cache.get("terracotta"));
-    managementRESTService = (NodeImpl) cacheManager.get("managementRESTService");
+    managementRESTService = (Node) cacheManager.get("managementRESTService");
     assertEquals("true", managementRESTService.getAttribute("enabled"));
     assertEquals("0.0.0.0:" + STANDALONE_REST_AGENT_PORT, managementRESTService.getAttribute("bind"));
-    terracottaConfig = (NodeImpl) cacheManager.get("terracottaConfig");
+    terracottaConfig = (Node) cacheManager.get("terracottaConfig");
     assertNotNull(terracottaConfig.getAttribute("url"));
   }
 
@@ -133,17 +130,17 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
         .jsonPath().get("find { it.cacheManagerName == 'testCacheManagerProgrammatic' }.xml").toString();
 
     XmlPath xmlPath = new XmlPath(xml);
-    NodeImpl cacheManager = xmlPath.get("ehcache");
+    Node cacheManager = xmlPath.get("ehcache");
     assertEquals("testCacheManagerProgrammatic", cacheManager.attributes().get("name"));
     assertEquals("5M", cacheManager.attributes().get("maxBytesLocalHeap"));
     assertEquals("10M", cacheManager.attributes().get("maxBytesLocalDisk"));
-    NodeImpl cache = (NodeImpl) cacheManager.get("cache");
+    Node cache = (Node) cacheManager.get("cache");
     assertEquals("testCache2", cache.getAttribute("name"));
     assertNotNull(cache.get("terracotta"));
-    NodeImpl managementRESTService = (NodeImpl) cacheManager.get("managementRESTService");
+    Node managementRESTService = (Node) cacheManager.get("managementRESTService");
     assertEquals("true", managementRESTService.getAttribute("enabled"));
     assertEquals("0.0.0.0:" + STANDALONE_REST_AGENT_PORT, managementRESTService.getAttribute("bind"));
-    NodeImpl terracottaConfig = (NodeImpl) cacheManager.get("terracottaConfig");
+    Node terracottaConfig = (Node) cacheManager.get("terracottaConfig");
     assertNotNull(terracottaConfig.getAttribute("url"));
 
     //same thing but we specify only a given cacheManager
@@ -164,13 +161,13 @@ public class CacheManagerConfigsResourceServiceImplTest extends ResourceServiceI
 
     cacheManager = xmlPath.get("ehcache");
     assertEquals("testCacheManager", cacheManager.attributes().get("name"));
-    cache = (NodeImpl) cacheManager.get("cache");
+    cache = (Node) cacheManager.get("cache");
     assertEquals("testCache", cache.getAttribute("name"));
     assertNotNull(cache.get("terracotta"));
-    managementRESTService = (NodeImpl) cacheManager.get("managementRESTService");
+    managementRESTService = (Node) cacheManager.get("managementRESTService");
     assertEquals("true", managementRESTService.getAttribute("enabled"));
     assertEquals("0.0.0.0:" + STANDALONE_REST_AGENT_PORT, managementRESTService.getAttribute("bind"));
-    terracottaConfig = (NodeImpl) cacheManager.get("terracottaConfig");
+    terracottaConfig = (Node) cacheManager.get("terracottaConfig");
     assertNotNull(terracottaConfig.getAttribute("url"));
   }
 
