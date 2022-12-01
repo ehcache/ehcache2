@@ -16,8 +16,14 @@
  */
 package net.sf.ehcache.management.resource.services;
 
+import com.tc.test.config.builder.ClusterManager;
 import com.tc.test.config.builder.OffHeap;
+import com.tc.test.config.builder.TcConfig;
+import com.tc.test.config.builder.TcMirrorGroup;
+import com.tc.test.config.builder.TcServer;
+import com.tc.util.PortChooser;
 import com.tc.util.concurrent.ThreadUtil;
+import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -26,21 +32,9 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ManagementRESTServiceConfiguration;
 import net.sf.ehcache.config.TerracottaClientConfiguration;
 import net.sf.ehcache.config.TerracottaConfiguration;
-
 import org.junit.AfterClass;
 import org.terracotta.test.util.TestBaseUtil;
 
-import io.restassured.RestAssured;
-import com.tc.test.config.builder.ClusterManager;
-import com.tc.test.config.builder.TcConfig;
-import com.tc.test.config.builder.TcMirrorGroup;
-import com.tc.test.config.builder.TcServer;
-import com.tc.util.PortChooser;
-
-import java.io.IOException;
-
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 
 /**
