@@ -23,7 +23,7 @@ public class TwinCachesTest {
 
     @Test
     public void testParallelLoadTwinCaches() {
-        manager = new CacheManager(new Configuration().maxBytesLocalHeap(16, MemoryUnit.MEGABYTES).defaultCache(new CacheConfiguration("default", 0).eternal(true)));
+        manager = new CacheManager(new Configuration().defaultCache(new CacheConfiguration("default", 0).maxEntriesLocalHeap(1000).eternal(true)));
 
         Ehcache one = manager.addCacheIfAbsent("one");
         Ehcache two = manager.addCacheIfAbsent("two");
@@ -60,7 +60,7 @@ public class TwinCachesTest {
 
     @Test
     public void testSerialLoadTwinCaches() {
-        manager = new CacheManager(new Configuration().maxBytesLocalHeap(16, MemoryUnit.MEGABYTES).defaultCache(new CacheConfiguration("default", 0).eternal(true)));
+        manager = new CacheManager(new Configuration().defaultCache(new CacheConfiguration("default", 0).maxEntriesLocalHeap(1000).eternal(true)));
 
         Ehcache one = manager.addCacheIfAbsent("one");
         Ehcache two = manager.addCacheIfAbsent("two");

@@ -998,10 +998,12 @@ public class RMICacheReplicatorIT extends AbstractRMITest {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(cache.getGuid() + ": put " + key);
                     }
-                } else {
+
                     //every twelfth time 1/4 * 1/3 = 1/12
                     if (random.nextInt(3) == 1) {
-                        LOG.debug("cache.removeAll()");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(cache.getGuid() + ": cache.removeAll()");
+                        }
                         cache.removeAll();
                     }
                 }

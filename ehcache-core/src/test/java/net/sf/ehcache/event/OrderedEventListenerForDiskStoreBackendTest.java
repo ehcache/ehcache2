@@ -2,13 +2,13 @@ package net.sf.ehcache.event;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
@@ -94,7 +94,7 @@ public class OrderedEventListenerForDiskStoreBackendTest {
         reset(listener);
 
         diskStore.putIfAbsent(new Element(key, "otherVal", 0));
-        verifyZeroInteractions(listener);
+        verifyNoInteractions(listener);
 
     }
 

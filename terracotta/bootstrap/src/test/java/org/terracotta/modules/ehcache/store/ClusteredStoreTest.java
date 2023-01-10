@@ -38,9 +38,9 @@ import org.terracotta.toolkit.internal.ToolkitProperties;
 import org.terracotta.toolkit.internal.cache.ToolkitCacheInternal;
 import org.terracotta.toolkit.internal.cache.ToolkitValueComparator;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;

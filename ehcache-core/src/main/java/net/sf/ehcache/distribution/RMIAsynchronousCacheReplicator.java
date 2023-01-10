@@ -396,6 +396,7 @@ public class RMIAsynchronousCacheReplicator extends RMISynchronousCacheReplicato
     public final void dispose() {
         status = Status.STATUS_SHUTDOWN;
         flushReplicationQueue();
+        replicationThread.interrupt();
     }
 
 

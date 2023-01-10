@@ -13,9 +13,13 @@ import net.sf.ehcache.statistics.extended.ExtendedStatistics;
 
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.number.OrderingComparison.*;
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 /**
  *
@@ -63,6 +67,8 @@ public class PassThroughStatisticsTest {
 
     @Test
     public void testGetLocalHeapSizeInBytes() {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), is(lessThan(16)));
+
         CacheManager manager = new CacheManager(new Configuration().name("foo-manager"));
         try {
             Cache foo = new Cache(new CacheConfiguration().name("foo").maxEntriesLocalHeap(1000));

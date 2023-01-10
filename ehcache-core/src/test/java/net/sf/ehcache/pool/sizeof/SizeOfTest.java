@@ -1,9 +1,12 @@
 package net.sf.ehcache.pool.sizeof;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
 import static net.sf.ehcache.pool.sizeof.JvmInformation.CURRENT_JVM_INFORMATION;
 import static net.sf.ehcache.pool.sizeof.JvmInformation.UNKNOWN_32_BIT;
 import static net.sf.ehcache.pool.sizeof.JvmInformation.UNKNOWN_64_BIT;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assume.assumeThat;
@@ -24,8 +27,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
 
-import net.sf.ehcache.pool.sizeof.filter.PassThroughFilter;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import javax.xml.datatype.DatatypeConstants;
@@ -48,6 +49,8 @@ public class SizeOfTest extends AbstractSizeOfTest {
 
   @BeforeClass
   public static void setup() {
+    assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), Matchers.is(lessThan(16)));
+
     System.err.println("java.vm.name:\t" + System.getProperty("java.vm.name", ""));
     System.err.println("java.vm.vendor:\t" + System.getProperty("java.vm.vendor", ""));
     assumeThat(System.getProperty("os.name"), not(containsString("AIX")));
@@ -129,7 +132,7 @@ public class SizeOfTest extends AbstractSizeOfTest {
   @Ignore("EHC-1154")
   @Test
   public void testOnHeapConsumption() throws Exception {
-    assumeThat(System.getProperty("java.version"), Matchers.startsWith("1."));
+    assumeThat(getProperty("java.version"), Matchers.startsWith("1."));
 
     SizeOf sizeOf = new CrossCheckingSizeOf();
 

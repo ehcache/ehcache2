@@ -27,11 +27,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>net.sf.ehcache.internal</groupId>
       <artifactId>ehcache-core</artifactId>
       <type>test-jar</type>

@@ -66,7 +66,6 @@ public class CacheCopyOnRWBaseTest {
         cacheManager = CacheManager.create( new Configuration()
                 .name("copyOnRWBaseManager")
                 .diskStore(new DiskStoreConfiguration().path(System.getProperty("java.io.tmpdir")))
-                .maxBytesLocalHeap(100, MemoryUnit.KILOBYTES)
                 .maxBytesLocalDisk(200, MemoryUnit.KILOBYTES));
     }
 
@@ -77,7 +76,7 @@ public class CacheCopyOnRWBaseTest {
 
     @Test
     public void testNoCopyCache() {
-        cacheManager.addCache(new Cache(new CacheConfiguration().name(NO_COPY_CACHE)
+        cacheManager.addCache(new Cache(new CacheConfiguration().maxEntriesLocalHeap(100).name(NO_COPY_CACHE)
                 .persistence(new PersistenceConfiguration().strategy(strategy))));
 
         Cache cache = cacheManager.getCache(NO_COPY_CACHE);
@@ -96,7 +95,7 @@ public class CacheCopyOnRWBaseTest {
 
     @Test
     public void testCopyOnWCache() {
-        cacheManager.addCache(new Cache(new CacheConfiguration().name(COPY_ON_W_CACHE)
+        cacheManager.addCache(new Cache(new CacheConfiguration().maxEntriesLocalHeap(100).name(COPY_ON_W_CACHE)
                 .persistence(new PersistenceConfiguration().strategy(strategy))
                 .copyOnWrite(true)));
 
@@ -116,7 +115,7 @@ public class CacheCopyOnRWBaseTest {
 
     @Test
     public void testCopyOnRWCache() {
-        cacheManager.addCache(new Cache(new CacheConfiguration().name(COPY_ON_RW_CACHE)
+        cacheManager.addCache(new Cache(new CacheConfiguration().maxEntriesLocalHeap(100).name(COPY_ON_RW_CACHE)
                 .persistence(new PersistenceConfiguration().strategy(strategy))
                 .copyOnRead(true)
                 .copyOnWrite(true)));
@@ -137,7 +136,7 @@ public class CacheCopyOnRWBaseTest {
 
     @Test
     public void testCopyOnRCache() {
-        cacheManager.addCache(new Cache(new CacheConfiguration().name(COPY_ON_R_CACHE)
+        cacheManager.addCache(new Cache(new CacheConfiguration().maxEntriesLocalHeap(100).name(COPY_ON_R_CACHE)
                 .persistence(new PersistenceConfiguration().strategy(strategy))
                 .copyOnRead(true)));
 

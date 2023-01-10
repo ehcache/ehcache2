@@ -20,7 +20,7 @@
   </scm>
   
   <properties>
-    <jetty.version>10.0.11</jetty.version>
+    <jetty.version>10.0.13</jetty.version>
     <thirdparty-bom.version>4.4.0-SNAPSHOT</thirdparty-bom.version>
     <terracotta-toolkit-api-internal.version>1.19</terracotta-toolkit-api-internal.version>
     <management-core.version>2.1.35-SNAPSHOT</management-core.version>
@@ -145,6 +145,11 @@
           <configuration>
             <argLine>-Djava.net.preferIPv4Stack=true</argLine>
             <trimStackTrace>false</trimStackTrace>
+            <reuseForks>false</reuseForks>
+            <jdk>
+              <version>1.${java.test.version}</version>
+              <vendor>${java.test.vendor}</vendor>
+            </jdk>
           </configuration>
         </plugin>
         <plugin>

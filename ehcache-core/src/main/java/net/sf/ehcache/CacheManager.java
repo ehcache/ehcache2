@@ -1531,11 +1531,30 @@ public class CacheManager {
                 registeredMgmtSvrBind = null;
             }
 
+            for (Ehcache cache : ehcaches.values()) {
+                if (cache != null) {
+                    cache.dispose();
+                }
+            }
+            ehcaches.clear();
+            initializingCaches.clear();
+            if (defaultCache != null) {
+                defaultCache.dispose();
+            }
+
             for (CacheManagerPeerProvider cacheManagerPeerProvider : cacheManagerPeerProviders.values()) {
                 if (cacheManagerPeerProvider != null) {
                     cacheManagerPeerProvider.dispose();
                 }
             }
+            cacheManagerPeerProviders.clear();
+
+            for (CacheManagerPeerListener cacheManagerPeerListener : cacheManagerPeerListeners.values()) {
+                if (cacheManagerPeerListener != null) {
+                    cacheManagerPeerListener.dispose();
+                }
+            }
+            cacheManagerPeerListeners.clear();
 
             // cancel the cacheManager timer and all tasks
             if (cacheManagerTimer != null) {
@@ -1547,14 +1566,6 @@ public class CacheManager {
 
             ALL_CACHE_MANAGERS.remove(this);
 
-            for (Ehcache cache : ehcaches.values()) {
-                if (cache != null) {
-                    cache.dispose();
-                }
-            }
-            if (defaultCache != null) {
-                defaultCache.dispose();
-            }
             status = Status.STATUS_SHUTDOWN;
             XARequestProcessor.shutdown();
 
@@ -1563,6 +1574,7 @@ public class CacheManager {
                 singleton = null;
             }
             terracottaClient.shutdown();
+            terracottaClient = null;
             transactionController = null;
             removeShutdownHook();
 

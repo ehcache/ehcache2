@@ -190,6 +190,7 @@ public abstract class AbstractRMITest {
                         // Run the thread until the given end time
                         while (System.nanoTime() < endTime) {
                             task.call();
+                            TimeUnit.MILLISECONDS.sleep(1);
                         }
                     } catch (Throwable t) {
                         // Hang on to any errors

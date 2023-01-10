@@ -10,6 +10,7 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.DiskStoreConfiguration;
 import net.sf.ehcache.store.disk.DiskStoreHelper;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -18,12 +19,16 @@ import org.terracotta.test.categories.CheckShorts;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
 import static net.sf.ehcache.config.MemoryUnit.KILOBYTES;
 import static net.sf.ehcache.config.MemoryUnit.MEGABYTES;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 /**
  * @author Alex Snaps
@@ -76,6 +81,8 @@ public class DiskStoreBootstrapCacheLoaderFactoryTest {
 
     @Test
     public void testLoadsFromDiskWithMaxBytesOnHeapSet() throws Exception {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), Matchers.is(lessThan(16)));
+
         setUp(CacheUT.sizeBased);
         DiskStoreHelper.flushAllEntriesToDisk(cacheSizeBound).get();
         cacheSizeBoundBootstrapCacheLoader.triggerLoad();

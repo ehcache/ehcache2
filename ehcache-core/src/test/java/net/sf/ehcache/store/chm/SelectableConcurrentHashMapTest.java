@@ -5,17 +5,13 @@ import net.sf.ehcache.pool.impl.UnboundedPool;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 

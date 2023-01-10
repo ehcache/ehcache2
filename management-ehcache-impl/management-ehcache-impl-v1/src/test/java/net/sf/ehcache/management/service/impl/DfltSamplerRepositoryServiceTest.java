@@ -23,7 +23,7 @@ import java.util.Collections;
 import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

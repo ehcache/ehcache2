@@ -27,8 +27,8 @@ import org.terracotta.modules.ehcache.transaction.xa.ClusteredXidTransactionID;
 
 import javax.transaction.xa.Xid;
 
-import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.refEq;
 import static org.mockito.Mockito.when;
 import static org.terracotta.upgradability.serialization.SerializationUpgradabilityTesting.validateSerializedForm;
 

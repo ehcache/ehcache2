@@ -35,10 +35,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.terracotta.test.categories.CheckShorts;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

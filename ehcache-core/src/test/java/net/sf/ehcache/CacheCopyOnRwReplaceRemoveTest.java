@@ -63,12 +63,13 @@ public class CacheCopyOnRwReplaceRemoveTest {
         cacheManager = CacheManager.create( new Configuration()
                 .name("copyOnRWReplaceRemoveManager")
                 .diskStore(new DiskStoreConfiguration().path(System.getProperty("java.io.tmpdir")))
-                .maxBytesLocalHeap(100, MemoryUnit.KILOBYTES)
                 .maxBytesLocalDisk(200, MemoryUnit.KILOBYTES));
         cacheManager.addCache(new Cache(new CacheConfiguration().name(MEMORY_CACHE)
+                .maxEntriesLocalHeap(100)
                 .copyOnRead(copyOnRead)
                 .copyOnWrite(copyOnWrite)));
         cacheManager.addCache(new Cache(new CacheConfiguration().name(DISK_CACHE)
+                .maxEntriesLocalHeap(100)
                 .persistence(new PersistenceConfiguration().strategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP))
                 .copyOnRead(copyOnRead)
                 .copyOnWrite(copyOnWrite)));

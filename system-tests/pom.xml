@@ -24,10 +24,9 @@
   <properties>
     <surefire.min-memory>512m</surefire.min-memory>
     <surefire.max-memory>1024m</surefire.max-memory>
-    <surefire.additional-jvm-args>-XX:MaxPermSize=512m</surefire.additional-jvm-args>
     <skipCheckstyle>true</skipCheckstyle>
     <quartz.version>2.2.3</quartz.version>
-    <osgi-test-tool.version>2.1</osgi-test-tool.version>
+    <osgi-test-tool.version>2.2</osgi-test-tool.version>
   </properties>
 
   <dependencies>  
@@ -196,6 +195,12 @@
       <groupId>org.terracotta.test</groupId>
       <artifactId>osgi-test-utils</artifactId>
       <version>${osgi-test-tool.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- The following hacks are for OsgiScheduledRefreshTest -->
     <dependency>

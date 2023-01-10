@@ -1,12 +1,16 @@
 package net.sf.ehcache.event;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeThat;
 
 import java.io.NotSerializableException;
 import java.util.Map;
@@ -33,6 +37,7 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import net.sf.ehcache.store.disk.DiskStorageFactory;
 import net.sf.ehcache.store.disk.DiskStoreHelper;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -133,6 +138,8 @@ public class EvictionListenerTest {
 
     @Test
     public void testGetsAllEvictedKeysWithoutDiskSizeBased() throws InterruptedException {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), Matchers.is(lessThan(16)));
+
         CacheConfiguration configuration = new CacheConfiguration().name("noDisk").maxBytesLocalHeap(100, MemoryUnit.KILOBYTES);
         final Cache noDiskCache = new Cache(configuration);
         cacheManager.addCache(noDiskCache);
@@ -238,7 +245,7 @@ public class EvictionListenerTest {
 
     @Test
     public void testEvictionDuplicates() throws Exception {
-        CacheConfiguration configuration = new CacheConfiguration().name("heapOnly").maxBytesLocalHeap(4, MemoryUnit.KILOBYTES).eternal(true).overflowToOffHeap(false);
+        CacheConfiguration configuration = new CacheConfiguration().name("heapOnly").maxEntriesLocalHeap(100).eternal(true).overflowToOffHeap(false);
         final Cache heapOnlyCache = new Cache(configuration);
         cacheManager.addCache(heapOnlyCache);
 

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Iterator;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 

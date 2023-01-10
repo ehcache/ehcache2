@@ -30,8 +30,6 @@ public class L1BMOnHeapActivePassiveSanityTest extends AbstractTerracottaActiveP
     testConfig.getL2Config().setMaxOffHeapDataSize(512);
     testConfig.addTcProperty("ehcache.evictor.logging.enabled", "true");
     testConfig.getCrashConfig().setCrashMode(ServerCrashMode.RANDOM_SERVER_CRASH);
-    testConfig.getCrashConfig().setInitialDelayInSeconds(60);
-    testConfig.getCrashConfig().setServerCrashWaitTimeInSec(30);
   }
 
 }

@@ -12,13 +12,19 @@ import net.sf.ehcache.config.SizeOfPolicyConfiguration;
 import net.sf.ehcache.store.compound.SerializationCopyStrategy;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
 
 /**
  * @author lorban
@@ -28,6 +34,11 @@ public class LocalTransactionSizeOfTest {
     private CacheManager cacheManager;
     private Ehcache cache1;
     private TransactionController transactionController;
+
+    @BeforeClass
+    public static void preconditions() {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), is(lessThan(16)));
+    }
 
     @Before
     public void setUp() throws Exception {

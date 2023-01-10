@@ -42,8 +42,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.sf.ehcache.distribution.AbstractRMITest.createRMICacheManagerConfiguration;
-
 /**
  * Multicast tests. These require special machine configuration.
  * <p>

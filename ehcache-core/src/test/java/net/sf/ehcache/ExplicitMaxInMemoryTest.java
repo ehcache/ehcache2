@@ -16,25 +16,33 @@
 
 package net.sf.ehcache;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.MemoryUnit;
 import net.sf.ehcache.event.CacheEventListener;
-
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExplicitMaxInMemoryTest extends TestCase {
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assume.assumeThat;
+
+public class ExplicitMaxInMemoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplicitMaxInMemoryTest.class);
 
     private static final int MB = 1024 * 1024;
 
+    @Test
     public void testExplicitMaxInMemory() throws Exception {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), is(lessThan(16)));
+
         Configuration config = new Configuration();
         config.maxBytesLocalHeap(10, MemoryUnit.MEGABYTES);
         CacheManager cm = new CacheManager(config);
