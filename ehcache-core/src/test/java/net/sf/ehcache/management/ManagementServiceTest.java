@@ -60,12 +60,12 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -415,7 +415,7 @@ public class ManagementServiceTest extends AbstractCacheTest {
         ManagementService managementService = new ManagementService(cm, server, false, false, false, false, false);
 
         managementService.notifyCacheRemoved("testName");
-        verifyZeroInteractions(server);
+        verifyNoInteractions(server);
     }
 
     @Test

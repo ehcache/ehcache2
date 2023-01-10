@@ -12,8 +12,10 @@ import junit.framework.Assert;
 import net.sf.ehcache.management.resource.CacheEntityV2;
 import net.sf.ehcache.management.sampled.CacheSampler;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author brandony
@@ -24,22 +26,20 @@ public class TestCacheEntityBuilder {
   public void testMultipleSamplersForSingleCM() {
     String cmName = "CM1";
 
-    CacheSampler samplerFoo = EasyMock.createMock(CacheSampler.class);
-    EasyMock.expect(samplerFoo.getCacheName()).andReturn("FOO");
-    EasyMock.expect(samplerFoo.getExpiredCount()).andReturn(1L);
-    EasyMock.expect(samplerFoo.isLocalHeapCountBased()).andReturn(true);
+    CacheSampler samplerFoo = mock(CacheSampler.class);
+    when(samplerFoo.getCacheName()).thenReturn("FOO");
+    when(samplerFoo.getExpiredCount()).thenReturn(1L);
+    when(samplerFoo.isLocalHeapCountBased()).thenReturn(true);
 
-    CacheSampler samplerGoo = EasyMock.createMock(CacheSampler.class);
-    EasyMock.expect(samplerGoo.getCacheName()).andReturn("GOO");
-    EasyMock.expect(samplerGoo.getExpiredCount()).andReturn(2L);
-    EasyMock.expect(samplerGoo.isLocalHeapCountBased()).andReturn(true);
+    CacheSampler samplerGoo = mock(CacheSampler.class);
+    when(samplerGoo.getCacheName()).thenReturn("GOO");
+    when(samplerGoo.getExpiredCount()).thenReturn(2L);
+    when(samplerGoo.isLocalHeapCountBased()).thenReturn(true);
 
-    CacheSampler samplerBar = EasyMock.createMock(CacheSampler.class);
-    EasyMock.expect(samplerBar.getCacheName()).andReturn("BAR");
-    EasyMock.expect(samplerBar.getExpiredCount()).andReturn(3L);
-    EasyMock.expect(samplerBar.isLocalHeapCountBased()).andReturn(true);
-
-    EasyMock.replay(samplerFoo, samplerBar, samplerGoo);
+    CacheSampler samplerBar = mock(CacheSampler.class);
+    when(samplerBar.getCacheName()).thenReturn("BAR");
+    when(samplerBar.getExpiredCount()).thenReturn(3L);
+    when(samplerBar.isLocalHeapCountBased()).thenReturn(true);
 
     CacheEntityBuilderV2 ceb = CacheEntityBuilderV2.createWith(samplerFoo, cmName);
     ceb.add(samplerGoo, cmName);

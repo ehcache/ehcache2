@@ -16,13 +16,8 @@
 
 package net.sf.ehcache;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -33,7 +28,6 @@ import net.sf.ehcache.config.DiskStoreConfiguration;
 import net.sf.ehcache.config.PinningConfiguration;
 import net.sf.ehcache.store.disk.DiskStoreHelper;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

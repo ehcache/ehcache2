@@ -61,10 +61,10 @@ import static net.sf.ehcache.config.CacheConfiguration.TransactionalMode.XA_STRI
 import static net.sf.ehcache.config.CacheWriterConfiguration.WriteMode.WRITE_BEHIND;
 import static net.sf.ehcache.config.MemoryUnit.MEGABYTES;
 import static net.sf.ehcache.config.TerracottaConfiguration.Consistency.STRONG;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.refEq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -406,16 +406,16 @@ public class InteractionTest {
     
     verify(toolkit).getStore(eq("_tc_quartz_jobs|scheduledRefresh_" + managerName + "_" + cacheName),
             refEq(new ToolkitStoreConfigBuilder().consistency(ToolkitConfigFields.Consistency.STRONG).concurrency(1).build()),
-            isNull(Class.class));
+            isNull());
     verify(toolkit).getStore(eq("_tc_quartz_triggers|scheduledRefresh_" + managerName + "_" + cacheName),
             refEq(new ToolkitStoreConfigBuilder().consistency(ToolkitConfigFields.Consistency.STRONG).concurrency(1).build()),
-            isNull(Class.class));
+            isNull());
     verify(toolkit).getStore(eq("_tc_quartz_fired_trigger|scheduledRefresh_" + managerName + "_" + cacheName),
             refEq(new ToolkitStoreConfigBuilder().consistency(ToolkitConfigFields.Consistency.STRONG).concurrency(1).build()),
-            isNull(Class.class));
+            isNull());
     verify(toolkit).getStore(eq("_tc_quartz_calendar_wrapper|scheduledRefresh_" + managerName + "_" + cacheName),
             refEq(new ToolkitStoreConfigBuilder().consistency(ToolkitConfigFields.Consistency.STRONG).concurrency(1).build()),
-            isNull(Class.class));
+            isNull());
     
     verify(toolkit).getSet("_tc_quartz_grp_names|scheduledRefresh_" + managerName + "_" + cacheName, String.class);
     verify(toolkit).getSet("_tc_quartz_grp_paused_names|scheduledRefresh_" + managerName + "_" + cacheName, String.class);

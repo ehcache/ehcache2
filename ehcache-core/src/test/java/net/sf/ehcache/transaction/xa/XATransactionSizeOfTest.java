@@ -13,18 +13,21 @@ import net.sf.ehcache.config.SizeOfPolicyConfiguration;
 import net.sf.ehcache.store.compound.SerializationCopyStrategy;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.transaction.Status;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
 
 /**
  * @author lorban
@@ -34,6 +37,11 @@ public class XATransactionSizeOfTest {
     private BitronixTransactionManager transactionManager;
     private CacheManager cacheManager;
     private Ehcache cache1;
+
+    @BeforeClass
+    public static void preconditions() {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), is(lessThan(16)));
+    }
 
     @Before
     public void setUp() throws Exception {

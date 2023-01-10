@@ -1,16 +1,5 @@
 package net.sf.ehcache.terracotta;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
@@ -20,9 +9,19 @@ import net.sf.ehcache.Status;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.TerracottaConfiguration;
-
 import org.junit.Test;
-import org.mockito.Matchers;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Alex Snaps
@@ -48,7 +47,7 @@ public class TerracottaBootstrapCacheLoaderTest {
     public void testBootstrapsWhenNoSnapshotPresent() {
         final Ehcache cache = mockCacheToBootStrap();
         cacheLoader.load(cache);
-        verify(cache, never()).get(Matchers.anyObject());
+        verify(cache, never()).get(any());
     }
 
     @Test
@@ -70,7 +69,7 @@ public class TerracottaBootstrapCacheLoaderTest {
         file.writeAll(localKeys);
         final Ehcache cache = mockCacheToBootStrap();
         cacheLoader.load(cache);
-        verify(cache, times(new HashSet<Integer>(localKeys).size())).get(Matchers.any(Object.class));
+        verify(cache, times(new HashSet<Integer>(localKeys).size())).get(any(Object.class));
         for (Integer localKey : localKeys) {
             verify(cache, times(1)).get((Object) localKey);
         }
@@ -86,7 +85,7 @@ public class TerracottaBootstrapCacheLoaderTest {
         when(cache.getStatus()).thenReturn(Status.STATUS_ALIVE);
         CacheManager cacheManager = mock(CacheManager.class);
         when(cache.getCacheManager()).thenReturn(cacheManager);
-        when(cache.get(Matchers.<Object>anyObject())).thenReturn(null);
+        when(cache.get(any())).thenReturn(null);
         when(cacheManager.getConfiguration()).thenReturn(new Configuration());
         return cache;
     }

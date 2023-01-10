@@ -26,8 +26,8 @@ import net.sf.ehcache.transaction.TransactionIDSerializedForm;
 import org.junit.Test;
 import org.terracotta.modules.ehcache.transaction.ClusteredTransactionID;
 
-import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.refEq;
 import static org.mockito.Mockito.when;
 import static org.terracotta.upgradability.serialization.SerializationUpgradabilityTesting.validateSerializedForm;
 

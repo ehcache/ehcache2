@@ -23,19 +23,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.restassured.http.ContentType;
-import io.restassured.internal.path.xml.NodeBase;
 import io.restassured.path.xml.XmlPath;
 
 import java.io.UnsupportedEncodingException;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.RestAssured.given;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
 
 /**
  * The aim of this test is to check via HTTP that the ehcache standalone agent /tc-management-api/agents/cacheManagers/caches/config endpoint

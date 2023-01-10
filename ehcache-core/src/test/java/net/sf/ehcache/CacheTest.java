@@ -143,7 +143,6 @@ public class CacheTest extends AbstractCacheTest {
 
     /**
      * test last update time is updated when a key is updated
-     * @param cache
      * @throws InterruptedException
      */
     @Test

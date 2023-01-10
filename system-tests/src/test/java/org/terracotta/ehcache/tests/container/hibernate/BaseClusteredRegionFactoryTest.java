@@ -112,7 +112,6 @@ public abstract class BaseClusteredRegionFactoryTest extends AbstractStandaloneT
     @Override
     protected void configureServerParamers(StandardAppServerParameters params) {
       super.configureServerParamers(params);
-      params.appendJvmArgs("-XX:MaxPermSize=160m");
       params.appendSysProp(HibernateUtil.DB_PORT_SYSPROP, derbyPort);
     }
 

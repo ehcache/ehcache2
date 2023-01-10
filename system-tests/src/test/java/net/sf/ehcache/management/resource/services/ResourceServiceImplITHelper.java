@@ -37,10 +37,6 @@ import com.tc.test.config.builder.TcMirrorGroup;
 import com.tc.test.config.builder.TcServer;
 import com.tc.util.PortChooser;
 
-import java.io.IOException;
-
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 
 /**
@@ -87,7 +83,6 @@ public abstract class ResourceServiceImplITHelper {
 
     clusterManager = new ClusterManager(clazz,tcConfig);
     clusterManager.addExtraJvmArg("-Xmx768m");
-    clusterManager.addExtraJvmArg("-XX:MaxPermSize=128m");
 //    clusterManager.addExtraJvmArg("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5555");
     clusterManager.start();
 

@@ -16,6 +16,15 @@
 
 package net.sf.ehcache;
 
+import junit.framework.Assert;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.MemoryUnit;
+import net.sf.ehcache.pool.SizeOfEngine;
+import net.sf.ehcache.pool.impl.DefaultSizeOfEngine;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,15 +32,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.MemoryUnit;
-import net.sf.ehcache.pool.SizeOfEngine;
-import net.sf.ehcache.pool.impl.DefaultSizeOfEngine;
+import static java.lang.Integer.parseInt;
+import static java.lang.System.getProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assume.assumeThat;
 
-public class RecalculateSizeTest extends TestCase {
+public class RecalculateSizeTest {
     private static final Random random;
 
     static {
@@ -42,6 +49,12 @@ public class RecalculateSizeTest extends TestCase {
 
     private final SizeOfEngine engine = new DefaultSizeOfEngine(1000, true);
 
+    @BeforeClass
+    public static void preconditions() {
+        assumeThat(parseInt(getProperty("java.specification.version").split("\\.")[0]), is(lessThan(16)));
+    }
+
+    @Test
     public void testCustomValue() {
         DynamicSizedValue value = new DynamicSizedValue('A');
 
@@ -71,6 +84,7 @@ public class RecalculateSizeTest extends TestCase {
         value = null;
     }
 
+    @Test
     public void testRecalculateSizeGrowing() {
         CacheManager cm = createCacheManager();
         cm.addCache(createCache("test-cache-growing"));
@@ -109,6 +123,7 @@ public class RecalculateSizeTest extends TestCase {
         cm.shutdown();
     }
 
+    @Test
     public void testRecalculateSizeShrinking() {
         CacheManager cm = createCacheManager();
         cm.addCache(createCache("test-cache-shrinking"));
@@ -155,6 +170,7 @@ public class RecalculateSizeTest extends TestCase {
         return CacheManager.create(new Configuration().name("test-cm").maxBytesLocalHeap(40, MemoryUnit.MEGABYTES));
     }
 
+    @Test
     public void testMultipleRecalculates() throws Exception {
         System.out.println("Testing multiple recalculates...");
         final CacheManager cacheManager = createCacheManager();
@@ -213,6 +229,7 @@ public class RecalculateSizeTest extends TestCase {
         cacheManager.shutdown();
     }
 
+    @Test
     public void testMultipleRecalculatesAndMutates() throws Exception {
         System.out.println("Testing multiple recalculates with mutation...");
         final CacheManager cacheManager = createCacheManager();
