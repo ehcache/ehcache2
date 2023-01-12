@@ -32,6 +32,8 @@ import java.util.concurrent.Callable;
 
 import junit.framework.Assert;
 
+import static org.terracotta.test.util.WaitUtil.waitUntilCallableReturnsTrue;
+
 public class ServerMapLocalSizeTest extends AbstractCacheTestBase {
 
   public ServerMapLocalSizeTest(TestConfig testConfig) {
@@ -67,8 +69,7 @@ public class ServerMapLocalSizeTest extends AbstractCacheTestBase {
 
       // eventual - can't assert size
       // Assert.assertEquals(maxElementsInMemory, cache.getSize());
-      Assert.assertEquals(maxElementsInMemory, cache.getStatistics().getLocalHeapSize());
-      Assert.assertEquals(maxElementsInMemory, cache.getStatistics().getLocalHeapSize());
+      waitUntilCallableReturnsTrue(() -> maxElementsInMemory == cache.getStatistics().getLocalHeapSize());
 
       for (int i = 1; i <= 100; i++) {
         cache.put(new Element("new-key-" + i, "new-value-" + i));
@@ -128,7 +129,7 @@ public class ServerMapLocalSizeTest extends AbstractCacheTestBase {
       }
       waitForAllCurrentTransactionsToComplete(cache);
       // wait untill pending transaction complete
-      WaitUtil.waitUntilCallableReturnsTrue(new Callable<Boolean>() {
+      waitUntilCallableReturnsTrue(new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
           long size = cache.getStatistics().getLocalHeapSize();
