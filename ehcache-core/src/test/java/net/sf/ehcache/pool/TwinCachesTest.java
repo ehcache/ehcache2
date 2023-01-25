@@ -15,6 +15,7 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.MemoryUnit;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TwinCachesTest {
@@ -269,7 +270,7 @@ public class TwinCachesTest {
 
         Ehcache three = manager.addCacheIfAbsent("three");
 
-        for (int i = 0; i < 20 * MAX; i++) {
+        for (int i = 0; i < 40 * MAX; i++) {
             Ehcache chosen;
             float choice = rndm.nextFloat();
             if (choice < ratioOne) {

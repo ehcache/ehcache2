@@ -26,7 +26,7 @@
     <surefire.max-memory>1024m</surefire.max-memory>
     <skipCheckstyle>true</skipCheckstyle>
     <quartz.version>2.2.3</quartz.version>
-    <osgi-test-tool.version>2.2</osgi-test-tool.version>
+    <osgi-test-tool.version>2.3</osgi-test-tool.version>
   </properties>
 
   <dependencies>  
