@@ -269,7 +269,7 @@ public class TwinCachesTest {
 
         Ehcache three = manager.addCacheIfAbsent("three");
 
-        for (int i = 0; i < 20 * MAX; i++) {
+        for (int i = 0; i < 40 * MAX; i++) {
             Ehcache chosen;
             float choice = rndm.nextFloat();
             if (choice < ratioOne) {
