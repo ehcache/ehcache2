@@ -19,17 +19,18 @@ package net.sf.ehcache.distribution;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.rmi.NotBoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
 
 /**
  * A peer provider which discovers peers using Multicast.
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * @author Greg Luck
  * @version $Id$
  */
-public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerPeerProvider implements CacheManagerPeerProvider {
+public class MulticastRMICacheManagerPeerProvider extends RMICacheManagerPeerProvider implements CacheManagerPeerProvider {
 
     /**
      * One tenth of a second, in ms
@@ -64,6 +65,10 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
 
     private static final Logger LOG = LoggerFactory.getLogger(MulticastRMICacheManagerPeerProvider.class.getName());
 
+    /**
+     * Contains a RMI URLs of the form: "//" + hostName + ":" + port + "/" + cacheName as key
+     */
+    protected final Map<String, CachePeerEntry> peerUrls = Collections.synchronizedMap(new HashMap<>());
 
     private final MulticastKeepaliveHeartbeatReceiver heartBeatReceiver;
     private final MulticastKeepaliveHeartbeatSender heartBeatSender;
@@ -79,18 +84,16 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
                                                 Integer groupMulticastPort, Integer timeToLive, InetAddress hostAddress) {
         super(cacheManager);
 
-
-
         heartBeatReceiver = new MulticastKeepaliveHeartbeatReceiver(this, groupMulticastAddress,
                 groupMulticastPort, hostAddress);
         heartBeatSender = new MulticastKeepaliveHeartbeatSender(cacheManager, groupMulticastAddress,
-                        groupMulticastPort, timeToLive, hostAddress);
+                groupMulticastPort, timeToLive, hostAddress);
     }
 
     /**
      * {@inheritDoc}
      */
-    public final void init() throws CacheException {
+    public void init() throws CacheException {
         try {
             heartBeatReceiver.init();
             heartBeatSender.init();
@@ -105,11 +108,11 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
      * <p>
      * This method is thread-safe. It relies on peerUrls being a synchronizedMap
      *
-     * @param rmiUrl
+     * @param rmiUrl the URL to register
      */
-    public final void registerPeer(String rmiUrl) {
+    public void registerPeer(String rmiUrl) {
         try {
-            CachePeerEntry cachePeerEntry = (CachePeerEntry) peerUrls.get(rmiUrl);
+            CachePeerEntry cachePeerEntry = peerUrls.get(rmiUrl);
             if (cachePeerEntry == null || stale(cachePeerEntry.date)) {
                 //can take seconds if there is a problem
                 CachePeer cachePeer = lookupRemoteCachePeer(rmiUrl);
@@ -119,18 +122,12 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
             } else {
                 cachePeerEntry.date = new Date();
             }
-        } catch (IOException e) {
+        } catch (IOException | NotBoundException e) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Unable to lookup remote cache peer for " + rmiUrl + ". Removing from peer list. Cause was: "
                         + e.getMessage());
             }
             unregisterPeer(rmiUrl);
-        } catch (NotBoundException e) {
-            peerUrls.remove(rmiUrl);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Unable to lookup remote cache peer for " + rmiUrl + ". Removing from peer list. Cause was: "
-                        + e.getMessage());
-            }
         } catch (Throwable t) {
             LOG.error("Unable to lookup remote cache peer for " + rmiUrl
                     + ". Cause was not due to an IOException or NotBoundException which will occur in normal operation:" +
@@ -141,40 +138,34 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
     /**
      * @return a list of {@link CachePeer} peers, excluding the local peer.
      */
-    public final synchronized List listRemoteCachePeers(Ehcache cache) throws CacheException {
-        List remoteCachePeers = new ArrayList();
-        List staleList = new ArrayList();
-        synchronized (peerUrls) {
-            for (Iterator iterator = peerUrls.keySet().iterator(); iterator.hasNext();) {
-                String rmiUrl = (String) iterator.next();
-                String rmiUrlCacheName = extractCacheName(rmiUrl);
-                try {
-                    if (!rmiUrlCacheName.equals(cache.getName())) {
-                        continue;
-                    }
-                    CachePeerEntry cachePeerEntry = (CachePeerEntry) peerUrls.get(rmiUrl);
-                    Date date = cachePeerEntry.date;
-                    if (!stale(date)) {
-                        CachePeer cachePeer = cachePeerEntry.cachePeer;
-                        remoteCachePeers.add(cachePeer);
-                    } else {
+    public synchronized List<CachePeer> listRemoteCachePeers(Ehcache cache) throws CacheException {
+        List<CachePeer> remoteCachePeers = new ArrayList<>();
+        List<String> staleList = new ArrayList<>();
 
-                            LOG.debug("rmiUrl is stale. Either the remote peer is shutdown or the " +
-                                    "network connectivity has been interrupted. Will be removed from list of remote cache peers",
-                                    rmiUrl);
-                        staleList.add(rmiUrl);
-                    }
-                } catch (Exception exception) {
-                    LOG.error(exception.getMessage(), exception);
-                    throw new CacheException("Unable to list remote cache peers. Error was " + exception.getMessage());
-                }
+        for (Map.Entry<String, CachePeerEntry> entry : peerUrls.entrySet()) {
+            String rmiUrl = entry.getKey();
+            String rmiUrlCacheName = extractCacheName(rmiUrl);
+            if (!rmiUrlCacheName.equals(cache.getName())) {
+                continue;
             }
-            //Must remove entries after we have finished iterating over them
-            for (int i = 0; i < staleList.size(); i++) {
-                String rmiUrl = (String) staleList.get(i);
-                peerUrls.remove(rmiUrl);
+            try {
+                CachePeerEntry cachePeerEntry = entry.getValue();
+                if (!stale(cachePeerEntry.date)) {
+                    remoteCachePeers.add(cachePeerEntry.cachePeer);
+                } else {
+                    LOG.debug("rmiUrl '{}' is stale. Either the remote peer is shutdown or the " +
+                                    "network connectivity has been interrupted. Will be removed from list of remote cache peers",
+                            rmiUrl);
+                    staleList.add(rmiUrl);
+                }
+            } catch (Exception exception) {
+                throw new CacheException("Unable to list remote cache peers.", exception);
             }
         }
+
+        // Must remove entries after we have finished iterating over them
+        staleList.forEach(peerUrls::remove);
+
         return remoteCachePeers;
     }
 
@@ -182,7 +173,7 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
     /**
      * Shutdown the heartbeat
      */
-    public final void dispose() {
+    public void dispose() {
         heartBeatSender.dispose();
         heartBeatReceiver.dispose();
     }
@@ -211,51 +202,42 @@ public final class MulticastRMICacheManagerPeerProvider extends RMICacheManagerP
      * @param date the date the entry was created
      * @return true if stale
      */
-    protected final boolean stale(Date date) {
+    protected boolean stale(Date date) {
         long now = System.currentTimeMillis();
         return date.getTime() < (now - getStaleTime());
     }
 
+    public void unregisterPeer(String rmiUrl) {
+        peerUrls.remove(rmiUrl);
+    }
 
     /**
      * Entry containing a looked up CachePeer and date
      */
-    protected static final class CachePeerEntry {
+    private static class CachePeerEntry {
 
         private final CachePeer cachePeer;
+
+        /**
+         * last access date
+         */
         private Date date;
 
         /**
-         * Constructor
          *
          * @param cachePeer the cache peer part of this entry
          * @param date      the date part of this entry
          */
-        public CachePeerEntry(CachePeer cachePeer, Date date) {
+        private CachePeerEntry(CachePeer cachePeer, Date date) {
             this.cachePeer = cachePeer;
             this.date = date;
         }
-
-        /**
-         * @return the cache peer part of this entry
-         */
-        public final CachePeer getCachePeer() {
-            return cachePeer;
-        }
-
-
-        /**
-         * @return the date part of this entry
-         */
-        public final Date getDate() {
-            return date;
-        }
-
     }
 
     /**
      * @return the MulticastKeepaliveHeartbeatReceiver
      */
+    @SuppressWarnings("unused")
     public MulticastKeepaliveHeartbeatReceiver getHeartBeatReceiver() {
         return heartBeatReceiver;
     }
