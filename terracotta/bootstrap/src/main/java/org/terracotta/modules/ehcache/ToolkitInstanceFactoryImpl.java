@@ -116,8 +116,8 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
   private final Watchdog                  wanWatchdog;
 
   public ToolkitInstanceFactoryImpl(final TerracottaClientConfiguration terracottaClientConfiguration,
-                                    final String productId, ClassLoader loader) {
-    this.toolkit = createTerracottaToolkit(terracottaClientConfiguration, productId, loader);
+                                    final String productId, String cacheManagerName, ClassLoader loader) {
+    this.toolkit = createTerracottaToolkit(terracottaClientConfiguration, productId, cacheManagerName, loader);
     updateDefaultNonStopConfig(toolkit);
     this.clusteredEntityManager = new ClusteredEntityManager(toolkit);
     this.entityNames = new EntityNamesHolder();
@@ -126,8 +126,8 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
   }
 
   public ToolkitInstanceFactoryImpl(final TerracottaClientConfiguration terracottaClientConfiguration,
-                                    ClassLoader loader) {
-    this(terracottaClientConfiguration, null, loader);
+                                    String cacheManagerName, ClassLoader loader) {
+    this(terracottaClientConfiguration, null, cacheManagerName, loader);
   }
 
   // Constructor to enable unit testing
@@ -163,7 +163,7 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
   }
 
   private static Toolkit createTerracottaToolkit(TerracottaClientConfiguration terracottaClientConfiguration,
-                                                 String productId, ClassLoader loader) {
+                                                 String productId, String cacheManagerName, ClassLoader loader) {
     TerracottaToolkitBuilder terracottaClientBuilder = new TerracottaToolkitBuilder();
     EhcacheTcConfig ehcacheTcConfig = EhcacheTcConfig.create(terracottaClientConfiguration);
     switch (ehcacheTcConfig.type) {
@@ -180,6 +180,7 @@ public class ToolkitInstanceFactoryImpl implements ToolkitInstanceFactory {
     terracottaClientBuilder.addTunnelledMBeanDomain("org.terracotta.wan");
     terracottaClientBuilder.setRejoinEnabled(terracottaClientConfiguration.isRejoin());
     terracottaClientBuilder.setProductId(productId);
+    terracottaClientBuilder.setClientName(cacheManagerName);
     terracottaClientBuilder.setClassLoader(loader);
     return terracottaClientBuilder.buildToolkit();
   }

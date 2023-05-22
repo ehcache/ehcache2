@@ -61,8 +61,8 @@ public class TerracottaClusteredInstanceFactory implements ClusteredInstanceFact
   private final TerracottaStoreInitializationService      initializationService;
 
   public TerracottaClusteredInstanceFactory(TerracottaClientConfiguration terracottaClientConfiguration,
-                                            ClassLoader loader) {
-    toolkitInstanceFactory = createToolkitInstanceFactory(terracottaClientConfiguration, loader);
+                                            String cacheManagerName, ClassLoader loader) {
+    toolkitInstanceFactory = createToolkitInstanceFactory(terracottaClientConfiguration, cacheManagerName, loader);
     initializationService = new TerracottaStoreInitializationService(toolkitInstanceFactory.getToolkit().getClusterInfo());
     topology = createTopology(toolkitInstanceFactory);
     clusteredEventReplicatorFactory = new ClusteredEventReplicatorFactory(toolkitInstanceFactory);
@@ -89,8 +89,8 @@ public class TerracottaClusteredInstanceFactory implements ClusteredInstanceFact
   }
 
   protected ToolkitInstanceFactory createToolkitInstanceFactory(TerracottaClientConfiguration terracottaClientConfiguration,
-                                                                ClassLoader loader) {
-    return new ToolkitInstanceFactoryImpl(terracottaClientConfiguration, loader);
+                                                                String cacheManagerName, ClassLoader loader) {
+    return new ToolkitInstanceFactoryImpl(terracottaClientConfiguration, cacheManagerName, loader);
   }
 
   protected AsyncCoordinatorFactory createAsyncCoordinatorFactory() {
