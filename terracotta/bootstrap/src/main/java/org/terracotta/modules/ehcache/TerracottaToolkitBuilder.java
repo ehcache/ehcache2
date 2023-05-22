@@ -24,6 +24,7 @@ public class TerracottaToolkitBuilder {
   private static final String      TC_CONFIG_SNIPPET_KEY          = "tcConfigSnippet";
   private static final String      REJOIN_KEY                     = "rejoin";
   private static final String      PRODUCT_ID_KEY                 = "productId";
+  private static final String      CLIENT_NAME_KEY                = "clientName";
   private static final String      CLASSLOADER_KEY                = "classloader";
   private static final String      NONSTOP_INIT_ENABLED_KEY       = "toolkit.nonstop.init.enabled";
 
@@ -31,6 +32,7 @@ public class TerracottaToolkitBuilder {
   private final TCConfigTypeStatus tcConfigTypeStatus             = new TCConfigTypeStatus();
   private final Set<String>        tunnelledMBeanDomains          = Collections.synchronizedSet(new HashSet<String>());
   private String                   productId;
+  private String                   clientName;
   private ClassLoader              classLoader;
   private final boolean            NONSTOP_INIT_ENABLED           = Boolean.getBoolean(NONSTOP_INIT_ENABLED_KEY);
 
@@ -80,6 +82,9 @@ public class TerracottaToolkitBuilder {
     properties.setProperty(REJOIN_KEY, String.valueOf(rejoin));
     if (productId != null) {
       properties.setProperty(PRODUCT_ID_KEY, productId);
+    }
+    if (clientName != null) {
+      properties.setProperty(CLIENT_NAME_KEY, clientName);
     }
     properties.setProperty(NONSTOP_INIT_ENABLED_KEY, String.valueOf(NONSTOP_INIT_ENABLED));
     return properties;
@@ -195,6 +200,11 @@ public class TerracottaToolkitBuilder {
 
   public TerracottaToolkitBuilder setProductId(final String productId) {
     this.productId = productId;
+    return this;
+  }
+
+  public TerracottaToolkitBuilder setClientName(final String clientName) {
+    this.clientName = clientName;
     return this;
   }
 }

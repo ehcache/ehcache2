@@ -10,7 +10,7 @@ import org.terracotta.modules.ehcache.store.TerracottaClusteredInstanceFactory;
 public class StandaloneTerracottaClusteredInstanceFactory extends TerracottaClusteredInstanceFactory {
 
   public StandaloneTerracottaClusteredInstanceFactory(final TerracottaClientConfiguration terracottaConfig,
-                                                      ClassLoader loader) {
-    super(terracottaConfig, loader);
+                                                      String cacheManagerName, ClassLoader loader) {
+    super(terracottaConfig, cacheManagerName, loader);
   }
 }
