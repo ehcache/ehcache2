@@ -1,4 +1,4 @@
-# Ehcache 2.x is approaching End of Life.   
+# Ehcache 2.x (community / FOSS edition) has reached End of Life.   
 
 Ehcache 3.0 was released April 2016.
 
