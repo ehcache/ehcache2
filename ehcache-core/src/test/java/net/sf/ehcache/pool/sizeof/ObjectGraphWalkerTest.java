@@ -6,6 +6,8 @@ import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -63,6 +65,7 @@ public class ObjectGraphWalkerTest {
     assertThat(map.isEmpty(), is(true));
 
     assertThat(walker.walk(MAX_SIZEOF_DEPTH, false, new SomeInnerClass()), is(14L));
+
     assertThat(map.remove("java.util.concurrent.locks.ReentrantReadWriteLock$Sync$ThreadLocalHoldCounter"), is(1L));
 
     assertThat(map.remove(SomeInnerClass.class.getName()), is(1L));
@@ -91,6 +94,30 @@ public class ObjectGraphWalkerTest {
     private final Object   four       = new ReentrantReadWriteLock();
     private final Object[] anArray    = new Object[]{new Object(), new Object(), new Object(), one, two, two, three, four, value};
     private final int[]    anIntArray = new int[]   {1, 2, 1300                                                                 };
-
   }
+
+  @Test
+  public void testWalksAGraphWithInacessibleFieldsWithoutThrowingException() {
+    class ClassWithNestedInacessibleFields {
+      /**
+       * Certain fields of JDK11 classes are internal and throw new kind of exception upon reflection access
+       *
+       * java.lang.reflect.InaccessibleObjectException: Unable to make field final jdk.internal.loader.URLClassPath jdk.internal.loader.ClassLoaders$AppClassLoader.ucp accessible: module java.base does not "opens jdk.internal.loader"
+       */
+      public final URLClassLoader objectWithInaccessibleFields = new URLClassLoader(new URL[]{});
+    }
+
+    ObjectGraphWalker walker = new ObjectGraphWalker(
+        new ObjectGraphWalker.Visitor() {
+          @Override
+          public long visit(Object object) {
+            return 0;
+          }
+        }, new PassThroughFilter()
+    );
+
+    walker.walk(MAX_SIZEOF_DEPTH, false, new ClassWithNestedInacessibleFields());
+  }
+
+
 }
