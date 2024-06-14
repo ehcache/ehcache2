@@ -19,14 +19,14 @@ package net.sf.ehcache.distribution;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A provider of Peer RMI addresses based off manual configuration.
@@ -38,9 +38,14 @@ import org.slf4j.LoggerFactory;
  * @author Greg Luck
  * @version $Id$
  */
-public final class ManualRMICacheManagerPeerProvider extends RMICacheManagerPeerProvider {
+public class ManualRMICacheManagerPeerProvider extends RMICacheManagerPeerProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ManualRMICacheManagerPeerProvider.class.getName());
+
+    /**
+     * Contains a RMI URLs of the form: "//" + hostName + ":" + port + "/" + cacheName;
+     */
+    protected final Set<String> peerUrls = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Empty constructor.
@@ -52,7 +57,7 @@ public final class ManualRMICacheManagerPeerProvider extends RMICacheManagerPeer
     /**
      * {@inheritDoc}
      */
-    public final void init() {
+    public void init() {
         //nothing to do here
     }
 
@@ -65,68 +70,37 @@ public final class ManualRMICacheManagerPeerProvider extends RMICacheManagerPeer
         return 0;
     }
 
-    /**
-     * Register a new peer.
-     *
-     * @param rmiUrl
-     */
-    public final synchronized void registerPeer(String rmiUrl) {
-        peerUrls.put(rmiUrl, new Date());
+    @Override
+    public synchronized void registerPeer(String rmiUrl) {
+        peerUrls.add(rmiUrl);
     }
 
 
-    /**
-     * @return a list of {@link CachePeer} peers, excluding the local peer.
-     */
-    public final synchronized List listRemoteCachePeers(Ehcache cache) throws CacheException {
-        List remoteCachePeers = new ArrayList();
-        List staleList = new ArrayList();
-        for (Iterator iterator = peerUrls.keySet().iterator(); iterator.hasNext();) {
-            String rmiUrl = (String) iterator.next();
+    @Override
+    public synchronized List<CachePeer> listRemoteCachePeers(Ehcache cache) throws CacheException {
+        List<CachePeer> remoteCachePeers = new ArrayList<>();
+        for (String rmiUrl : peerUrls) {
             String rmiUrlCacheName = extractCacheName(rmiUrl);
 
             if (!rmiUrlCacheName.equals(cache.getName())) {
                 continue;
             }
-            Date date = (Date) peerUrls.get(rmiUrl);
-            if (!stale(date)) {
-                CachePeer cachePeer = null;
-                try {
-                    cachePeer = lookupRemoteCachePeer(rmiUrl);
-                    remoteCachePeers.add(cachePeer);
-                } catch (Exception e) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Looking up rmiUrl " + rmiUrl + " through exception " + e.getMessage()
-                                + ". This may be normal if a node has gone offline. Or it may indicate network connectivity"
-                                + " difficulties", e);
-                    }
+
+            try {
+                remoteCachePeers.add(lookupRemoteCachePeer(rmiUrl));
+            } catch (Exception e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Looking up rmiUrl {} through exception. This may be normal if a node has gone offline. Or it may indicate network connectivity difficulties",
+                            rmiUrl, e);
                 }
-            } else {
-                    LOG.debug("rmiUrl {} should never be stale for a manually configured cluster.", rmiUrl);
-                staleList.add(rmiUrl);
             }
-
         }
 
-        //Remove any stale remote peers. Must be done here to avoid concurrent modification exception.
-        for (int i = 0; i < staleList.size(); i++) {
-            String rmiUrl = (String) staleList.get(i);
-            peerUrls.remove(rmiUrl);
-        }
         return remoteCachePeers;
     }
 
-
-    /**
-     * Whether the entry should be considered stale.
-     * <p>
-     * Manual RMICacheManagerProviders use a static list of urls and are therefore never stale.
-     *
-     * @param date the date the entry was created
-     * @return true if stale
-     */
-    protected final boolean stale(Date date) {
-        return false;
+    @Override
+    public void unregisterPeer(String rmiUrl) {
+        peerUrls.remove(rmiUrl);
     }
-
 }
